@@ -482,7 +482,16 @@ def git_commit_if_changed():
     """
     检查是否有变更，仅在有变更时执行commit & push
     变更条件：哈希文件修改 或 新增邮件备份
+    
+    注意：此函数在GitHub Actions环境中会跳过git操作，
+    因为workflow有专门的提交步骤
     """
+    # 检查是否在GitHub Actions环境中
+    if os.getenv('GITHUB_ACTIONS') == 'true':
+        print("[Git] 在GitHub Actions环境中，跳过脚本内git操作")
+        print("[Git] 变更将由workflow的提交步骤处理")
+        return False
+    
     try:
         # 检查工作区状态
         result = subprocess.run(
