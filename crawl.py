@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 GitHub Actions 多站点更新监控系统
-功能：爬取46个站点 → MD5比对检测更新 → 网易Claw邮件推送 → 本地备份归档
+功能：爬取46个站点 → MD5比对检测更新 → 163邮箱SMTP推送 → 本地备份归档
 时间：每4小时执行一次（00:00, 04:00, 08:00, 12:00, 16:00, 20:00）
 时区：Asia/Shanghai（北京时间）
 """
@@ -12,6 +12,9 @@ import sys
 import time
 import hashlib
 import requests
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 import json
@@ -75,10 +78,12 @@ MONITOR_SITES = [
 HASH_RECORD_FILE = "hash_record.txt"
 EMAIL_BACKUP_DIR = "email_backup"
 
-# 网易Claw邮箱配置（从环境变量读取）
-CLAW_AUTH_URL = os.getenv("CLAW_AUTH_URL", "t1/VSrSdLb78uqwSSCtWBTAbTRwZki")
-CLAW_API_KEY = os.getenv("CLAWEMAIL_API_KEY", "")
-CLAW_USER = os.getenv("CLAWEMAIL_USER", "")
+# 163邮箱SMTP配置
+SMTP_SERVER = "smtp.163.com"
+SMTP_PORT = 465
+SMTP_USER = os.getenv("SMTP_USER", "")  # 邮箱地址
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")  # 授权码
+EMAIL_TO = os.getenv("SMTP_USER", "")  # 发送到自己
 
 # 爬虫配置
 REQUEST_TIMEOUT = 15  # 单个站点超时时间（秒）
@@ -393,6 +398,7 @@ def generate_email_html(round_num, updated_sites, check_time):
     <div class="footer">
         <p style="margin: 5px 0;">🤖 自动化监控来源：GitHub Actions 站点巡检机器人</p>
         <p style="margin: 5px 0;">⏱ 每4小时自动巡检 | 零运维 | 稳定可靠</p>
+        <p style="margin: 5px 0; color: #667eea;">✉️ 163邮箱推送服务</p>
     </div>
 </body>
 </html>
@@ -401,49 +407,39 @@ def generate_email_html(round_num, updated_sites, check_time):
     return subject, body
 
 
-def send_claw_email(subject, html_body):
+def send_email_smtp(subject, html_body):
     """
-    通过网易Claw发送邮件
+    通过163邮箱SMTP发送邮件
     返回：(成功标志, 错误信息)
     """
-    if not CLAW_API_KEY or not CLAW_USER:
-        return False, "Claw邮箱密钥未配置"
+    if not SMTP_USER or not SMTP_PASSWORD:
+        return False, "邮箱配置缺失"
     
     try:
-        # Claw邮件API接口
-        url = "https://api.claw.163.com/api/send"
+        # 创建邮件
+        message = MIMEMultipart('alternative')
+        message['From'] = SMTP_USER
+        message['To'] = EMAIL_TO
+        message['Subject'] = subject
         
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {CLAW_API_KEY}"
-        }
+        # 添加HTML正文
+        html_part = MIMEText(html_body, 'html', 'utf-8')
+        message.attach(html_part)
         
-        data = {
-            "authUrl": CLAW_AUTH_URL,
-            "to": CLAW_USER,
-            "subject": subject,
-            "html": html_body,
-            "text": subject  # 纯文本备用
-        }
+        print(f"[邮件] 发送到: {EMAIL_TO}")
         
-        response = requests.post(
-            url, 
-            headers=headers, 
-            json=data, 
-            timeout=30
-        )
+        # 连接SMTP服务器并发送
+        with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT) as server:
+            server.login(SMTP_USER, SMTP_PASSWORD)
+            server.sendmail(SMTP_USER, EMAIL_TO, message.as_string())
         
-        if response.status_code == 200:
-            result = response.json()
-            if result.get('success') or result.get('code') == 0:
-                print(f"[邮件] 发送成功: {subject}")
-                return True, None
-            else:
-                error = result.get('message', '未知错误')
-                return False, f"API返回错误: {error}"
-        else:
-            return False, f"HTTP {response.status_code}: {response.text[:100]}"
-            
+        print(f"[邮件] ✓ 发送成功: {subject}")
+        return True, None
+        
+    except smtplib.SMTPAuthenticationError:
+        return False, "邮箱认证失败（检查授权码）"
+    except smtplib.SMTPException as e:
+        return False, f"SMTP错误: {e}"
     except Exception as e:
         return False, f"发送异常: {str(e)}"
 
@@ -606,14 +602,14 @@ def main():
         backup_path = save_email_backup(round_num, html_body)
         
         # 4. 发送邮件
-        if CLAW_API_KEY and CLAW_USER:
-            success, error = send_claw_email(subject, html_body)
+        if SMTP_USER and SMTP_PASSWORD:
+            success, error = send_email_smtp(subject, html_body)
             if not success:
                 print(f"[警告] 邮件发送失败: {error}")
                 print("[提示] 邮件已本地备份，可手动查看")
         else:
-            print("[警告] Claw邮箱未配置，跳过邮件发送")
-            print("[提示] 请在GitHub Secrets中配置 CLAWEMAIL_API_KEY 和 CLAWEMAIL_USER")
+            print("[警告] 邮箱未配置，跳过邮件发送")
+            print("[提示] 请在GitHub Secrets中配置 SMTP_USER 和 SMTP_PASSWORD")
         
         # 5. Git提交（有哈希变更或新增邮件备份）
         git_commit_if_changed()
