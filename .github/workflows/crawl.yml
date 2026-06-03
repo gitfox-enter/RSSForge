@@ -2,8 +2,6 @@ name: 站点更新监控
 
 on:
   # 定时触发：每4小时执行一次（北京时间 00:00, 04:00, 08:00, 12:00, 16:00, 20:00）
-  # Cron表达式（UTC时间）：0 */4 * * *
-  # 对应北京时间：08:00, 12:00, 16:00, 20:00, 00:00, 04:00
   schedule:
     - cron: '0 */4 * * *'
   
@@ -19,87 +17,87 @@ jobs:
   monitor:
     runs-on: ubuntu-latest
     
-    # 设置时区为北京时间
     env:
       TZ: Asia/Shanghai
     
-    # 给予写权限
     permissions:
       contents: write
     
     steps:
-      # 1. 检出代码仓库
       - name: 检出仓库
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0  # 获取完整历史，确保push正常
+          fetch-depth: 0
       
-      # 2. 设置Python环境
       - name: 设置Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
       
-      # 3. 安装依赖
       - name: 安装依赖
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       
-      # 4. 配置Git用户信息（用于提交变更）
       - name: 配置Git
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
       
-      # 5. 执行监控脚本
       - name: 运行监控
         env:
-          # 163邮箱SMTP配置（从GitHub Secrets读取）
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         run: python crawl.py
       
-      # 6. 提交变更（哈希记录、邮件备份、Dashboard数据）
       - name: 提交变更
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          # 添加存在的文件和目录（使用 find 安全添加）
           git add hash_record.txt data/ index.html notified_items.json run_log.jsonl feed.xml paused_sites.json failed_sites.json 2>/dev/null || true
-          # 安全添加 email_backup/ 目录（如果存在）
           if [ -d email_backup ]; then
             git add email_backup/ 2>/dev/null || true
           fi
           git status
           
-          # 检查是否有变更
           if git diff --staged --quiet 2>/dev/null; then
             echo "No changes to commit"
           else
-            git commit -m "自动更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
-            # 先拉取远程更新，避免 non-fast-forward 错误（带重试机制）
-            pull_success=false
+            git commit -m "自动更新: $(TZ="Asia/Shanghai" date "+%Y-%m-%d %H:%M:%S")"
+            push_success=false
             for i in 1 2 3; do
-              if git pull --rebase origin main; then
-                pull_success=true
-                break
+              if git rebase --abort 2>/dev/null; then
+                echo "Aborted previous rebase state"
               fi
-              echo "Pull attempt $i failed, retrying..."
+              if git pull --rebase --strategy-option=theirs origin main; then
+                if git push origin main; then
+                  push_success=true
+                  break
+                fi
+                echo "Push attempt $i failed, retrying..."
+              else
+                echo "Pull rebase attempt $i had conflicts, aborting..."
+                git rebase --abort 2>/dev/null || true
+                if git pull --no-rebase --strategy-option=ours origin main; then
+                  if git push origin main; then
+                    push_success=true
+                    break
+                  fi
+                fi
+                git push --force-with-lease origin main && push_success=true && break
+              fi
               sleep 5
             done
-            if [ "$pull_success" = true ]; then
-              git push origin main
+            if [ "$push_success" = true ]; then
               echo "✓ Changes committed and pushed successfully"
             else
-              echo "✗ Failed to pull remote changes after 3 attempts, skipping push"
+              echo "✗ Failed to push changes after 3 attempts"
               exit 1
             fi
           fi
       
-      # 7. 上传邮件备份（可选，用于手动下载查看）
       - name: 上传邮件备份
         uses: actions/upload-artifact@v4
         if: always()
