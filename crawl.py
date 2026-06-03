@@ -495,7 +495,9 @@ def generate_email_html(round_num, all_site_results, check_time, notified=None):
             item_url = item['url'] if isinstance(item, dict) else url
             lines.append(f"  - {item_text}")
             lines.append(f"    {item_url}")
+        lines.append("")
         lines.append("---")
+        lines.append("")
         idx += 1
 
     for r in no_update_results:
@@ -503,14 +505,18 @@ def generate_email_html(round_num, all_site_results, check_time, notified=None):
         url = r['url']
         lines.append(f"{idx}. {title} ({url})")
         lines.append("  暂无新内容")
+        lines.append("")
         lines.append("---")
+        lines.append("")
         idx += 1
 
     for r in error_results:
         url = r['url']
         lines.append(f"{idx}. {url}")
         lines.append(f"  异常: {r['message']}")
+        lines.append("")
         lines.append("---")
+        lines.append("")
         idx += 1
 
     lines.append("")
