@@ -81,13 +81,22 @@ jobs:
           else
             git commit -m "自动更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
             # 先拉取远程更新，避免 non-fast-forward 错误（带重试机制）
+            pull_success=false
             for i in 1 2 3; do
-              git pull --rebase origin main && break
+              if git pull --rebase origin main; then
+                pull_success=true
+                break
+              fi
               echo "Pull attempt $i failed, retrying..."
               sleep 5
             done
-            git push origin main
-            echo "✓ Changes committed and pushed successfully"
+            if [ "$pull_success" = true ]; then
+              git push origin main
+              echo "✓ Changes committed and pushed successfully"
+            else
+              echo "✗ Failed to pull remote changes after 3 attempts, skipping push"
+              exit 1
+            fi
           fi
       
       # 7. 上传邮件备份（可选，用于手动下载查看）
