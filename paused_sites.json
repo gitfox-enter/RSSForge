@@ -28,5 +28,11 @@
     "paused_round": 2,
     "reason": "连续 3 轮失败",
     "fail_count": 3
+  },
+  "https://www.ghxi.com/category/all": {
+    "paused_at": "2026-06-04 06:27:02",
+    "paused_round": 2,
+    "reason": "连续 3 轮失败",
+    "fail_count": 3
   }
 }
