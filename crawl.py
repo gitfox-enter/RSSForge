@@ -80,6 +80,7 @@ HASH_RECORD_FILE = "hash_record.txt"
 EMAIL_BACKUP_DIR = "email_backup"
 DASHBOARD_DATA_DIR = "data"
 DASHBOARD_RESULT_FILE = os.path.join(DASHBOARD_DATA_DIR, "inspection_result.json")
+NOTIFIED_ITEMS_FILE = "notified_items.json"  # 记录已通知过的条目URL，避免重复推送
 
 # 163邮箱SMTP配置
 SMTP_SERVER = "smtp.163.com"
@@ -191,20 +192,66 @@ def save_hash_records(records):
 
 
 # ============================================================
+# 已通知条目管理（去重）
+# ============================================================
+
+def load_notified_items():
+    """
+    加载已通知过的条目URL集合
+    返回格式：set of item URLs
+    """
+    notified = set()
+    if os.path.exists(NOTIFIED_ITEMS_FILE):
+        try:
+            with open(NOTIFIED_ITEMS_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                notified = set(data.get('items', []))
+        except Exception as e:
+            print(f"[警告] 读取已通知条目文件失败: {e}")
+    return notified
+
+
+def save_notified_items(notified):
+    """保存已通知条目URL集合到文件"""
+    try:
+        with open(NOTIFIED_ITEMS_FILE, 'w', encoding='utf-8') as f:
+            json.dump({'items': sorted(notified), 'updated_at': get_beijing_time().strftime('%Y-%m-%d %H:%M:%S')}, f, ensure_ascii=False, indent=2)
+        print(f"[信息] 已通知条目记录已更新: {NOTIFIED_ITEMS_FILE} ({len(notified)} 条)")
+        return True
+    except Exception as e:
+        print(f"[错误] 保存已通知条目失败: {e}")
+        return False
+
+
+def filter_new_items(items, notified):
+    """
+    从条目列表中过滤出未通知过的新条目
+    返回：(新条目列表, 本轮新增的URL集合)
+    """
+    new_items = []
+    new_urls = set()
+    for item in items:
+        item_url = item['url'] if isinstance(item, dict) else item
+        if item_url not in notified:
+            new_items.append(item)
+            new_urls.add(item_url)
+    return new_items, new_urls
+
+
+# ============================================================
 # 爬虫核心逻辑
 # ============================================================
 
-def extract_article_items(soup):
+def extract_article_items(soup, base_url=''):
     """
-    从页面中提取独立文章条目列表
-    策略：提取正文中所有有意义的一行文本（通常是文章标题/商品信息）
-    返回：文章条目列表（去重，最多50条）
+    从页面中提取独立文章条目列表（含链接）
+    返回：[{'text': '标题', 'url': '链接'}, ...] 最多50条
     """
+    import re
     # 移除干扰元素
     for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside', 'iframe']):
         tag.decompose()
 
-    # 获取正文
     body = soup.find('body')
     if not body:
         return []
@@ -212,26 +259,29 @@ def extract_article_items(soup):
     items = []
     seen = set()
 
-    # 策略1: 提取所有 <a> 标签的文本（通常是文章链接）
+    # 策略1: 提取 <a> 标签的文本 + href
     for a_tag in body.find_all('a', href=True):
         text = a_tag.get_text(strip=True)
         if not text or len(text) < 4 or len(text) > 120:
             continue
-        # 清理
         text = ' '.join(text.split())
         if text in seen:
             continue
-        # 过滤纯英文、纯数字、导航词、特殊符号开头的
-        if not text[0].isalpha() and text[0] not in '0123456789':
-            pass  # 中文开头，保留
-        elif text[0].isupper() and len(text) < 20:
-            continue  # 可能是导航词如 "HOME", "ABOUT"
-        # 过滤含大量特殊符号的
-        import re
+        # 过滤导航词/英文短词
+        if text[0].isupper() and len(text) < 20:
+            continue
         if len(re.findall(r'[^\w\u4e00-\u9fff\u3000-\u303f\s]', text)) > len(text) * 0.3:
             continue
+        href = a_tag['href'].strip()
+        # 转绝对链接
+        if href.startswith('/'):
+            from urllib.parse import urljoin
+            href = urljoin(base_url, href)
+        elif not href.startswith('http'):
+            from urllib.parse import urljoin
+            href = urljoin(base_url, href)
         seen.add(text)
-        items.append(text)
+        items.append({'text': text, 'url': href})
 
     # 策略2: 如果 <a> 标签太少，用正文分句作为备选
     if len(items) < 2:
@@ -245,13 +295,12 @@ def extract_article_items(soup):
                 continue
             if line in seen:
                 continue
-            # 过滤URL行、纯数字行
             if line.startswith('http') or line.startswith('www') or line.isdigit():
                 continue
             if len(re.findall(r'[a-zA-Z0-9]', line)) > len(line) * 0.7 and len(line) < 30:
                 continue
             seen.add(line)
-            items.append(line)
+            items.append({'text': line, 'url': base_url})
 
     return items[:50]
 
@@ -298,8 +347,8 @@ def fetch_page_content(url):
         title_tag = soup.find('title')
         title = title_tag.get_text(strip=True) if title_tag else url
         
-        # 提取文章条目列表
-        article_items = extract_article_items(soup)
+        # 提取文章条目列表（含链接）
+        article_items = extract_article_items(soup, url)
 
         # 移除脚本、样式、注释等干扰内容
         for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
@@ -381,17 +430,32 @@ def check_site_update(url, old_records):
 # 邮件推送（网易Claw）
 # ============================================================
 
-def generate_email_html(round_num, all_site_results, check_time):
+def generate_email_html(round_num, all_site_results, check_time, notified=None):
     """
-    生成邮件HTML内容 — 紧凑列表风格
+    生成邮件内容 — 纯文本格式
     all_site_results: 列表，每个元素为 {'url':..., 'title':..., 'summary':..., 'items':..., 'status': 'updated'|'no_update'|'error'|'first', 'message':...}
+    items 格式: [{'text': '标题', 'url': '链接'}, ...]
+    notified: 已通知过的条目URL集合（set），传入则过滤重复条目
     排序规则：有更新的排在前面（按条目数降序），无更新的排在后面
-    返回：(主题, HTML正文, 纯文本正文)
+    返回：(主题, HTML正文, 纯文本正文, 本轮新增条目URL集合)
     """
+    if notified is None:
+        notified = set()
+
     # 统计与排序
     updated_results = [r for r in all_site_results if r['status'] == 'updated']
     no_update_results = [r for r in all_site_results if r['status'] in ('no_update', 'first')]
     error_results = [r for r in all_site_results if r['status'] == 'error']
+
+    # 过滤已通知过的条目，只保留真正新的
+    all_new_urls = set()
+    for r in updated_results:
+        new_items, new_urls = filter_new_items(r.get('items', []), notified)
+        r['items'] = new_items
+        all_new_urls.update(new_urls)
+
+    # 移除过滤后无条目的站点（之前发过了，不算真正更新）
+    updated_results = [r for r in updated_results if r['items']]
 
     # 更新的站点按条目数降序
     updated_results.sort(key=lambda r: len(r.get('items', [])), reverse=True)
@@ -406,122 +470,63 @@ def generate_email_html(round_num, all_site_results, check_time):
         subject = f"【站点巡检报告】第{round_num}轮巡检 | 暂无更新"
 
     # ===== 纯文本正文 =====
-    text_body = f"站点更新监控巡检报告\n\n"
-    text_body += f"📅 第 {round_num} 轮巡检  ⏰ {check_time}\n"
-    text_body += f"📊 总计 {total} 个站点 | 更新 {updated_count} 个 | 无更新 {len(no_update_results)} 个 | 异常 {len(error_results)} 个\n\n"
+    lines = []
+    lines.append("站点更新监控巡检报告")
+    lines.append("")
+    lines.append(f"第 {round_num} 轮巡检  {check_time}")
+    lines.append(f"总计 {total} 个站点 | 更新 {updated_count} 个 | 无更新 {len(no_update_results)} 个 | 异常 {len(error_results)} 个")
+    lines.append("")
 
-    idx = 1
-    for r in updated_results:
-        item_count = len(r.get('items', []))
-        title = r.get('title', r['url'])
-        text_body += f"{idx}.{title} ({item_count}条新)\n"
-        for item in r.get('items', []):
-            text_body += f"  {item}\n"
-        text_body += "📡\n"
-        idx += 1
-
-    for r in no_update_results:
-        title = r.get('title', r['url'])
-        text_body += f"{idx}.{title}\n  暂无新内容\n📡\n"
-        idx += 1
-
-    for r in error_results:
-        text_body += f"{idx}.{r['url']}\n  异常: {r['message']}\n📡\n"
-        idx += 1
-
-    text_body += "\n🤖 GitHub Actions 站点巡检机器人 | 每4小时自动巡检 | 163邮箱推送\n"
-
-    # ===== HTML正文 =====
-    site_blocks = []
-
-    # 有更新的站点
     idx = 1
     for r in updated_results:
         items = r.get('items', [])
         item_count = len(items)
         title = r.get('title', r['url'])
         url = r['url']
-
-        item_lines = ""
+        lines.append(f"{idx}. {title} ({url}) [{item_count}条新]")
         for item in items:
-            item_lines += f'<li style="margin:4px 0 4px 16px; padding:0; color:#333; font-size:13px; line-height:1.6; list-style:disc;">{item}</li>\n'
-
-        site_blocks.append(f"""
-        <div style="margin-bottom:8px; padding:12px 16px; background:#fafbfc; border-left:4px solid #1a73e8; border-radius:0 4px 4px 0;">
-            <div style="margin-bottom:6px; font-size:14px;">
-                <span style="color:#1a73e8; font-weight:700; margin-right:4px;">{idx}.</span>
-                <a href="{url}" target="_blank" style="color:#1a73e8; text-decoration:none; font-weight:600;">{title}</a>
-                <span style="display:inline-block; background:#e8f5e9; color:#2e7d32; font-size:12px; font-weight:600; padding:2px 8px; border-radius:12px; margin-left:6px;">({item_count}条新)</span>
-            </div>
-            <ul style="margin:0; padding:0 0 0 4px;">{item_lines}</ul>
-            <div style="text-align:center; color:#ccc; font-size:14px; margin-top:8px; padding-top:8px; border-top:1px dashed #e0e0e0;">📡</div>
-        </div>""")
+            item_text = item['text'] if isinstance(item, dict) else item
+            item_url = item['url'] if isinstance(item, dict) else url
+            lines.append(f"  - {item_text}")
+            lines.append(f"    {item_url}")
+        lines.append("---")
         idx += 1
 
-    # 无更新的站点
     for r in no_update_results:
         title = r.get('title', r['url'])
-        site_blocks.append(f"""
-        <div style="margin-bottom:8px; padding:10px 16px; background:#fafbfc; border-left:4px solid #e0e0e0; border-radius:0 4px 4px 0;">
-            <div style="font-size:14px;">
-                <span style="color:#999; font-weight:700; margin-right:4px;">{idx}.</span>
-                <span style="color:#888;">{title}</span>
-                <span style="display:inline-block; background:#f5f5f5; color:#999; font-size:12px; font-weight:600; padding:2px 8px; border-radius:12px; margin-left:6px;">暂无新内容</span>
-            </div>
-            <div style="text-align:center; color:#ccc; font-size:14px; margin-top:4px; padding-top:4px; border-top:1px dashed #e0e0e0;">📡</div>
-        </div>""")
+        url = r['url']
+        lines.append(f"{idx}. {title} ({url})")
+        lines.append("  暂无新内容")
+        lines.append("---")
         idx += 1
 
-    # 异常的站点
     for r in error_results:
-        site_blocks.append(f"""
-        <div style="margin-bottom:8px; padding:10px 16px; background:#fff8f8; border-left:4px solid #e53935; border-radius:0 4px 4px 0;">
-            <div style="font-size:14px;">
-                <span style="color:#e53935; font-weight:700; margin-right:4px;">{idx}.</span>
-                <span style="color:#c62828; font-size:12px;">{r['url']}</span>
-                <span style="display:inline-block; background:#fce4ec; color:#c62828; font-size:12px; font-weight:600; padding:2px 8px; border-radius:12px; margin-left:6px;">{r['message']}</span>
-            </div>
-            <div style="text-align:center; color:#ccc; font-size:14px; margin-top:4px; padding-top:4px; border-top:1px dashed #e0e0e0;">📡</div>
-        </div>""")
+        url = r['url']
+        lines.append(f"{idx}. {url}")
+        lines.append(f"  异常: {r['message']}")
+        lines.append("---")
         idx += 1
 
-    body = f"""<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-</head>
-<body style="margin:0; padding:0; background-color:#f4f5f7; font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,&quot;Helvetica Neue&quot;,Arial,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif;">
-    <table cellpadding="0" cellspacing="0" style="width:100%; max-width:680px; margin:0 auto; background:#ffffff;">
-        <tr>
-            <td style="background:#1a73e8; padding:24px 28px; color:#fff;">
-                <div style="font-size:20px; font-weight:700; margin-bottom:6px;">🔔 站点更新监控</div>
-                <div style="font-size:13px; color:#bbdefb;">📅 第 {round_num} 轮巡检 &nbsp;|&nbsp; ⏰ {check_time}</div>
-            </td>
-        </tr>
-        <tr>
-            <td style="background:#e8f0fe; padding:12px 28px; font-size:13px; color:#1a73e8; font-weight:600;">
-                📊 总计 <b>{total}</b> 个站点 &nbsp;
-                ✅ 更新 <b>{updated_count}</b> 个 &nbsp;
-                ⭕ 无更新 <b>{len(no_update_results)}</b> 个 &nbsp;
-                {'❌ 异常 <b>' + str(len(error_results)) + '</b> 个' if error_results else ''}
-            </td>
-        </tr>
-        <tr>
-            <td style="padding:16px 20px 20px;">
-                {''.join(site_blocks)}
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align:center; padding:16px 20px 24px; font-size:12px; color:#999; border-top:1px solid #eee;">
-                🤖 GitHub Actions 站点巡检机器人 &nbsp;|&nbsp; ⏱ 每4小时自动巡检 &nbsp;|&nbsp; ✉️ 163邮箱推送
-            </td>
-        </tr>
-    </table>
-</body>
-</html>
-"""
+    lines.append("")
+    lines.append("GitHub Actions 站点巡检机器人 | 每4小时自动巡检 | 163邮箱推送")
 
-    return subject, body, text_body
+    text_body = '\n'.join(lines)
+
+    # HTML 版本也生成一份纯文本（邮件备份用）
+    html_body = f"""<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:monospace;font-size:13px;white-space:pre-wrap;padding:20px;">
+{html_escape(text_body)}
+</body>
+</html>"""
+
+    return subject, html_body, text_body, all_new_urls
+
+
+def html_escape(text):
+    """转义HTML特殊字符"""
+    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
 
 
 def send_email_smtp(subject, html_body, text_body=None):
@@ -717,6 +722,10 @@ def main():
     # 加载历史哈希记录
     old_records = load_hash_records()
     print(f"[信息] 已加载哈希记录: {len(old_records)} 条")
+
+    # 加载已通知过的条目URL（去重用）
+    notified = load_notified_items()
+    print(f"[信息] 已加载已通知条目: {len(notified)} 条")
     
     # 检查所有站点更新
     all_site_results = []  # 存储所有站点状态（含标题、摘要）
@@ -784,8 +793,18 @@ def main():
     # 总是更新哈希文件
     save_hash_records(new_records)
 
-    # 生成邮件内容（所有站点状态）
-    subject, html_body, text_body = generate_email_html(round_num, all_site_results, check_time)
+    # 生成邮件内容（传入已通知条目用于去重）
+    subject, html_body, text_body, new_urls = generate_email_html(round_num, all_site_results, check_time, notified)
+
+    # 更新已通知条目：加入本轮所有站点的items URL（去重）
+    for r in all_site_results:
+        if r['status'] == 'updated':
+            for item in r.get('items', []):
+                item_url = item['url'] if isinstance(item, dict) else item
+                notified.add(item_url)
+    save_notified_items(notified)
+
+    print(f"[信息] 本轮新通知条目: {len(new_urls)} 条")
 
     # 保存邮件备份
     backup_path = save_email_backup(round_num, html_body)
