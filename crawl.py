@@ -193,6 +193,68 @@ def save_hash_records(records):
 # 爬虫核心逻辑
 # ============================================================
 
+def extract_article_items(soup):
+    """
+    从页面中提取独立文章条目列表
+    策略：提取正文中所有有意义的一行文本（通常是文章标题/商品信息）
+    返回：文章条目列表（去重，最多50条）
+    """
+    # 移除干扰元素
+    for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside', 'iframe']):
+        tag.decompose()
+
+    # 获取正文
+    body = soup.find('body')
+    if not body:
+        return []
+
+    items = []
+    seen = set()
+
+    # 策略1: 提取所有 <a> 标签的文本（通常是文章链接）
+    for a_tag in body.find_all('a', href=True):
+        text = a_tag.get_text(strip=True)
+        if not text or len(text) < 4 or len(text) > 120:
+            continue
+        # 清理
+        text = ' '.join(text.split())
+        if text in seen:
+            continue
+        # 过滤纯英文、纯数字、导航词、特殊符号开头的
+        if not text[0].isalpha() and text[0] not in '0123456789':
+            pass  # 中文开头，保留
+        elif text[0].isupper() and len(text) < 20:
+            continue  # 可能是导航词如 "HOME", "ABOUT"
+        # 过滤含大量特殊符号的
+        import re
+        if len(re.findall(r'[^\w\u4e00-\u9fff\u3000-\u303f\s]', text)) > len(text) * 0.3:
+            continue
+        seen.add(text)
+        items.append(text)
+
+    # 策略2: 如果 <a> 标签太少，用正文分句作为备选
+    if len(items) < 2:
+        text = body.get_text()
+        for sep in ['\n', '｜', '丨', '│']:
+            text = text.replace(sep, '|SPLIT|')
+        lines = text.split('|SPLIT|')
+        for line in lines:
+            line = ' '.join(line.split()).strip()
+            if not line or len(line) < 4 or len(line) > 150:
+                continue
+            if line in seen:
+                continue
+            # 过滤URL行、纯数字行
+            if line.startswith('http') or line.startswith('www') or line.isdigit():
+                continue
+            if len(re.findall(r'[a-zA-Z0-9]', line)) > len(line) * 0.7 and len(line) < 30:
+                continue
+            seen.add(line)
+            items.append(line)
+
+    return items[:50]
+
+
 def fetch_page_content(url):
     """
     爬取页面完整正文
@@ -234,31 +296,35 @@ def fetch_page_content(url):
         title_tag = soup.find('title')
         title = title_tag.get_text(strip=True) if title_tag else url
         
+        # 提取文章条目列表
+        article_items = extract_article_items(soup)
+
         # 移除脚本、样式、注释等干扰内容
         for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
             tag.decompose()
-        
+
         # 获取正文文本
         body = soup.find('body')
         if body:
             text = body.get_text(separator=' ', strip=True)
         else:
             text = soup.get_text(separator=' ', strip=True)
-        
+
         # 清理多余空白
         text = ' '.join(text.split())
-        
+
         if not text:
             return False, "页面正文为空"
-        
+
         # 生成摘要（前300个字符）
         summary = text[:300] + '...' if len(text) > 300 else text
-        
-        # 返回包含标题和摘要的字典
+
+        # 返回包含标题、摘要和文章条目的字典
         return True, {
             'text': text,
             'title': title,
-            'summary': summary
+            'summary': summary,
+            'items': article_items
         }
         
     except requests.Timeout:
@@ -314,233 +380,140 @@ def check_site_update(url, old_records):
 
 def generate_email_html(round_num, all_site_results, check_time):
     """
-    生成邮件HTML内容 — 显示所有站点状态
-    all_site_results: 列表，每个元素为 {'url':..., 'title':..., 'summary':..., 'status': 'updated'|'no_update'|'error'|'first', 'message':..., 'page_info':...}
-    排序规则：有更新的排在前面，无更新的排在后面
+    生成邮件HTML内容 — 紧凑列表风格
+    all_site_results: 列表，每个元素为 {'url':..., 'title':..., 'summary':..., 'items':..., 'status': 'updated'|'no_update'|'error'|'first', 'message':...}
+    排序规则：有更新的排在前面（按条目数降序），无更新的排在后面
     返回：(主题, HTML正文, 纯文本正文)
     """
-    # 统计
+    # 统计与排序
     updated_results = [r for r in all_site_results if r['status'] == 'updated']
     no_update_results = [r for r in all_site_results if r['status'] in ('no_update', 'first')]
     error_results = [r for r in all_site_results if r['status'] == 'error']
+
+    # 更新的站点按条目数降序
+    updated_results.sort(key=lambda r: len(r.get('items', [])), reverse=True)
+
     total = len(all_site_results)
     updated_count = len(updated_results)
+    total_new_items = sum(len(r.get('items', [])) for r in updated_results)
 
-    # 排序：更新的前面，无更新的后面
-    sorted_results = updated_results + no_update_results + error_results
-
-    # 邮件标题
     if updated_count > 0:
-        subject = f"【站点更新提醒】第{round_num}轮巡检 | {updated_count}个站点有更新"
+        subject = f"【站点更新提醒】第{round_num}轮巡检 | {updated_count}个站点 {total_new_items}条新内容"
     else:
         subject = f"【站点巡检报告】第{round_num}轮巡检 | 暂无更新"
 
     # ===== 纯文本正文 =====
-    text_body = f"""站点更新监控巡检报告
+    text_body = f"站点更新监控巡检报告\n\n"
+    text_body += f"📅 第 {round_num} 轮巡检  ⏰ {check_time}\n"
+    text_body += f"📊 总计 {total} 个站点 | 更新 {updated_count} 个 | 无更新 {len(no_update_results)} 个 | 异常 {len(error_results)} 个\n\n"
 
-📅 当日第 {round_num} 次全自动巡检
-⏰ 巡检时间：{check_time}
-📊 总计 {total} 个站点 | 更新 {updated_count} 个 | 无更新 {len(no_update_results)} 个 | 异常 {len(error_results)} 个
+    idx = 1
+    for r in updated_results:
+        item_count = len(r.get('items', []))
+        title = r.get('title', r['url'])
+        text_body += f"{idx}.{title} ({item_count}条新)\n"
+        for item in r.get('items', []):
+            text_body += f"  {item}\n"
+        text_body += "📡\n"
+        idx += 1
 
-"""
-    if updated_results:
-        text_body += "━━━ 有更新的站点 ━━━\n\n"
-        for idx, r in enumerate(updated_results, 1):
-            text_body += f"[更新] {idx}. {r['title']}\n   URL: {r['url']}\n   摘要: {r['summary']}\n\n"
+    for r in no_update_results:
+        title = r.get('title', r['url'])
+        text_body += f"{idx}.{title}\n  暂无新内容\n📡\n"
+        idx += 1
 
-    if no_update_results:
-        text_body += "━━━ 无更新的站点 ━━━\n\n"
-        for idx, r in enumerate(no_update_results, 1):
-            text_body += f"[无新内容] {idx}. {r['title']}\n   URL: {r['url']}\n\n"
+    for r in error_results:
+        text_body += f"{idx}.{r['url']}\n  异常: {r['message']}\n📡\n"
+        idx += 1
 
-    if error_results:
-        text_body += "━━━ 异常的站点 ━━━\n\n"
-        for idx, r in enumerate(error_results, 1):
-            text_body += f"[异常] {idx}. {r['url']}\n   原因: {r['message']}\n\n"
-
-    text_body += """
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-🤖 自动化监控来源：GitHub Actions 站点巡检机器人
-⏱ 每4小时自动巡检 | 零运维 | 稳定可靠
-✉️ 163邮箱推送服务
-"""
+    text_body += "\n🤖 GitHub Actions 站点巡检机器人 | 每4小时自动巡检 | 163邮箱推送\n"
 
     # ===== HTML正文 =====
+    site_blocks = []
+
+    # 有更新的站点
+    idx = 1
+    for r in updated_results:
+        items = r.get('items', [])
+        item_count = len(items)
+        title = r.get('title', r['url'])
+        url = r['url']
+
+        item_lines = ""
+        for item in items:
+            item_lines += f'<li style="margin:4px 0 4px 16px; padding:0; color:#333; font-size:13px; line-height:1.6; list-style:disc;">{item}</li>\n'
+
+        site_blocks.append(f"""
+        <div style="margin-bottom:8px; padding:12px 16px; background:#fafbfc; border-left:4px solid #1a73e8; border-radius:0 4px 4px 0;">
+            <div style="margin-bottom:6px; font-size:14px;">
+                <span style="color:#1a73e8; font-weight:700; margin-right:4px;">{idx}.</span>
+                <a href="{url}" target="_blank" style="color:#1a73e8; text-decoration:none; font-weight:600;">{title}</a>
+                <span style="display:inline-block; background:#e8f5e9; color:#2e7d32; font-size:12px; font-weight:600; padding:2px 8px; border-radius:12px; margin-left:6px;">({item_count}条新)</span>
+            </div>
+            <ul style="margin:0; padding:0 0 0 4px;">{item_lines}</ul>
+            <div style="text-align:center; color:#ccc; font-size:14px; margin-top:8px; padding-top:8px; border-top:1px dashed #e0e0e0;">📡</div>
+        </div>""")
+        idx += 1
+
+    # 无更新的站点
+    for r in no_update_results:
+        title = r.get('title', r['url'])
+        site_blocks.append(f"""
+        <div style="margin-bottom:8px; padding:10px 16px; background:#fafbfc; border-left:4px solid #e0e0e0; border-radius:0 4px 4px 0;">
+            <div style="font-size:14px;">
+                <span style="color:#999; font-weight:700; margin-right:4px;">{idx}.</span>
+                <span style="color:#888;">{title}</span>
+                <span style="display:inline-block; background:#f5f5f5; color:#999; font-size:12px; font-weight:600; padding:2px 8px; border-radius:12px; margin-left:6px;">暂无新内容</span>
+            </div>
+            <div style="text-align:center; color:#ccc; font-size:14px; margin-top:4px; padding-top:4px; border-top:1px dashed #e0e0e0;">📡</div>
+        </div>""")
+        idx += 1
+
+    # 异常的站点
+    for r in error_results:
+        site_blocks.append(f"""
+        <div style="margin-bottom:8px; padding:10px 16px; background:#fff8f8; border-left:4px solid #e53935; border-radius:0 4px 4px 0;">
+            <div style="font-size:14px;">
+                <span style="color:#e53935; font-weight:700; margin-right:4px;">{idx}.</span>
+                <span style="color:#c62828; font-size:12px;">{r['url']}</span>
+                <span style="display:inline-block; background:#fce4ec; color:#c62828; font-size:12px; font-weight:600; padding:2px 8px; border-radius:12px; margin-left:6px;">{r['message']}</span>
+            </div>
+            <div style="text-align:center; color:#ccc; font-size:14px; margin-top:4px; padding-top:4px; border-top:1px dashed #e0e0e0;">📡</div>
+        </div>""")
+        idx += 1
+
     body = f"""<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <style>
-        body {{
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }}
-        .header {{
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 8px 8px 0 0;
-            text-align: center;
-        }}
-        .content {{
-            background: #f9f9f9;
-            padding: 20px;
-            border: 1px solid #e0e0e0;
-            border-top: none;
-        }}
-        .info-box {{
-            background: white;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            border-left: 4px solid #667eea;
-        }}
-        .section-title {{
-            background: #667eea;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin: 20px 0 10px 0;
-            font-size: 15px;
-        }}
-        .section-title.no-update {{
-            background: #9e9e9e;
-        }}
-        .section-title.error {{
-            background: #e53935;
-        }}
-        .site-item.updated {{
-            padding: 15px;
-            margin: 10px 0;
-            background: #f0f4ff;
-            border-radius: 5px;
-            border-left: 3px solid #667eea;
-        }}
-        .site-item.updated a {{
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-        }}
-        .site-item.updated a:hover {{
-            text-decoration: underline;
-        }}
-        .site-summary {{
-            margin-top: 8px;
-            padding: 10px;
-            background: white;
-            border-radius: 3px;
-            font-size: 13px;
-            color: #666;
-            line-height: 1.5;
-        }}
-        .site-item.no-update {{
-            padding: 10px 15px;
-            margin: 6px 0;
-            background: #fafafa;
-            border-radius: 5px;
-            border-left: 3px solid #e0e0e0;
-            color: #999;
-            font-size: 14px;
-        }}
-        .site-item.no-update a {{
-            color: #999;
-            text-decoration: none;
-        }}
-        .site-item.error {{
-            padding: 10px 15px;
-            margin: 6px 0;
-            background: #fff5f5;
-            border-radius: 5px;
-            border-left: 3px solid #e53935;
-            color: #c62828;
-            font-size: 14px;
-        }}
-        .badge {{
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-size: 12px;
-            margin-left: 8px;
-        }}
-        .badge.updated {{ background: #667eea; color: white; }}
-        .badge.no-update {{ background: #e0e0e0; color: #666; }}
-        .badge.error {{ background: #e53935; color: white; }}
-        .footer {{
-            text-align: center;
-            padding: 15px;
-            color: #999;
-            font-size: 12px;
-            border-top: 1px solid #e0e0e0;
-            margin-top: 20px;
-        }}
-        .highlight {{
-            color: #667eea;
-            font-weight: bold;
-        }}
-    </style>
 </head>
-<body>
-    <div class="header">
-        <h2 style="margin: 0;">🔔 站点更新监控巡检报告</h2>
-    </div>
-
-    <div class="content">
-        <div class="info-box">
-            <p style="margin: 5px 0;">📅 当日第 <span class="highlight">{round_num}</span> 次全自动巡检</p>
-            <p style="margin: 5px 0;">⏰ 巡检时间：<span class="highlight">{check_time}</span></p>
-            <p style="margin: 5px 0;">📊 总计 <span class="highlight">{total}</span> 个站点 ｜
-               更新 <span class="highlight" style="color:#2e7d32">{updated_count}</span> 个 ｜
-               无更新 <span class="highlight" style="color:#9e9e9e">{len(no_update_results)}</span> 个 ｜
-               异常 <span class="highlight" style="color:#e53935">{len(error_results)}</span> 个</p>
-        </div>
-"""
-
-    # 有更新的站点
-    if updated_results:
-        body += f'        <div class="section-title">✅ 有更新的站点（{len(updated_results)}个）</div>\n'
-        for idx, r in enumerate(updated_results, 1):
-            body += f"""
-            <div class="site-item updated">
-                <strong>{idx}.</strong> <a href="{r['url']}" target="_blank" rel="noopener noreferrer">{r['title']}</a>
-                <span class="badge updated">已更新</span>
-                <div class="site-summary">{r['summary']}</div>
-            </div>
-"""
-
-    # 无更新的站点
-    if no_update_results:
-        body += f'        <div class="section-title no-update">⭕ 无更新的站点（{len(no_update_results)}个）</div>\n'
-        for idx, r in enumerate(no_update_results, 1):
-            body += f"""
-            <div class="site-item no-update">
-                {idx}. <a href="{r['url']}" target="_blank" rel="noopener noreferrer">{r['title']}</a>
-                <span class="badge no-update">无新内容</span>
-            </div>
-"""
-
-    # 异常的站点
-    if error_results:
-        body += f'        <div class="section-title error">❌ 异常的站点（{len(error_results)}个）</div>\n'
-        for idx, r in enumerate(error_results, 1):
-            body += f"""
-            <div class="site-item error">
-                {idx}. {r['url']} <span class="badge error">异常</span> — {r['message']}
-            </div>
-"""
-
-    body += """
-    </div>
-
-    <div class="footer">
-        <p style="margin: 5px 0;">🤖 自动化监控来源：GitHub Actions 站点巡检机器人</p>
-        <p style="margin: 5px 0;">⏱ 每4小时自动巡检 | 零运维 | 稳定可靠</p>
-        <p style="margin: 5px 0; color: #667eea;">✉️ 163邮箱推送服务</p>
-    </div>
+<body style="margin:0; padding:0; background-color:#f4f5f7; font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,&quot;Helvetica Neue&quot;,Arial,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif;">
+    <table cellpadding="0" cellspacing="0" style="width:100%; max-width:680px; margin:0 auto; background:#ffffff;">
+        <tr>
+            <td style="background:#1a73e8; padding:24px 28px; color:#fff;">
+                <div style="font-size:20px; font-weight:700; margin-bottom:6px;">🔔 站点更新监控</div>
+                <div style="font-size:13px; color:#bbdefb;">📅 第 {round_num} 轮巡检 &nbsp;|&nbsp; ⏰ {check_time}</div>
+            </td>
+        </tr>
+        <tr>
+            <td style="background:#e8f0fe; padding:12px 28px; font-size:13px; color:#1a73e8; font-weight:600;">
+                📊 总计 <b>{total}</b> 个站点 &nbsp;
+                ✅ 更新 <b>{updated_count}</b> 个 &nbsp;
+                ⭕ 无更新 <b>{len(no_update_results)}</b> 个 &nbsp;
+                {'❌ 异常 <b>' + str(len(error_results)) + '</b> 个' if error_results else ''}
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:16px 20px 20px;">
+                {''.join(site_blocks)}
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center; padding:16px 20px 24px; font-size:12px; color:#999; border-top:1px solid #eee;">
+                🤖 GitHub Actions 站点巡检机器人 &nbsp;|&nbsp; ⏱ 每4小时自动巡检 &nbsp;|&nbsp; ✉️ 163邮箱推送
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
 """
@@ -639,6 +612,7 @@ def save_dashboard_data(round_num, all_site_results, check_time):
                 'url': r['url'],
                 'title': r.get('title', r['url']),
                 'summary': r.get('summary', ''),
+                'items': r.get('items', []),
                 'status': status,
                 'message': r.get('message', '')
             })
@@ -777,6 +751,7 @@ def main():
                     'url': url,
                     'title': page_info.get('title', url) if page_info else url,
                     'summary': page_info.get('summary', '') if page_info else '',
+                    'items': page_info.get('items', []) if page_info else [],
                     'status': 'updated',
                     'message': message
                 })
@@ -787,6 +762,7 @@ def main():
                     'url': url,
                     'title': page_info.get('title', url) if page_info else url,
                     'summary': '',
+                    'items': [],
                     'status': status,
                     'message': message
                 })
