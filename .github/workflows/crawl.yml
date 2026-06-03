@@ -57,7 +57,16 @@ jobs:
             push_success=false
             for i in 1 2 3 4 5; do
               echo "=== Push attempt $i ==="
-              git pull --rebase origin main
+              git pull --rebase --strategy-option=theirs origin main
+              if [ $? -ne 0 ]; then
+                echo "Rebase failed, resolving conflicts with ours..."
+                git diff --name-only --diff-filter=U | while read conflict_file; do
+                  echo "Resolving conflict in $conflict_file using ours"
+                  git checkout --ours "$conflict_file"
+                  git add "$conflict_file"
+                done
+                git rebase --continue || true
+              fi
               if git push origin main; then
                 push_success=true
                 break
