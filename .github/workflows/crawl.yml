@@ -1,0 +1,71 @@
+name: 站点更新监控
+
+on:
+  # 定时触发：每4小时执行一次（北京时间 00:00, 04:00, 08:00, 12:00, 16:00, 20:00）
+  # Cron表达式（UTC时间）：0 */4 * * *
+  # 对应北京时间：08:00, 12:00, 16:00, 20:00, 00:00, 04:00
+  schedule:
+    - cron: '0 */4 * * *'
+  
+  # 手动触发（用于测试）
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    
+    # 设置时区为北京时间
+    env:
+      TZ: Asia/Shanghai
+    
+    steps:
+      # 1. 检出代码仓库
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          # 需要写权限用于提交变更
+          persist-credentials: true
+      
+      # 2. 设置Python环境
+      - name: 设置Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      # 3. 安装依赖
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      # 4. 配置Git用户信息（用于提交变更）
+      - name: 配置Git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+      
+      # 5. 执行监控脚本
+      - name: 运行监控
+        env:
+          # 网易Claw邮箱配置（从GitHub Secrets读取）
+          CLAW_AUTH_URL: ${{ secrets.CLAW_AUTH_URL }}
+          CLAWEMAIL_API_KEY: ${{ secrets.CLAWEMAIL_API_KEY }}
+          CLAWEMAIL_USER: ${{ secrets.CLAWEMAIL_USER }}
+        run: python crawl.py
+      
+      # 6. 提交变更（哈希记录或邮件备份）
+      # 注意：crawl.py内部已包含智能提交逻辑，此处为兜底
+      - name: 提交变更
+        run: |
+          git add -A
+          git diff --quiet && git diff --staged --quiet || (git commit -m "自动更新: $(date '+%Y-%m-%d %H:%M:%S')" && git push)
+      
+      # 7. 上传邮件备份（可选，用于手动下载查看）
+      - name: 上传邮件备份
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: email-backup-${{ github.run_number }}
+          path: email_backup/
+          retention-days: 30
