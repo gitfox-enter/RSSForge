@@ -70,15 +70,29 @@ jobs:
             push_success=false
             for i in 1 2 3 4 5; do
               echo "=== Push attempt $i ==="
-              git pull --rebase --strategy-option=theirs origin main || {
-                echo "Rebase had conflicts, trying merge strategy..."
-                git rebase --abort 2>/dev/null || true
-                git pull --no-rebase --strategy-option=ours origin main || {
-                  echo "Merge also failed, forcing..."
+              # Try to pull with rebase first
+              if git pull --rebase origin main; then
+                echo "Pull/rebase succeeded"
+              else
+                echo "Rebase had conflicts, resolving by accepting our version..."
+                # If rebase conflicts occur, accept our version for all conflicted files
+                git diff --name-only --diff-filter=U | while read conflict_file; do
+                  echo "Resolving conflict in: $conflict_file (using ours)"
+                  git checkout --ours "$conflict_file"
+                  git add "$conflict_file"
+                done
+                # Continue the rebase
+                if git rebase --continue; then
+                  echo "Rebase continued successfully"
+                else
+                  echo "Rebase continue failed, aborting and trying force approach..."
+                  git rebase --abort 2>/dev/null || true
+                  # Last resort: reset to remote and re-apply our commit
+                  git fetch origin main
                   git reset --soft origin/main
                   git commit -m "自动更新: $(TZ="Asia/Shanghai" date "+%Y-%m-%d %H:%M:%S")"
-                }
-              }
+                fi
+              fi
               if git push origin main; then
                 push_success=true
                 break
