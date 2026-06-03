@@ -195,6 +195,7 @@ def fetch_page_content(url):
     """
     爬取页面完整正文
     返回：(成功标志, 内容/错误信息)
+    内容包含：(text, title, summary)
     """
     headers = {
         'User-Agent': get_random_ua(),
@@ -227,6 +228,10 @@ def fetch_page_content(url):
         # 使用BeautifulSoup提取正文内容
         soup = BeautifulSoup(content, 'html.parser')
         
+        # 获取页面标题
+        title_tag = soup.find('title')
+        title = title_tag.get_text(strip=True) if title_tag else url
+        
         # 移除脚本、样式、注释等干扰内容
         for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
             tag.decompose()
@@ -244,7 +249,15 @@ def fetch_page_content(url):
         if not text:
             return False, "页面正文为空"
         
-        return True, text
+        # 生成摘要（前300个字符）
+        summary = text[:300] + '...' if len(text) > 300 else text
+        
+        # 返回包含标题和摘要的字典
+        return True, {
+            'text': text,
+            'title': title,
+            'summary': summary
+        }
         
     except requests.Timeout:
         return False, "请求超时"
@@ -264,25 +277,33 @@ def calculate_md5(text):
 def check_site_update(url, old_records):
     """
     检查单个站点是否有更新
-    返回：(是否更新, 新哈希值, 错误信息)
+    返回：(是否更新, 新哈希值, 错误信息, 页面信息)
     """
     success, result = fetch_page_content(url)
     
     if not success:
-        return None, None, result  # 爬取失败
+        return None, None, result, None  # 爬取失败
     
-    new_hash = calculate_md5(result)
+    # result现在是一个字典
+    text = result['text']
+    page_info = {
+        'url': url,
+        'title': result['title'],
+        'summary': result['summary']
+    }
+    
+    new_hash = calculate_md5(text)
     old_hash = old_records.get(url)
     
     if old_hash is None:
         # 首次监控，记录哈希但不视为更新
-        return False, new_hash, "首次监控"
+        return False, new_hash, "首次监控", page_info
     elif old_hash != new_hash:
         # 检测到更新
-        return True, new_hash, "内容已更新"
+        return True, new_hash, "内容已更新", page_info
     else:
         # 无更新
-        return False, new_hash, "无更新"
+        return False, new_hash, "无更新", page_info
 
 
 # ============================================================
@@ -293,7 +314,7 @@ def generate_email_html(round_num, updated_sites, check_time):
     """
     生成邮件HTML内容
     - 标题：【站点更新提醒】当日第N轮巡检 | 共M个网站更新
-    - 正文：标准HTML格式，链接新窗口打开
+    - 正文：标准HTML格式，链接新窗口打开，包含页面标题和摘要
     返回：(主题, HTML正文, 纯文本正文)
     """
     # 邮件标题
@@ -308,9 +329,13 @@ def generate_email_html(round_num, updated_sites, check_time):
 
 更新站点列表：
 以下站点监测到内容更新，点击链接可直达原网页：
+
 """
-    for idx, site in enumerate(updated_sites, 1):
-        text_body += f"{idx}. {site}\n"
+    for idx, site_info in enumerate(updated_sites, 1):
+        url = site_info.get('url', '')
+        title = site_info.get('title', url)
+        summary = site_info.get('summary', '')
+        text_body += f"{idx}. {title}\n   URL: {url}\n   摘要: {summary}\n\n"
     
     text_body += f"""
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -357,8 +382,8 @@ def generate_email_html(round_num, updated_sites, check_time):
             padding: 15px;
         }}
         .site-item {{
-            padding: 10px;
-            margin: 8px 0;
+            padding: 15px;
+            margin: 10px 0;
             background: #f0f4ff;
             border-radius: 5px;
             border-left: 3px solid #667eea;
@@ -366,10 +391,20 @@ def generate_email_html(round_num, updated_sites, check_time):
         .site-item a {{
             color: #667eea;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 16px;
         }}
         .site-item a:hover {{
             text-decoration: underline;
+        }}
+        .site-summary {{
+            margin-top: 8px;
+            padding: 10px;
+            background: white;
+            border-radius: 3px;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
         }}
         .footer {{
             text-align: center;
@@ -402,11 +437,15 @@ def generate_email_html(round_num, updated_sites, check_time):
             <p>以下站点监测到内容更新，点击链接可直达原网页：</p>
 """
     
-    # 添加每个更新站点
-    for idx, site in enumerate(updated_sites, 1):
+    # 添加每个更新站点（包含标题和摘要）
+    for idx, site_info in enumerate(updated_sites, 1):
+        url = site_info.get('url', '')
+        title = site_info.get('title', url)
+        summary = site_info.get('summary', '')
         body += f"""
             <div class="site-item">
-                <strong>{idx}.</strong> <a href="{site}" target="_blank" rel="noopener noreferrer">{site}</a>
+                <strong>{idx}.</strong> <a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a>
+                <div class="site-summary">{summary}</div>
             </div>
 """
     
@@ -579,7 +618,7 @@ def main():
     print(f"[信息] 已加载哈希记录: {len(old_records)} 条")
     
     # 检查所有站点更新
-    updated_sites = []
+    updated_sites = []  # 存储更新的站点信息（包含标题和摘要）
     new_records = old_records.copy()
     success_count = 0
     error_count = 0
@@ -588,7 +627,7 @@ def main():
         print(f"\n[{idx}/{len(MONITOR_SITES)}] 检查: {url}")
         
         # 检查站点更新
-        is_updated, new_hash, message = check_site_update(url, old_records)
+        is_updated, new_hash, message, page_info = check_site_update(url, old_records)
         
         if is_updated is None:
             # 爬取失败
@@ -601,9 +640,10 @@ def main():
         success_count += 1
         
         if is_updated:
-            # 检测到更新
+            # 检测到更新，保存页面信息
             print(f"[更新] ✅ {message}")
-            updated_sites.append(url)
+            if page_info:
+                updated_sites.append(page_info)
         else:
             print(f"[正常] {message}")
         
