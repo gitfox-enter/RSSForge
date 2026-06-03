@@ -524,12 +524,13 @@ def generate_email_html(round_num, all_site_results, check_time, notified=None):
 
     text_body = '\n'.join(lines)
 
-    # HTML 版本也生成一份纯文本（邮件备份用）
+    # HTML 版本：用 <br> 标签换行，兼容所有邮箱客户端
+    html_escaped = html_escape(text_body).replace('\n', '<br>\n')
     html_body = f"""<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"></head>
-<body style="font-family:monospace;font-size:13px;white-space:pre-wrap;padding:20px;">
-{html_escape(text_body)}
+<body style="font-family:'Courier New',Consolas,monospace;font-size:14px;line-height:1.6;padding:20px;color:#333;">
+{html_escaped}
 </body>
 </html>"""
 
