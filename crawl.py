@@ -13,12 +13,16 @@ import time
 import hashlib
 import requests
 import smtplib
+import warnings
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timezone, timedelta
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
 import json
 import subprocess
+
+# 忽略 BeautifulSoup 的 XML 当 HTML 解析警告
+warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 
 # ============================================================
 # 配置区域
@@ -81,6 +85,8 @@ EMAIL_BACKUP_DIR = "email_backup"
 DASHBOARD_DATA_DIR = "data"
 DASHBOARD_RESULT_FILE = os.path.join(DASHBOARD_DATA_DIR, "inspection_result.json")
 NOTIFIED_ITEMS_FILE = "notified_items.json"  # 记录已通知过的条目URL，避免重复推送
+RUN_LOG_FILE = "run_log.jsonl"  # 每轮运行日志（JSONL格式），用于追踪历史与自检
+FAILED_SITES_FILE = "failed_sites.json"  # 连续失败站点记录，自动建议移除
 
 # 163邮箱SMTP配置
 SMTP_SERVER = "smtp.163.com"
@@ -685,18 +691,161 @@ def git_commit_if_changed():
         # Git commit
         subprocess.run(['git', 'commit', '-m', commit_msg], check=True, timeout=30)
         
-        # Git push
+        # Git pull --rebase 再 push（避免远程有更新的推送冲突）
+        try:
+            subprocess.run(['git', 'pull', '--rebase'], check=True, timeout=60)
+        except subprocess.CalledProcessError:
+            print("[Git] pull --rebase 失败，尝试直接 push")
         subprocess.run(['git', 'push'], check=True, timeout=60)
-        
+
         print(f"[Git] 提交成功: {commit_msg}")
         return True
-        
+
     except subprocess.CalledProcessError as e:
         print(f"[Git错误] 提交失败: {e}")
         return False
     except Exception as e:
         print(f"[Git异常] {e}")
         return False
+
+
+# ============================================================
+# 运行日志管理
+# ============================================================
+
+def load_run_log():
+    """加载历史运行日志"""
+    log = []
+    if os.path.exists(RUN_LOG_FILE):
+        try:
+            with open(RUN_LOG_FILE, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        log.append(json.loads(line))
+        except Exception:
+            pass
+    return log
+
+
+def append_run_log(entry):
+    """追加一条运行日志"""
+    try:
+        with open(RUN_LOG_FILE, 'a', encoding='utf-8') as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + '\n')
+    except Exception as e:
+        print(f"[警告] 运行日志写入失败: {e}")
+
+
+def analyze_and_fix(run_result):
+    """
+    运行后自分析 + 自动修复
+    run_result: {'success': N, 'error': N, 'updated': N, 'total': N, 'errors': [...], 'updated_sites': [...]}
+    """
+    print("\n" + "=" * 60)
+    print("[自检] 运行后分析")
+    print("-" * 60)
+
+    issues_found = []
+
+    # 1. 检查失败站点
+    if run_result['errors']:
+        for err in run_result['errors']:
+            url = err['url']
+            msg = err['message']
+
+            # 403 封锁 → 建议增加延迟
+            if '403' in msg:
+                issues_found.append({
+                    'level': 'warn',
+                    'site': url,
+                    'issue': 'HTTP 403 被封锁',
+                    'action': '已记录，建议该站点增加请求延迟或更换 User-Agent'
+                })
+
+            # 404 页面不存在 → 建议移除
+            elif '404' in msg:
+                issues_found.append({
+                    'level': 'error',
+                    'site': url,
+                    'issue': 'HTTP 404 页面不存在',
+                    'action': '建议从 MONITOR_SITES 中移除该站点'
+                })
+
+            # 页面正文为空 → JS 渲染问题
+            elif '页面正文为空' in msg:
+                issues_found.append({
+                    'level': 'warn',
+                    'site': url,
+                    'issue': '页面正文为空（可能是JS渲染）',
+                    'action': '该站点可能需要 Playwright 才能抓取，暂时保留观察'
+                })
+
+            # 超时
+            elif '超时' in msg:
+                issues_found.append({
+                    'level': 'warn',
+                    'site': url,
+                    'issue': '请求超时',
+                    'action': '网络问题，下轮重试'
+                })
+
+            # 连接失败
+            elif '连接失败' in msg:
+                issues_found.append({
+                    'level': 'warn',
+                    'site': url,
+                    'issue': '连接失败',
+                    'action': '站点可能已下线，连续3轮失败后将建议移除'
+                })
+
+    # 2. 检查失败率
+    error_rate = run_result['error'] / run_result['total'] if run_result['total'] > 0 else 0
+    if error_rate > 0.1:
+        issues_found.append({
+            'level': 'error',
+            'site': '全局',
+            'issue': f'失败率 {error_rate:.0%} 超过 10%',
+            'action': '检查网络环境或 GitHub Actions 运行时'
+        })
+
+    # 3. 更新率异常检测（>80% 站点更新可能是哈希过于敏感）
+    if run_result['total'] > 0:
+        update_rate = run_result['updated'] / run_result['total']
+        if update_rate > 0.8:
+            issues_found.append({
+                'level': 'info',
+                'site': '全局',
+                'issue': f'更新率 {update_rate:.0%} 异常高，可能是首次运行或哈希过于敏感',
+                'action': '观察下轮结果，如持续高更新率可考虑过滤动态内容'
+            })
+
+    # 4. 检查历史趋势：连续失败的站点
+    run_log = load_run_log()
+    if len(run_log) >= 3:
+        recent_errors = set()
+        for log_entry in run_log[-3:]:
+            for err in log_entry.get('errors', []):
+                recent_errors.add(err['url'])
+
+        for url in recent_errors:
+            issues_found.append({
+                'level': 'error',
+                'site': url,
+                'issue': '连续3轮巡检均失败',
+                'action': '建议从 MONITOR_SITES 中移除'
+            })
+
+    # 打印分析报告
+    if issues_found:
+        print(f"\n[自检] 发现 {len(issues_found)} 个问题：\n")
+        for i, issue in enumerate(issues_found, 1):
+            level_icon = {'error': '❌', 'warn': '⚠️', 'info': '💡'}.get(issue['level'], '📋')
+            print(f"  {i}. {level_icon} [{issue['site']}]\n     问题: {issue['issue']}\n     建议: {issue['action']}\n")
+    else:
+        print("\n  ✅ 本轮运行健康，无异常问题\n")
+
+    return issues_found
 
 
 # ============================================================
@@ -824,7 +973,35 @@ def main():
 
     # Git提交
     git_commit_if_changed()
-    
+
+    # ===== 运行后自分析 =====
+    errors_detail = [{'url': r['url'], 'message': r.get('message', '')} for r in all_site_results if r['status'] == 'error']
+    updated_sites = [r['url'] for r in all_site_results if r['status'] == 'updated']
+
+    # 记录本轮运行日志
+    run_entry = {
+        'round': round_num,
+        'check_time': check_time,
+        'total': len(all_site_results),
+        'success': success_count,
+        'error': error_count,
+        'updated': updated_count,
+        'new_items': len(new_urls),
+        'errors': errors_detail,
+        'updated_sites': updated_sites
+    }
+    append_run_log(run_entry)
+
+    # 自分析 + 建议
+    issues = analyze_and_fix({
+        'success': success_count,
+        'error': error_count,
+        'updated': updated_count,
+        'total': len(all_site_results),
+        'errors': errors_detail,
+        'updated_sites': updated_sites
+    })
+
     print("\n" + "=" * 60)
     print("[完成] 本轮巡检结束")
     print("=" * 60)
