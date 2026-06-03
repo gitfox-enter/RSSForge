@@ -58,10 +58,6 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # First, pull latest changes with rebase before staging our changes
-          echo "=== Pulling latest remote changes ==="
-          git pull --rebase origin main || true
-          
           git add hash_record.txt data/ index.html notified_items.json run_log.jsonl feed.xml paused_sites.json failed_sites.json 2>/dev/null || true
           if [ -d email_backup ]; then
             git add email_backup/ 2>/dev/null || true
@@ -75,26 +71,30 @@ jobs:
             push_success=false
             for i in 1 2 3 4 5; do
               echo "=== Push attempt $i ==="
-              # Pull with rebase, auto-resolve conflicts by taking ours
-              if git pull --rebase origin main; then
-                echo "Pull/rebase succeeded"
-              else
+              # Pull with rebase, auto-resolving conflicts by taking our version
+              git pull --rebase origin main 2>/dev/null || {
                 echo "Rebase had conflicts, resolving by accepting our version..."
-                # Check if we're in a rebase state
+                # Resolve all conflicts by taking our version
                 if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
                   git diff --name-only --diff-filter=U 2>/dev/null | while read conflict_file; do
                     echo "Resolving conflict in: $conflict_file (using ours)"
-                    git checkout --ours "$conflict_file"
-                    git add "$conflict_file"
+                    git checkout --ours "$conflict_file" 2>/dev/null
+                    git add "$conflict_file" 2>/dev/null
                   done
                   GIT_EDITOR=true git rebase --continue 2>/dev/null || {
-                    echo "Rebase continue failed, aborting..."
+                    echo "Rebase continue failed, trying force push..."
                     git rebase --abort 2>/dev/null || true
+                    # Reset to our commit and force push
+                    git reset --hard HEAD@{1} 2>/dev/null || true
                   }
                 fi
-              fi
+              }
               if git push origin main; then
                 push_success=true
+                break
+              elif git push --force-with-lease origin main; then
+                push_success=true
+                echo "Force-pushed (with lease) on attempt $i"
                 break
               fi
               echo "Push attempt $i failed, waiting before retry..."
