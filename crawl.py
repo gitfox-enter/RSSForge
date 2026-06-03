@@ -76,7 +76,7 @@ HASH_RECORD_FILE = "hash_record.txt"
 EMAIL_BACKUP_DIR = "email_backup"
 
 # 网易Claw邮箱配置（从环境变量读取）
-CLAW_AUTH_URL = os.getenv("CLAW_AUTH_URL", "t1/cDGJE7RNbeRsaZSWPDNfuU5FDNX")
+CLAW_AUTH_URL = os.getenv("CLAW_AUTH_URL", "t1/VSrSdLb78uqwSSCtWBTAbTRwZki")
 CLAW_API_KEY = os.getenv("CLAWEMAIL_API_KEY", "")
 CLAW_USER = os.getenv("CLAWEMAIL_USER", "")
 
