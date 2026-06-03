@@ -294,11 +294,30 @@ def generate_email_html(round_num, updated_sites, check_time):
     生成邮件HTML内容
     - 标题：【站点更新提醒】当日第N轮巡检 | 共M个网站更新
     - 正文：标准HTML格式，链接新窗口打开
+    返回：(主题, HTML正文, 纯文本正文)
     """
     # 邮件标题
     subject = f"【站点更新提醒】当日第{round_num}轮巡检 | 共{len(updated_sites)}个网站更新"
     
-    # 邮件正文HTML
+    # 纯文本正文
+    text_body = f"""站点更新监控提醒
+
+📅 当日第 {round_num} 次全自动巡检
+⏰ 巡检时间：{check_time}
+📊 检测到 {len(updated_sites)} 个网站内容更新
+
+更新站点列表：
+以下站点监测到内容更新，点击链接可直达原网页：
+"""
+    for idx, site in enumerate(updated_sites, 1):
+        text_body += f"{idx}. {site}\n"
+    
+    text_body += f"""
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🤖 自动化监控来源：GitHub Actions 站点巡检机器人
+⏱ 每4小时自动巡检 | 零运维 | 稳定可靠
+✉️ 163邮箱推送服务
+"""
     body = f"""<!DOCTYPE html>
 <html>
 <head>
@@ -404,10 +423,10 @@ def generate_email_html(round_num, updated_sites, check_time):
 </html>
 """
     
-    return subject, body
+    return subject, body, text_body
 
 
-def send_email_smtp(subject, html_body):
+def send_email_smtp(subject, html_body, text_body=None):
     """
     通过163邮箱SMTP发送邮件
     返回：(成功标志, 错误信息)
@@ -421,6 +440,15 @@ def send_email_smtp(subject, html_body):
         message['From'] = SMTP_USER
         message['To'] = EMAIL_TO
         message['Subject'] = subject
+        
+        # 添加纯文本正文（邮件客户端会优先显示）
+        if text_body:
+            text_part = MIMEText(text_body, 'plain', 'utf-8')
+            message.attach(text_part)
+        else:
+            # 如果没有提供纯文本，从主题生成
+            text_part = MIMEText(subject, 'plain', 'utf-8')
+            message.attach(text_part)
         
         # 添加HTML正文
         html_part = MIMEText(html_body, 'html', 'utf-8')
@@ -596,14 +624,14 @@ def main():
         save_hash_records(new_records)
         
         # 2. 生成邮件内容
-        subject, html_body = generate_email_html(round_num, updated_sites, check_time)
+        subject, html_body, text_body = generate_email_html(round_num, updated_sites, check_time)
         
         # 3. 保存邮件备份（无论发送成功与否）
         backup_path = save_email_backup(round_num, html_body)
         
         # 4. 发送邮件
         if SMTP_USER and SMTP_PASSWORD:
-            success, error = send_email_smtp(subject, html_body)
+            success, error = send_email_smtp(subject, html_body, text_body)
             if not success:
                 print(f"[警告] 邮件发送失败: {error}")
                 print("[提示] 邮件已本地备份，可手动查看")
@@ -622,13 +650,34 @@ def main():
             # 保存哈希
             save_hash_records(new_records)
             
-            # 生成首次监控邮件HTML
+            # 生成首次监控邮件
             subject = f"【站点监控启动】首次监控完成 | 已录入{len(new_records)}个站点"
-            html_body = f"""&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;meta charset="utf-8"&gt;
-    &lt;style&gt;
+            
+            # 纯文本正文
+            text_body = f"""站点更新监控系统已启动
+
+📅 启动时间：{check_time}
+📊 已录入监控站点：{len(new_records)} 个
+⏰ 监控频率：每4小时自动巡检
+📧 通知邮箱：{EMAIL_TO}
+
+📌 说明：
+这是首次监控运行的初始化邮件。
+从现在开始，系统将每4小时自动检查所有站点。
+当检测到内容更新时，您将收到更新通知邮件。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🤖 GitHub Actions 站点巡检机器人
+⏱ 每4小时自动巡检 | 零运维 | 稳定可靠
+✉️ 163邮箱推送服务
+"""
+            
+            # HTML正文
+            html_body = f"""<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
         body {{
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
             line-height: 1.6;
@@ -671,44 +720,44 @@ def main():
             color: #667eea;
             font-weight: bold;
         }}
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class="container"&gt;
-        &lt;div class="header"&gt;
-            &lt;h2 style="margin: 0;"&gt;🔔 站点更新监控系统已启动&lt;/h2&gt;
-        &lt;/div&gt;
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2 style="margin: 0;">🔔 站点更新监控系统已启动</h2>
+        </div>
         
-        &lt;div class="content"&gt;
-            &lt;div class="info-box"&gt;
-                &lt;p style="margin: 10px 0;"&gt;📅 启动时间：&lt;span class="highlight"&gt;{check_time}&lt;/span&gt;&lt;/p&gt;
-                &lt;p style="margin: 10px 0;"&gt;📊 已录入监控站点：&lt;span class="highlight"&gt;{len(new_records)}&lt;/span&gt; 个&lt;/p&gt;
-                &lt;p style="margin: 10px 0;"&gt;⏰ 监控频率：每4小时自动巡检&lt;/p&gt;
-                &lt;p style="margin: 10px 0;"&gt;📧 通知邮箱：{EMAIL_TO}&lt;/p&gt;
-            &lt;/div&gt;
+        <div class="content">
+            <div class="info-box">
+                <p style="margin: 10px 0;">📅 启动时间：<span class="highlight">{check_time}</span></p>
+                <p style="margin: 10px 0;">📊 已录入监控站点：<span class="highlight">{len(new_records)}</span> 个</p>
+                <p style="margin: 10px 0;">⏰ 监控频率：每4小时自动巡检</p>
+                <p style="margin: 10px 0;">📧 通知邮箱：{EMAIL_TO}</p>
+            </div>
             
-            &lt;div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107;"&gt;
-                &lt;p style="margin: 0;"&gt;&lt;strong&gt;📌 说明：&lt;/strong&gt;&lt;/p&gt;
-                &lt;p style="margin: 5px 0;"&gt;这是首次监控运行的初始化邮件。&lt;/p&gt;
-                &lt;p style="margin: 5px 0;"&gt;从现在开始，系统将每4小时自动检查所有站点。&lt;/p&gt;
-                &lt;p style="margin: 5px 0;"&gt;当检测到内容更新时，您将收到更新通知邮件。&lt;/p&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
+            <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107;">
+                <p style="margin: 0;"><strong>📌 说明：</strong></p>
+                <p style="margin: 5px 0;">这是首次监控运行的初始化邮件。</p>
+                <p style="margin: 5px 0;">从现在开始，系统将每4小时自动检查所有站点。</p>
+                <p style="margin: 5px 0;">当检测到内容更新时，您将收到更新通知邮件。</p>
+            </div>
+        </div>
         
-        &lt;div class="footer"&gt;
-            &lt;p style="margin: 5px 0;"&gt;🤖 GitHub Actions 站点巡检机器人&lt;/p&gt;
-            &lt;p style="margin: 5px 0;"&gt;⏱ 每4小时自动巡检 | 零运维 | 稳定可靠&lt;/p&gt;
-            &lt;p style="margin: 5px 0; color: #667eea;"&gt;✉️ 163邮箱推送服务&lt;/p&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+        <div class="footer">
+            <p style="margin: 5px 0;">🤖 GitHub Actions 站点巡检机器人</p>
+            <p style="margin: 5px 0;">⏱ 每4小时自动巡检 | 零运维 | 稳定可靠</p>
+            <p style="margin: 5px 0; color: #667eea;">✉️ 163邮箱推送服务</p>
+        </div>
+    </div>
+</body>
+</html>
 """
             
             # 发送首次监控通知邮件
             if SMTP_USER and SMTP_PASSWORD:
                 print("[邮件] 发送首次监控通知...")
-                success, error = send_email_smtp(subject, html_body)
+                success, error = send_email_smtp(subject, html_body, text_body)
                 if success:
                     print("[邮件] ✓ 首次监控通知已发送")
                 else:
