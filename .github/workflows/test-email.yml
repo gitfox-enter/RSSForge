@@ -25,10 +25,9 @@ jobs:
       
       - name: 运行邮件测试
         env:
-          CLAW_AUTH_URL: ${{ secrets.CLAW_AUTH_URL }}
-          CLAWEMAIL_API_KEY: ${{ secrets.CLAWEMAIL_API_KEY }}
-          CLAWEMAIL_USER: ${{ secrets.CLAWEMAIL_USER }}
-        run: python test_email.py
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        run: python test_email_smtp.py
       
       - name: 上传邮件备份
         uses: actions/upload-artifact@v4
