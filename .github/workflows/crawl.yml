@@ -18,13 +18,16 @@ jobs:
     env:
       TZ: Asia/Shanghai
     
+    # 给予写权限
+    permissions:
+      contents: write
+    
     steps:
       # 1. 检出代码仓库
       - name: 检出仓库
         uses: actions/checkout@v4
         with:
-          # 需要写权限用于提交变更
-          persist-credentials: true
+          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0  # 获取完整历史，确保push正常
       
       # 2. 设置Python环境
