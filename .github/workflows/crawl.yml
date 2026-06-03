@@ -1,113 +1,77 @@
 name: 站点更新监控
 
 on:
-  # 定时触发：每4小时执行一次（北京时间 00:00, 04:00, 08:00, 12:00, 16:00, 20:00）
   schedule:
     - cron: '0 */4 * * *'
-  
-  # 手动触发（用于测试）
   workflow_dispatch:
 
-# 同一时间只允许一个监控任务运行，取消排队中的旧运行
 concurrency:
   group: site-monitor
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   monitor:
     runs-on: ubuntu-latest
-    
     env:
       TZ: Asia/Shanghai
-    
     permissions:
       contents: write
-    
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-      
       - name: 设置Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
-      
       - name: 安装依赖
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      
       - name: 配置Git
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-      
       - name: 运行监控
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         run: python crawl.py
-      
       - name: 提交变更
         run: |
           set +e
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          
           git add hash_record.txt data/ index.html notified_items.json run_log.jsonl feed.xml paused_sites.json failed_sites.json 2>/dev/null || true
           if [ -d email_backup ]; then
             git add email_backup/ 2>/dev/null || true
           fi
           git status
-          
           if git diff --staged --quiet 2>/dev/null; then
             echo "No changes to commit"
           else
-            git commit -m "自动更新: $(TZ="Asia/Shanghai" date "+%Y-%m-%d %H:%M:%S")"
+            git commit -m "自动更新: $(TZ='Asia/Shanghai' date '+%%Y-%%m-%%d %%H:%%M:%%S')"
             push_success=false
             for i in 1 2 3 4 5; do
               echo "=== Push attempt $i ==="
-              # Pull with rebase, auto-resolving conflicts by taking our version
-              git pull --rebase origin main 2>/dev/null || {
-                echo "Rebase had conflicts, resolving by accepting our version..."
-                # Resolve all conflicts by taking our version
-                if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
-                  git diff --name-only --diff-filter=U 2>/dev/null | while read conflict_file; do
-                    echo "Resolving conflict in: $conflict_file (using ours)"
-                    git checkout --ours "$conflict_file" 2>/dev/null
-                    git add "$conflict_file" 2>/dev/null
-                  done
-                  GIT_EDITOR=true git rebase --continue 2>/dev/null || {
-                    echo "Rebase continue failed, trying force push..."
-                    git rebase --abort 2>/dev/null || true
-                    # Reset to our commit and force push
-                    git reset --hard HEAD@{1} 2>/dev/null || true
-                  }
-                fi
-              }
+              git pull --rebase origin main
               if git push origin main; then
                 push_success=true
-                break
-              elif git push --force-with-lease origin main; then
-                push_success=true
-                echo "Force-pushed (with lease) on attempt $i"
                 break
               fi
               echo "Push attempt $i failed, waiting before retry..."
               sleep 10
             done
             if [ "$push_success" = true ]; then
-              echo "✓ Changes committed and pushed successfully"
+              echo "Changes committed and pushed successfully"
             else
-              echo "✗ Failed to push changes after 5 attempts"
+              echo "Failed to push changes after 5 attempts"
               exit 1
             fi
           fi
-      
       - name: 上传邮件备份
         uses: actions/upload-artifact@v4
         if: always()
