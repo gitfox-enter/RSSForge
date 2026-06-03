@@ -77,6 +77,8 @@ MONITOR_SITES = [
 # 文件存储配置
 HASH_RECORD_FILE = "hash_record.txt"
 EMAIL_BACKUP_DIR = "email_backup"
+DASHBOARD_DATA_DIR = "data"
+DASHBOARD_RESULT_FILE = os.path.join(DASHBOARD_DATA_DIR, "inspection_result.json")
 
 # 163邮箱SMTP配置
 SMTP_SERVER = "smtp.163.com"
@@ -619,6 +621,47 @@ def save_email_backup(round_num, html_body):
 
 
 # ============================================================
+# Dashboard 数据生成
+# ============================================================
+
+def save_dashboard_data(round_num, all_site_results, check_time):
+    """
+    保存巡检结果为 JSON，供 GitHub Pages 仪表盘读取
+    """
+    try:
+        os.makedirs(DASHBOARD_DATA_DIR, exist_ok=True)
+
+        # 转换状态格式：下划线 → 连字符（前端约定）
+        sites_for_dashboard = []
+        for r in all_site_results:
+            status = r['status'].replace('_', '-')
+            sites_for_dashboard.append({
+                'url': r['url'],
+                'title': r.get('title', r['url']),
+                'summary': r.get('summary', ''),
+                'status': status,
+                'message': r.get('message', '')
+            })
+
+        dashboard_data = {
+            'round_num': round_num,
+            'check_time': check_time,
+            'total': len(sites_for_dashboard),
+            'updated': len([s for s in sites_for_dashboard if s['status'] == 'updated']),
+            'sites': sites_for_dashboard
+        }
+
+        with open(DASHBOARD_RESULT_FILE, 'w', encoding='utf-8') as f:
+            json.dump(dashboard_data, f, ensure_ascii=False, indent=2)
+
+        print(f"[Dashboard] 仪表盘数据已保存: {DASHBOARD_RESULT_FILE}")
+        return True
+    except Exception as e:
+        print(f"[错误] Dashboard数据保存失败: {e}")
+        return False
+
+
+# ============================================================
 # Git提交管理
 # ============================================================
 
@@ -759,11 +802,17 @@ def main():
     print("\n" + "-" * 60)
     print("[处理] 生成巡检报告邮件...")
 
+    # 总是更新哈希文件
+    save_hash_records(new_records)
+
     # 生成邮件内容（所有站点状态）
     subject, html_body, text_body = generate_email_html(round_num, all_site_results, check_time)
 
     # 保存邮件备份
     backup_path = save_email_backup(round_num, html_body)
+
+    # 保存 Dashboard 数据（供 GitHub Pages 读取）
+    save_dashboard_data(round_num, all_site_results, check_time)
 
     # 发送邮件
     if SMTP_USER and SMTP_PASSWORD:

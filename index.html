@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金的站点更新监控</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #0f1923;
+            color: #e0e6ed;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a2a3a 0%, #0d1b2a 100%);
+            border-bottom: 1px solid #1e3a5f;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #4fc3f7;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .header .subtitle {
+            color: #78909c;
+            font-size: 14px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            background: #132232;
+            border-bottom: 1px solid #1e3a5f;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .stat-number.total { color: #4fc3f7; }
+        .stat-number.updated { color: #66bb6a; }
+        .stat-number.normal { color: #78909c; }
+        .stat-number.error { color: #ef5350; }
+
+        .stat-label {
+            font-size: 12px;
+            color: #78909c;
+            margin-top: 4px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: #0f1923;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 18px;
+            border: 1px solid #1e3a5f;
+            background: transparent;
+            color: #78909c;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #1e3a5f;
+            color: #4fc3f7;
+            border-color: #4fc3f7;
+        }
+
+        .search-box {
+            padding: 8px 16px;
+            border: 1px solid #1e3a5f;
+            background: #132232;
+            color: #e0e6ed;
+            border-radius: 20px;
+            font-size: 13px;
+            width: 220px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: #4fc3f7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: #4fc3f7;
+            margin: 24px 0 12px 0;
+            padding-left: 12px;
+            border-left: 3px solid #4fc3f7;
+        }
+
+        .sites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .site-card {
+            background: #132232;
+            border: 1px solid #1e3a5f;
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .site-card:hover {
+            border-color: #4fc3f7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 195, 247, 0.1);
+        }
+
+        .site-card.status-updated {
+            border-left: 3px solid #66bb6a;
+        }
+
+        .site-card.status-no-update {
+            border-left: 3px solid #455a64;
+        }
+
+        .site-card.status-error {
+            border-left: 3px solid #ef5350;
+        }
+
+        .site-card.status-first {
+            border-left: 3px solid #ffa726;
+        }
+
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .site-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e0e6ed;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .site-badge {
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .badge-updated { background: #1b3a1b; color: #66bb6a; }
+        .badge-no-update { background: #1e2d3d; color: #78909c; }
+        .badge-error { background: #3a1b1b; color: #ef5350; }
+        .badge-first { background: #3a2e1b; color: #ffa726; }
+
+        .site-url {
+            font-size: 12px;
+            color: #546e7a;
+            margin-bottom: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .site-url a {
+            color: #4fc3f7;
+            text-decoration: none;
+        }
+
+        .site-url a:hover {
+            text-decoration: underline;
+        }
+
+        .site-summary {
+            font-size: 12px;
+            color: #90a4ae;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            background: #0f1923;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #455a64;
+            font-size: 12px;
+            border-top: 1px solid #1e3a5f;
+            margin-top: 40px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #78909c;
+        }
+
+        .loading .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #1e3a5f;
+            border-top-color: #4fc3f7;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-msg {
+            text-align: center;
+            padding: 40px;
+            color: #ef5350;
+        }
+
+        @media (max-width: 600px) {
+            .sites-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-bar {
+                gap: 16px;
+            }
+            .stat-number {
+                font-size: 24px;
+            }
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔔 金的站点更新监控</h1>
+        <div class="subtitle" id="checkTime">加载中...</div>
+    </div>
+
+    <div class="stats-bar" id="statsBar">
+        <div class="stat-item">
+            <div class="stat-number total" id="totalCount">-</div>
+            <div class="stat-label">总计</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number updated" id="updatedCount">-</div>
+            <div class="stat-label">有更新</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number normal" id="normalCount">-</div>
+            <div class="stat-label">无更新</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number error" id="errorCount">-</div>
+            <div class="stat-label">异常</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="filter-btn active" data-filter="all">全部</button>
+        <button class="filter-btn" data-filter="updated">有更新</button>
+        <button class="filter-btn" data-filter="no-update">无更新</button>
+        <button class="filter-btn" data-filter="error">异常</button>
+        <input type="text" class="search-box" placeholder="搜索站点名称或URL..." id="searchBox">
+    </div>
+
+    <div class="container" id="sitesContainer">
+        <div class="loading">
+            <div class="spinner"></div>
+            <div>正在加载巡检数据...</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>🤖 自动化监控来源：GitHub Actions 站点巡检机器人</p>
+        <p>⏱ 每4小时自动巡检 | 零运维 | 稳定可靠</p>
+        <p style="margin-top: 8px;">源码: <a href="https://github.com/gitfox-enter/site-update-monitor" style="color: #4fc3f7;" target="_blank">gitfox-enter/site-update-monitor</a></p>
+    </div>
+
+    <script>
+        let allSites = [];
+        let currentFilter = 'all';
+
+        // Load data
+        async function loadData() {
+            try {
+                const resp = await fetch('data/inspection_result.json');
+                if (!resp.ok) throw new Error('数据加载失败');
+                const data = await resp.json();
+                renderDashboard(data);
+            } catch (e) {
+                document.getElementById('sitesContainer').innerHTML =
+                    '<div class="error-msg">⚠️ 巡检数据加载失败，请稍后刷新<br><small>' + e.message + '</small></div>';
+            }
+        }
+
+        function renderDashboard(data) {
+            // Update header
+            document.getElementById('checkTime').textContent =
+                '📅 第 ' + data.round_num + ' 轮巡检 | ⏰ ' + data.check_time;
+
+            // Count stats
+            allSites = data.sites || [];
+            const updated = allSites.filter(s => s.status === 'updated').length;
+            const normal = allSites.filter(s => s.status === 'no-update' || s.status === 'first').length;
+            const errors = allSites.filter(s => s.status === 'error').length;
+
+            document.getElementById('totalCount').textContent = allSites.length;
+            document.getElementById('updatedCount').textContent = updated;
+            document.getElementById('normalCount').textContent = normal;
+            document.getElementById('errorCount').textContent = errors;
+
+            renderSites(allSites);
+        }
+
+        function renderSites(sites) {
+            const container = document.getElementById('sitesContainer');
+
+            if (sites.length === 0) {
+                container.innerHTML = '<div class="loading"><div>没有匹配的站点</div></div>';
+                return;
+            }
+
+            let html = '';
+
+            // Group by status
+            const updatedSites = sites.filter(s => s.status === 'updated');
+            const normalSites = sites.filter(s => s.status === 'no-update' || s.status === 'first');
+            const errorSites = sites.filter(s => s.status === 'error');
+
+            if (updatedSites.length > 0) {
+                html += '<div class="section-title">✅ 有更新的站点（' + updatedSites.length + '个）</div>';
+                html += '<div class="sites-grid">';
+                updatedSites.forEach(s => { html += siteCard(s); });
+                html += '</div>';
+            }
+
+            if (normalSites.length > 0) {
+                html += '<div class="section-title">⭕ 无更新的站点（' + normalSites.length + '个）</div>';
+                html += '<div class="sites-grid">';
+                normalSites.forEach(s => { html += siteCard(s); });
+                html += '</div>';
+            }
+
+            if (errorSites.length > 0) {
+                html += '<div class="section-title">❌ 异常的站点（' + errorSites.length + '个）</div>';
+                html += '<div class="sites-grid">';
+                errorSites.forEach(s => { html += siteCard(s); });
+                html += '</div>';
+            }
+
+            container.innerHTML = html;
+        }
+
+        function siteCard(site) {
+            const statusMap = {
+                'updated': { cls: 'status-updated', badge: 'badge-updated', label: '已更新' },
+                'no-update': { cls: 'status-no-update', badge: 'badge-no-update', label: '无新内容' },
+                'first': { cls: 'status-first', badge: 'badge-first', label: '首次' },
+                'error': { cls: 'status-error', badge: 'badge-error', label: '异常' }
+            };
+
+            const st = statusMap[site.status] || statusMap['no-update'];
+            const title = site.title || site.url;
+
+            let summaryHtml = '';
+            if (site.status === 'updated' && site.summary) {
+                summaryHtml = '<div class="site-summary">' + escapeHtml(site.summary) + '</div>';
+            } else if (site.status === 'error') {
+                summaryHtml = '<div class="site-summary" style="color:#ef5350;">' + escapeHtml(site.message || '爬取失败') + '</div>';
+            } else if (site.status === 'no-update') {
+                summaryHtml = '<div class="site-summary" style="color:#455a64;">无新内容</div>';
+            }
+
+            return '<div class="site-card ' + st.cls + '">' +
+                '<div class="site-header">' +
+                    '<div class="site-title">' + escapeHtml(title) + '</div>' +
+                    '<span class="site-badge ' + st.badge + '">' + st.label + '</span>' +
+                '</div>' +
+                '<div class="site-url"><a href="' + escapeHtml(site.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(site.url) + '</a></div>' +
+                summaryHtml +
+            '</div>';
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                applyFilters();
+            });
+        });
+
+        // Search
+        document.getElementById('searchBox').addEventListener('input', function() {
+            applyFilters();
+        });
+
+        function applyFilters() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            let filtered = allSites;
+
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(s => {
+                    if (currentFilter === 'no-update') {
+                        return s.status === 'no-update' || s.status === 'first';
+                    }
+                    return s.status === currentFilter;
+                });
+            }
+
+            if (query) {
+                filtered = filtered.filter(s =>
+                    s.url.toLowerCase().includes(query) ||
+                    (s.title && s.title.toLowerCase().includes(query))
+                );
+            }
+
+            renderSites(filtered);
+        }
+
+        // Init
+        loadData();
+
+        // Auto-refresh every 5 minutes
+        setInterval(loadData, 5 * 60 * 1000);
+    </script>
+</body>
+</html>

@@ -57,12 +57,12 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         run: python crawl.py
       
-      # 6. 提交变更（哈希记录或邮件备份）
+      # 6. 提交变更（哈希记录、邮件备份、Dashboard数据）
       - name: 提交变更
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add hash_record.txt email_backup/
+          git add hash_record.txt email_backup/ data/ index.html
           git status
           
           # 检查是否有变更
