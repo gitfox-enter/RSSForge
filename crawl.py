@@ -69,9 +69,10 @@ MONITOR_SITES = [
     "https://pc.qq.com/category/rank.html",
     "https://store.epicgames.com/zh-CN/free-games",
     "https://feed.iplaysoft.com",
-    "https://plink.anyfeeder.com/ign/cn",
-    "https://plink.anyfeeder.com/3dm",
-    "https://plink.anyfeeder.com/gamersky",
+    # anyfeeder 服务已关闭（2026-06-03 返回 404），移除以下站点：
+    # "https://plink.anyfeeder.com/ign/cn",
+    # "https://plink.anyfeeder.com/3dm",
+    # "https://plink.anyfeeder.com/gamersky",
 ]
 
 # 文件存储配置
@@ -282,15 +283,16 @@ def fetch_page_content(url):
         if response.status_code != 200:
             return False, f"HTTP {response.status_code}"
         
-        # 获取页面编码
-        encoding = response.encoding or 'utf-8'
-        if encoding.lower() in ['gb2312', 'gbk']:
-            encoding = 'gbk'
-        
-        content = response.content.decode(encoding, errors='ignore')
-        
-        # 使用BeautifulSoup提取正文内容
-        soup = BeautifulSoup(content, 'html.parser')
+        # 让 BeautifulSoup 直接用字节流自动检测编码（避免 requests 默认 ISO-8859-1 导致中文乱码）
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # 如果 BS 没检测到编码，尝试 apparent_encoding（基于 chardet）
+        if not soup.original_encoding:
+            encoding = response.apparent_encoding or 'utf-8'
+            if encoding.lower() in ['gb2312', 'gbk', 'gb18030']:
+                encoding = 'gbk'
+            content = response.content.decode(encoding, errors='ignore')
+            soup = BeautifulSoup(content, 'html.parser')
         
         # 获取页面标题
         title_tag = soup.find('title')
