@@ -10,6 +10,7 @@ GitHub Actions 多站点更新监控系统
 import os
 import sys
 import time
+import random
 import hashlib
 import requests
 import smtplib
@@ -103,10 +104,14 @@ REQUEST_DELAY_MAX = 1.5  # 请求间隔最大值（秒）
 # 随机User-Agent池
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edg/120.0.0.0 Safari/537.36",
 ]
 
 # ============================================================
@@ -146,13 +151,11 @@ def get_current_round():
 
 def get_random_ua():
     """随机返回一个User-Agent"""
-    import random
     return random.choice(USER_AGENTS)
 
 
 def get_random_delay():
     """随机返回请求延迟时间（秒）"""
-    import random
     return random.uniform(REQUEST_DELAY_MIN, REQUEST_DELAY_MAX)
 
 
@@ -317,23 +320,30 @@ def fetch_page_content(url):
     返回：(成功标志, 内容/错误信息)
     内容包含：(text, title, summary)
     """
-    headers = {
-        'User-Agent': get_random_ua(),
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-        'Accept-Encoding': 'gzip, deflate',
-        'Connection': 'keep-alive',
-    }
-    
+    def make_request(ua):
+        h = {
+            'User-Agent': ua,
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+            'Accept-Encoding': 'gzip, deflate',
+            'Connection': 'keep-alive',
+        }
+        return requests.get(url, headers=h, timeout=REQUEST_TIMEOUT, allow_redirects=True)
+
     try:
         print(f"[爬取] {url}")
-        response = requests.get(
-            url, 
-            headers=headers, 
-            timeout=REQUEST_TIMEOUT,
-            allow_redirects=True
-        )
-        
+        ua = get_random_ua()
+        response = make_request(ua)
+
+        # 403 时换 UA 重试一次
+        if response.status_code == 403:
+            new_ua = get_random_ua()
+            while new_ua == ua:
+                new_ua = get_random_ua()
+            print(f"[重试] 403 → 切换 UA 重试")
+            time.sleep(random.uniform(1, 3))
+            response = make_request(new_ua)
+
         # 检查HTTP状态码
         if response.status_code != 200:
             return False, f"HTTP {response.status_code}"
