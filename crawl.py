@@ -615,12 +615,114 @@ def main():
         git_commit_if_changed()
         
     else:
-        print("\n[结果] 无更新，零输出、零提交、零打扰 ✓")
-        
-        # 即使无更新，也要保存首次监控的哈希
+        # 首次运行：保存哈希并发送通知邮件
         if len(new_records) > len(old_records):
+            print("\n[结果] 首次监控，正在初始化...")
+            
+            # 保存哈希
             save_hash_records(new_records)
+            
+            # 生成首次监控邮件HTML
+            subject = f"【站点监控启动】首次监控完成 | 已录入{len(new_records)}个站点"
+            html_body = f"""&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;style&gt;
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }}
+        .container {{
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }}
+        .header {{
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }}
+        .content {{
+            padding: 30px 20px;
+        }}
+        .info-box {{
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }}
+        .footer {{
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 12px;
+            border-top: 1px solid #e0e0e0;
+        }}
+        .highlight {{
+            color: #667eea;
+            font-weight: bold;
+        }}
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;div class="header"&gt;
+            &lt;h2 style="margin: 0;"&gt;🔔 站点更新监控系统已启动&lt;/h2&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="content"&gt;
+            &lt;div class="info-box"&gt;
+                &lt;p style="margin: 10px 0;"&gt;📅 启动时间：&lt;span class="highlight"&gt;{check_time}&lt;/span&gt;&lt;/p&gt;
+                &lt;p style="margin: 10px 0;"&gt;📊 已录入监控站点：&lt;span class="highlight"&gt;{len(new_records)}&lt;/span&gt; 个&lt;/p&gt;
+                &lt;p style="margin: 10px 0;"&gt;⏰ 监控频率：每4小时自动巡检&lt;/p&gt;
+                &lt;p style="margin: 10px 0;"&gt;📧 通知邮箱：{EMAIL_TO}&lt;/p&gt;
+            &lt;/div&gt;
+            
+            &lt;div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107;"&gt;
+                &lt;p style="margin: 0;"&gt;&lt;strong&gt;📌 说明：&lt;/strong&gt;&lt;/p&gt;
+                &lt;p style="margin: 5px 0;"&gt;这是首次监控运行的初始化邮件。&lt;/p&gt;
+                &lt;p style="margin: 5px 0;"&gt;从现在开始，系统将每4小时自动检查所有站点。&lt;/p&gt;
+                &lt;p style="margin: 5px 0;"&gt;当检测到内容更新时，您将收到更新通知邮件。&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="footer"&gt;
+            &lt;p style="margin: 5px 0;"&gt;🤖 GitHub Actions 站点巡检机器人&lt;/p&gt;
+            &lt;p style="margin: 5px 0;"&gt;⏱ 每4小时自动巡检 | 零运维 | 稳定可靠&lt;/p&gt;
+            &lt;p style="margin: 5px 0; color: #667eea;"&gt;✉️ 163邮箱推送服务&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"""
+            
+            # 发送首次监控通知邮件
+            if SMTP_USER and SMTP_PASSWORD:
+                print("[邮件] 发送首次监控通知...")
+                success, error = send_email_smtp(subject, html_body)
+                if success:
+                    print("[邮件] ✓ 首次监控通知已发送")
+                else:
+                    print(f"[邮件] ✗ 发送失败: {error}")
+            else:
+                print("[警告] 邮箱未配置，跳过邮件发送")
+            
+            # 保存邮件备份
+            save_email_backup(round_num, html_body)
+            
+            # Git提交
             git_commit_if_changed()
+        else:
+            print("\n[结果] 无更新，零输出、零提交、零打扰 ✓")
     
     print("\n" + "=" * 60)
     print("[完成] 本轮巡检结束")
