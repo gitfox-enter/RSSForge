@@ -8,10 +8,10 @@ on:
   # 手动触发（用于测试）
   workflow_dispatch:
 
-# 同一时间只允许一个监控任务运行，避免并发 push 冲突
+# 同一时间只允许一个监控任务运行，取消排队中的旧运行
 concurrency:
   group: site-monitor
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   monitor:
@@ -25,7 +25,7 @@ jobs:
     
     steps:
       - name: 检出仓库
-        uses: actions/checkout@v4
+        uses: actions/checkoutZv4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
@@ -57,6 +57,11 @@ jobs:
           set +e
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          
+          # First, pull latest changes with rebase before staging our changes
+          echo "=== Pulling latest remote changes ==="
+          git pull --rebase origin main || true
+          
           git add hash_record.txt data/ index.html notified_items.json run_log.jsonl feed.xml paused_sites.json failed_sites.json 2>/dev/null || true
           if [ -d email_backup ]; then
             git add email_backup/ 2>/dev/null || true
@@ -70,27 +75,22 @@ jobs:
             push_success=false
             for i in 1 2 3 4 5; do
               echo "=== Push attempt $i ==="
-              # Try to pull with rebase first
+              # Pull with rebase, auto-resolve conflicts by taking ours
               if git pull --rebase origin main; then
                 echo "Pull/rebase succeeded"
               else
                 echo "Rebase had conflicts, resolving by accepting our version..."
-                # If rebase conflicts occur, accept our version for all conflicted files
-                git diff --name-only --diff-filter=U | while read conflict_file; do
-                  echo "Resolving conflict in: $conflict_file (using ours)"
-                  git checkout --ours "$conflict_file"
-                  git add "$conflict_file"
-                done
-                # Continue the rebase
-                if git rebase --continue; then
-                  echo "Rebase continued successfully"
-                else
-                  echo "Rebase continue failed, aborting and trying force approach..."
-                  git rebase --abort 2>/dev/null || true
-                  # Last resort: reset to remote and re-apply our commit
-                  git fetch origin main
-                  git reset --soft origin/main
-                  git commit -m "自动更新: $(TZ="Asia/Shanghai" date "+%Y-%m-%d %H:%M:%S")"
+                # Check if we're in a rebase state
+                if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
+                  git diff --name-only --diff-filter=U 2>/dev/null | while read conflict_file; do
+                    echo "Resolving conflict in: $conflict_file (using ours)"
+                    git checkout --ours "$conflict_file"
+                    git add "$conflict_file"
+                  done
+                  GIT_EDITOR=true git rebase --continue 2>/dev/null || {
+                    echo "Rebase continue failed, aborting..."
+                    git rebase --abort 2>/dev/null || true
+                  }
                 fi
               fi
               if git push origin main; then
