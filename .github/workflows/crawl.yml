@@ -58,13 +58,16 @@ jobs:
       # 6. 提交变更（哈希记录或邮件备份）
       - name: 提交变更
         run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add -A
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "自动更新: $(date '+%Y-%m-%d %H:%M:%S')"
+          git status
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "自动更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
             git push origin main
             echo "✓ Changes committed and pushed"
+          else
+            echo "No changes to commit"
           fi
       
       # 7. 上传邮件备份（可选，用于手动下载查看）
