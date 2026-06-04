@@ -29,7 +29,7 @@ warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 # 配置区域
 # ============================================================
 
-# 28个监控站点（已移除Steam×2/GOG/多多/华军/当下/QQ游戏/帮找网/Epic/iqshw/foxirj/ypojie/52hb共14个，anyfeeder×3已关闭）
+# 26个监控站点（已移除Steam×2/GOG/多多/华军/当下/QQ游戏/帮找网/Epic/iqshw/foxirj/ypojie/52hb/kxdao/ghxi共16个，anyfeeder×3已关闭）
 MONITOR_SITES = [
     "https://xianbaomi.com/",
     "http://www.0818tuan.com/",
@@ -44,7 +44,6 @@ MONITOR_SITES = [
     "https://www.zhuanyes.com/xianbao/",
     "https://www.huodong5.com/",
     "https://www.yxssp.com/",
-    "https://www.kxdao.net/forum.php?forumlist=1&mobile=2",
     "https://www.baicaio.com/",
     "https://yangmao.wang/",
     "https://www.12345pro.com/",
@@ -53,7 +52,6 @@ MONITOR_SITES = [
     "https://www.ithome.com/zt/xijiayi",
     "https://free.apprcn.com/",
     "https://www.lsapk.com/",
-    "https://www.ghxi.com/category/all",
     "https://www.appinn.com/",
     "https://www.423down.com/",
     "https://www.ziyuanting.com/",

@@ -1,44 +1,14 @@
 {
-  "https://www.iqshw.com/": {
-    "paused_at": "2026-06-04 01:02:08",
-    "paused_round": 1,
-    "reason": "连续 3 轮失败",
-    "fail_count": 3
-  },
-  "https://foxirj.com/": {
-    "paused_at": "2026-06-04 01:02:08",
-    "paused_round": 1,
-    "reason": "连续 3 轮失败",
-    "fail_count": 3
-  },
-  "https://store.epicgames.com/zh-CN/free-games": {
-    "paused_at": "2026-06-04 01:02:08",
-    "paused_round": 1,
-    "reason": "连续 3 轮失败",
-    "fail_count": 3
-  },
-  "https://www.kxdao.net/forum-42-1.html": {
-    "paused_at": "2026-06-04 10:57:58",
+  "https://www.kxdao.net/forum.php?forumlist=1&mobile=2": {
+    "paused_at": "2026-06-04 16:00:00",
     "paused_round": 3,
-    "reason": "连续 3 轮失败",
-    "fail_count": 3
+    "reason": "连续多轮返回页面正文为空",
+    "fail_count": 4
   },
   "https://www.ghxi.com/category/all": {
-    "paused_at": "2026-06-04 10:57:58",
+    "paused_at": "2026-06-04 16:00:00",
     "paused_round": 3,
-    "reason": "连续 3 轮失败",
-    "fail_count": 3
-  },
-  "https://www.ypojie.com/": {
-    "paused_at": "2026-06-04 10:57:58",
-    "paused_round": 3,
-    "reason": "连续 3 轮失败",
-    "fail_count": 3
-  },
-  "https://www.52hb.com/forum.php": {
-    "paused_at": "2026-06-04 10:57:58",
-    "paused_round": 3,
-    "reason": "连续 3 轮失败",
-    "fail_count": 3
+    "reason": "连续多轮返回页面正文为空或连接失败",
+    "fail_count": 5
   }
 }
