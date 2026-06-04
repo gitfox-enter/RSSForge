@@ -781,6 +781,82 @@ def save_email_backup(round_num, html_body):
         return None
 
 
+def refresh_email_backup_index():
+    """
+    生成 email_backup/index.html 索引页，列出所有邮件备份文件
+    解决 GitHub Pages 不支持目录浏览导致 404 的问题
+    """
+    try:
+        if not os.path.isdir(EMAIL_BACKUP_DIR):
+            return
+
+        files = sorted(
+            [f for f in os.listdir(EMAIL_BACKUP_DIR) if f.endswith('.html') and f != 'index.html'],
+            reverse=True  # 最新的在前面
+        )
+
+        if not files:
+            return
+
+        rows = ""
+        for f in files:
+            # 从文件名解析日期和轮次，如 20260604_第2轮_站点更新邮件备份.html
+            parts = f.split('_')
+            date_str = parts[0] if parts else f
+            try:
+                display_date = f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:8]}"
+            except (IndexError, ValueError):
+                display_date = date_str
+            round_info = parts[1] if len(parts) > 1 else ""
+            rows += f'            <tr><td>{display_date}</td><td>{round_info}</td><td><a href="{f}">{f}</a></td></tr>\n'
+
+        index_html = f'''<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>邮件备份存档 - 金的站点监控</title>
+<style>
+*{{margin:0;padding:0;box-sizing:border-box}}
+body{{font-family:'Segoe UI',Arial,sans-serif;background:#0f172a;color:#e2e8f0;padding:24px;min-height:100vh}}
+.container{{max-width:900px;margin:0 auto}}
+h1{{font-size:24px;color:#38bdf8;margin-bottom:4px}}
+.subtitle{{color:#94a3b8;font-size:14px;margin-bottom:24px}}
+.back-link{{display:inline-block;color:#38bdf8;text-decoration:none;margin-bottom:20px;font-size:14px}}
+.back-link:hover{{text-decoration:underline}}
+table{{width:100%;border-collapse:collapse;background:#1e293b;border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.3)}}
+th{{background:#334155;color:#38bdf8;padding:12px 16px;text-align:left;font-size:13px;text-transform:uppercase;letter-spacing:.5px}}
+td{{padding:10px 16px;border-top:1px solid #334155;font-size:14px}}
+tr:hover td{{background:#334155}}
+a{{color:#38bdf8;text-decoration:none}}
+a:hover{{text-decoration:underline}}
+.count{{color:#64748b;font-size:13px;margin-top:16px;text-align:right}}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back-link" href="..">&larr; 返回仪表盘</a>
+  <h1>邮件备份存档</h1>
+  <p class="subtitle">每 4 小时自动生成 · 按时间倒序</p>
+  <table>
+    <thead><tr><th>日期</th><th>轮次</th><th>文件</th></tr></thead>
+    <tbody>
+{rows}    </tbody>
+  </table>
+  <p class="count">共 {len(files)} 份备份</p>
+</div>
+</body>
+</html>'''
+
+        index_path = os.path.join(EMAIL_BACKUP_DIR, 'index.html')
+        with open(index_path, 'w', encoding='utf-8') as f:
+            f.write(index_html)
+        print(f"[备份] 索引页已更新: {index_path} ({len(files)} 份备份)")
+
+    except Exception as e:
+        print(f"[错误] 索引页生成失败: {e}")
+
+
 # ============================================================
 # Dashboard 数据生成
 # ============================================================
@@ -1439,6 +1515,9 @@ def main():
 
     # 保存邮件备份
     backup_path = save_email_backup(round_num, html_body)
+
+    # 刷新邮件备份索引页（解决 Pages 目录浏览 404）
+    refresh_email_backup_index()
 
     # 保存 Dashboard 数据（供 GitHub Pages 读取）
     save_dashboard_data(round_num, all_site_results, check_time)
