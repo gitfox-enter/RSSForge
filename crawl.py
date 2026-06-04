@@ -808,7 +808,7 @@ def refresh_email_backup_index():
             except (IndexError, ValueError):
                 display_date = date_str
             round_info = parts[1] if len(parts) > 1 else ""
-            rows += f'            <tr><td>{display_date}</td><td>{round_info}</td><td><a href="{f}">{f}</a></td></tr>\n'
+            rows += f'            <tr><td>{display_date}</td><td>{round_info}</td><td><a class="file-link" href="{f}">{f}</a></td></tr>\n'
 
         index_html = f'''<!DOCTYPE html>
 <html lang="zh-CN">
@@ -817,26 +817,46 @@ def refresh_email_backup_index():
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>邮件备份存档 - 金的站点监控</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 *{{margin:0;padding:0;box-sizing:border-box}}
-body{{font-family:'Segoe UI',Arial,sans-serif;background:#0f172a;color:#e2e8f0;padding:24px;min-height:100vh}}
-.container{{max-width:900px;margin:0 auto}}
-h1{{font-size:24px;color:#38bdf8;margin-bottom:4px}}
-.subtitle{{color:#94a3b8;font-size:14px;margin-bottom:24px}}
-.back-link{{display:inline-block;color:#38bdf8;text-decoration:none;margin-bottom:20px;font-size:14px}}
-.back-link:hover{{text-decoration:underline}}
-table{{width:100%;border-collapse:collapse;background:#1e293b;border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.3)}}
-th{{background:#334155;color:#38bdf8;padding:12px 16px;text-align:left;font-size:13px;text-transform:uppercase;letter-spacing:.5px}}
-td{{padding:10px 16px;border-top:1px solid #334155;font-size:14px}}
-tr:hover td{{background:#334155}}
-a{{color:#38bdf8;text-decoration:none}}
-a:hover{{text-decoration:underline}}
-.count{{color:#64748b;font-size:13px;margin-top:16px;text-align:right}}
+:root{{--bg:#f5f7fa;--surface:#ffffff;--border:#e2e8f0;--border-light:#f1f5f9;--text-primary:#1e293b;--text-secondary:#64748b;--text-muted:#94a3b8;--accent:#2563eb;--accent-light:#dbeafe;--accent-bg:#eff6ff;--green:#16a34a;--shadow-sm:0 1px 2px rgba(0,0,0,0.04),0 1px 2px rgba(0,0,0,0.06);--shadow-md:0 4px 6px -1px rgba(0,0,0,0.07),0 2px 4px -2px rgba(0,0,0,0.05);--radius:12px}}
+body{{font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text-primary);min-height:100vh;line-height:1.5}}
+.topnav{{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}}
+.topnav-left{{display:flex;align-items:center;gap:12px}}
+.topnav-logo{{width:34px;height:34px;background:linear-gradient(135deg,#2563eb 0%,#7c3aed 100%);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0}}
+.topnav-title{{font-size:16px;font-weight:700;color:var(--text-primary);letter-spacing:-0.3px}}
+.container{{max-width:900px;margin:0 auto;padding:32px}}
+h1{{font-size:24px;font-weight:700;color:var(--text-primary);margin-bottom:4px}}
+.subtitle{{color:var(--text-muted);font-size:14px;margin-bottom:24px}}
+.back-link{{display:inline-flex;align-items:center;gap:4px;color:var(--accent);text-decoration:none;font-size:14px;font-weight:500;padding:6px 0;border-radius:6px;transition:opacity 0.15s}}
+.back-link:hover{{opacity:0.7;text-decoration:none}}
+table{{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}}
+thead{{}}
+th{{text-align:left;padding:12px 16px;font-weight:600;font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;background:var(--border-light);border-bottom:1px solid var(--border)}}
+td{{padding:12px 16px;border-top:1px solid var(--border-light);font-size:14px;color:var(--text-primary)}}
+tbody tr:hover td{{background:var(--accent-bg)}}
+a.file-link{{color:var(--accent);text-decoration:none;font-weight:500}}
+a.file-link:hover{{text-decoration:underline}}
+.count{{color:var(--text-muted);font-size:13px;margin-top:16px;text-align:right}}
+.footer{{text-align:center;padding:24px 20px 32px;color:var(--text-muted);font-size:12px;border-top:1px solid var(--border);max-width:900px;margin:0 auto}}
+.footer a{{color:var(--accent);text-decoration:none}}.footer a:hover{{text-decoration:underline}}
+@keyframes fadeInUp{{from{{opacity:0;transform:translateY(8px)}}to{{opacity:1;transform:translateY(0)}}}}
+tbody tr{{animation:fadeInUp 0.25s ease both}}
+tbody tr:nth-child(1){{animation-delay:0.02s}}tbody tr:nth-child(2){{animation-delay:0.04s}}
+tbody tr:nth-child(3){{animation-delay:0.06s}}tbody tr:nth-child(4){{animation-delay:0.08s}}
+tbody tr:nth-child(5){{animation-delay:0.10s}}
+@media(max-width:600px){{.topnav{{padding:0 16px}}.container{{padding:20px 16px}}th,td{{padding:10px 12px;font-size:13px}}}}
 </style>
 </head>
 <body>
+<nav class="topnav">
+  <a href="../" style="display:flex;align-items:center;gap:12px;text-decoration:none">
+    <div class="topnav-logo">&#9679;</div>
+    <span class="topnav-title">邮件备份存档</span>
+  </a>
+</nav>
 <div class="container">
-  <a class="back-link" href="..">&larr; 返回仪表盘</a>
-  <h1>邮件备份存档</h1>
+  <h1>邮件备份列表</h1>
   <p class="subtitle">每 4 小时自动生成 · 按时间倒序</p>
   <table>
     <thead><tr><th>日期</th><th>轮次</th><th>文件</th></tr></thead>
@@ -844,6 +864,9 @@ a:hover{{text-decoration:underline}}
 {rows}    </tbody>
   </table>
   <p class="count">共 {len(files)} 份备份</p>
+</div>
+<div class="footer">
+  <a href="../">返回仪表盘</a> &middot; <a href="https://github.com/gitfox-enter/site-update-monitor" target="_blank" rel="noopener">查看源码</a>
 </div>
 </body>
 </html>'''

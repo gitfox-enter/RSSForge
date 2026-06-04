@@ -72,6 +72,8 @@
         .topnav-title { font-size: 16px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.3px; }
 
         .topnav-meta { display: flex; align-items: center; gap: 16px; font-size: 13px; color: var(--text-secondary); }
+        .nav-link { color: var(--accent); text-decoration: none; font-weight: 500; padding: 6px 14px; border-radius: 8px; transition: background 0.15s; }
+        .nav-link:hover { background: var(--accent-bg); text-decoration: none; }
 
         .topnav-meta .dot {
             width: 7px; height: 7px; border-radius: 50%; background: var(--green);
@@ -366,6 +368,7 @@
         <div class="topnav-meta" id="topnavMeta">
             <span><span class="dot"></span>运行中</span>
             <span id="checkTime">加载中...</span>
+            <a class="nav-link" href="email_backup/">邮件备份</a>
         </div>
     </nav>
 
