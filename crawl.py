@@ -19,6 +19,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timezone, timedelta
 from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
+from urllib.parse import urlparse
 import json
 import subprocess
 
@@ -79,6 +80,7 @@ PAUSED_SITES_FILE = "paused_sites.json"  # 因连续失败被暂停的站点
 SITE_HEALTH_FILE = os.path.join(DASHBOARD_DATA_DIR, "site_health.json")  # 站点健康数据
 KEYWORD_STATS_FILE = os.path.join(DASHBOARD_DATA_DIR, "keyword_stats.json")  # 关键词热点统计
 RSS_FEED_FILE = "feed.xml"  # RSS 2.0 订阅源
+BLACKLIST_FILE = "blacklist.json"  # 网站黑名单（用户讨厌/付费墙/反爬/无法访问/纯工具页）
 
 # 自动移除/恢复配置
 MAX_CONSECUTIVE_FAILURES = 3  # 连续失败 N 轮后自动暂停
@@ -1422,13 +1424,38 @@ def main():
     print(f"[启动] 北京时间: {check_time}")
     print(f"[启动] 当日第 {round_num} 轮巡检")
 
+    # 加载黑名单（用户讨厌/付费墙/反爬/无法访问/纯工具页）
+    blacklist_domains = []
+    try:
+        with open(BLACKLIST_FILE, 'r', encoding='utf-8') as f:
+            blacklist_data = json.load(f)
+        blacklist_domains = [entry['domain'].lower() for entry in blacklist_data.get('blacklist', [])]
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
+        blacklist_domains = []
+
+    def is_blacklisted(url):
+        parsed = urlparse(url)
+        host = parsed.hostname or parsed.netloc
+        host = host.lower().lstrip('www.').lstrip('m.')
+        for domain in blacklist_domains:
+            domain_clean = domain.lower().lstrip('www.').lstrip('m.')
+            if host == domain_clean or host.endswith('.' + domain_clean):
+                return True
+        return False
+
+    # 过滤黑名单站点
+    filtered_by_blacklist = [url for url in MONITOR_SITES if is_blacklisted(url)]
+    monitor_sites = [url for url in MONITOR_SITES if not is_blacklisted(url)]
+    if filtered_by_blacklist:
+        print(f"[黑名单] 过滤 {len(filtered_by_blacklist)} 个站点: {', '.join(filtered_by_blacklist)}")
+
     # 加载暂停站点（连续失败被自动移除的）
     paused = load_paused_sites()
     paused_urls = set(paused.keys())
 
-    # 实际监控列表 = 配置列表 - 暂停站点
-    active_sites = [url for url in MONITOR_SITES if url not in paused_urls]
-    print(f"[启动] 监控站点数: {len(active_sites)} (活跃) + {len(paused_urls)} (暂停)")
+    # 实际监控列表 = 配置列表 - 黑名单 - 暂停站点
+    active_sites = [url for url in monitor_sites if url not in paused_urls]
+    print(f"[启动] 监控站点数: {len(active_sites)} (活跃) + {len(blacklist_domains)} (黑名单) + {len(paused_urls)} (暂停)")
     if paused_urls:
         print(f"[暂停站点] {', '.join(paused_urls)}")
     print("-" * 60)
