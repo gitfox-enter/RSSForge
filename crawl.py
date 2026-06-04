@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 GitHub Actions 多站点更新监控系统
-功能：爬取46个站点 → MD5比对检测更新 → 163邮箱SMTP推送 → 本地备份归档
+功能：爬取33个站点 → MD5比对检测更新 → 163邮箱SMTP推送 → 本地备份归档
 时间：每4小时执行一次（00:00, 04:00, 08:00, 12:00, 16:00, 20:00）
 时区：Asia/Shanghai（北京时间）
 """
@@ -29,7 +29,7 @@ warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 # 配置区域
 # ============================================================
 
-# 46个监控站点完整列表
+# 33个监控站点（已移除Steam×2/GOG/多多/华军/当下/QQ游戏/帮找网/Epic共9个，anyfeeder×3已关闭）
 MONITOR_SITES = [
     "https://xianbaomi.com/",
     "http://www.0818tuan.com/",
@@ -45,7 +45,6 @@ MONITOR_SITES = [
     "https://www.iqshw.com/",
     "https://www.huodong5.com/",
     "https://www.yxssp.com/",
-    "https://www.wobangzhao.com/",
     "https://www.kxdao.net/forum-42-1.html",
     "https://www.baicaio.com/",
     "https://yangmao.wang/",
@@ -59,25 +58,13 @@ MONITOR_SITES = [
     "https://www.appinn.com/",
     "https://www.423down.com/",
     "https://foxirj.com/",
-    "https://store.steampowered.com/search/?specials=1&os=win",
-    "https://www.gog.com/partner/free_games",
-    "https://store.steampowered.com/",
     "https://www.ziyuanting.com/",
     "https://www.wycad.com/",
-    "https://www.ddooo.com/",
-    "https://www.onlinedown.net/",
-    "https://www.downxia.com/",
     "https://www.ypojie.com/",
     "https://www.52hb.com/forum.php",
     "https://m.hybase.com/",
     "https://xzba.cc/",
-    "https://pc.qq.com/category/rank.html",
-    "https://store.epicgames.com/zh-CN/free-games",
     "https://feed.iplaysoft.com",
-    # anyfeeder 服务已关闭（2026-06-03 返回 404），移除以下站点：
-    # "https://plink.anyfeeder.com/ign/cn",
-    # "https://plink.anyfeeder.com/3dm",
-    # "https://plink.anyfeeder.com/gamersky",
 ]
 
 # 文件存储配置
@@ -322,6 +309,82 @@ def filter_new_items(items, notified):
 # 爬虫核心逻辑
 # ============================================================
 
+# ============================================================
+# 站点专用解析器
+# ============================================================
+
+def parse_ypojie(soup):
+    """易破解 (WordPress DUX主题) - 精准提取最新文章标题和链接"""
+    items = []
+    for h2 in soup.select('#content h2 a, #content .entry-title a, #main-content h2 a'):
+        text = h2.get_text(strip=True)
+        href = h2.get('href', '')
+        if text and len(text) > 5:
+            items.append(f"{text} ({href})")
+    if not items:
+        for a in soup.select('.widget_recent a, .widgets-list a, .recent-posts a'):
+            text = a.get_text(strip=True)
+            href = a.get('href', '')
+            if text and len(text) > 5 and not any(x in href for x in ['/page/', '/archives']):
+                items.append(f"{text} ({href})")
+    return '\n'.join(items[:30])
+
+
+def parse_discuz_threadlist(soup):
+    """Discuz论坛通用解析器 - 精准提取帖子列表"""
+    items = []
+    for a in soup.select('.threadlist .t a, .tl .t a, #threadlist .t a, .threadlist tr td a.xst, .threadlist tr td a'):
+        text = a.get_text(strip=True)
+        href = a.get('href', '')
+        if text and len(text) > 3 and '/thread-' in href:
+            items.append(f"{text} ({href})")
+    if not items:
+        for tr in soup.select('.forum tbody tr, table tbody tr'):
+            for a in tr.select('a'):
+                text = a.get_text(strip=True)
+                href = a.get('href', '')
+                if text and len(text) > 3 and '/thread-' in href:
+                    items.append(f"{text} ({href})")
+                    break
+    return '\n'.join(items[:30])
+
+
+def parse_yxssp(soup):
+    """异星软件空间 (WordPress) - 精准提取文章列表，排除分类导航"""
+    items = []
+    for a in soup.select('.post-item h2 a, .entry-title a, .post-title a, article h2 a, article h3 a'):
+        text = a.get_text(strip=True)
+        href = a.get('href', '')
+        if text and len(text) > 5:
+            items.append(f"{text} ({href})")
+    if not items:
+        for article in soup.select('article, .post'):
+            h = article.select_one('h2 a, h3 a, h4 a')
+            if h:
+                text = h.get_text(strip=True)
+                href = h.get('href', '')
+                if text and len(text) > 5:
+                    items.append(f"{text} ({href})")
+    return '\n'.join(items[:30])
+
+
+def parse_ghxi(soup):
+    """果核剥壳 (WordPress justnews) - 精准提取 .post-item 文章"""
+    items = []
+    for a in soup.select('.post-item .entry-title a, .post-item h2 a, .post-item h3 a'):
+        text = a.get_text(strip=True)
+        href = a.get('href', '')
+        if text and len(text) > 5:
+            items.append(f"{text} ({href})")
+    if not items:
+        for article in soup.select('article .entry-title a, .article h2 a'):
+            text = article.get_text(strip=True)
+            href = article.get('href', '')
+            if text and len(text) > 5:
+                items.append(f"{text} ({href})")
+    return '\n'.join(items[:30])
+
+
 def extract_article_items(soup, base_url=''):
     """
     从页面中提取独立文章条目列表（含链接）
@@ -451,19 +514,27 @@ def fetch_page_content(url):
         # 提取文章条目列表（含链接）
         article_items = extract_article_items(soup, url)
 
-        # 移除脚本、样式、注释等干扰内容
-        for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
-            tag.decompose()
-
-        # 获取正文文本
-        body = soup.find('body')
-        if body:
-            text = body.get_text(separator=' ', strip=True)
+        # 站点专用解析器（精准提取正文，避免抓取到导航/侧边栏/旧内容）
+        if 'ypojie.com' in url:
+            text = parse_ypojie(soup)
+        elif '52hb.com' in url:
+            text = parse_discuz_threadlist(soup)
+        elif 'kxdao.net' in url:
+            text = parse_discuz_threadlist(soup)
+        elif 'yxssp.com' in url:
+            text = parse_yxssp(soup)
+        elif 'ghxi.com' in url:
+            text = parse_ghxi(soup)
         else:
-            text = soup.get_text(separator=' ', strip=True)
-
-        # 清理多余空白
-        text = ' '.join(text.split())
+            # 通用解析：移除干扰元素后取body文本
+            for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
+                tag.decompose()
+            body = soup.find('body')
+            if body:
+                text = body.get_text(separator=' ', strip=True)
+            else:
+                text = soup.get_text(separator=' ', strip=True)
+            text = ' '.join(text.split())
 
         if not text:
             return False, "页面正文为空"
