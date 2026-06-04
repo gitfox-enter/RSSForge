@@ -29,7 +29,7 @@ warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 # 配置区域
 # ============================================================
 
-# 26个监控站点（已移除Steam×2/GOG/多多/华军/当下/QQ游戏/帮找网/Epic/iqshw/foxirj/ypojie/52hb/kxdao/ghxi共16个，anyfeeder×3已关闭）
+# 32个监控站点（新增：聚合线报/鲸线报/那些免费的砖/慢慢买/拔草哦/薅羊毛小伙伴）
 MONITOR_SITES = [
     "https://xianbaomi.com/",
     "http://www.0818tuan.com/",
@@ -59,6 +59,12 @@ MONITOR_SITES = [
     "https://m.hybase.com/",
     "https://xzba.cc/",
     "https://feed.iplaysoft.com",
+    "https://www.huifabu.cn/",
+    "https://xianbao.icu/",
+    "https://www.thosefree.com/",
+    "https://www.manmanbuy.com/",
+    "https://www.bacaoo.com/",
+    "https://www.yangmaodang.club/",
 ]
 
 # 文件存储配置
