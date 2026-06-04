@@ -29,7 +29,7 @@ warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 # 配置区域
 # ============================================================
 
-# 33个监控站点（已移除Steam×2/GOG/多多/华军/当下/QQ游戏/帮找网/Epic共9个，anyfeeder×3已关闭）
+# 28个监控站点（已移除Steam×2/GOG/多多/华军/当下/QQ游戏/帮找网/Epic/iqshw/foxirj/ypojie/52hb共14个，anyfeeder×3已关闭）
 MONITOR_SITES = [
     "https://xianbaomi.com/",
     "http://www.0818tuan.com/",
@@ -42,10 +42,9 @@ MONITOR_SITES = [
     "https://www.007ymd.com/",
     "http://news.ixbk.net/",
     "https://www.zhuanyes.com/xianbao/",
-    "https://www.iqshw.com/",
     "https://www.huodong5.com/",
     "https://www.yxssp.com/",
-    "https://www.kxdao.net/forum-42-1.html",
+    "https://www.kxdao.net/forum.php?forumlist=1&mobile=2",
     "https://www.baicaio.com/",
     "https://yangmao.wang/",
     "https://www.12345pro.com/",
@@ -57,11 +56,8 @@ MONITOR_SITES = [
     "https://www.ghxi.com/category/all",
     "https://www.appinn.com/",
     "https://www.423down.com/",
-    "https://foxirj.com/",
     "https://www.ziyuanting.com/",
     "https://www.wycad.com/",
-    "https://www.ypojie.com/",
-    "https://www.52hb.com/forum.php",
     "https://m.hybase.com/",
     "https://xzba.cc/",
     "https://feed.iplaysoft.com",
@@ -369,17 +365,18 @@ def parse_yxssp(soup):
 
 
 def parse_ghxi(soup):
-    """果核剥壳 (WordPress justnews) - 精准提取 .post-item 文章"""
+    """果核剥壳 (新版结构 .item-content h2 a) - 精准提取文章"""
     items = []
-    for a in soup.select('.post-item .entry-title a, .post-item h2 a, .post-item h3 a'):
+    for a in soup.select('.item-content h2 a, .item-content h3 a'):
         text = a.get_text(strip=True)
         href = a.get('href', '')
         if text and len(text) > 5:
             items.append(f"{text} ({href})")
+    # 兼容旧版结构
     if not items:
-        for article in soup.select('article .entry-title a, .article h2 a'):
-            text = article.get_text(strip=True)
-            href = article.get('href', '')
+        for a in soup.select('.post-item .entry-title a, .post-item h2 a'):
+            text = a.get_text(strip=True)
+            href = a.get('href', '')
             if text and len(text) > 5:
                 items.append(f"{text} ({href})")
     return '\n'.join(items[:30])
@@ -515,10 +512,6 @@ def fetch_page_content(url):
         article_items = extract_article_items(soup, url)
 
         # 站点专用解析器（精准提取正文，避免抓取到导航/侧边栏/旧内容）
-        if 'ypojie.com' in url:
-            text = parse_ypojie(soup)
-        elif '52hb.com' in url:
-            text = parse_discuz_threadlist(soup)
         elif 'kxdao.net' in url:
             text = parse_discuz_threadlist(soup)
         elif 'yxssp.com' in url:
@@ -866,7 +859,7 @@ tbody tr:nth-child(5){{animation-delay:0.10s}}
   <p class="count">共 {len(files)} 份备份</p>
 </div>
 <div class="footer">
-  <a href="../">返回仪表盘</a> &middot; <a href="https://github.com/gitfox-enter/site-update-monitor" target="_blank" rel="noopener">查看源码</a>
+  <a href="../">返回仪表盘</a>
 </div>
 </body>
 </html>'''
@@ -1390,12 +1383,12 @@ def save_rss_feed(round_num, check_time, all_site_results):
     rss_xml = f'''<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>金的站点更新监控</title>
-    <link>https://gitfox-enter.github.io/site-update-monitor/</link>
-    <description>自动监控 {len(MONITOR_SITES)} 个站点的最新内容更新</description>
+    <title>Site Monitor Feed</title>
+    <link>https://s1a9xk.com/</link>
+    <description>Content update feed</description>
     <language>zh-CN</language>
     <lastBuildDate>{check_time}</lastBuildDate>
-    <generator>site-update-monitor v2.0</generator>
+    <generator>site-monitor</generator>
 {items_xml}  </channel>
 </rss>'''
 
