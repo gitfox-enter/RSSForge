@@ -16,5 +16,29 @@
     "paused_round": 1,
     "reason": "连续 3 轮失败",
     "fail_count": 3
+  },
+  "https://www.kxdao.net/forum-42-1.html": {
+    "paused_at": "2026-06-04 10:57:58",
+    "paused_round": 3,
+    "reason": "连续 3 轮失败",
+    "fail_count": 3
+  },
+  "https://www.ghxi.com/category/all": {
+    "paused_at": "2026-06-04 10:57:58",
+    "paused_round": 3,
+    "reason": "连续 3 轮失败",
+    "fail_count": 3
+  },
+  "https://www.ypojie.com/": {
+    "paused_at": "2026-06-04 10:57:58",
+    "paused_round": 3,
+    "reason": "连续 3 轮失败",
+    "fail_count": 3
+  },
+  "https://www.52hb.com/forum.php": {
+    "paused_at": "2026-06-04 10:57:58",
+    "paused_round": 3,
+    "reason": "连续 3 轮失败",
+    "fail_count": 3
   }
 }
