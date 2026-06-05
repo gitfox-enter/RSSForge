@@ -4,5 +4,11 @@
     "paused_round": 3,
     "reason": "连续多轮返回页面正文为空",
     "fail_count": 4
+  },
+  "https://feed.iplaysoft.com": {
+    "paused_at": "2026-06-05 10:46:31",
+    "paused_round": 3,
+    "reason": "连续 3 轮失败",
+    "fail_count": 3
   }
 }
