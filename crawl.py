@@ -31,42 +31,24 @@ warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 # ============================================================
 
 # 32个监控站点（新增：聚合线报/鲸线报/那些免费的砖/慢慢买/拔草哦/薅羊毛小伙伴）
-MONITOR_SITES = [
-    "https://xianbaomi.com/",
-    "http://www.0818tuan.com/",
-    "http://79tao.linejia.com/",
+MONITOR_SITES = ["http://www.0818tuan.com/",
     "https://www.daydayzhuan.com/",
     "https://cjx8.com/",
-    "https://907k.cn/",
-    "https://ym2.cc/",
     "https://b1.ymxianbao.cn/",
     "https://www.007ymd.com/",
     "http://news.ixbk.net/",
     "https://www.zhuanyes.com/xianbao/",
-    "https://www.huodong5.com/",
-    "https://www.yxssp.com/",
     "https://www.baicaio.com/",
-    "https://yangmao.wang/",
     "https://www.12345pro.com/",
     "https://news.ixbk.fun/",
-    "https://www.h6room.com/",
-    "https://www.ithome.com/zt/xijiayi",
-    "https://free.apprcn.com/",
-    "https://www.lsapk.com/",
     "https://www.appinn.com/",
     "https://www.423down.com/",
-    "https://www.ziyuanting.com/",
-    "https://www.wycad.com/",
     "https://m.hybase.com/",
-    "https://xzba.cc/",
-    "https://feed.iplaysoft.com",
     "https://www.huifabu.cn/",
     "https://xianbao.icu/",
     "https://www.thosefree.com/",
     "https://www.manmanbuy.com/",
-    "https://www.bacaoo.com/",
-    "https://www.yangmaodang.club/",
-]
+    "https://www.bacaoo.com/",]
 
 # 文件存储配置
 HASH_RECORD_FILE = "hash_record.txt"
