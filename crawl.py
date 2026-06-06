@@ -31,7 +31,8 @@ warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 # ============================================================
 
 # 32个监控站点（新增：聚合线报/鲸线报/那些免费的砖/慢慢买/拔草哦/薅羊毛小伙伴）
-MONITOR_SITES = ["http://79tao.linejia.com/",
+MONITOR_SITES = [
+    "https://axutongxue.net/","http://79tao.linejia.com/",
     "http://news.ixbk.net/",
     "http://www.0818tuan.com/",
     "https://907k.cn/",
@@ -707,6 +708,35 @@ def parse_manmanbuy_items(soup, base_url):
     return items[:20]
 
 
+
+
+def parse_axutongxue_items(soup, base_url):
+    """阿虚同学的储物间 - 提取资源导航链接"""
+    from urllib.parse import urljoin
+    items = []
+    seen = set()
+    # 提取所有外部链接
+    for a in soup.find_all('a', href=True):
+        href = a.get('href', '').strip()
+        text = a.get_text(strip=True)
+        if not href.startswith('http'):
+            continue
+        if not text or len(text) < 3:
+            continue
+        # 过滤内部链接
+        if 'axutongxue.net' in href:
+            continue
+        if text in seen:
+            continue
+        # 过滤导航词
+        skip = ['获取公众号自动回复资源', '搜索储物间', '搜索公众号文章']
+        if text in skip:
+            continue
+        seen.add(text)
+        items.append({'text': text, 'url': href})
+    return items[:30]
+
+
 def parse_rss_feed(content_bytes, base_url):
     """RSS/Atom Feed 解析器 - 直接从XML提取文章条目"""
     from xml.etree import ElementTree as ET
@@ -927,7 +957,10 @@ def fetch_page_content(url):
         elif 'baicaio.com' in url:
             article_items = parse_baicaio_items_v2(soup, url)
             text = '\n'.join(item['text'] for item in article_items)
-        elif 'manmanbuy.com' in url:
+        elif 'axutongxue.net' in url:
+    article_items = parse_axutongxue_items(soup, url)
+    text = '\n'.join(item['text'] for item in article_items)
+elif 'manmanbuy.com' in url:
             article_items = parse_manmanbuy_items(soup, url)
             text = '\n'.join(item['text'] for item in article_items)
         else:
