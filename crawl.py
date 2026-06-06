@@ -1759,36 +1759,55 @@ def save_keyword_stats(round_num, check_time, all_site_results):
 
 def save_rss_feed(round_num, check_time, all_site_results):
     """
-    生成标准 RSS 2.0 订阅源
+    生成标准 RSS 2.0 订阅源（无限条）
     """
     import html as html_mod
+    import os
 
+    RSS_HISTORY_FILE = "rss_history.json"
+    
+    # 加载历史
+    all_rss_items = []
+    if os.path.exists(RSS_HISTORY_FILE):
+        try:
+            with open(RSS_HISTORY_FILE, 'r', encoding='utf-8') as f:
+                all_rss_items = json.load(f)
+        except:
+            pass
+    
+    # 添加新条目
     updated_sites = [r for r in all_site_results if r['status'] == 'updated']
-
-    # RSS XML 构建
-    rss_items = []
     for r in updated_sites:
         title = html_mod.escape(r.get('title', r['url']))
-        link = html_mod.escape(r['url'])
         for item in r.get('items', []):
             item_text = item['text'] if isinstance(item, dict) else str(item)
             item_url = item['url'] if isinstance(item, dict) else r['url']
-            rss_items.append({
-                'title': html_mod.escape(item_text[:100]),
-                'link': html_mod.escape(item_url),
-                'description': html_mod.escape(f"[{title}] {item_text[:200]}"),
-            })
-
-    # 限制最近 100 条
-    rss_items = rss_items[:100]
+            # 去重
+            if not any(i['link'] == item_url for i in all_rss_items):
+                all_rss_items.append({
+                    'title': html_mod.escape(item_text[:100]),
+                    'link': html_mod.escape(item_url),
+                    'description': html_mod.escape(f"[{title}] {item_text[:200]}"),
+                    'pubDate': check_time
+                })
+    
+    # 保存历史
+    try:
+        with open(RSS_HISTORY_FILE, 'w', encoding='utf-8') as f:
+            json.dump(all_rss_items, f, ensure_ascii=False)
+    except:
+        pass
+    
+    rss_items = all_rss_items  # 无限条
 
     items_xml = ''
     for item in rss_items:
+        pub = item.get('pubDate', check_time)
         items_xml += f'''    <item>
       <title>{item['title']}</title>
       <link>{item['link']}</link>
       <description>{item['description']}</description>
-      <pubDate>{check_time}</pubDate>
+      <pubDate>{pub}</pubDate>
       <guid>{item['link']}</guid>
     </item>
 '''
