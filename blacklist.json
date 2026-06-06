@@ -58,42 +58,6 @@
       "added": "2026-06-04"
     },
     {
-      "domain": "appcgn.com",
-      "reason": "2026-06-04测试无法连接",
-      "category": "inaccessible",
-      "added": "2026-06-04"
-    },
-    {
-      "domain": "surferline.cn",
-      "reason": "2026-06-04测试无法连接",
-      "category": "inaccessible",
-      "added": "2026-06-04"
-    },
-    {
-      "domain": "geekapp.net",
-      "reason": "2026-06-04测试无法连接",
-      "category": "inaccessible",
-      "added": "2026-06-04"
-    },
-    {
-      "domain": "greendown.cn",
-      "reason": "2026-06-04测试无法连接",
-      "category": "inaccessible",
-      "added": "2026-06-04"
-    },
-    {
-      "domain": "skycn.com",
-      "reason": "2026-06-04测试无法连接",
-      "category": "inaccessible",
-      "added": "2026-06-04"
-    },
-    {
-      "domain": "pcunion.cn",
-      "reason": "2026-06-04测试无法连接",
-      "category": "inaccessible",
-      "added": "2026-06-04"
-    },
-    {
       "domain": "crsky.com",
       "reason": "返回403反爬",
       "category": "anti_crawl",
@@ -106,106 +70,10 @@
       "added": "2026-06-04"
     },
     {
-      "domain": "indiemade.app",
-      "reason": "2026-06-04测试无法连接",
-      "category": "inaccessible",
-      "added": "2026-06-04"
-    },
-    {
       "domain": "hisprice.com",
       "reason": "纯工具页，无内容列表可监控",
       "category": "not_content",
       "added": "2026-06-04"
-    },
-    {
-      "domain": "whylangit.com",
-      "reason": "2026-06-04测试无法连接",
-      "category": "inaccessible",
-      "added": "2026-06-04"
-    },
-    {
-      "domain": "free-and-below.com",
-      "reason": "2026-06-04测试无法连接",
-      "category": "inaccessible",
-      "added": "2026-06-04"
-    },
-    {
-      "domain": "www.iqshw.com",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
-    },
-    {
-      "domain": "ym2.cc",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
-    },
-    {
-      "domain": "www.kxdao.net",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
-    },
-    {
-      "domain": "www.ghxi.com",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
-    },
-    {
-      "domain": "foxirj.com",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
-    },
-    {
-      "domain": "www.52hb.com",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
-    },
-    {
-      "domain": "xianbaomi.com",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
-    },
-    {
-      "domain": "79tao.linejia.com",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
-    },
-    {
-      "domain": "www.yxssp.com",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
-    },
-    {
-      "domain": "free.apprcn.com",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
-    },
-    {
-      "domain": "www.lsapk.com",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
-    },
-    {
-      "domain": "www.ypojie.com",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
-    },
-    {
-      "domain": "feed.iplaysoft.com",
-      "reason": "连续3+轮连接失败",
-      "category": "inaccessible",
-      "added": "2026-06-06"
     }
   ]
 }
