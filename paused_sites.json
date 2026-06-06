@@ -1,14 +1,13 @@
-{
-  "https://www.kxdao.net/forum.php?forumlist=1&mobile=2": {
-    "paused_at": "2026-06-04 16:00:00",
-    "paused_round": 3,
-    "reason": "连续多轮返回页面正文为空",
-    "fail_count": 4
-  },
-  "https://feed.iplaysoft.com": {
-    "paused_at": "2026-06-05 10:46:31",
-    "paused_round": 3,
-    "reason": "连续 3 轮失败",
-    "fail_count": 3
-  }
-}
+[
+  "https://www.kxdao.net/forum.php?forumlist=1&mobile=2",
+  "https://feed.iplaysoft.com",
+  "http://79tao.linejia.com/",
+  "https://www.yxssp.com/",
+  "https://yangmao.wang/",
+  "https://www.h6room.com/",
+  "https://www.ithome.com/zt/xijiayi",
+  "https://www.lsapk.com/",
+  "https://www.ziyuanting.com/",
+  "https://www.wycad.com/",
+  "https://xzba.cc/"
+]
