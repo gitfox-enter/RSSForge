@@ -1082,12 +1082,12 @@ def generate_email_html(round_num, all_site_results, check_time, notified=None):
     生成邮件内容 — 纯文本格式
     all_site_results: 列表，每个元素为 {'url':..., 'title':..., 'summary':..., 'items':..., 'status': 'updated'|'no_update'|'error'|'first', 'message':...}
     items 格式: [{'text': '标题', 'url': '链接'}, ...]
-    notified: 已通知过的条目URL集合（set），传入则过滤重复条目
+    notified: 已通知条目列表 [{"url":..., "text":...}, ...]，用于去重
     排序规则：有更新的排在前面（按条目数降序），无更新的排在后面
     返回：(主题, HTML正文, 纯文本正文, 本轮新增条目URL集合)
     """
-    if notified is None:
-        notified = set()
+    if not notified:
+        notified = []
 
     updated_results = [r for r in all_site_results if r['status'] == 'updated']
     no_update_results = [r for r in all_site_results if r['status'] in ('no_update', 'first')]
@@ -1562,7 +1562,7 @@ def main():
     save_hash_records(new_records)
 
     # 生成邮件内容（传入已通知条目用于去重）
-    subject, html_body, text_body, new_urls = generate_email_html(round_num, all_site_results, check_time, notified.get('items', []))
+    subject, html_body, text_body, new_urls = generate_email_html(round_num, all_site_results, check_time, notified)
 
     # 构建完整条目字典（URL + 正文 + 来源 + 时间）
     new_item_list = []
