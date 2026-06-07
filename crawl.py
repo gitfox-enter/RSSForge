@@ -259,18 +259,23 @@ def save_hash_records(records):
 
 def load_notified_items():
     """
-    加载已通知过的条目URL集合
-    返回格式：set of item URLs
+    加载已通知条目
+    新格式：dict{'items': [{'url', 'text', 'source', 'time'}, ...]}
+    旧格式：set of URLs（向后兼容）
     """
-    notified = set()
     if os.path.exists(NOTIFIED_ITEMS_FILE):
         try:
             with open(NOTIFIED_ITEMS_FILE, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-                notified = set(data.get('items', []))
+            if isinstance(data, dict):
+                return data  # 新格式直接返回
+            elif isinstance(data, list):
+                return {'items': [{'url': u} for u in data]}  # 旧格式转新格式
+            elif isinstance(data, set):
+                return {'items': [{'url': u} for u in data]}
         except Exception as e:
             print(f"[警告] 读取已通知条目文件失败: {e}")
-    return notified
+    return {'items': []}
 
 
 def save_notified_items(item_dict):
