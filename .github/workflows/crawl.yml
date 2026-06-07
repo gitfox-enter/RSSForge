@@ -45,10 +45,7 @@ jobs:
           set +e
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add hash_record.txt data/ index.html notified_items.json run_log.jsonl feed.xml paused_sites.json failed_sites.json 2>/dev/null || true
-          if [ -d email_backup ]; then
-            git add email_backup/ 2>/dev/null || true
-          fi
+          git add hash_record.txt notified_items.json run_log.jsonl paused_sites.json failed_sites.json 2>/dev/null || true
           git status
           if git diff --staged --quiet 2>/dev/null; then
             echo "No changes to commit"
@@ -92,6 +89,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: email-backup-${{ github.run_number }}
-          path: email_backup/
+          name: run-log-${{ github.run_number }}
+          path: run_log.jsonl
           retention-days: 30
