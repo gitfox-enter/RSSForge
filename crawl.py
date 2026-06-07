@@ -1383,6 +1383,527 @@ def save_paused_sites(paused):
         print(f"[警告] 暂停站点保存失败: {e}")
 
 
+def generate聚合_page(item_list):
+    """
+    生成好看的聚合线报页面 index.html
+    """
+    from datetime import datetime
+    from urllib.parse import urlparse
+    from collections import Counter
+
+    # 只保留有正文的条目，过滤垃圾
+    clean_items = []
+    junk_patterns = ["安卓软件", "办公软件", "安全软件", "查看详情", "直达链接", "阅读全文",
+                     "继续阅读", "更多", "首页", "登录", "注册", "搜索", "javascript:"]
+    for item in item_list:
+        text = item.get('text', '')
+        if len(text) < 5:
+            continue
+        if text.isdigit():
+            continue
+        skip = False
+        for jp in junk_patterns:
+            if text == jp or text.replace(" ", "") == jp:
+                skip = True
+                break
+        if skip:
+            continue
+        clean_items.append(item)
+
+    # 按时间倒序
+    clean_items.sort(key=lambda x: x.get('time', ''), reverse=True)
+    total = len(clean_items)
+
+    # 按来源分组统计
+    source_counts = Counter(item.get('source', '未知') for item in clean_items)
+    top_sources = source_counts.most_common(5)
+
+    # 生成每条线报的 HTML 卡片
+    cards_html = ""
+    for item in clean_items[:200]:
+        text = item.get('text', '')
+        url = item.get('url', '#')
+        source = item.get('source', '未知')
+        t = item.get('time', '')[:16]
+        try:
+            domain = urlparse(url).netloc.replace('www.', '')
+        except:
+            domain = source[:20]
+        cards_html += f'''
+        <a href="{url}" target="_blank" class="card" rel="noopener">
+            <div class="card-title">{text}</div>
+            <div class="card-meta">
+                <span class="card-source">{domain}</span>
+                <span class="card-time">{t}</span>
+            </div>
+        </a>
+'''
+
+    now_str = datetime.now().strftime('%Y-%m-%d %H:%M')
+
+    html = f'''<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>线报聚合 - 实时更新的羊毛线报合集</title>
+<meta name="description" content="聚合全网优质羊毛线报，实时更新，告别垃圾站">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+  :root {{
+    --bg: #f5f0eb;
+    --surface: #ffffff;
+    --primary: #e85d04;
+    --primary-light: #fff0e6;
+    --text: #1a1a1a;
+    --text-muted: #888;
+    --border: #e8e0d8;
+    --shadow: 0 2px 8px rgba(0,0,0,0.06);
+    --radius: 14px;
+  }}
+  body {{
+    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }}
+  header {{
+    background: var(--primary);
+    color: #fff;
+    padding: 0 24px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(232,93,4,0.3);
+  }}
+  header .logo {{
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }}
+  header .logo span {{
+    background: rgba(255,255,255,0.2);
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 8px;
+  }}
+  header .stats {{
+    font-size: 13px;
+    opacity: 0.9;
+  }}
+  .container {{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }}
+  .hero {{
+    background: var(--primary);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }}
+  .hero .fire {{ font-size: 48px; }}
+  .hero h1 {{ font-size: 22px; font-weight: 700; margin-bottom: 6px; }}
+  .hero p {{ font-size: 14px; opacity: 0.85; }}
+  .sources {{
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }}
+  .source-tag {{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }}
+  .cards {{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }}
+  .card {{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: all 0.15s ease;
+    box-shadow: var(--shadow);
+  }}
+  .card:hover {{
+    border-color: var(--primary);
+    background: var(--primary-light);
+    transform: translateX(3px);
+    box-shadow: 0 4px 16px rgba(232,93,4,0.15);
+  }}
+  .card::before {{
+    content: '◆';
+    color: var(--primary);
+    font-size: 8px;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }}
+  .card-title {{
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text);
+  }}
+  .card-meta {{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+  }}
+  .card-source {{
+    font-size: 11px;
+    color: var(--primary);
+    font-weight: 600;
+    background: var(--primary-light);
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }}
+  .card-time {{
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }}
+  footer {{
+    text-align: center;
+    padding: 24px 16px;
+    color: var(--text-muted);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }}
+  footer a {{ color: var(--primary); text-decoration: none; }}
+  @media (max-width: 600px) {{
+    .hero {{ padding: 20px; flex-direction: column; text-align: center; }}
+    .card {{ padding: 14px 16px; }}
+    .card-meta {{ display: none; }}
+    header .stats {{ display: none; }}
+  }}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🔥 线报聚合 <span>自动更新</span></div>
+  <div class="stats">{total} 条羊毛线报</div>
+</header>
+<div class="container">
+  <div class="hero">
+    <div class="fire">🔥</div>
+    <div>
+      <h1>全网羊毛线报实时聚合</h1>
+      <p>自动抓取多个线报站点，去重过滤，只保留真实有价值的线报信息</p>
+      <p style="margin-top:6px;font-size:12px;opacity:0.7;">最后更新：{now_str} · 共收录 {total} 条</p>
+    </div>
+  </div>
+  <div class="sources">
+    <span style="font-size:12px;color:var(--text-muted);margin-right:4px;">来源：</span>
+    <span class="source-tag">{top_sources[0][0]} ({top_sources[0][1]})</span>
+    <span class="source-tag">{top_sources[1][0]} ({top_sources[1][1]})</span>
+    <span class="source-tag">{top_sources[2][0]} ({top_sources[2][1]})</span>
+  </div>
+  <div class="cards">
+{cards_html}
+  </div>
+</div>
+<footer>
+  <p>自动更新 · 永不停止 · <a href="https://github.com/gitfox-enter/site-update-monitor">GitHub</a></p>
+</footer>
+</body>
+</html>'''
+
+    with open('index.html', 'w', encoding='utf-8') as f:
+        f.write(html)
+    print(f"[页面] 聚合页面已生成: index.html ({total} 条)")
+
+    """
+    生成好看的聚合线报页面 index.html
+    """
+    from datetime import datetime
+    from urllib.parse import urlparse
+    from collections import Counter
+
+    # 只保留有正文的条目，过滤垃圾
+    clean_items = []
+    junk_patterns = ["安卓软件", "办公软件", "安全软件", "查看详情", "直达链接", "阅读全文",
+                     "继续阅读", "更多", "首页", "登录", "注册", "搜索", "javascript:"]
+    for item in item_list:
+        text = item.get('text', '')
+        if len(text) < 5:
+            continue
+        if text.isdigit():
+            continue
+        skip = False
+        for jp in junk_patterns:
+            if text == jp or text.replace(" ", "") == jp:
+                skip = True
+                break
+        if skip:
+            continue
+        clean_items.append(item)
+
+    # 按时间倒序
+    clean_items.sort(key=lambda x: x.get('time', ''), reverse=True)
+    total = len(clean_items)
+
+    # 按来源分组统计
+    source_counts = Counter(item.get('source', '未知') for item in clean_items)
+    top_sources = source_counts.most_common(5)
+
+    # 生成每条线报的 HTML 卡片
+    cards_html = ""
+    for item in clean_items[:200]:
+        text = item.get('text', '')
+        url = item.get('url', '#')
+        source = item.get('source', '未知')
+        t = item.get('time', '')[:16]
+        try:
+            domain = urlparse(url).netloc.replace('www.', '')
+        except:
+            domain = source[:20]
+        cards_html += (
+            '\n        <a href="' + url + '" target="_blank" class="card" rel="noopener">\n'
+            '            <div class="card-title">' + text + '</div>\n'
+            '            <div class="card-meta">\n'
+            '                <span class="card-source">' + domain + '</span>\n'
+            '                <span class="card-time">' + t + '</span>\n'
+            '            </div>\n'
+            '        </a>\n'
+        )
+
+    now_str = datetime.now().strftime('%Y-%m-%d %H:%M')
+
+    html = (
+        '<!DOCTYPE html>\n'
+        '<html lang="zh-CN">\n'
+        '<head>\n'
+        '<meta charset="UTF-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+        '<title>线报聚合 - 实时更新的羊毛线报合集</title>\n'
+        '<meta name="description" content="聚合全网优质羊毛线报，实时更新，告别垃圾站">\n'
+        '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
+        '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">\n'
+        '<style>\n'
+        '  * { margin: 0; padding: 0; box-sizing: border-box; }\n'
+        '  :root {\n'
+        '    --bg: #f5f0eb;\n'
+        '    --surface: #ffffff;\n'
+        '    --primary: #e85d04;\n'
+        '    --primary-light: #fff0e6;\n'
+        '    --text: #1a1a1a;\n'
+        '    --text-muted: #888;\n'
+        '    --border: #e8e0d8;\n'
+        '    --shadow: 0 2px 8px rgba(0,0,0,0.06);\n'
+        '    --radius: 14px;\n'
+        '  }\n'
+        '  body {\n'
+        '    font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;\n'
+        '    background: var(--bg);\n'
+        '    color: var(--text);\n'
+        '    min-height: 100vh;\n'
+        '    line-height: 1.6;\n'
+        '  }\n'
+        '  header {\n'
+        '    background: var(--primary);\n'
+        '    color: #fff;\n'
+        '    padding: 0 24px;\n'
+        '    height: 60px;\n'
+        '    display: flex;\n'
+        '    align-items: center;\n'
+        '    justify-content: space-between;\n'
+        '    position: sticky;\n'
+        '    top: 0;\n'
+        '    z-index: 100;\n'
+        '    box-shadow: 0 2px 12px rgba(232,93,4,0.3);\n'
+        '  }\n'
+        '  header .logo {\n'
+        '    font-size: 20px;\n'
+        '    font-weight: 700;\n'
+        '    letter-spacing: -0.5px;\n'
+        '  }\n'
+        '  header .logo span {\n'
+        '    background: rgba(255,255,255,0.2);\n'
+        '    padding: 2px 10px;\n'
+        '    border-radius: 6px;\n'
+        '    font-size: 12px;\n'
+        '    font-weight: 600;\n'
+        '    margin-left: 8px;\n'
+        '  }\n'
+        '  header .stats {\n'
+        '    font-size: 13px;\n'
+        '    opacity: 0.9;\n'
+        '  }\n'
+        '  .container {\n'
+        '    max-width: 900px;\n'
+        '    margin: 0 auto;\n'
+        '    padding: 24px 16px 60px;\n'
+        '  }\n'
+        '  .hero {\n'
+        '    background: var(--primary);\n'
+        '    color: #fff;\n'
+        '    border-radius: var(--radius);\n'
+        '    padding: 28px 32px;\n'
+        '    margin-bottom: 20px;\n'
+        '    box-shadow: var(--shadow);\n'
+        '    display: flex;\n'
+        '    align-items: center;\n'
+        '    gap: 20px;\n'
+        '  }\n'
+        '  .hero .fire { font-size: 48px; }\n'
+        '  .hero h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }\n'
+        '  .hero p { font-size: 14px; opacity: 0.85; }\n'
+        '  .sources {\n'
+        '    display: flex;\n'
+        '    gap: 8px;\n'
+        '    flex-wrap: wrap;\n'
+        '    margin-bottom: 24px;\n'
+        '  }\n'
+        '  .source-tag {\n'
+        '    background: var(--surface);\n'
+        '    border: 1px solid var(--border);\n'
+        '    border-radius: 20px;\n'
+        '    padding: 4px 12px;\n'
+        '    font-size: 12px;\n'
+        '    color: var(--text-muted);\n'
+        '  }\n'
+        '  .cards {\n'
+        '    display: flex;\n'
+        '    flex-direction: column;\n'
+        '    gap: 8px;\n'
+        '  }\n'
+        '  .card {\n'
+        '    background: var(--surface);\n'
+        '    border: 1px solid var(--border);\n'
+        '    border-radius: 12px;\n'
+        '    padding: 16px 20px;\n'
+        '    text-decoration: none;\n'
+        '    color: var(--text);\n'
+        '    display: flex;\n'
+        '    align-items: flex-start;\n'
+        '    gap: 12px;\n'
+        '    transition: all 0.15s ease;\n'
+        '    box-shadow: var(--shadow);\n'
+        '  }\n'
+        '  .card:hover {\n'
+        '    border-color: var(--primary);\n'
+        '    background: var(--primary-light);\n'
+        '    transform: translateX(3px);\n'
+        '    box-shadow: 0 4px 16px rgba(232,93,4,0.15);\n'
+        '  }\n'
+        '  .card::before {\n'
+        '    content: "◆";\n'
+        '    color: var(--primary);\n'
+        '    font-size: 8px;\n'
+        '    margin-top: 7px;\n'
+        '    flex-shrink: 0;\n'
+        '  }\n'
+        '  .card-title {\n'
+        '    flex: 1;\n'
+        '    font-size: 15px;\n'
+        '    font-weight: 500;\n'
+        '    line-height: 1.5;\n'
+        '    color: var(--text);\n'
+        '  }\n'
+        '  .card-meta {\n'
+        '    display: flex;\n'
+        '    flex-direction: column;\n'
+        '    align-items: flex-end;\n'
+        '    gap: 4px;\n'
+        '    flex-shrink: 0;\n'
+        '  }\n'
+        '  .card-source {\n'
+        '    font-size: 11px;\n'
+        '    color: var(--primary);\n'
+        '    font-weight: 600;\n'
+        '    background: var(--primary-light);\n'
+        '    padding: 2px 8px;\n'
+        '    border-radius: 10px;\n'
+        '    white-space: nowrap;\n'
+        '  }\n'
+        '  .card-time {\n'
+        '    font-size: 11px;\n'
+        '    color: var(--text-muted);\n'
+        '    white-space: nowrap;\n'
+        '  }\n'
+        '  footer {\n'
+        '    text-align: center;\n'
+        '    padding: 24px 16px;\n'
+        '    color: var(--text-muted);\n'
+        '    font-size: 12px;\n'
+        '    border-top: 1px solid var(--border);\n'
+        '    margin-top: 40px;\n'
+        '  }\n'
+        '  footer a { color: var(--primary); text-decoration: none; }\n'
+        '  @media (max-width: 600px) {\n'
+        '    .hero { padding: 20px; flex-direction: column; text-align: center; }\n'
+        '    .card { padding: 14px 16px; }\n'
+        '    .card-meta { display: none; }\n'
+        '    header .stats { display: none; }\n'
+        '  }\n'
+        '</style>\n'
+        '</head>\n'
+        '<body>\n'
+        '<header>\n'
+        '  <div class="logo">🔥 线报聚合 <span>自动更新</span></div>\n'
+        '  <div class="stats">' + str(total) + ' 条羊毛线报</div>\n'
+        '</header>\n'
+        '<div class="container">\n'
+        '  <div class="hero">\n'
+        '    <div class="fire">🔥</div>\n'
+        '    <div>\n'
+        '      <h1>全网羊毛线报实时聚合</h1>\n'
+        '      <p>自动抓取多个线报站点，去重过滤，只保留真实有价值的线报信息</p>\n'
+        '      <p style="margin-top:6px;font-size:12px;opacity:0.7;">最后更新：' + now_str + ' · 共收录 ' + str(total) + ' 条</p>\n'
+        '    </div>\n'
+        '  </div>\n'
+        '  <div class="sources">\n'
+        '    <span style="font-size:12px;color:var(--text-muted);margin-right:4px;">来源：</span>\n'
+        '    <span class="source-tag">' + top_sources[0][0] + ' (' + str(top_sources[0][1]) + ')</span>\n'
+        '    <span class="source-tag">' + top_sources[1][0] + ' (' + str(top_sources[1][1]) + ')</span>\n'
+        '    <span class="source-tag">' + top_sources[2][0] + ' (' + str(top_sources[2][1]) + ')</span>\n'
+        '  </div>\n'
+        '  <div class="cards">\n'
+        + cards_html +
+        '  </div>\n'
+        '</div>\n'
+        '<footer>\n'
+        '  <p>自动更新 · 永不停止 · <a href="https://github.com/gitfox-enter/site-update-monitor">GitHub</a></p>\n'
+        '</footer>\n'
+        '</body>\n'
+        '</html>\n'
+    )
+
+    with open('index.html', 'w', encoding='utf-8') as f:
+        f.write(html)
+    print(f"[页面] 聚合页面已生成: index.html (" + str(total) + " 条)")
+
 def main():
     """主监控流程"""
     print("=" * 60)
