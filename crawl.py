@@ -1094,7 +1094,8 @@ def generate_email_html(round_num, all_site_results, check_time, notified=None):
     error_results = [r for r in all_site_results if r['status'] == 'error']
 
     all_new_urls = set()
-    existing_urls = {item['url'] for item in notified.get('items', [])}
+    notif_list = notified.get('items', []) if isinstance(notified, dict) else (notified if isinstance(notified, list) else [])
+    existing_urls = {item['url'] for item in notif_list}
     for r in updated_results:
         new_items, new_urls = filter_new_items(r.get('items', []), existing_urls)
         r['items'] = new_items
