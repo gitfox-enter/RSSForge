@@ -1019,11 +1019,15 @@ def generate_email_html(round_num, all_site_results, check_time, notified=None):
     排序规则：有更新的排在前面（按条目数降序），无更新的排在后面
     返回：(主题, HTML正文, 纯文本正文, 本轮新增条目URL集合)
     """
-    # 标准化 notified 为 list（兼容旧 set/str dict 格式）
+    # 标准化 notified 为 dict list（兼容旧 set/str/纯URL 格式）
     if not notified:
         notif_list = []
     elif isinstance(notified, list):
-        notif_list = notified
+        if notified and isinstance(notified[0], str):
+            # 旧格式：纯URL字符串列表，转成 dict list
+            notif_list = [{'url': u} for u in notified]
+        else:
+            notif_list = notified
     elif isinstance(notified, dict):
         notif_list = notified.get('items', [])
     else:
