@@ -1,12 +1,22 @@
 {
   "name": "线报聚合",
-  "short_name": "线报",
+  "short_name": "线报聚合",
   "description": "全网羊毛线报实时聚合",
   "start_url": "/site-update-monitor/",
   "display": "standalone",
-  "background_color": "#f5f0eb",
-  "theme_color": "#e85d04",
+  "background_color": "#ffffff",
+  "theme_color": "#1976d2",
   "icons": [
+    {
+      "src": "public/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "public/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
     {
       "src": "public/favicon.svg",
       "sizes": "any",
