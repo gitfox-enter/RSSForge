@@ -1562,7 +1562,7 @@ def main():
     save_hash_records(new_records)
 
     # 生成邮件内容（传入已通知条目用于去重）
-    subject, html_body, text_body, new_urls = generate_email_html(round_num, all_site_results, check_time, notified)
+    subject, html_body, text_body, new_urls = generate_email_html(round_num, all_site_results, check_time, notified.get('items', []) if isinstance(notified, dict) else notified)
 
     # 构建完整条目字典（URL + 正文 + 来源 + 时间）
     new_item_list = []
