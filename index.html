@@ -231,17 +231,21 @@ button{font-family:inherit}
 }
 .item>a:hover .item-title{color:var(--primary)}
 .src-badge{
-  width:26px;
-  height:26px;
+  min-width:28px;
+  width:28px;
+  height:28px;
   border-radius:4px;
-  display:flex;
+  display:inline-flex;
   align-items:center;
   justify-content:center;
-  color:#fff;
-  font-size:13px;
+  color:#fff !important;
+  font-size:14px;
   font-weight:700;
+  font-family:var(--font);
   flex-shrink:0;
   line-height:1;
+  text-align:center;
+  user-select:none;
 }
 .item-body{flex:1;min-width:0}
 .item-title{
@@ -491,7 +495,7 @@ button{font-family:inherit}
   #menu a{padding:6px 8px;font-size:13px}
   .item>a{padding:10px 12px;gap:8px}
   .item-title{font-size:13px}
-  .src-badge{width:24px;height:24px;font-size:12px}
+  .src-badge{min-width:24px;width:24px;height:24px;font-size:12px}
   #footer{padding:16px 12px}
   #back-top{bottom:16px;right:16px;width:36px;height:36px}
 }
@@ -696,6 +700,18 @@ function formatTime(t) {
 }
 
 /* ================================================================
+   TITLE CLEANUP - strip leading date/time prefixes
+   ================================================================ */
+function cleanTitle(text) {
+  if (!text) return '';
+  // Strip leading "MM-DD HH:MM" pattern (e.g., "06-07 20:08伊利...")
+  text = text.replace(/^\d{2}[-/]\d{2}\s+\d{2}:\d{2}\s*/, '');
+  // Also strip "MM-DD" at start if followed by Chinese text
+  text = text.replace(/^\d{2}[-/]\d{2}\s+/, '');
+  return text.trim();
+}
+
+/* ================================================================
    DATA LOADING
    ================================================================ */
 function loadData() {
@@ -840,7 +856,7 @@ function renderList() {
   pageItems.forEach(function(it) {
     var char = getSourceChar(it.source);
     var color = getSourceColor(it.source);
-    var title = highlightPrice(esc(it.text));
+    var title = highlightPrice(esc(cleanTitle(it.text)));
     var time = formatTime(it.time);
     var platformHtml = it.platform ? '<span class="platform-tag">' + esc(it.platform) + '</span>' : '';
 
