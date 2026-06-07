@@ -2,8 +2,8 @@ name: 快速增量检查
 
 on:
   schedule:
-    # 每 5 分钟检查一次 top 站点
-    - cron: '*/5 * * * *'
+    # 高峰期（9:00-22:00 北京时间）每 30 分钟快速检查 top 站点
+    - cron: '*/30 9-21 * * *'
   workflow_dispatch:
 
 concurrency:

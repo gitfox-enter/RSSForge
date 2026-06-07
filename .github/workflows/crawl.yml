@@ -2,7 +2,8 @@ name: 站点更新监控
 
 on:
   schedule:
-    - cron: '0 */1 * * *'
+    # 每天3次全量爬取：早8点、下午1点、晚6点（北京时间）
+    - cron: '0 0,5,10 * * *'
   workflow_dispatch:
 
 concurrency:
