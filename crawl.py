@@ -273,12 +273,12 @@ def load_notified_items():
     return notified
 
 
-def save_notified_items(notified):
+def save_notified_items(item_dict):
     """保存已通知条目URL集合到文件"""
     try:
         with open(NOTIFIED_ITEMS_FILE, 'w', encoding='utf-8') as f:
-            json.dump({'items': sorted(notified), 'updated_at': get_beijing_time().strftime('%Y-%m-%d %H:%M:%S')}, f, ensure_ascii=False, indent=2)
-        print(f"[信息] 已通知条目记录已更新: {NOTIFIED_ITEMS_FILE} ({len(notified)} 条)")
+            json.dump(item_dict, f, ensure_ascii=False, indent=2)
+        print(f"[信息] 已通知条目记录已更新: {NOTIFIED_ITEMS_FILE} ({len(item_dict.get('items', []))} 条)")
         return True
     except Exception as e:
         print(f"[错误] 保存已通知条目失败: {e}")
@@ -1089,8 +1089,9 @@ def generate_email_html(round_num, all_site_results, check_time, notified=None):
     error_results = [r for r in all_site_results if r['status'] == 'error']
 
     all_new_urls = set()
+    existing_urls = {item['url'] for item in notified.get('items', [])}
     for r in updated_results:
-        new_items, new_urls = filter_new_items(r.get('items', []), notified)
+        new_items, new_urls = filter_new_items(r.get('items', []), existing_urls)
         r['items'] = new_items
         all_new_urls.update(new_urls)
 
@@ -1477,7 +1478,7 @@ def main():
 
     # 加载已通知过的条目URL（去重用）
     notified = load_notified_items()
-    print(f"[信息] 已加载已通知条目: {len(notified)} 条")
+    print(f"[信息] 已加载历史条目: {len(notified.get('items', []))} 条")
 
     # 检查所有活跃站点更新
     all_site_results = []  # 存储所有站点状态（含标题、摘要）
@@ -1556,15 +1557,29 @@ def main():
     save_hash_records(new_records)
 
     # 生成邮件内容（传入已通知条目用于去重）
-    subject, html_body, text_body, new_urls = generate_email_html(round_num, all_site_results, check_time, notified)
+    subject, html_body, text_body, new_urls = generate_email_html(round_num, all_site_results, check_time, notified.get('items', []))
 
-    # 更新已通知条目：加入本轮所有站点的items URL（去重）
+    # 构建完整条目字典（URL + 正文 + 来源 + 时间）
+    new_item_list = []
     for r in all_site_results:
         if r['status'] == 'updated':
             for item in r.get('items', []):
                 item_url = item['url'] if isinstance(item, dict) else item
-                notified.add(item_url)
-    save_notified_items(notified)
+                item_text = item['text'] if isinstance(item, dict) else str(item)
+                if item_url and not item_url.startswith('javascript:'):
+                    new_item_list.append({
+                        'url': item_url,
+                        'text': item_text,
+                        'source': r.get('title', r['url']),
+                        'time': check_time
+                    })
+    save_notified_items({
+        'items': new_item_list,
+        'updated_at': check_time
+    })
+
+    # 生成聚合页面
+    generate聚合_page(new_item_list)
 
     print(f"[信息] 本轮新通知条目: {len(new_urls)} 条")
 
