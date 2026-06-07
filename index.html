@@ -3,1498 +3,1476 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>线报聚合 - 实时更新的羊毛线报合集</title>
-<meta name="description" content="聚合全网优质羊毛线报，实时更新，告别垃圾站">
+<title>线报聚合 - 全网羊毛线报实时聚合</title>
+<meta name="description" content="聚合全网优质羊毛线报，自动抓取实时更新，告别垃圾站">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --bg: #f5f0eb;
-    --surface: #ffffff;
-    --primary: #e85d04;
-    --primary-light: #fff0e6;
-    --text: #1a1a1a;
-    --text-muted: #888;
-    --border: #e8e0d8;
-    --shadow: 0 2px 8px rgba(0,0,0,0.06);
-    --radius: 14px;
-  }
-  body {
-    font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    line-height: 1.6;
-  }
-  header {
-    background: var(--primary);
-    color: #fff;
-    padding: 0 24px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 12px rgba(232,93,4,0.3);
-  }
-  header .logo {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-  header .logo span {
-    background: rgba(255,255,255,0.2);
-    padding: 2px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-left: 8px;
-  }
-  header .stats {
-    font-size: 13px;
-    opacity: 0.9;
-  }
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 16px 60px;
-  }
-  .hero {
-    background: var(--primary);
-    color: #fff;
-    border-radius: var(--radius);
-    padding: 28px 32px;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-  .hero .fire { font-size: 48px; }
-  .hero h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-  .hero p { font-size: 14px; opacity: 0.85; }
-  .sources {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-  }
-  .source-tag {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-  .cards {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 20px;
-    text-decoration: none;
-    color: var(--text);
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    transition: all 0.15s ease;
-    box-shadow: var(--shadow);
-  }
-  .card:hover {
-    border-color: var(--primary);
-    background: var(--primary-light);
-    transform: translateX(3px);
-    box-shadow: 0 4px 16px rgba(232,93,4,0.15);
-  }
-  .card::before {
-    content: "◆";
-    color: var(--primary);
-    font-size: 8px;
-    margin-top: 7px;
-    flex-shrink: 0;
-  }
-  .card-title {
-    flex: 1;
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 1.5;
-    color: var(--text);
-  }
-  .card-meta {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-    flex-shrink: 0;
-  }
-  .card-source {
-    font-size: 11px;
-    color: var(--primary);
-    font-weight: 600;
-    background: var(--primary-light);
-    padding: 2px 8px;
-    border-radius: 10px;
-    white-space: nowrap;
-  }
-  .card-time {
-    font-size: 11px;
-    color: var(--text-muted);
-    white-space: nowrap;
-  }
-  footer {
-    text-align: center;
-    padding: 24px 16px;
-    color: var(--text-muted);
-    font-size: 12px;
-    border-top: 1px solid var(--border);
-    margin-top: 40px;
-  }
-  footer a { color: var(--primary); text-decoration: none; }
-  @media (max-width: 600px) {
-    .hero { padding: 20px; flex-direction: column; text-align: center; }
-    .card { padding: 14px 16px; }
-    .card-meta { display: none; }
-    header .stats { display: none; }
-  }
+/* ========== CSS RESET & CUSTOM PROPERTIES ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #e85d04;
+  --primary-dark: #c94d03;
+  --primary-light: #fff0e6;
+  --primary-gradient: linear-gradient(135deg, #e85d04 0%, #dc2f02 50%, #d00000 100%);
+  --bg: #f5f0eb;
+  --bg-alt: #ede7e0;
+  --surface: #ffffff;
+  --surface-hover: #fffbf7;
+  --text: #1a1a1a;
+  --text-secondary: #555;
+  --text-muted: #999;
+  --text-light: #bbb;
+  --border: #e8e0d8;
+  --border-light: #f0ebe5;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-primary: 0 4px 20px rgba(232,93,4,0.25);
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --header-height: 60px;
+  --filter-height: 52px;
+  --max-width: 860px;
+  --transition: 0.2s ease;
+  --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========== BASE ========== */
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ========== HEADER ========== */
+.header {
+  background: var(--primary);
+  color: #fff;
+  height: var(--header-height);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 16px rgba(232,93,4,0.35);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+.badge-auto {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(4px);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-count {
+  font-size: 13px;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.btn-settings {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.btn-settings:hover { background: rgba(255,255,255,0.3); }
+
+/* ========== SEARCH BAR ========== */
+.search-wrap {
+  position: relative;
+  max-width: 320px;
+  flex: 1;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  height: 38px;
+  border: none;
+  border-radius: 20px;
+  padding: 0 36px 0 36px;
+  font-size: 14px;
+  font-family: inherit;
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  outline: none;
+  transition: background var(--transition), box-shadow var(--transition);
+}
+
+.search-input::placeholder { color: rgba(255,255,255,0.6); }
+.search-input:focus {
+  background: rgba(255,255,255,0.28);
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+}
+
+.search-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.3);
+  border: none;
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+}
+
+.search-clear.visible { display: flex; }
+.search-clear:hover { background: rgba(255,255,255,0.5); }
+
+/* ========== HERO ========== */
+.hero {
+  background: var(--primary-gradient);
+  color: #fff;
+  padding: 40px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 300px;
+  height: 300px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: -30%;
+  left: -5%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-content { position: relative; z-index: 1; }
+
+.hero h1 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.hero-subtitle {
+  font-size: 14px;
+  opacity: 0.85;
+  max-width: 440px;
+  margin: 0 auto 16px;
+  line-height: 1.7;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.hero-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-stat svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
+}
+
+/* ========== FILTER BAR ========== */
+.filter-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: var(--header-height);
+  z-index: 150;
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  height: var(--filter-height);
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filter-inner::-webkit-scrollbar { display: none; }
+
+.filter-tab {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  transition: all var(--transition);
+  flex-shrink: 0;
+  font-family: inherit;
+  user-select: none;
+}
+
+.filter-tab:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.filter-tab.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(232,93,4,0.25);
+}
+
+.filter-tab .tab-count {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+/* ========== MAIN CONTENT ========== */
+.main {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 16px 16px 80px;
+}
+
+/* ========== STATUS BAR ========== */
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 4px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.status-bar .search-result-info { color: var(--primary); font-weight: 500; }
+
+/* ========== ITEM LIST ========== */
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item-card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all var(--transition);
+  cursor: pointer;
+  position: relative;
+}
+
+.item-card:hover {
+  border-color: var(--primary);
+  background: var(--surface-hover);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+}
+
+.item-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 8px;
+  flex-shrink: 0;
+  transition: transform var(--transition);
+}
+
+.item-card:hover .item-dot { transform: scale(1.4); }
+
+.item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-title {
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--text);
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.item-card:hover .item-title { color: var(--primary); }
+
+.item-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.item-source {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+.item-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ========== LOAD MORE ========== */
+.load-more-wrap {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.btn-load-more {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 10px 32px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-load-more:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: var(--shadow);
+}
+
+/* ========== LOADING SPINNER ========== */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ========== EMPTY STATE ========== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.empty-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.empty-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ========== SENTINEL (for IntersectionObserver) ========== */
+.scroll-sentinel {
+  height: 1px;
+  width: 100%;
+}
+
+/* ========== BACK TO TOP ========== */
+.back-to-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: all var(--transition-slow);
+  z-index: 100;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(232,93,4,0.35);
+}
+
+.back-to-top svg { width: 20px; height: 20px; }
+
+/* ========== FOOTER ========== */
+.footer {
+  text-align: center;
+  padding: 28px 16px;
+  color: var(--text-muted);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.footer a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer a:hover { text-decoration: underline; }
+
+/* ========== SETTINGS MODAL ========== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-slow);
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 520px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(20px) scale(0.97);
+  transition: transform var(--transition-slow);
+}
+
+.modal-overlay.open .modal {
+  transform: translateY(0) scale(1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--text-muted);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all var(--transition);
+}
+
+.modal-close:hover { background: var(--bg); color: var(--text); }
+
+.modal-body { padding: 20px 24px; }
+
+.modal-section { margin-bottom: 24px; }
+
+.modal-section:last-child { margin-bottom: 0; }
+
+.modal-section h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.custom-cat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.custom-cat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+}
+
+.custom-cat-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.custom-cat-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.custom-cat-keywords {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  word-break: break-all;
+}
+
+.custom-cat-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.custom-cat-actions button {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition);
+}
+
+.custom-cat-actions button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.custom-cat-actions .btn-del:hover {
+  border-color: #d00000;
+  color: #d00000;
+}
+
+.add-cat-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.form-group input {
+  width: 100%;
+  height: 38px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.form-group input:focus { border-color: var(--primary); }
+
+.form-group input::placeholder { color: var(--text-light); }
+
+.btn-add-cat {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--transition);
+  align-self: flex-start;
+}
+
+.btn-add-cat:hover { background: var(--primary-dark); }
+
+.no-custom-cats {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 16px;
+}
+
+/* ========== SOURCE COLORS ========== */
+.src-color-0  { background: #fff0e6; color: #e85d04; }
+.src-color-1  { background: #e8f5e9; color: #2e7d32; }
+.src-color-2  { background: #e3f2fd; color: #1565c0; }
+.src-color-3  { background: #fce4ec; color: #c62828; }
+.src-color-4  { background: #f3e5f5; color: #7b1fa2; }
+.src-color-5  { background: #e0f2f1; color: #00695c; }
+.src-color-6  { background: #fff3e0; color: #e65100; }
+.src-color-7  { background: #e8eaf6; color: #283593; }
+.src-color-8  { background: #fbe9e7; color: #bf360c; }
+.src-color-9  { background: #e1f5fe; color: #0277bd; }
+.src-color-10 { background: #f1f8e9; color: #33691e; }
+.src-color-11 { background: #fff8e1; color: #f57f17; }
+
+.dot-color-0  { background: #e85d04; }
+.dot-color-1  { background: #2e7d32; }
+.dot-color-2  { background: #1565c0; }
+.dot-color-3  { background: #c62828; }
+.dot-color-4  { background: #7b1fa2; }
+.dot-color-5  { background: #00695c; }
+.dot-color-6  { background: #e65100; }
+.dot-color-7  { background: #283593; }
+.dot-color-8  { background: #bf360c; }
+.dot-color-9  { background: #0277bd; }
+.dot-color-10 { background: #33691e; }
+.dot-color-11 { background: #f57f17; }
+
+/* ========== ERROR STATE ========== */
+.error-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.error-icon { font-size: 48px; margin-bottom: 16px; }
+
+.error-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.error-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.btn-retry {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.btn-retry:hover { background: var(--primary-dark); }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .header { padding: 0 12px; }
+  .header-count { display: none; }
+  .search-wrap { max-width: 180px; }
+  .hero { padding: 28px 16px; }
+  .hero h1 { font-size: 20px; }
+  .hero-subtitle { font-size: 13px; }
+  .hero-stats { gap: 16px; font-size: 12px; }
+  .main { padding: 12px 10px 80px; }
+  .item-card { padding: 12px 14px; gap: 10px; }
+  .item-meta { display: none; }
+  .item-title { font-size: 14px; -webkit-line-clamp: 3; }
+  .filter-inner { padding: 0 10px; }
+  .back-to-top { bottom: 20px; right: 16px; width: 40px; height: 40px; }
+  .modal { width: 95%; }
+}
+
+@media (min-width: 769px) {
+  .item-meta { min-width: 120px; }
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.item-card { animation: fadeInUp 0.3s ease both; }
+
+/* stagger via JS inline style */
 </style>
 </head>
 <body>
-<header>
-  <div class="logo">🔥 线报聚合 <span>自动更新</span></div>
-  <div class="stats">163 条羊毛线报</div>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo">&#x1F525; 线报聚合</div>
+    <span class="badge-auto">自动更新</span>
+  </div>
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" class="search-input" id="searchInput" placeholder="搜索线报..." autocomplete="off">
+    <button class="search-clear" id="searchClear" title="清除">&times;</button>
+  </div>
+  <div class="header-right">
+    <span class="header-count" id="headerCount"></span>
+    <button class="btn-settings" id="btnSettings" title="自定义分类">&#9881;</button>
+  </div>
 </header>
-<div class="container">
-  <div class="hero">
-    <div class="fire">🔥</div>
-    <div>
-      <h1>全网羊毛线报实时聚合</h1>
-      <p>自动抓取多个线报站点，去重过滤，只保留真实有价值的线报信息</p>
-      <p style="margin-top:6px;font-size:12px;opacity:0.7;">最后更新：2026-06-07 17:00 · 共收录 163 条</p>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>全网羊毛线报实时聚合</h1>
+    <p class="hero-subtitle">自动抓取多个线报站点，智能过滤去重，只保留真实有价值的优惠线报</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="heroTime">加载中...</span>
+      </div>
+      <div class="hero-stat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span id="heroTotal">共收录 -- 条</span>
+      </div>
     </div>
   </div>
-  <div class="sources">
-    <span style="font-size:12px;color:var(--text-muted);margin-right:4px;">来源：</span>
-    <span class="source-tag">线报酷 - 专注线报活动与优惠促销分享的线报网站 (48)</span>
-    <span class="source-tag">好赚网 - 每日分享新鲜活动线报和优惠信息 (38)</span>
-    <span class="source-tag">0818团线报资源网-京东优惠券/抽奖-为赚客服务的一手线报网站-0818线报 (21)</span>
+</section>
+
+<!-- ===== FILTER BAR ===== -->
+<nav class="filter-bar">
+  <div class="filter-inner" id="filterTabs"></div>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<main class="main" id="mainContent">
+  <div class="loading" id="loadingState">
+    <div class="spinner"></div>
+    <div class="loading-text">正在加载线报数据...</div>
   </div>
-  <div class="cards">
-
-        <a href="http://www.0818tuan.com/xbhd/2700241.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">06-06 00:000818tuan即将关闭，启用新域名！！</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://u.jd.com/H6sh0JJ" target="_blank" class="card" rel="noopener">
-            <div class="card-title">06-07 00:00京东必中618红包｜直达 ></div>
-            <div class="card-meta">
-                <span class="card-source">u.jd.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/xbhd/2700948.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">06-07 16:58一品玉 阿克苏去核灰枣500g 26.9亓，买一赠一 到手共2袋 *香甜</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/xbhd/2700932.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">06-07 16:19美的 家用双面加热电饼铛 淘宝首页秒杀加购凑消费券200-25 77.47</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/xbhd/2700931.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">06-07 16:17唯品会,iPhone17 Pro蓝色,7899元</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2022-03-15/241.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">05-07 20:59美团外卖</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2022-03-25/244.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">05-07 20:52特价寄快递</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2022-03-15/235.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">05-07 20:52滴滴打车券</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2019-10-11/232.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">05-01 20:59美团可叠加红包</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2019-08-07/226.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">05-01 20:55淘宝闪购天天红包</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2022-03-15/243.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">05-01 20:54饿了么消费券</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2022-03-15/242.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">03-15 10:58美团霸王餐</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2022-03-15/237.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">03-15 10:35美团-美团酒店券</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2019-09-07/229.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">05-07 09:37霸王餐</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2022-03-15/240.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">03-15 10:40抖音新人1分购</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2022-03-15/239.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">03-15 10:36同程打车</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2022-03-15/238.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">03-15 10:35滴滴-代驾100元券</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2022-03-15/236.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">03-15 10:30花小猪打车</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2022-03-15/234.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">03-15 09:15电影票</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2019-10-19/233.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">03-11 07:31滴滴有车 加油｜代驾等</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.0818tuan.com/quan/2019-09-26/231.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">02-26 09:28曹操出行</div>
-            <div class="card-meta">
-                <span class="card-source">0818tuan.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=6" target="_blank" class="card" rel="noopener">
-            <div class="card-title">蘑菇小牙牙</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=13" target="_blank" class="card" rel="noopener">
-            <div class="card-title">好心天天分享</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=10" target="_blank" class="card" rel="noopener">
-            <div class="card-title">败家少女的日常</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=18" target="_blank" class="card" rel="noopener">
-            <div class="card-title">丐帮羊毛日记</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=19" target="_blank" class="card" rel="noopener">
-            <div class="card-title">优惠女孩的日常</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=11" target="_blank" class="card" rel="noopener">
-            <div class="card-title">天涯花花的百宝袋</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=12" target="_blank" class="card" rel="noopener">
-            <div class="card-title">白菜省钱君</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=14" target="_blank" class="card" rel="noopener">
-            <div class="card-title">披着羊毛的魔鬼</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=20" target="_blank" class="card" rel="noopener">
-            <div class="card-title">白给王酸菜</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=21" target="_blank" class="card" rel="noopener">
-            <div class="card-title">拼夕夕bot</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=22" target="_blank" class="card" rel="noopener">
-            <div class="card-title">光芒呀shine</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=23" target="_blank" class="card" rel="noopener">
-            <div class="card-title">买白菜的妹妹</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/?cat=24" target="_blank" class="card" rel="noopener">
-            <div class="card-title">薅羊毛的大队长</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://cjx8.com/post/1724950" target="_blank" class="card" rel="noopener">
-            <div class="card-title">菜暇步士儿童短袖T恤合集 58-65元 多款可选 京东Plus专享2026-06-07 16:40:340京东妖16点30领5-4叠加优惠券2026-06-07 16:26:450京东</div>
-            <div class="card-meta">
-                <span class="card-source">cjx8.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://beian.miit.gov.cn/" target="_blank" class="card" rel="noopener">
-            <div class="card-title">闽ICP备2024062941号</div>
-            <div class="card-meta">
-                <span class="card-source">beian.miit.gov.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://nav.weyondesign.com" target="_blank" class="card" rel="noopener">
-            <div class="card-title">自贡PPT制作</div>
-            <div class="card-meta">
-                <span class="card-source">nav.weyondesign.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://www.yiyazaojiao.com" target="_blank" class="card" rel="noopener">
-            <div class="card-title">动画片下载</div>
-            <div class="card-meta">
-                <span class="card-source">yiyazaojiao.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.downext.com" target="_blank" class="card" rel="noopener">
-            <div class="card-title">次世代下载网</div>
-            <div class="card-meta">
-                <span class="card-source">downext.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/zuankeba-hot.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">赚客吧热帖</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/xinzuanba-hot.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">新赚吧热帖</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/zhidemai-hot.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">值得买热帖</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/category-huluxia/" target="_blank" class="card" rel="noopener">
-            <div class="card-title">葫芦侠三楼</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/category-man/" target="_blank" class="card" rel="noopener">
-            <div class="card-title">更新较慢活动</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/category-xiaodao/" target="_blank" class="card" rel="noopener">
-            <div class="card-title">小刀娱乐网</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/category-iqnew/" target="_blank" class="card" rel="noopener">
-            <div class="card-title">爱Q生活网</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/category-mianfei/" target="_blank" class="card" rel="noopener">
-            <div class="card-title">免费赚钱中心</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/haodan/6419729.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">黄金搭档人参蛋白粉500g*2罐 79元，黄金搭档儿童钙铁锌口服液10ml*96支 69.9元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/haodan/6419728.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">王朝霞暑假三件套字帖计算阅读专项 4.9元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/weibo/6419727.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">乐唯诗高硼圆形保鲜盒370ml*2个 6.4元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/weibo/6419726.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">17点小程序加码抽38-19 美团券合集 1</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/haodan/6419725.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">心相印厨房纸120抽叠琻币5提 23.8元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/weibo/6419724.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">京喜无痕挂衣架20支 6.01元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/haodan/6419722.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">优益C青提乳酸菌20瓶500亿活性益生菌 29.9元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/haodan/6419723.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">一品玉阿克苏去核灰枣500g 买一赠一到手共2袋 26.9元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/haodan/6419721.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">飞影PB3.0拖鞋 8元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/haodan/6419720.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">乔丹FE运动拖鞋 15元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/weibo/6419730.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">斯凯奇凉感T恤短袖 39.23元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/haodan/6419719.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">德佑婴儿湿巾 无敏配方 9.9元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/haodan/6419718.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">玉米段拍1.1kg实发1.4-1.6kg一袋8段 16.8元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/haodan/6419716.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">大风丸 0.3元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/weibo/6419717.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">清风抽纸M码80抽*20包 24元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="http://news.ixbk.net/douban-pinzu/6419715.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">欧莱雅小银管150毫升174.5</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.net</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/zuankeba-hot.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">赚客吧热帖</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/xinzuanba-hot.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">新赚吧热帖</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/zhidemai-hot.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">值得买热帖</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/category-huluxia/" target="_blank" class="card" rel="noopener">
-            <div class="card-title">葫芦侠三楼</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/category-man/" target="_blank" class="card" rel="noopener">
-            <div class="card-title">更新较慢活动</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/category-xiaodao/" target="_blank" class="card" rel="noopener">
-            <div class="card-title">小刀娱乐网</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/category-iqnew/" target="_blank" class="card" rel="noopener">
-            <div class="card-title">爱Q生活网</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/category-mianfei/" target="_blank" class="card" rel="noopener">
-            <div class="card-title">免费赚钱中心</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/haodan/6419729.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">黄金搭档人参蛋白粉500g*2罐 79元，黄金搭档儿童钙铁锌口服液10ml*96支 69.9元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/haodan/6419728.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">王朝霞暑假三件套字帖计算阅读专项 4.9元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/weibo/6419727.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">乐唯诗高硼圆形保鲜盒370ml*2个 6.4元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/weibo/6419726.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">17点小程序加码抽38-19 美团券合集 1</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/haodan/6419725.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">心相印厨房纸120抽叠琻币5提 23.8元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/weibo/6419724.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">京喜无痕挂衣架20支 6.01元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/haodan/6419722.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">优益C青提乳酸菌20瓶500亿活性益生菌 29.9元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/haodan/6419723.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">一品玉阿克苏去核灰枣500g 买一赠一到手共2袋 26.9元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/haodan/6419721.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">飞影PB3.0拖鞋 8元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/haodan/6419720.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">乔丹FE运动拖鞋 15元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/weibo/6419730.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">斯凯奇凉感T恤短袖 39.23元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/haodan/6419719.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">德佑婴儿湿巾 无敏配方 9.9元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/haodan/6419718.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">玉米段拍1.1kg实发1.4-1.6kg一袋8段 16.8元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/haodan/6419716.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">大风丸 0.3元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/weibo/6419717.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">清风抽纸M码80抽*20包 24元</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://news.ixbk.fun/douban-pinzu/6419715.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">欧莱雅小银管150毫升174.5</div>
-            <div class="card-meta">
-                <span class="card-source">news.ixbk.fun</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.baicaio.com/item/986576.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">慕方 新茶太平猴魁特级雨前茶叶 10g*3罐</div>
-            <div class="card-meta">
-                <span class="card-source">baicaio.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.baicaio.com/item/986576.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">慕方 新茶太平猴魁特级雨前茶叶 10g*3罐19.7元包邮</div>
-            <div class="card-meta">
-                <span class="card-source">baicaio.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.baicaio.com/item/985211.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">百度网盘 超级会员年卡12个月+赠超级会员2个月</div>
-            <div class="card-meta">
-                <span class="card-source">baicaio.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.baicaio.com/item/985211.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">百度网盘 超级会员年卡12个月+赠超级会员2个月189元（13.5元/月）</div>
-            <div class="card-meta">
-                <span class="card-source">baicaio.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.baicaio.com/item/986534.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">白菜！EltamD 安妍科 清透守护防晒霜 SPF32 48g*2支</div>
-            <div class="card-meta">
-                <span class="card-source">baicaio.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.baicaio.com/item/986534.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">白菜！EltamD 安妍科 清透守护防晒霜 SPF32 48g*2支48.26元包邮（24.13元/支）</div>
-            <div class="card-meta">
-                <span class="card-source">baicaio.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.baicaio.com/item/986179.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">Kleenex 舒洁 湿厕纸 80抽*18包</div>
-            <div class="card-meta">
-                <span class="card-source">baicaio.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.baicaio.com/item/986179.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">Kleenex 舒洁 湿厕纸 80抽*18包89.7元包邮（4.98元/包）</div>
-            <div class="card-meta">
-                <span class="card-source">baicaio.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.baicaio.com/item/986572.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">养生堂 天然维生素E软胶囊 200粒</div>
-            <div class="card-meta">
-                <span class="card-source">baicaio.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.baicaio.com/item/986572.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">养生堂 天然维生素E软胶囊 200粒新低55.24元包邮</div>
-            <div class="card-meta">
-                <span class="card-source">baicaio.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.baicaio.com/item/986571.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">白菜！超亚 EO灭菌便携纯棉日抛一次性内裤 10条（送超亚卫生巾2片）</div>
-            <div class="card-meta">
-                <span class="card-source">baicaio.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.baicaio.com/item/986571.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">白菜！超亚 EO灭菌便携纯棉日抛一次性内裤 10条（送超亚卫生巾2片）新低6.17元包邮（0.62元/条）</div>
-            <div class="card-meta">
-                <span class="card-source">baicaio.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/weibo/123397.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">微博乐唯诗高硼圆形保鲜盒370ml*2个 6.4元06-07 16:59›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/weibo/123396.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">微博17点小程序加码抽38-19 美团券合集 106-07 16:59›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/yangmaodang/123395.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">酷安价还不错！361长裤33 到首页秒杀搜索...06-07 16:58›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/haodan/123394.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">好单心相印厨房纸120抽叠琻币5提 23.8元06-07 16:59›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/weibo/123393.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">微博京喜无痕挂衣架20支 6.01元06-07 16:58›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/haodan/123392.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">好单一品玉阿克苏去核灰枣500g 买一赠一到手共2袋 26.9元06-07 16:58›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/haodan/123391.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">好单优益C青提乳酸菌20瓶500亿活性益生菌 29.9元06-07 16:58›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/haodan/123390.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">好单飞影PB3.0拖鞋 8元06-07 16:58›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/haodan/123389.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">好单乔丹FE运动拖鞋 15元06-07 16:57›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/haodan/123388.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">好单德佑婴儿湿巾 无敏配方 9.9元06-07 16:57›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/haodan/123387.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">好单玉米段拍1.1kg实发1.4-1.6kg一袋8段 16.8元06-07 16:57›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/yangmaodang/123386.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">酷安京东积分有换啥的方案吗？06-07 16:56›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/weibo/123385.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">微博清风抽纸M码80抽*20包 24元06-07 16:57›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/haodan/123384.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">好单大风丸 0.3元06-07 16:57›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.huifabu.cn/douban/123383.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">豆瓣欧莱雅小银管150毫升174.506-07 16:56›</div>
-            <div class="card-meta">
-                <span class="card-source">huifabu.cn</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://xianbao.icu/xianbao/detail/398181" target="_blank" class="card" rel="noopener">
-            <div class="card-title">1亓玉泽 皮肤屏障修护调理如5ml...</div>
-            <div class="card-meta">
-                <span class="card-source">xianbao.icu</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://xianbao.icu/xianbao/wb?author=丐帮羊毛日记" target="_blank" class="card" rel="noopener">
-            <div class="card-title">丐帮羊毛日记</div>
-            <div class="card-meta">
-                <span class="card-source">xianbao.icu</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://xianbao.icu/xianbao/detail/398180" target="_blank" class="card" rel="noopener">
-            <div class="card-title">❗️速度 淘宝app-闪购搜【2179】 本会场 点击千问横幅跳转活动页面 下单立减3.8-8.8元...</div>
-            <div class="card-meta">
-                <span class="card-source">xianbao.icu</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://xianbao.icu/xianbao/wb?author=头号情报站" target="_blank" class="card" rel="noopener">
-            <div class="card-title">头号情报站</div>
-            <div class="card-meta">
-                <span class="card-source">xianbao.icu</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://xianbao.icu/xianbao/detail/398179" target="_blank" class="card" rel="noopener">
-            <div class="card-title">❗️淘宝闪购 点外卖叠加抵扣步骤 ❶淘宝app-闪购搜【2179】【2378】 领15-10~14等...</div>
-            <div class="card-meta">
-                <span class="card-source">xianbao.icu</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://xianbao.icu/xianbao/detail/398178" target="_blank" class="card" rel="noopener">
-            <div class="card-title">❗️淘宝app-闪购搜【2178】 本会场 加码闪购奶茶卡去试试 （消耗日常抽卡次数 加码抽） - ...</div>
-            <div class="card-meta">
-                <span class="card-source">xianbao.icu</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://xianbao.icu/xianbao/detail/398177" target="_blank" class="card" rel="noopener">
-            <div class="card-title">上车‼🈴1.5/袋老母鸡汤面 康师傅老母鸡汤面5包💰7.9 从首页-进入淘宝秒杀页面拍 88付10....</div>
-            <div class="card-meta">
-                <span class="card-source">xianbao.icu</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://xianbao.icu/xianbao/detail/398176" target="_blank" class="card" rel="noopener">
-            <div class="card-title">17点 超级加码 美团 38-19 6K张 肯德基上津贴+兔配啦❗ 而且38-19使用范围很广 👉m...</div>
-            <div class="card-meta">
-                <span class="card-source">xianbao.icu</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://xianbao.icu/xianbao/detail/398175" target="_blank" class="card" rel="noopener">
-            <div class="card-title">👖优酷云包场 30天内领一次 《翘楚》 ⏰ 17:30 | 看10分钟 22000份 ⏰ 18:00...</div>
-            <div class="card-meta">
-                <span class="card-source">xianbao.icu</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://xianbao.icu/xianbao/wb?author=光芒呀shine" target="_blank" class="card" rel="noopener">
-            <div class="card-title">光芒呀shine</div>
-            <div class="card-meta">
-                <span class="card-source">xianbao.icu</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://xianbao.icu/xianbao/wb?author=蘑菇小牙牙" target="_blank" class="card" rel="noopener">
-            <div class="card-title">蘑菇小牙牙</div>
-            <div class="card-meta">
-                <span class="card-source">xianbao.icu</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/forum.php" target="_blank" class="card" rel="noopener">
-            <div class="card-title">版块BBS</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/xianbao-my.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">我收藏的线报</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/xianbao-my.html?ac=part" target="_blank" class="card" rel="noopener">
-            <div class="card-title">我参与的线报</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://s.click.taobao.com/XfpJYel" target="_blank" class="card" rel="noopener">
-            <div class="card-title">淘宝618超级红包，最高26888元无门槛红包，每天都能领 >>></div>
-            <div class="card-meta">
-                <span class="card-source">s.click.taobao.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://u.jd.com/HDqz70W" target="_blank" class="card" rel="noopener">
-            <div class="card-title">京东618红包来了，最高26618元无门槛超级大红包，每天可以领三次 >>></div>
-            <div class="card-meta">
-                <span class="card-source">u.jd.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/676666.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">每日必领：淘宝闪购+美团外卖+京东外卖红包</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/xianbao-day.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">24小时热门</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697538.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">霸王茶同款22g*7条+赠杯子 券后10.9元</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697537.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">1亓玉泽皮肤屏障修护调理如5ml</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697530.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">沪上别去了哈 等下次吧 ​</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697529.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">去抽 沪上阿姨抽3w张0.01亓喝</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697528.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">蜜雪冰城 四个活d 随机中</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697527.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">彩虹电池组合16粒💰2.99元</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697526.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">淘宝搜 vivos60系列 ，有反馈0.01实w 试试</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697525.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">移.动APP搜：周日视频日 ，16点 1千张2GB ​</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697524.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">每天都记得签到哈 ，新一月❗只限实.ming女性</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697523.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">11💰广西金煌芒4.5斤一箱</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697522.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">今天没抽的现在去试试 ，次数更新 霸王茶姬 每天1次机会</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697521.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">要好点空调被的上车❗ ，富安娜的 他家线下超级贵</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697520.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">15:30 留意补沪上阿姨0.01💰</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697519.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">工.行 湘约有礼领1立减 ，如光了就忽略</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697518.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">抖音618抢先购，抢最高1500元消费券@a ​</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697517.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">dy商城果园种树兔费得实w</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697515.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">先领一个鸿包 ，1.37💰鸡蛋龙须挂面100g*2</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697514.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">腾讯领5k体验.金</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697513.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">⏰15点 猫超加码1.68💰！</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697512.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">茶百道石头剪刀布 ，抽1w份兔单卷试试</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697511.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">小红薯顶部世界杯去抽</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697510.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">速领京东🧧完成打卡 今日加码</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697509.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">淘宝搜【淘宝秒杀】 ，如图 天天砸金蛋 横幅进</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/member.php?mod=logging&action=login" target="_blank" class="card" rel="noopener">
-            <div class="card-title">签到连续天20人签到看排名</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697483.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">淘宝必中无门槛红包</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697486.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">京东先点右下方虹包叠加 ，👉</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697467.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">闪购红包最高20元，可叠加</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697476.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">11点30分 补5万张5-4叠加卷</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697482.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">1⃣️12点 大众搜【周末评友派】</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697469.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">每日领京豆：6月07日 京东关注店铺领京豆</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
-
-        <a href="https://www.zhuanyes.com/xianbao/697497.html" target="_blank" class="card" rel="noopener">
-            <div class="card-title">13:30 留意补沪上阿姨0.01💰</div>
-            <div class="card-meta">
-                <span class="card-source">zhuanyes.com</span>
-                <span class="card-time">2026-06-07 17:00</span>
-            </div>
-        </a>
+</main>
+
+<!-- ===== BACK TO TOP ===== -->
+<button class="back-to-top" id="backToTop" title="回到顶部">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <p>自动更新 &middot; 永不停止 &middot; <a href="https://github.com/gitfox-enter/site-update-monitor" target="_blank" rel="noopener">GitHub</a></p>
+</footer>
+
+<!-- ===== SETTINGS MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>&#9881; 自定义分类</h2>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <h3>已有自定义分类</h3>
+        <div id="customCatList"></div>
+      </div>
+      <div class="modal-section">
+        <h3>添加新分类</h3>
+        <div class="add-cat-form" id="addCatForm">
+          <div class="form-group">
+            <label for="catName">分类名称</label>
+            <input type="text" id="catName" placeholder="如：数码产品">
+          </div>
+          <div class="form-group">
+            <label for="catKeywords">关键词（逗号分隔）</label>
+            <input type="text" id="catKeywords" placeholder="如：手机,电脑,耳机,数码">
+          </div>
+          <button class="btn-add-cat" id="btnAddCat">添加分类</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-<footer>
-  <p>自动更新 · 永不停止 · <a href="https://github.com/gitfox-enter/site-update-monitor">GitHub</a></p>
-</footer>
+
+<script>
+/* ================================================================
+   线报聚合 - 主应用逻辑
+   ================================================================ */
+(function () {
+  "use strict";
+
+  /* ---- Constants ---- */
+  var PAGE_SIZE = 30;
+  var DEBOUNCE_MS = 250;
+
+  /* ---- Built-in keyword categories ---- */
+  var BUILTIN_CATEGORIES = [
+    { name: "京东",   keywords: ["京东"] },
+    { name: "淘宝",   keywords: ["淘宝"] },
+    { name: "拼多多", keywords: ["拼多多", "拼夕夕"] },
+    { name: "外卖",   keywords: ["外卖", "美团", "饿了么", "闪购"] },
+    { name: "红包",   keywords: ["红包", "虹包", "鸿包"] },
+    { name: "优惠券", keywords: ["优惠券", "券", "消费券", "叠加卷"] }
+  ];
+
+  /* ---- State ---- */
+  var allItems = [];
+  var updatedAt = "";
+  var sourceMap = {};         // source -> colorIndex
+  var customCategories = [];  // { name, keywords:[] }
+  var activeFilter = "all";   // "all" | "src:xxx" | "kw:xxx" | "custom:xxx"
+  var searchQuery = "";
+  var filteredItems = [];
+  var displayedCount = 0;
+  var isLoading = false;
+
+  /* ---- DOM refs ---- */
+  var $loadingState   = document.getElementById("loadingState");
+  var $mainContent    = document.getElementById("mainContent");
+  var $filterTabs     = document.getElementById("filterTabs");
+  var $searchInput    = document.getElementById("searchInput");
+  var $searchClear    = document.getElementById("searchClear");
+  var $headerCount    = document.getElementById("headerCount");
+  var $heroTime       = document.getElementById("heroTime");
+  var $heroTotal      = document.getElementById("heroTotal");
+  var $backToTop      = document.getElementById("backToTop");
+  var $modalOverlay   = document.getElementById("modalOverlay");
+  var $customCatList  = document.getElementById("customCatList");
+  var $catName        = document.getElementById("catName");
+  var $catKeywords    = document.getElementById("catKeywords");
+
+  /* ---- Utility ---- */
+  function escapeHtml(str) {
+    var div = document.createElement("div");
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+
+  function debounce(fn, ms) {
+    var timer;
+    return function () {
+      var ctx = this, args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () { fn.apply(ctx, args); }, ms);
+    };
+  }
+
+  function getSourceColorIndex(source) {
+    if (!(source in sourceMap)) {
+      sourceMap[source] = Object.keys(sourceMap).length % 12;
+    }
+    return sourceMap[source];
+  }
+
+  function formatRelativeTime(timeStr) {
+    if (!timeStr) return "";
+    var d = new Date(timeStr.replace(" ", "T"));
+    if (isNaN(d.getTime())) return timeStr;
+    var now = new Date();
+    var diffMs = now - d;
+    var diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return "刚刚";
+    if (diffMin < 60) return diffMin + " 分钟前";
+    var diffHr = Math.floor(diffMin / 60);
+    if (diffHr < 24) return diffHr + " 小时前";
+    var diffDay = Math.floor(diffHr / 24);
+    if (diffDay < 7) return diffDay + " 天前";
+    return timeStr.slice(5, 16);
+  }
+
+  /* ---- Data fetching ---- */
+  function fetchData() {
+    isLoading = true;
+    showLoading();
+    fetch("items.json?t=" + Date.now())
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        allItems = data.items || [];
+        updatedAt = data.updated_at || "";
+        isLoading = false;
+        init();
+      })
+      .catch(function (err) {
+        isLoading = false;
+        showError(err.message);
+      });
+  }
+
+  /* ---- Initialization after data load ---- */
+  function init() {
+    // Pre-compute source colors
+    allItems.forEach(function (item) {
+      getSourceColorIndex(item.source || "未知");
+    });
+
+    updateHeroStats();
+    buildFilterTabs();
+    applyFilters();
+    restoreHashState();
+  }
+
+  /* ---- Hero / header stats ---- */
+  function updateHeroStats() {
+    $heroTime.textContent = "最后更新：" + (updatedAt || "未知");
+    $heroTotal.textContent = "共收录 " + allItems.length + " 条";
+    $headerCount.textContent = allItems.length + " 条线报";
+  }
+
+  /* ---- Filter tabs ---- */
+  function buildFilterTabs() {
+    var html = "";
+
+    // "全部" tab
+    html += '<button class="filter-tab active" data-filter="all">全部<span class="tab-count">' + allItems.length + "</span></button>";
+
+    // Source tabs
+    var sourceCounts = {};
+    allItems.forEach(function (item) {
+      var s = item.source || "未知";
+      sourceCounts[s] = (sourceCounts[s] || 0) + 1;
+    });
+    var sources = Object.keys(sourceCounts).sort(function (a, b) {
+      return sourceCounts[b] - sourceCounts[a];
+    });
+    sources.forEach(function (s) {
+      var key = "src:" + s;
+      html += '<button class="filter-tab" data-filter="' + escapeHtml(key) + '">' + escapeHtml(s) + '<span class="tab-count">' + sourceCounts[s] + "</span></button>";
+    });
+
+    // Built-in keyword categories
+    BUILTIN_CATEGORIES.forEach(function (cat) {
+      var count = countKeywordMatch(cat.keywords);
+      if (count > 0) {
+        var key = "kw:" + cat.name;
+        html += '<button class="filter-tab" data-filter="' + escapeHtml(key) + '">' + escapeHtml(cat.name) + '<span class="tab-count">' + count + "</span></button>";
+      }
+    });
+
+    // Custom categories
+    customCategories.forEach(function (cat) {
+      var count = countKeywordMatch(cat.keywords);
+      var key = "custom:" + cat.name;
+      html += '<button class="filter-tab" data-filter="' + escapeHtml(key) + '">' + escapeHtml(cat.name) + '<span class="tab-count">' + count + "</span></button>";
+    });
+
+    $filterTabs.innerHTML = html;
+
+    // Attach click events
+    var tabs = $filterTabs.querySelectorAll(".filter-tab");
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        setFilter(this.getAttribute("data-filter"));
+      });
+    });
+  }
+
+  function countKeywordMatch(keywords) {
+    var count = 0;
+    allItems.forEach(function (item) {
+      var text = (item.text || "").toLowerCase();
+      for (var i = 0; i < keywords.length; i++) {
+        if (text.indexOf(keywords[i].toLowerCase()) !== -1) {
+          count++;
+          break;
+        }
+      }
+    });
+    return count;
+  }
+
+  function setFilter(filter) {
+    activeFilter = filter;
+    // Update active tab styling
+    var tabs = $filterTabs.querySelectorAll(".filter-tab");
+    tabs.forEach(function (tab) {
+      if (tab.getAttribute("data-filter") === filter) {
+        tab.classList.add("active");
+      } else {
+        tab.classList.remove("active");
+      }
+    });
+    saveHashState();
+    applyFilters();
+  }
+
+  /* ---- Filtering + Search ---- */
+  function applyFilters() {
+    var query = searchQuery.toLowerCase().trim();
+
+    filteredItems = allItems.filter(function (item) {
+      var text = (item.text || "").toLowerCase();
+      var source = (item.source || "").toLowerCase();
+
+      // Search filter
+      if (query) {
+        var searchMatch = text.indexOf(query) !== -1 || source.indexOf(query) !== -1;
+        if (!searchMatch) return false;
+      }
+
+      // Category filter
+      if (activeFilter === "all") return true;
+
+      if (activeFilter.indexOf("src:") === 0) {
+        var srcName = activeFilter.slice(4);
+        return (item.source || "未知") === srcName;
+      }
+
+      if (activeFilter.indexOf("kw:") === 0) {
+        var catName = activeFilter.slice(3);
+        var cat = null;
+        for (var i = 0; i < BUILTIN_CATEGORIES.length; i++) {
+          if (BUILTIN_CATEGORIES[i].name === catName) { cat = BUILTIN_CATEGORIES[i]; break; }
+        }
+        if (!cat) return true;
+        for (var j = 0; j < cat.keywords.length; j++) {
+          if (text.indexOf(cat.keywords[j].toLowerCase()) !== -1) return true;
+        }
+        return false;
+      }
+
+      if (activeFilter.indexOf("custom:") === 0) {
+        var customName = activeFilter.slice(7);
+        var customCat = null;
+        for (var k = 0; k < customCategories.length; k++) {
+          if (customCategories[k].name === customName) { customCat = customCategories[k]; break; }
+        }
+        if (!customCat) return true;
+        for (var m = 0; m < customCat.keywords.length; m++) {
+          if (text.indexOf(customCat.keywords[m].toLowerCase()) !== -1) return true;
+        }
+        return false;
+      }
+
+      return true;
+    });
+
+    displayedCount = 0;
+    renderItems();
+  }
+
+  /* ---- Rendering ---- */
+  function renderItems() {
+    var total = filteredItems.length;
+    var toShow = Math.min(displayedCount + PAGE_SIZE, total);
+
+    var html = "";
+
+    // Status bar
+    html += '<div class="status-bar">';
+    if (searchQuery) {
+      html += '<span class="search-result-info">搜索 "' + escapeHtml(searchQuery) + '" 找到 ' + total + " 条结果</span>";
+    } else {
+      html += "<span>共 " + total + " 条线报</span>";
+    }
+    html += '<span id="displayCounter">显示 ' + toShow + " / " + total + " 条</span>";
+    html += "</div>";
+
+    if (total === 0) {
+      html += '<div class="empty-state">';
+      html += '<div class="empty-icon">&#x1F50D;</div>';
+      html += '<div class="empty-title">没有找到相关线报</div>';
+      html += '<div class="empty-desc">试试其他关键词或切换分类</div>';
+      html += "</div>";
+    } else {
+      html += '<div class="item-list" id="itemList">';
+      for (var i = 0; i < toShow; i++) {
+        var item = filteredItems[i];
+        var srcIdx = getSourceColorIndex(item.source || "未知");
+        var delay = Math.min(i, 10) * 0.03;
+        html += renderItemCard(item, srcIdx, delay);
+      }
+      html += "</div>";
+
+      // Load more
+      if (toShow < total) {
+        html += '<div class="load-more-wrap">';
+        html += '<button class="btn-load-more" id="btnLoadMore">加载更多 (' + (total - toShow) + " 条)</button>";
+        html += "</div>";
+        html += '<div class="scroll-sentinel" id="scrollSentinel"></div>';
+      }
+    }
+
+    $mainContent.innerHTML = html;
+    displayedCount = toShow;
+
+    // Rebind load more
+    var $btn = document.getElementById("btnLoadMore");
+    if ($btn) {
+      $btn.addEventListener("click", function () { loadMore(); });
+    }
+
+    // Setup intersection observer
+    setupInfiniteScroll();
+  }
+
+  function renderItemCard(item, srcIdx, delay) {
+    var url = escapeHtml(item.url || "#");
+    var text = escapeHtml(item.text || "无线报标题");
+    var source = escapeHtml(item.source || "未知");
+    var time = formatRelativeTime(item.time);
+    var timeRaw = item.time ? item.time.slice(5, 16) : "";
+
+    var s = "";
+    s += '<a href="' + url + '" target="_blank" rel="noopener" class="item-card" style="animation-delay:' + delay.toFixed(2) + 's">';
+    s += '<div class="item-dot dot-color-' + srcIdx + '"></div>';
+    s += '<div class="item-body">';
+    s += '<div class="item-title">' + text + '</div>';
+    s += '</div>';
+    s += '<div class="item-meta">';
+    s += '<span class="item-source src-color-' + srcIdx + '">' + source + '</span>';
+    s += '<span class="item-time" title="' + escapeHtml(timeRaw) + '">' + escapeHtml(time) + '</span>';
+    s += '</div>';
+    s += '</a>';
+    return s;
+  }
+
+  function loadMore() {
+    var total = filteredItems.length;
+    if (displayedCount >= total) return;
+
+    var toShow = Math.min(displayedCount + PAGE_SIZE, total);
+    var $list = document.getElementById("itemList");
+    if (!$list) return;
+
+    var fragment = "";
+    for (var i = displayedCount; i < toShow; i++) {
+      var item = filteredItems[i];
+      var srcIdx = getSourceColorIndex(item.source || "未知");
+      fragment += renderItemCard(item, srcIdx, 0);
+    }
+    $list.insertAdjacentHTML("beforeend", fragment);
+    displayedCount = toShow;
+
+    // Update counter
+    var $counter = document.getElementById("displayCounter");
+    if ($counter) $counter.textContent = "显示 " + toShow + " / " + total + " 条";
+
+    // Update/remove load-more button
+    var $btnWrap = document.querySelector(".load-more-wrap");
+    if (toShow >= total && $btnWrap) {
+      $btnWrap.remove();
+    } else if ($btnWrap) {
+      var $btn = $btnWrap.querySelector(".btn-load-more");
+      if ($btn) $btn.textContent = "加载更多 (" + (total - toShow) + " 条)";
+    }
+
+    setupInfiniteScroll();
+  }
+
+  /* ---- Infinite Scroll ---- */
+  var observer = null;
+
+  function setupInfiniteScroll() {
+    if (observer) observer.disconnect();
+
+    var sentinel = document.getElementById("scrollSentinel");
+    if (!sentinel) return;
+
+    observer = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) {
+        loadMore();
+      }
+    }, { rootMargin: "200px" });
+
+    observer.observe(sentinel);
+  }
+
+  /* ---- UI states ---- */
+  function showLoading() {
+    $mainContent.innerHTML = '<div class="loading"><div class="spinner"></div><div class="loading-text">正在加载线报数据...</div></div>';
+  }
+
+  function showError(msg) {
+    $mainContent.innerHTML =
+      '<div class="error-state">' +
+      '<div class="error-icon">&#x26A0;&#xFE0F;</div>' +
+      '<div class="error-title">数据加载失败</div>' +
+      '<div class="error-desc">' + escapeHtml(msg) + ' - 请确保 items.json 文件存在且格式正确</div>' +
+      '<button class="btn-retry" onclick="location.reload()">重新加载</button>' +
+      '</div>';
+  }
+
+  /* ---- Search ---- */
+  var debouncedSearch = debounce(function () {
+    searchQuery = $searchInput.value.trim();
+    $searchClear.classList.toggle("visible", searchQuery.length > 0);
+    applyFilters();
+  }, DEBOUNCE_MS);
+
+  $searchInput.addEventListener("input", debouncedSearch);
+
+  $searchClear.addEventListener("click", function () {
+    $searchInput.value = "";
+    searchQuery = "";
+    $searchClear.classList.remove("visible");
+    applyFilters();
+    $searchInput.focus();
+  });
+
+  /* ---- Back to Top ---- */
+  window.addEventListener("scroll", function () {
+    $backToTop.classList.toggle("visible", window.scrollY > 400);
+  }, { passive: true });
+
+  $backToTop.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  /* ---- URL Hash State ---- */
+  function saveHashState() {
+    var hash = "";
+    if (activeFilter && activeFilter !== "all") hash += "f=" + encodeURIComponent(activeFilter);
+    if (searchQuery) hash += (hash ? "&" : "") + "q=" + encodeURIComponent(searchQuery);
+    history.replaceState(null, "", hash ? "#" + hash : window.location.pathname);
+  }
+
+  function restoreHashState() {
+    var hash = window.location.hash.slice(1);
+    if (!hash) return;
+    var params = {};
+    hash.split("&").forEach(function (part) {
+      var kv = part.split("=");
+      if (kv.length === 2) params[kv[0]] = decodeURIComponent(kv[1]);
+    });
+    if (params.q) {
+      $searchInput.value = params.q;
+      searchQuery = params.q;
+      $searchClear.classList.add("visible");
+    }
+    if (params.f) {
+      setFilter(params.f);
+    } else {
+      applyFilters();
+    }
+  }
+
+  /* ---- Settings Modal ---- */
+  document.getElementById("btnSettings").addEventListener("click", function () {
+    renderCustomCatList();
+    $modalOverlay.classList.add("open");
+  });
+
+  document.getElementById("modalClose").addEventListener("click", closeModal);
+
+  $modalOverlay.addEventListener("click", function (e) {
+    if (e.target === $modalOverlay) closeModal();
+  });
+
+  function closeModal() {
+    $modalOverlay.classList.remove("open");
+  }
+
+  function renderCustomCatList() {
+    if (customCategories.length === 0) {
+      $customCatList.innerHTML = '<div class="no-custom-cats">暂无自定义分类，请在下方添加</div>';
+      return;
+    }
+    var html = '<div class="custom-cat-list">';
+    customCategories.forEach(function (cat, idx) {
+      html += '<div class="custom-cat-item">';
+      html += '<div class="custom-cat-info">';
+      html += '<div class="custom-cat-name">' + escapeHtml(cat.name) + '</div>';
+      html += '<div class="custom-cat-keywords">' + escapeHtml(cat.keywords.join(", ")) + '</div>';
+      html += '</div>';
+      html += '<div class="custom-cat-actions">';
+      html += '<button onclick="window._editCat(' + idx + ')">编辑</button>';
+      html += '<button class="btn-del" onclick="window._deleteCat(' + idx + ')">删除</button>';
+      html += '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    $customCatList.innerHTML = html;
+  }
+
+  // Add category
+  document.getElementById("btnAddCat").addEventListener("click", function () {
+    var name = $catName.value.trim();
+    var kwStr = $catKeywords.value.trim();
+    if (!name || !kwStr) return;
+    var keywords = kwStr.split(/[,，]/).map(function (k) { return k.trim(); }).filter(Boolean);
+    if (keywords.length === 0) return;
+    customCategories.push({ name: name, keywords: keywords });
+    $catName.value = "";
+    $catKeywords.value = "";
+    renderCustomCatList();
+    buildFilterTabs();
+    applyFilters();
+  });
+
+  // Expose edit/delete to global scope for inline onclick
+  window._deleteCat = function (idx) {
+    customCategories.splice(idx, 1);
+    renderCustomCatList();
+    buildFilterTabs();
+    applyFilters();
+  };
+
+  window._editCat = function (idx) {
+    var cat = customCategories[idx];
+    $catName.value = cat.name;
+    $catKeywords.value = cat.keywords.join(", ");
+    customCategories.splice(idx, 1);
+    renderCustomCatList();
+    buildFilterTabs();
+    applyFilters();
+    $catName.focus();
+  };
+
+  /* ---- Keyboard shortcut: Escape to close modal ---- */
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && $modalOverlay.classList.contains("open")) {
+      closeModal();
+    }
+  });
+
+  /* ---- Start ---- */
+  fetchData();
+
+})();
+</script>
 </body>
 </html>
