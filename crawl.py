@@ -15,6 +15,8 @@ import hashlib
 import requests
 import smtplib
 import warnings
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timezone, timedelta
@@ -487,39 +489,6 @@ def parse_wycad_items(soup, base_url):
     return items[:20]
 
 
-def parse_baicaio_items(soup, base_url):
-    """白菜哦 - 每个商品只取一条，不重复"""
-    import re
-    items = []
-    seen_urls = set()
-    seen_texts = set()
-    for a in soup.find_all('a', href=True):
-        href = a.get('href', '').strip()
-        text = a.get_text(strip=True)
-        if not text or len(text) < 5 or len(text) > 100:
-            continue
-        # 只取 /item/ 路径下的商品页
-        if '/item/' not in href:
-            continue
-        # 过滤掉"查看详情"/"直达链接"/"阅读全文"等无意义文本
-        skip_words = ['查看详情', '直达链接', '阅读全文', '去购买', '更多', '返回']
-        if any(w in text for w in skip_words):
-            continue
-        # URL去重
-        if href in seen_urls:
-            continue
-        # 文本去重（避免同一商品多条）
-        text_key = text[:30]
-        if text_key in seen_texts:
-            continue
-        seen_urls.add(href)
-        seen_texts.add(text_key)
-        if href.startswith('/'):
-            from urllib.parse import urljoin
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
-    return items[:30]
-
 
 def parse_h6room_items(soup, base_url):
     """好料空间 - 提取最新发布的软件/资源文章"""
@@ -922,7 +891,7 @@ def fetch_page_content(url):
             article_items = parse_wycad_items(soup, url)
             text = '\n'.join(item['text'] for item in article_items)
         elif 'baicaio.com' in url:
-            article_items = parse_baicaio_items(soup, url)
+            article_items = parse_baicaio_items_v2(soup, url)
             text = '\n'.join(item['text'] for item in article_items)
         elif 'h6room.com' in url:
             article_items = parse_h6room_items(soup, url)
@@ -1452,84 +1421,6 @@ def save_paused_sites(paused):
         print(f"[警告] 暂停站点保存失败: {e}")
 
 
-def auto_manage_failed_sites(error_urls, round_num, check_time):
-    """
-    根据本轮失败站点自动管理暂停/恢复
-    - 连续 MAX_CONSECUTIVE_FAILURES 轮失败 → 移入暂停列表
-    - 每 RECOVERY_CHECK_INTERVAL 轮尝试恢复暂停站点
-    返回：本轮应移除的活跃站点列表
-    """
-    paused = load_paused_sites()
-    run_log = load_run_log()
-
-    # 加载 failed_sites.json 中的连续失败计数
-    fail_counts = {}
-    if os.path.exists(FAILED_SITES_FILE):
-        try:
-            with open(FAILED_SITES_FILE, 'r', encoding='utf-8') as f:
-                fail_counts = json.load(f)
-        except Exception:
-            pass
-
-    newly_paused = []
-
-    # 1) 统计本轮失败站点的连续失败次数
-    for url in error_urls:
-        fail_counts[url] = fail_counts.get(url, 0) + 1
-
-        if fail_counts[url] >= MAX_CONSECUTIVE_FAILURES and url not in paused:
-            paused[url] = {
-                'paused_at': check_time,
-                'paused_round': round_num,
-                'reason': f'连续 {fail_counts[url]} 轮失败',
-                'fail_count': fail_counts[url]
-            }
-            newly_paused.append(url)
-            print(f"[自动暂停] {url} — {fail_counts[url]} 轮连续失败，已移入暂停列表")
-
-    # 2) 清除本轮成功的站点的失败计数
-    all_monitored = set(MONITOR_SITES) - set(paused.keys())
-    for url in all_monitored:
-        if url not in error_urls and url in fail_counts:
-            del fail_counts[url]
-
-    # 3) 尝试恢复暂停站点（按间隔检查）
-    total_runs = len(run_log)
-    recovered = []
-    if total_runs > 0 and total_runs % RECOVERY_CHECK_INTERVAL == 0 and paused:
-        print(f"\n[恢复检查] 累计 {total_runs} 轮，尝试恢复暂停站点...")
-        urls_to_remove = []
-        for url in list(paused.keys()):
-            # 简单探测：尝试抓取一次
-            success, result = fetch_page_content(url)
-            if success:
-                recovered.append(url)
-                urls_to_remove.append(url)
-                print(f"[自动恢复] {url} — 站点已恢复可用")
-                del paused[url]
-                # 清除失败计数
-                fail_counts.pop(url, None)
-            time.sleep(1)  # 恢复探测也需延迟
-
-        for url in urls_to_remove:
-            if url in paused:
-                del paused[url]
-
-    # 保存状态
-    save_paused_sites(paused)
-    try:
-        with open(FAILED_SITES_FILE, 'w', encoding='utf-8') as f:
-            json.dump(fail_counts, f, ensure_ascii=False, indent=2)
-    except Exception:
-        pass
-
-    return newly_paused, recovered
-
-
-# ============================================================
-# 站点健康面板数据
-# ============================================================
-
 def main():
     """主监控流程"""
     print("=" * 60)
@@ -1596,54 +1487,51 @@ def main():
     updated_count = 0
     response_times = []
 
-    for idx, url in enumerate(active_sites, 1):
-        print(f"\n[{idx}/{len(active_sites)}] 检查: {url}")
+    # 并发抓取（max_workers=6，每个站点自带随机延迟防止封禁）
+    results_lock = threading.Lock()
 
-        # 检查站点更新
+    def check_one(url, idx):
         is_updated, new_hash, message, page_info = check_site_update(url, old_records)
-
+        time.sleep(get_random_delay())
         if is_updated is None:
-            # 爬取失败
-            print(f"[失败] {message}")
-            error_count += 1
-            all_site_results.append({
-                'url': url,
-                'title': url,
-                'summary': '',
-                'status': 'error',
-                'message': message
-            })
-        else:
-            # 更新哈希记录
-            new_records[url] = new_hash
-            success_count += 1
+            return {'url': url, 'title': url, 'summary': '', 'status': 'error', 'message': message, 'is_updated': None, 'new_hash': None, 'page_info': None}
+        return {
+            'url': url,
+            'title': page_info.get('title', url) if page_info else url,
+            'summary': page_info.get('summary', '') if page_info else '',
+            'items': page_info.get('items', []) if page_info else [],
+            'status': 'updated' if is_updated else ('first' if url not in old_records else 'no_update'),
+            'message': message,
+            'is_updated': is_updated,
+            'new_hash': new_hash,
+            'page_info': page_info
+        }
 
-            if is_updated:
-                print(f"[更新] ✅ {message}")
-                updated_count += 1
+    with ThreadPoolExecutor(max_workers=6) as executor:
+        futures = {executor.submit(check_one, url, idx): (idx, url) for idx, url in enumerate(active_sites, 1)}
+        for future in as_completed(futures):
+            result = future.result()
+            with results_lock:
+                idx, url = futures[future]
+                if result['is_updated'] is None:
+                    print(f"\n[{idx}/{len(active_sites)}] [失败] {result['message']}")
+                    error_count += 1
+                else:
+                    if result['is_updated']:
+                        print(f"\n[{idx}/{len(active_sites)}] [更新] ✅ {result['message']}")
+                        updated_count += 1
+                    else:
+                        print(f"\n[{idx}/{len(active_sites)}] [正常] {result['message']}")
+                    success_count += 1
+                    new_records[result['url']] = result['new_hash']
                 all_site_results.append({
-                    'url': url,
-                    'title': page_info.get('title', url) if page_info else url,
-                    'summary': page_info.get('summary', '') if page_info else '',
-                    'items': page_info.get('items', []) if page_info else [],
-                    'status': 'updated',
-                    'message': message
+                    'url': result['url'],
+                    'title': result['title'],
+                    'summary': result['summary'],
+                    'items': result['items'],
+                    'status': result['status'],
+                    'message': result['message']
                 })
-            else:
-                print(f"[正常] {message}")
-                status = 'first' if url not in old_records else 'no_update'
-                all_site_results.append({
-                    'url': url,
-                    'title': page_info.get('title', url) if page_info else url,
-                    'summary': '',
-                    'items': [],
-                    'status': status,
-                    'message': message
-                })
-
-        # 随机延迟，防止封禁
-        delay = get_random_delay()
-        time.sleep(delay)
 
     # 添加暂停站点到结果列表（标记为 paused）
     for url in paused_urls:
