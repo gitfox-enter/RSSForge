@@ -46,11 +46,27 @@ logger.setLevel(logging.DEBUG)
 
 _handler = logging.StreamHandler(sys.stdout)
 _handler.setLevel(logging.INFO)
-_formatter = logging.Formatter(
-    "[%(asctime)s] %(levelname)-7s %(message)s",
-    datefmt="%H:%M:%S",
-)
-_handler.setFormatter(_formatter)
+class JsonFormatter(logging.Formatter):
+    """将日志记录格式化为 JSON 字符串，便于结构化日志收集与分析。"""
+
+    def format(self, record: logging.LogRecord) -> str:
+        log_entry = {
+            'timestamp': datetime.fromtimestamp(record.created, tz=timezone(timedelta(hours=8))).isoformat(),
+            'level': record.levelname,
+            'logger': record.name,
+            'message': record.getMessage(),
+        }
+        if record.exc_info and record.exc_info[1]:
+            log_entry['exception'] = str(record.exc_info[1])
+        # 附加额外字段
+        for key in ('site', 'status_code', 'response_time', 'event'):
+            val = getattr(record, key, None)
+            if val is not None:
+                log_entry[key] = val
+        return json.dumps(log_entry, ensure_ascii=False)
+
+
+_handler.setFormatter(JsonFormatter())
 logger.addHandler(_handler)
 
 # ============================================================
@@ -82,11 +98,73 @@ MAX_RETRIES: int = 3                       # 3 次尝试
 RETRY_BACKOFF_BASE: float = 1.0            # 退避基数 (秒): 1, 2, 4
 RESPECT_ROBOTS_TXT: bool = False            # 6. robots.txt 合规开关（线报站 robots.txt 通常过严，个人监控建议关闭）
 
-USER_AGENTS: List[str] = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0",
+BROWSER_PROFILES: List[Dict[str, Any]] = [
+    {
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'fingerprint': {
+            'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+        },
+        'accept_language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    },
+    {
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+        'fingerprint': {
+            'sec-ch-ua': '"Not/A_Brand";v="8", "Chromium";v="125", "Google Chrome";v="125"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+        },
+        'accept_language': 'zh-CN,zh;q=0.9',
+    },
+    {
+        'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'fingerprint': {
+            'sec-ch-ua': '"Not A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"macOS"',
+        },
+        'accept_language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+    },
+    {
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+        'fingerprint': {},  # Firefox does not send sec-ch-ua headers
+        'accept_language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    },
+    {
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0',
+        'fingerprint': {},  # Firefox does not send sec-ch-ua headers
+        'accept_language': 'zh-TW,zh-CN;q=0.9,zh;q=0.8,en;q=0.7',
+    },
+    {
+        'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15',
+        'fingerprint': {},  # Safari does not send sec-ch-ua headers
+        'accept_language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+    },
+    {
+        'user_agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'fingerprint': {
+            'sec-ch-ua': '"Chromium";v="120", "Not A Brand";v="24", "Google Chrome";v="120"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Linux"',
+        },
+        'accept_language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
+    },
+    {
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edg/120.0.0.0 Safari/537.36',
+        'fingerprint': {
+            'sec-ch-ua': '"Not A Brand";v="8", "Chromium";v="120", "Microsoft Edge";v="120"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+        },
+        'accept_language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    },
 ]
+
+
+def get_random_profile() -> Dict[str, Any]:
+    """随机返回一组一致的浏览器配置（UA + 指纹 + 语言匹配）"""
+    return random.choice(BROWSER_PROFILES)
 
 # 关键词自动分类
 CATEGORY_KEYWORDS: Dict[str, List[str]] = {
@@ -112,8 +190,8 @@ JUNK_PATTERNS: List[str] = [
 _session: requests.Session = requests.Session()
 # 设置连接池大小以匹配并发 worker 数
 _adapter = requests.adapters.HTTPAdapter(
-    pool_connections=4,
-    pool_maxsize=4,
+    pool_connections=12,
+    pool_maxsize=12,
     max_retries=0,  # 我们自己控制重试
 )
 _session.mount("http://", _adapter)
@@ -279,12 +357,16 @@ def load_items_db() -> Dict[str, Any]:
 
 
 def save_items_db(db: Dict[str, Any]) -> bool:
+    tmp_file = ITEMS_DB_FILE + '.tmp'
     try:
-        with open(ITEMS_DB_FILE, "w", encoding="utf-8") as f:
+        with open(tmp_file, "w", encoding="utf-8") as f:
             json.dump(db, f, ensure_ascii=False, separators=(",", ":"))
+        os.replace(tmp_file, ITEMS_DB_FILE)
         return True
     except Exception as e:
         logger.error("保存失败: %s", e)
+        if os.path.exists(tmp_file):
+            os.remove(tmp_file)
         return False
 
 
@@ -368,7 +450,11 @@ def fetch_and_extract(
     """抓取单个站点并提取线报条目"""
     url: str = site["url"]
     name: str = site["name"]
-    ua: str = random.choice(USER_AGENTS)
+    profile = get_random_profile()
+    ua: str = profile['user_agent']
+
+    # 5. Request delay between sites
+    time.sleep(random.uniform(0.3, 0.8))
 
     # 6. robots.txt 合规检查
     if not is_allowed_by_robots(url, ua):
@@ -380,18 +466,29 @@ def fetch_and_extract(
     referer: str = f"{parsed_url.scheme}://{parsed_url.netloc}/"
 
     headers: Dict[str, str] = {
-        "User-Agent": ua,
+        "User-Agent": profile['user_agent'],
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+        "Accept-Language": profile['accept_language'],
         "Accept-Encoding": "gzip, deflate",
         "Referer": referer,
     }
+    headers.update(profile['fingerprint'])
 
     # 3. 带指数退避的请求
     resp = _fetch_with_retry(url, headers)
 
     if resp is None:
         return name, url, [], f"重试 {MAX_RETRIES} 次后仍失败"
+
+    # 6. SSRF Protection - block private/internal IP addresses
+    if resp is not None:
+        final_host = urlparse(resp.url).hostname or ''
+        if final_host.startswith(('127.', '10.', '172.16.', '192.168.', '169.254.', '0.')):
+            return name, url, [], f"SSRF blocked: {final_host}"
+
+    # 7. Response size limit - 10MB
+    if len(resp.content) > 10 * 1024 * 1024:
+        return name, url, [], "Response too large"
 
     try:
         resp.encoding = resp.apparent_encoding or "utf-8"
@@ -504,8 +601,11 @@ def main() -> None:
                 )
 
     # 4. 合并到数据库
+    MAX_ITEMS_DB = 1500
     if all_new_items:
         db["items"] = all_new_items + db["items"]
+        if len(db["items"]) > MAX_ITEMS_DB:
+            db["items"] = db["items"][:MAX_ITEMS_DB]
         db["updated_at"] = get_beijing_time().strftime("%Y-%m-%d %H:%M:%S")
         save_items_db(db)
         logger.info("[结果] 新增 %d 条，总计 %d 条", len(all_new_items), len(db["items"]))
@@ -531,6 +631,17 @@ def main() -> None:
     try:
         with open(FAST_LOG_FILE, "a", encoding="utf-8") as f:
             f.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
+
+    # Rotate fast_log: keep last 30 entries
+    try:
+        with open(FAST_LOG_FILE, 'r', encoding='utf-8') as f:
+            lines = [l.strip() for l in f if l.strip()]
+        if len(lines) > 30:
+            lines = lines[-30:]
+            with open(FAST_LOG_FILE, 'w', encoding='utf-8') as f:
+                f.write('\n'.join(lines) + '\n')
     except Exception:
         pass
 

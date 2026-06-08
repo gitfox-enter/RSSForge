@@ -32,6 +32,14 @@ from urllib.robotparser import RobotFileParser
 import requests
 from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
 
+from common import (
+    JsonFormatter, get_beijing_time, auto_categorize, CATEGORY_KEYWORDS,
+    load_items_db, save_items_db, load_blacklist, is_blacklisted,
+    build_source_name_index, get_source_name as _get_source_name_by_index,
+    calculate_md5, upgrade_to_https, DomainRateLimiter, sanitize_href,
+    sanitize_text, is_junk, ITEMS_DB_FILE, BLACKLIST_FILE,
+)
+
 # 忽略 BeautifulSoup 的 XML 当 HTML 解析警告
 warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 
@@ -39,26 +47,6 @@ warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 # ============================================================
 # 结构化 JSON 日志配置
 # ============================================================
-
-class JsonFormatter(logging.Formatter):
-    """将日志记录格式化为 JSON 字符串，便于结构化日志收集与分析。"""
-
-    def format(self, record: logging.LogRecord) -> str:
-        log_entry = {
-            'timestamp': datetime.fromtimestamp(record.created, tz=timezone(timedelta(hours=8))).isoformat(),
-            'level': record.levelname,
-            'logger': record.name,
-            'message': record.getMessage(),
-        }
-        if record.exc_info and record.exc_info[1]:
-            log_entry['exception'] = str(record.exc_info[1])
-        # 附加额外字段
-        for key in ('site', 'status_code', 'response_time', 'event'):
-            val = getattr(record, key, None)
-            if val is not None:
-                log_entry[key] = val
-        return json.dumps(log_entry, ensure_ascii=False)
-
 
 logger = logging.getLogger('crawl')
 logger.setLevel(logging.INFO)
@@ -177,11 +165,19 @@ SOURCE_NAME_MAP: Dict[str, str] = {
 }
 
 
+# Build O(1) source name index at module load time
+_SOURCE_NAME_INDEX: Dict[str, str] = build_source_name_index(SOURCE_NAME_MAP)
+
+
 def get_source_name(url: str) -> Optional[str]:
-    """根据 URL 获取统一短名称"""
-    for base_url, name in SOURCE_NAME_MAP.items():
-        if url.startswith(base_url.rstrip('/')):
-            return name
+    """根据 URL 获取统一短名称 (O(1) lookup)"""
+    parsed = urlparse(url)
+    host = (parsed.hostname or '').lower()
+    name = _SOURCE_NAME_INDEX.get(host)
+    if name:
+        return name
+    if host.startswith('www.'):
+        return _SOURCE_NAME_INDEX.get(host[4:])
     return None
 
 
@@ -191,8 +187,6 @@ NOTIFIED_ITEMS_FILE = "notified_items.json"  # 记录已通知过的条目URL，
 RUN_LOG_FILE = "run_log.jsonl"  # 每轮运行日志（JSONL格式），用于追踪历史与自检
 FAILED_SITES_FILE = "failed_sites.json"  # 连续失败站点记录，自动建议移除
 PAUSED_SITES_FILE = "paused_sites.json"  # 因连续失败被暂停的站点
-BLACKLIST_FILE = "blacklist.json"  # 网站黑名单（用户讨厌/付费墙/反爬/无法访问/纯工具页）
-ITEMS_DB_FILE = "items.json"  # 全量线报数据库（持久化累积，供前端 SPA 加载）
 
 # 自动移除/恢复配置
 MAX_CONSECUTIVE_FAILURES = 3  # 连续失败 N 轮后自动暂停
@@ -368,6 +362,9 @@ class CircuitBreaker:
 # 全局熔断器实例
 circuit_breaker = CircuitBreaker()
 
+# Global rate limiter
+rate_limiter = DomainRateLimiter(min_gap=1.0)
+
 
 # ============================================================
 # Session 连接池管理（每域名一个 Session，复用 TCP 连接 + Cookie）
@@ -482,12 +479,6 @@ def is_allowed_by_robots(url: str) -> bool:
 # 工具函数
 # ============================================================
 
-def get_beijing_time() -> datetime:
-    """获取北京时间（Asia/Shanghai）"""
-    beijing_tz = timezone(timedelta(hours=8))
-    return datetime.now(beijing_tz)
-
-
 def get_current_round() -> int:
     """
     根据当前小时判断当日第几轮（固定映射，禁止计数器模式）
@@ -552,42 +543,45 @@ def get_referer(url: str) -> str:
 # ============================================================
 
 def load_hash_records() -> Dict[str, str]:
-    """
-    从文件加载哈希记录
-    返回格式：{url: md5_hash}
-    """
+    """Load hash records from file. Supports both JSON and legacy url=hash format."""
     records: Dict[str, str] = {}
     if os.path.exists(HASH_RECORD_FILE):
         try:
             with open(HASH_RECORD_FILE, 'r', encoding='utf-8') as f:
-                for line in f:
+                content = f.read().strip()
+            # Try JSON format first
+            if content.startswith('{'):
+                data = json.loads(content)
+                if isinstance(data, dict):
+                    records = data.get('records', data)
+            else:
+                # Legacy url=hash format
+                for line in content.split('\n'):
                     line = line.strip()
                     if '=' in line and not line.startswith('#'):
                         url, md5_hash = line.split('=', 1)
                         records[url.strip()] = md5_hash.strip()
         except Exception as e:
-            print(f"[错误] 读取哈希文件失败: {e}")
+            logger.warning("读取哈希文件失败: %s", e)
     return records
 
 
 def save_hash_records(records: Dict[str, str]) -> bool:
-    """
-    保存哈希记录到文件
-    格式：url=md5值（每行一个）
-    使用原子写入：先写 .tmp 再 os.replace 防止写入中断导致文件损坏
-    """
+    """Save hash records as JSON (atomic write)."""
     tmp_file = HASH_RECORD_FILE + '.tmp'
     try:
+        data = {
+            'schema_version': 2,
+            'updated_at': get_beijing_time().isoformat(),
+            'records': records,
+        }
         with open(tmp_file, 'w', encoding='utf-8') as f:
-            f.write("# 站点哈希记录文件 - 格式: url=md5值\n")
-            f.write("# 最后更新: {}\n".format(get_beijing_time().strftime('%Y-%m-%d %H:%M:%S')))
-            for url, md5_hash in records.items():
-                f.write(f"{url}={md5_hash}\n")
+            json.dump(data, f, ensure_ascii=False, indent=2)
         os.replace(tmp_file, HASH_RECORD_FILE)
-        print(f"[信息] 哈希文件已更新: {HASH_RECORD_FILE}")
+        logger.info("哈希文件已更新: %d 条记录", len(records))
         return True
     except Exception as e:
-        print(f"[错误] 保存哈希文件失败: {e}")
+        logger.error("保存哈希文件失败: %s", e)
         if os.path.exists(tmp_file):
             os.remove(tmp_file)
         return False
@@ -614,7 +608,7 @@ def load_notified_items() -> Dict[str, Any]:
             elif isinstance(data, set):
                 return {'items': [{'url': u} for u in data]}
         except Exception as e:
-            print(f"[警告] 读取已通知条目文件失败: {e}")
+            logger.warning("读取已通知条目文件失败: %s", e)
     return {'items': []}
 
 
@@ -625,10 +619,10 @@ def save_notified_items(item_dict: Dict[str, Any]) -> bool:
         with open(tmp_file, 'w', encoding='utf-8') as f:
             json.dump(item_dict, f, ensure_ascii=False, indent=2)
         os.replace(tmp_file, NOTIFIED_ITEMS_FILE)
-        print(f"[信息] 已通知条目记录已更新: {NOTIFIED_ITEMS_FILE} ({len(item_dict.get('items', []))} 条)")
+        logger.info("已通知条目记录已更新: %s (%d 条)", NOTIFIED_ITEMS_FILE, len(item_dict.get('items', [])))
         return True
     except Exception as e:
-        print(f"[错误] 保存已通知条目失败: {e}")
+        logger.error("保存已通知条目失败: %s", e)
         if os.path.exists(tmp_file):
             os.remove(tmp_file)
         return False
@@ -652,54 +646,6 @@ def filter_new_items(items: List[Any], notified: Dict[str, Any]) -> Tuple[List[A
 # ============================================================
 # 线报数据库（items.json）- 持久化累积所有历史线报
 # ============================================================
-
-# 内置关键词分类规则
-CATEGORY_KEYWORDS: Dict[str, List[str]] = {
-    "京东": ["京东", "jd.com", "jd", "京豆", "京享"],
-    "淘宝": ["淘宝", "天猫", "tmall", "taobao", "淘金币"],
-    "拼多多": ["拼多多", "pdd", "拼多"],
-    "外卖": ["外卖", "美团", "饿了么", "美团外卖"],
-    "红包": ["红包", "虹包", "鸿包", "必中红包"],
-    "优惠券": ["优惠券", "券", "满减", "消费券", "领券"],
-}
-
-
-def auto_categorize(text: str) -> Optional[str]:
-    """根据关键词自动分类"""
-    for cat, keywords in CATEGORY_KEYWORDS.items():
-        for kw in keywords:
-            if kw in text:
-                return cat
-    return None
-
-
-def load_items_db() -> Dict[str, Any]:
-    """加载全量线报数据库"""
-    if os.path.exists(ITEMS_DB_FILE):
-        try:
-            with open(ITEMS_DB_FILE, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            if isinstance(data, dict) and 'items' in data:
-                return data
-        except Exception as e:
-            print(f"[警告] 读取线报数据库失败: {e}")
-    return {'items': [], 'updated_at': ''}
-
-
-def save_items_db(db: Dict[str, Any]) -> bool:
-    """保存全量线报数据库（原子写入）"""
-    tmp_file = ITEMS_DB_FILE + '.tmp'
-    try:
-        with open(tmp_file, 'w', encoding='utf-8') as f:
-            json.dump(db, f, ensure_ascii=False, separators=(',', ':'))
-        os.replace(tmp_file, ITEMS_DB_FILE)
-        print(f"[信息] 线报数据库已更新: {ITEMS_DB_FILE} ({len(db['items'])} 条)")
-        return True
-    except Exception as e:
-        print(f"[错误] 保存线报数据库失败: {e}")
-        if os.path.exists(tmp_file):
-            os.remove(tmp_file)
-        return False
 
 
 def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) -> int:
@@ -731,11 +677,11 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
     if len(db['items']) > MAX_ITEMS_DB:
         removed = len(db['items']) - MAX_ITEMS_DB
         db['items'] = db['items'][:MAX_ITEMS_DB]
-        print(f"[数据库] 裁剪旧条目: 移除 {removed} 条，保留最新 {MAX_ITEMS_DB} 条")
+        logger.info("裁剪旧条目: 移除 %d 条，保留最新 %d 条", removed, MAX_ITEMS_DB)
 
     db['updated_at'] = check_time
     save_items_db(db)
-    print(f"[数据库] 新增 {added} 条，总计 {len(db['items'])} 条")
+    logger.info("新增 %d 条，总计 %d 条", added, len(db['items']))
     return added
 
 
@@ -1214,11 +1160,11 @@ def parse_ghxi_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]
                 link = post.get('link', '')
                 if title and len(title) > 3 and link:
                     items.append({'text': title, 'url': link})
-            print(f"[果核剥壳] WP API 获取到 {len(items)} 篇文章")
+            logger.info("果核剥壳 WP API 获取到 %d 篇文章", len(items))
         else:
-            print(f"[果核剥壳] WP API 返回 HTTP {resp.status_code}")
+            logger.info("果核剥壳 WP API 返回 HTTP %d", resp.status_code)
     except Exception as e:
-        print(f"[果核剥壳] WP API 请求失败: {e}")
+        logger.info("果核剥壳 WP API 请求失败: %s", e)
     return items
 
 
@@ -1504,8 +1450,7 @@ def fetch_page_content(url: str) -> Tuple[bool, Any]:
         return session.get(url, headers=headers, timeout=REQUEST_TIMEOUT, allow_redirects=True)
 
     try:
-        print(f"[爬取] {url}")
-        logger.info("开始爬取", extra={'site': url, 'event': 'crawl_start'})
+        logger.info("爬取 %s", url, extra={'site': url, 'event': 'crawl_start'})
 
         # 指数退避重试循环
         response: Optional[requests.Response] = None
@@ -1536,11 +1481,9 @@ def fetch_page_content(url: str) -> Tuple[bool, Any]:
             if response.status_code in (403, 500, 502, 503, 504):
                 if attempt < MAX_RETRIES - 1:
                     delay = RETRY_BASE_DELAY * (2 ** attempt) + random.uniform(0, 0.5)
-                    print(f"[重试] HTTP {response.status_code} -> 第 {attempt + 2}/{MAX_RETRIES} 次，延迟 {delay:.1f}s")
-                    logger.info("重试请求", extra={
-                        'site': url, 'event': 'retry',
-                        'status_code': response.status_code,
-                    })
+                    logger.info("重试请求 HTTP %d -> 第 %d/%d 次，延迟 %.1fs",
+                                response.status_code, attempt + 2, MAX_RETRIES, delay,
+                                extra={'site': url, 'event': 'retry', 'status_code': response.status_code})
                     time.sleep(delay)
                     continue
 
@@ -1678,11 +1621,6 @@ def fetch_page_content(url: str) -> Tuple[bool, Any]:
         return False, f"未知错误: {str(e)[:50]}"
 
 
-def calculate_md5(text: str) -> str:
-    """计算文本的MD5哈希值"""
-    return hashlib.md5(text.encode('utf-8')).hexdigest()
-
-
 def check_site_update(url: str, old_records: Dict[str, str]) -> Tuple[Optional[bool], Optional[str], str, Optional[Dict[str, Any]]]:
     """
     检查单个站点是否有更新
@@ -1733,8 +1671,8 @@ def git_commit_if_changed() -> bool:
     """
     # 检查是否在GitHub Actions环境中
     if os.getenv('GITHUB_ACTIONS') == 'true':
-        print("[Git] 在GitHub Actions环境中，跳过脚本内git操作")
-        print("[Git] 变更将由workflow的提交步骤处理")
+        logger.info("在GitHub Actions环境中，跳过脚本内git操作", extra={'event': 'git'})
+        logger.info("变更将由workflow的提交步骤处理", extra={'event': 'git'})
         return False
 
     try:
@@ -1748,7 +1686,7 @@ def git_commit_if_changed() -> bool:
 
         changes = result.stdout.strip()
         if not changes:
-            print("[Git] 无变更，跳过提交")
+            logger.info("无变更，跳过提交", extra={'event': 'git'})
             return False
 
         # 有变更，执行提交
@@ -1765,17 +1703,17 @@ def git_commit_if_changed() -> bool:
         try:
             subprocess.run(['git', 'pull', '--rebase'], check=True, timeout=60)
         except subprocess.CalledProcessError:
-            print("[Git] pull --rebase 失败，尝试直接 push")
+            logger.warning("pull --rebase 失败，尝试直接 push", extra={'event': 'git'})
         subprocess.run(['git', 'push'], check=True, timeout=60)
 
-        print(f"[Git] 提交成功: {commit_msg}")
+        logger.info("提交成功: %s", commit_msg, extra={'event': 'git'})
         return True
 
     except subprocess.CalledProcessError as e:
-        print(f"[Git错误] 提交失败: {e}")
+        logger.error("提交失败: %s", e, extra={'event': 'git'})
         return False
     except Exception as e:
-        print(f"[Git异常] {e}")
+        logger.error("Git异常: %s", e, extra={'event': 'git'})
         return False
 
 
@@ -1813,7 +1751,7 @@ def append_run_log(entry: Dict[str, Any]) -> None:
                 f.write(json.dumps(e, ensure_ascii=False) + '\n')
         os.replace(tmp_file, RUN_LOG_FILE)
     except Exception as e:
-        print(f"[警告] 运行日志写入失败: {e}")
+        logger.warning("运行日志写入失败: %s", e)
         if os.path.exists(tmp_file):
             os.remove(tmp_file)
 
@@ -1823,10 +1761,7 @@ def analyze_and_fix(run_result: Dict[str, Any]) -> List[Dict[str, str]]:
     运行后自分析 + 自动修复
     run_result: {'success': N, 'error': N, 'updated': N, 'total': N, 'errors': [...], 'updated_sites': [...]}
     """
-    print("\n" + "=" * 60)
-    print("[自检] 运行后分析")
-    print("-" * 60)
-
+    logger.info("运行后分析", extra={'event': 'self_check'})
     issues_found: List[Dict[str, str]] = []
 
     # 1. 检查失败站点
@@ -1924,12 +1859,13 @@ def analyze_and_fix(run_result: Dict[str, Any]) -> List[Dict[str, str]]:
 
     # 打印分析报告
     if issues_found:
-        print(f"\n[自检] 发现 {len(issues_found)} 个问题：\n")
+        logger.info("自检发现 %d 个问题", len(issues_found), extra={'event': 'self_check'})
         for i, issue in enumerate(issues_found, 1):
-            level_icon = {'error': '❌', 'warn': '⚠️', 'info': '💡'}.get(issue['level'], '📋')
-            print(f"  {i}. {level_icon} [{issue['site']}]\n     问题: {issue['issue']}\n     建议: {issue['action']}\n")
+            logger.info("  %d. [%s] 问题: %s | 建议: %s",
+                        i, issue['site'], issue['issue'], issue['action'],
+                        extra={'event': 'self_check'})
     else:
-        print("\n  ✅ 本轮运行健康，无异常问题\n")
+        logger.info("本轮运行健康，无异常问题", extra={'event': 'self_check'})
 
     return issues_found
 
@@ -1957,68 +1893,50 @@ def save_paused_sites(paused: Dict[str, Any]) -> None:
             json.dump(paused, f, ensure_ascii=False, indent=2)
         os.replace(tmp_file, PAUSED_SITES_FILE)
     except Exception as e:
-        print(f"[警告] 暂停站点保存失败: {e}")
+        logger.warning("暂停站点保存失败: %s", e)
         if os.path.exists(tmp_file):
             os.remove(tmp_file)
 
 
 def main() -> None:
     """主监控流程"""
-    print("=" * 60)
-    print("GitHub Actions 多站点更新监控系统 v2.0")
-    print("=" * 60)
+    logger.info("GitHub Actions 多站点更新监控系统 v2.0")
 
     # 获取当前时间和轮次
     now = get_beijing_time()
     round_num = get_current_round()
     check_time = now.strftime('%Y-%m-%d %H:%M:%S')
 
-    print(f"[启动] 北京时间: {check_time}")
-    print(f"[启动] 当日第 {round_num} 轮巡检")
+    logger.info("北京时间: %s", check_time)
+    logger.info("当日第 %d 轮巡检", round_num)
 
     # 加载黑名单（用户讨厌/付费墙/反爬/无法访问/纯工具页）
-    blacklist_domains: List[str] = []
-    try:
-        with open(BLACKLIST_FILE, 'r', encoding='utf-8') as f:
-            blacklist_data = json.load(f)
-        blacklist_domains = [entry['domain'].lower() for entry in blacklist_data.get('blacklist', [])]
-    except (FileNotFoundError, json.JSONDecodeError, KeyError):
-        blacklist_domains = []
-
-    def is_blacklisted(url: str) -> bool:
-        parsed = urlparse(url)
-        host = parsed.hostname or parsed.netloc
-        host = host.lower().lstrip('www.').lstrip('m.')
-        for domain in blacklist_domains:
-            domain_clean = domain.lower().lstrip('www.').lstrip('m.')
-            if host == domain_clean or host.endswith('.' + domain_clean):
-                return True
-        return False
+    blacklist_domains: List[str] = load_blacklist()
 
     # 过滤黑名单站点
-    filtered_by_blacklist = [url for url in MONITOR_SITES if is_blacklisted(url)]
-    monitor_sites = [url for url in MONITOR_SITES if not is_blacklisted(url)]
+    filtered_by_blacklist = [url for url in MONITOR_SITES if is_blacklisted(url, blacklist_domains)]
+    monitor_sites = [url for url in MONITOR_SITES if not is_blacklisted(url, blacklist_domains)]
     if filtered_by_blacklist:
-        print(f"[黑名单] 过滤 {len(filtered_by_blacklist)} 个站点: {', '.join(filtered_by_blacklist)}")
+        logger.info("黑名单过滤 %d 个站点: %s", len(filtered_by_blacklist), ', '.join(filtered_by_blacklist))
 
     # 加载暂停站点（连续失败被自动移除的）
     paused = load_paused_sites()
     paused_urls = set(paused.keys())
 
-    # 实际监控列表 = 配置列表 - 黑名单 - 暂停站点
-    active_sites = [url for url in monitor_sites if url not in paused_urls]
-    print(f"[启动] 监控站点数: {len(active_sites)} (活跃) + {len(blacklist_domains)} (黑名单) + {len(paused_urls)} (暂停)")
+    # 实际监控列表 = 配置列表 - 黑名单 - 暂停站点（HTTP 自动升级 HTTPS）
+    active_sites = [upgrade_to_https(url) for url in monitor_sites if url not in paused_urls]
+    logger.info("监控站点数: %d (活跃) + %d (黑名单) + %d (暂停)",
+                len(active_sites), len(blacklist_domains), len(paused_urls))
     if paused_urls:
-        print(f"[暂停站点] {', '.join(paused_urls)}")
-    print("-" * 60)
+        logger.info("暂停站点: %s", ', '.join(paused_urls))
 
     # 加载历史哈希记录
     old_records = load_hash_records()
-    print(f"[信息] 已加载哈希记录: {len(old_records)} 条")
+    logger.info("已加载哈希记录: %d 条", len(old_records))
 
     # 加载已通知过的条目URL（去重用）
     notified = load_notified_items()
-    print(f"[信息] 已加载历史条目: {len(notified.get('items', []))} 条")
+    logger.info("已加载历史条目: %d 条", len(notified.get('items', [])))
 
     # Run log rotation: keep only the last 30 entries
     run_log = load_run_log()
@@ -2049,6 +1967,8 @@ def main() -> None:
     results_lock = threading.Lock()
 
     def check_one(url: str, idx: int) -> Dict[str, Any]:
+        parsed = urlparse(url)
+        rate_limiter.wait(parsed.hostname or '')
         is_updated, new_hash, message, page_info = check_site_update(url, old_records)
         time.sleep(get_random_delay())
         if is_updated is None:
@@ -2075,21 +1995,28 @@ def main() -> None:
         futures = {executor.submit(check_one, url, idx): (idx, url) for idx, url in enumerate(active_sites, 1)}
         robots_denied_count = 0
         for future in as_completed(futures):
+            if _shutdown_requested:
+                logger.info("优雅退出：跳过剩余站点")
+                break
             result = future.result()
             with results_lock:
                 idx, url = futures[future]
                 if result['status'] == 'robots_denied':
-                    print(f"\n[{idx}/{len(active_sites)}] [跳过] robots.txt 拒绝: {url}")
+                    logger.info("[%d/%d] robots.txt 拒绝: %s", idx, len(active_sites), url,
+                                extra={'site': url, 'event': 'crawl_result'})
                     robots_denied_count += 1
                 elif result['is_updated'] is None:
-                    print(f"\n[{idx}/{len(active_sites)}] [失败] {result['message']}")
+                    logger.info("[%d/%d] 失败: %s", idx, len(active_sites), result['message'],
+                                extra={'site': url, 'event': 'crawl_result'})
                     error_count += 1
                 else:
                     if result['is_updated']:
-                        print(f"\n[{idx}/{len(active_sites)}] [更新] [OK] {result['message']}")
+                        logger.info("[%d/%d] 更新: %s", idx, len(active_sites), result['message'],
+                                    extra={'site': url, 'event': 'crawl_result'})
                         updated_count += 1
                     else:
-                        print(f"\n[{idx}/{len(active_sites)}] [正常] {result['message']}")
+                        logger.info("[%d/%d] 正常: %s", idx, len(active_sites), result['message'],
+                                    extra={'site': url, 'event': 'crawl_result'})
                     success_count += 1
                     new_records[result['url']] = result['new_hash']
                 all_site_results.append({
@@ -2113,23 +2040,20 @@ def main() -> None:
 
     total_count = len(all_site_results)
 
-    print("\n" + "=" * 60)
-    print(f"[统计] 成功: {success_count} | 失败: {error_count} | robots.txt跳过: {robots_denied_count} | 暂停: {len(paused_urls)}")
-    print(f"[统计] 更新站点: {updated_count} 个")
+    logger.info("成功: %d | 失败: %d | robots.txt跳过: %d | 暂停: %d",
+                success_count, error_count, robots_denied_count, len(paused_urls))
+    logger.info("更新站点: %d 个", updated_count)
 
     # 输出运行指标摘要
     metrics_summary = metrics.get_summary()
-    print(f"[指标] 总请求: {metrics_summary['total_requests']} | "
-          f"成功: {metrics_summary['success_count']} | "
-          f"失败: {metrics_summary['fail_count']}")
+    logger.info("总请求: %d | 成功: %d | 失败: %d",
+                metrics_summary['total_requests'], metrics_summary['success_count'], metrics_summary['fail_count'])
 
     # 输出熔断器状态
     cb_status = circuit_breaker.get_status()
     open_circuits = {d: c for d, c in cb_status.items() if c >= MAX_CONSECUTIVE_FAILURES}
     if open_circuits:
-        print(f"[熔断] 已熔断域名: {', '.join(open_circuits.keys())}")
-
-    print("\n" + "-" * 60)
+        logger.warning("已熔断域名: %s", ', '.join(open_circuits.keys()))
 
     # 总是更新哈希文件
     save_hash_records(new_records)
@@ -2163,7 +2087,7 @@ def main() -> None:
     # 计算本轮新增URL数
     existing_urls_set = set(item['url'] for item in (notified.get('items', []) if isinstance(notified, dict) else []))
     new_urls = set(item['url'] for item in new_item_list if item['url'] not in existing_urls_set)
-    print(f"[信息] 本轮新通知条目: {len(new_urls)} 条")
+    logger.info("本轮新通知条目: %d 条", len(new_urls))
 
     # Git提交
     git_commit_if_changed()
@@ -2200,19 +2124,36 @@ def main() -> None:
         'updated_sites': updated_sites
     })
 
-    print("\n" + "=" * 60)
-    print("[完成] 本轮巡检结束")
-    print("=" * 60)
+    logger.info("本轮巡检结束")
+
+
+# ============================================================
+# Graceful shutdown
+# ============================================================
+import signal
+
+_shutdown_requested = False
+
+def _handle_signal(signum, frame):
+    global _shutdown_requested
+    if _shutdown_requested:
+        logger.warning("强制退出（数据可能未完全保存）")
+        sys.exit(1)
+    _shutdown_requested = True
+    logger.info("收到停止信号，将在当前任务完成后优雅退出")
+
+signal.signal(signal.SIGTERM, _handle_signal)
+signal.signal(signal.SIGINT, _handle_signal)
 
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n[中断] 用户手动停止")
+        logger.info("用户手动停止")
         sys.exit(0)
     except Exception as e:
-        print(f"\n[致命错误] {e}")
+        logger.error("致命错误: %s", e)
         import traceback
         traceback.print_exc()
         sys.exit(1)

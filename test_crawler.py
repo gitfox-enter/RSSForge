@@ -343,14 +343,14 @@ class TestHashRecordsRoundtrip(unittest.TestCase):
         self.assertEqual(loaded["https://example.com/page"], "hash=with=signs")
 
     def test_comments_are_ignored(self):
-        """Lines starting with '#' should be ignored on load."""
-        crawl.save_hash_records({"https://a.com/": "aaa"})
-        # Manually append a comment line
-        with open(crawl.HASH_RECORD_FILE, "a", encoding="utf-8") as f:
-            f.write("# this is a comment\n")
-        loaded = crawl.load_hash_records()
-        self.assertEqual(len(loaded), 1)
-        self.assertIn("https://a.com/", loaded)
+        """Legacy url=hash format should still work (backward compatibility)."""
+        with open(crawl.HASH_RECORD_FILE, 'w') as f:
+            f.write("# comment line\n")
+            f.write("https://example.com/=abc123\n")
+            f.write("\n")
+        records = crawl.load_hash_records()
+        self.assertEqual(records.get('https://example.com/'), 'abc123')
+        self.assertNotIn('# comment line', records)
 
 
 class TestNotifiedItemsRoundtrip(unittest.TestCase):
@@ -408,11 +408,11 @@ class TestItemsDbRoundtrip(unittest.TestCase):
 
     def setUp(self):
         self._tmpdir = tempfile.mkdtemp()
-        self._orig_file = crawl.ITEMS_DB_FILE
-        crawl.ITEMS_DB_FILE = os.path.join(self._tmpdir, "items.json")
+        self._orig_cwd = os.getcwd()
+        os.chdir(self._tmpdir)
 
     def tearDown(self):
-        crawl.ITEMS_DB_FILE = self._orig_file
+        os.chdir(self._orig_cwd)
         for f in os.listdir(self._tmpdir):
             os.remove(os.path.join(self._tmpdir, f))
         os.rmdir(self._tmpdir)
@@ -432,7 +432,7 @@ class TestItemsDbRoundtrip(unittest.TestCase):
         self.assertEqual(loaded, db)
 
     def test_load_nonexistent_returns_default(self):
-        crawl.ITEMS_DB_FILE = os.path.join(self._tmpdir, "missing.json")
+        # No items.json exists in the fresh tempdir
         loaded = crawl.load_items_db()
         self.assertEqual(loaded, {"items": [], "updated_at": ""})
 
@@ -502,11 +502,11 @@ class TestMergeItemsIntoDb(unittest.TestCase):
 
     def setUp(self):
         self._tmpdir = tempfile.mkdtemp()
-        self._orig_file = crawl.ITEMS_DB_FILE
-        crawl.ITEMS_DB_FILE = os.path.join(self._tmpdir, "items.json")
+        self._orig_cwd = os.getcwd()
+        os.chdir(self._tmpdir)
 
     def tearDown(self):
-        crawl.ITEMS_DB_FILE = self._orig_file
+        os.chdir(self._orig_cwd)
         for f in os.listdir(self._tmpdir):
             try:
                 os.remove(os.path.join(self._tmpdir, f))
