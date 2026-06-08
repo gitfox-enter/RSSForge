@@ -1,6 +1,7 @@
-const CACHE_NAME = 'xianbao-v3';
+const CACHE_NAME = 'xianbao-v4';
 const ASSETS = [
-  '/site-update-monitor/public/favicon.svg'
+  '/site-update-monitor/public/favicon.svg',
+  '/site-update-monitor/offline.html'
 ];
 
 self.addEventListener('install', e => {
@@ -32,7 +33,16 @@ self.addEventListener('fetch', e => {
           caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
           return res;
         })
-        .catch(() => caches.match(e.request))
+        .catch(async () => {
+          const cached = await caches.match(e.request);
+          if (cached) return cached;
+          // For navigation requests, show offline page
+          if (e.request.mode === 'navigate') {
+            const offlinePage = await caches.match('/site-update-monitor/offline.html');
+            if (offlinePage) return offlinePage;
+          }
+          return new Response('离线 - 线报聚合', { status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+        })
     );
     return;
   }

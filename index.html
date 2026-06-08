@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#1976d2">
 <title>线报聚合 - 实时监控全网羊毛线报</title>
 <meta name="description" content="线报聚合：通过自动化爬虫实时监控全网电商、购物平台线报，聚合展示">
 <meta name="renderer" content="webkit">
@@ -25,6 +28,7 @@
 <!-- Canonical -->
 <link rel="canonical" href="https://gitfox-enter.github.io/site-update-monitor/">
 <link rel="preconnect" href="https://gitfox-enter.github.io" crossorigin>
+<link rel="preload" href="items.json" as="fetch" fetchpriority="high" crossorigin>
 <!-- Icons -->
 <link rel="icon" type="image/svg+xml" href="public/favicon.svg">
 <link rel="apple-touch-icon" href="public/icon-192.png">
@@ -788,7 +792,7 @@ function cleanTitle(text) {
 function loadData() {
   document.getElementById('item-list').innerHTML = '<div class="loading">加载中</div>';
 
-  fetch('items.json?t=' + Date.now())
+  fetch('items.json?t=' + Date.now(), { priority: 'high' })
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var rawItems = data.items || [];
