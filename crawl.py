@@ -2,35 +2,77 @@
 # -*- coding: utf-8 -*-
 """
 GitHub Actions 多站点更新监控系统
-功能：爬取33个站点 → MD5比对检测更新 → 数据持久化到 items.json
+功能：爬取33个站点 -> MD5比对检测更新 -> 数据持久化到 items.json
 时间：每小时执行一次
 时区：Asia/Shanghai（北京时间）
 """
 
+# ============================================================
+# 顶层导入（所有模块统一在此导入，禁止函数内散落导入）
+# ============================================================
 import os
 import sys
+import re
 import time
 import random
 import hashlib
-import requests
-import warnings
+import html as html_mod
+import json
+import logging
+import subprocess
 import threading
+import warnings
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone, timedelta
+from typing import Any, Dict, List, Optional, Set, Tuple
+from urllib.parse import urljoin, urlparse
+from urllib.robotparser import RobotFileParser
+
+import requests
 from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
-from urllib.parse import urlparse
-import json
-import subprocess
 
 # 忽略 BeautifulSoup 的 XML 当 HTML 解析警告
 warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
+
+
+# ============================================================
+# 结构化 JSON 日志配置
+# ============================================================
+
+class JsonFormatter(logging.Formatter):
+    """将日志记录格式化为 JSON 字符串，便于结构化日志收集与分析。"""
+
+    def format(self, record: logging.LogRecord) -> str:
+        log_entry = {
+            'timestamp': datetime.fromtimestamp(record.created, tz=timezone(timedelta(hours=8))).isoformat(),
+            'level': record.levelname,
+            'logger': record.name,
+            'message': record.getMessage(),
+        }
+        if record.exc_info and record.exc_info[1]:
+            log_entry['exception'] = str(record.exc_info[1])
+        # 附加额外字段
+        for key in ('site', 'status_code', 'response_time', 'event'):
+            val = getattr(record, key, None)
+            if val is not None:
+                log_entry[key] = val
+        return json.dumps(log_entry, ensure_ascii=False)
+
+
+logger = logging.getLogger('crawl')
+logger.setLevel(logging.INFO)
+_handler = logging.StreamHandler(sys.stdout)
+_handler.setFormatter(JsonFormatter())
+logger.addHandler(_handler)
+
 
 # ============================================================
 # 配置区域
 # ============================================================
 
 # 32个监控站点（新增：聚合线报/鲸线报/那些免费的砖/慢慢买/拔草哦/薅羊毛小伙伴）
-MONITOR_SITES = [
+MONITOR_SITES: List[str] = [
     "https://axutongxue.net/",
     "http://79tao.linejia.com/",
     "http://news.ixbk.net/",
@@ -75,8 +117,8 @@ MONITOR_SITES = [
     "https://www.haodanku.com/",
 ]
 
-# URL → 短名称映射（统一来源显示名称，避免使用页面标题导致名称过长/重复）
-SOURCE_NAME_MAP = {
+# URL -> 短名称映射（统一来源显示名称，避免使用页面标题导致名称过长/重复）
+SOURCE_NAME_MAP: Dict[str, str] = {
     "https://axutongxue.net/": "爱Q生活",
     "http://79tao.linejia.com/": "79淘",
     "http://news.ixbk.net/": "线报酷",
@@ -119,12 +161,14 @@ SOURCE_NAME_MAP = {
     "https://www.ghxi.com/": "果核剥壳",
 }
 
-def get_source_name(url):
+
+def get_source_name(url: str) -> Optional[str]:
     """根据 URL 获取统一短名称"""
     for base_url, name in SOURCE_NAME_MAP.items():
         if url.startswith(base_url.rstrip('/')):
             return name
     return None
+
 
 # 文件存储配置
 HASH_RECORD_FILE = "hash_record.txt"
@@ -145,8 +189,15 @@ REQUEST_TIMEOUT = 15  # 单个站点超时时间（秒）
 REQUEST_DELAY_MIN = 0.5  # 请求间隔最小值（秒）
 REQUEST_DELAY_MAX = 1.5  # 请求间隔最大值（秒）
 
+# 重试配置（指数退避）
+MAX_RETRIES = 3  # 最大重试次数
+RETRY_BASE_DELAY = 1.0  # 重试基础延迟（秒），实际延迟 = base * 2^attempt
+
+# robots.txt 合规配置
+RESPECT_ROBOTS_TXT: bool = True  # 是否遵守 robots.txt
+
 # 随机User-Agent池
-USER_AGENTS = [
+USER_AGENTS: List[str] = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
@@ -159,7 +210,7 @@ USER_AGENTS = [
 ]
 
 # 浏览器指纹池（与 UA 配合随机化，增加反爬抗性）
-BROWSER_FINGERPRINTS = [
+BROWSER_FINGERPRINTS: List[Dict[str, str]] = [
     {
         'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
         'sec-ch-ua-mobile': '?0',
@@ -203,7 +254,7 @@ BROWSER_FINGERPRINTS = [
 ]
 
 # Accept-Language 随机池
-ACCEPT_LANGUAGES = [
+ACCEPT_LANGUAGES: List[str] = [
     'zh-CN,zh;q=0.9,en;q=0.8',
     'zh-CN,zh;q=0.9',
     'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
@@ -211,25 +262,228 @@ ACCEPT_LANGUAGES = [
     'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
 ]
 
+
+# ============================================================
+# 运行指标追踪
+# ============================================================
+
+class MetricsTracker:
+    """
+    追踪爬虫运行指标：总请求数、成功/失败计数、每站点平均响应时间。
+    线程安全实现，支持并发抓取场景下的指标累加。
+    """
+
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self.total_requests: int = 0
+        self.success_count: int = 0
+        self.fail_count: int = 0
+        self._site_times: Dict[str, List[float]] = {}  # domain -> [response_time, ...]
+
+    def record_success(self, domain: str, response_time: float) -> None:
+        """记录一次成功请求及其响应时间。"""
+        with self._lock:
+            self.total_requests += 1
+            self.success_count += 1
+            self._site_times.setdefault(domain, []).append(response_time)
+
+    def record_failure(self, domain: str) -> None:
+        """记录一次失败请求。"""
+        with self._lock:
+            self.total_requests += 1
+            self.fail_count += 1
+
+    def get_summary(self) -> Dict[str, Any]:
+        """返回指标摘要字典。"""
+        with self._lock:
+            site_avg: Dict[str, float] = {}
+            for domain, times in self._site_times.items():
+                site_avg[domain] = round(sum(times) / len(times), 3) if times else 0.0
+            return {
+                'total_requests': self.total_requests,
+                'success_count': self.success_count,
+                'fail_count': self.fail_count,
+                'avg_response_time_per_site': site_avg,
+            }
+
+
+# 全局指标实例
+metrics = MetricsTracker()
+
+
+# ============================================================
+# 熔断器（Circuit Breaker）
+# ============================================================
+
+class CircuitBreaker:
+    """
+    简单的域名级熔断器：追踪每个域名的连续失败次数。
+    当连续失败次数超过阈值时，熔断器打开（open），后续请求直接跳过该域名。
+    成功请求会重置失败计数。
+
+    状态说明：
+    - closed: 正常状态，允许请求通过
+    - open: 熔断状态，拒绝请求
+    """
+
+    def __init__(self, failure_threshold: int = MAX_CONSECUTIVE_FAILURES) -> None:
+        self._lock = threading.Lock()
+        self._failures: Dict[str, int] = {}  # domain -> consecutive failure count
+        self._threshold = failure_threshold
+
+    def is_open(self, domain: str) -> bool:
+        """检查某域名的熔断器是否处于打开（拒绝请求）状态。"""
+        with self._lock:
+            return self._failures.get(domain, 0) >= self._threshold
+
+    def record_success(self, domain: str) -> None:
+        """记录成功，重置该域名的连续失败计数。"""
+        with self._lock:
+            self._failures[domain] = 0
+
+    def record_failure(self, domain: str) -> None:
+        """记录失败，递增该域名的连续失败计数。"""
+        with self._lock:
+            self._failures[domain] = self._failures.get(domain, 0) + 1
+
+    def get_status(self) -> Dict[str, int]:
+        """返回所有域名的失败计数快照。"""
+        with self._lock:
+            return dict(self._failures)
+
+
+# 全局熔断器实例
+circuit_breaker = CircuitBreaker()
+
+
+# ============================================================
+# Session 连接池管理（每域名一个 Session，复用 TCP 连接 + Cookie）
+# ============================================================
+
+_sessions: Dict[str, requests.Session] = {}
+_sessions_lock = threading.Lock()
+
+
+def get_session(domain: str) -> requests.Session:
+    """
+    获取指定域名的 requests.Session 实例。
+    同一域名复用同一个 Session，实现连接池和 Cookie 持久化。
+    """
+    with _sessions_lock:
+        if domain not in _sessions:
+            session = requests.Session()
+            # 预配置默认 headers，减少每次请求的开销
+            session.headers.update({
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Encoding': 'gzip, deflate',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1',
+                'Cache-Control': 'max-age=0',
+            })
+            _sessions[domain] = session
+        return _sessions[domain]
+
+
+# ============================================================
+# HTTP 条件请求缓存（ETag / Last-Modified）
+# ============================================================
+
+_conditional_cache: Dict[str, Dict[str, str]] = {}  # url -> {'etag': ..., 'last_modified': ...}
+_conditional_cache_lock = threading.Lock()
+
+
+def get_conditional_headers(url: str) -> Dict[str, str]:
+    """
+    获取指定 URL 的条件请求头（If-None-Match / If-Modified-Since）。
+    如果之前请求过该 URL 且服务端返回了 ETag 或 Last-Modified，
+    则在下次请求时携带条件头以避免重复下载未变更的内容。
+    """
+    with _conditional_cache_lock:
+        cached = _conditional_cache.get(url, {})
+    headers = {}
+    if cached.get('etag'):
+        headers['If-None-Match'] = cached['etag']
+    if cached.get('last_modified'):
+        headers['If-Modified-Since'] = cached['last_modified']
+    return headers
+
+
+def update_conditional_cache(url: str, response: requests.Response) -> None:
+    """从响应中提取 ETag / Last-Modified 并缓存。"""
+    etag = response.headers.get('ETag')
+    last_modified = response.headers.get('Last-Modified')
+    if etag or last_modified:
+        with _conditional_cache_lock:
+            _conditional_cache[url] = {
+                'etag': etag or '',
+                'last_modified': last_modified or '',
+            }
+
+
+# ============================================================
+# robots.txt 合规检查
+# ============================================================
+
+_robots_cache: Dict[str, RobotFileParser] = {}  # base_url -> RobotFileParser
+_robots_lock = threading.Lock()
+
+
+def is_allowed_by_robots(url: str) -> bool:
+    """
+    检查指定 URL 是否被该站点的 robots.txt 允许爬取。
+    结果按域名缓存，避免重复请求 robots.txt。
+    如果 robots.txt 无法获取，默认允许（宽容策略）。
+    """
+    if not RESPECT_ROBOTS_TXT:
+        return True
+
+    parsed = urlparse(url)
+    base_url = f"{parsed.scheme}://{parsed.netloc}"
+    robots_url = f"{base_url}/robots.txt"
+
+    with _robots_lock:
+        if base_url in _robots_cache:
+            rp = _robots_cache[base_url]
+            return rp.can_fetch('*', url)
+
+    # 首次访问该域名的 robots.txt
+    rp = RobotFileParser()
+    rp.set_url(robots_url)
+    try:
+        rp.read()
+    except Exception:
+        # 无法读取 robots.txt 时默认允许
+        logger.info("robots.txt 读取失败，默认允许爬取", extra={'site': base_url, 'event': 'robots_txt_error'})
+        return True
+
+    with _robots_lock:
+        _robots_cache[base_url] = rp
+
+    allowed = rp.can_fetch('*', url)
+    if not allowed:
+        logger.info("robots.txt 禁止爬取该 URL", extra={'site': url, 'event': 'robots_txt_denied'})
+    return allowed
+
+
 # ============================================================
 # 工具函数
 # ============================================================
 
-def get_beijing_time():
+def get_beijing_time() -> datetime:
     """获取北京时间（Asia/Shanghai）"""
     beijing_tz = timezone(timedelta(hours=8))
     return datetime.now(beijing_tz)
 
 
-def get_current_round():
+def get_current_round() -> int:
     """
     根据当前小时判断当日第几轮（固定映射，禁止计数器模式）
-    - 00:00-03:59 → 第1轮
-    - 04:00-07:59 → 第2轮
-    - 08:00-11:59 → 第3轮
-    - 12:00-15:59 → 第4轮
-    - 16:00-19:59 → 第5轮
-    - 20:00-23:59 → 第6轮
+    - 00:00-03:59 -> 第1轮
+    - 04:00-07:59 -> 第2轮
+    - 08:00-11:59 -> 第3轮
+    - 12:00-15:59 -> 第4轮
+    - 16:00-19:59 -> 第5轮
+    - 20:00-23:59 -> 第6轮
     """
     hour = get_beijing_time().hour
     if 0 <= hour < 4:
@@ -246,36 +500,45 @@ def get_current_round():
         return 6
 
 
-def get_random_ua():
+def get_random_ua() -> str:
     """随机返回一个User-Agent"""
     return random.choice(USER_AGENTS)
 
 
-def get_random_fingerprint():
+def get_random_fingerprint() -> Dict[str, str]:
     """随机返回一组浏览器指纹头部"""
     return random.choice(BROWSER_FINGERPRINTS)
 
 
-def get_random_accept_language():
+def get_random_accept_language() -> str:
     """随机返回一个Accept-Language"""
     return random.choice(ACCEPT_LANGUAGES)
 
 
-def get_random_delay():
+def get_random_delay() -> float:
     """随机返回请求延迟时间（秒）"""
     return random.uniform(REQUEST_DELAY_MIN, REQUEST_DELAY_MAX)
+
+
+def get_referer(url: str) -> str:
+    """
+    根据目标 URL 生成 Referer 头（使用站点自身首页作为 Referer）。
+    这增强了请求的真实性，降低被反爬机制拦截的概率。
+    """
+    parsed = urlparse(url)
+    return f"{parsed.scheme}://{parsed.netloc}/"
 
 
 # ============================================================
 # 哈希记录管理
 # ============================================================
 
-def load_hash_records():
+def load_hash_records() -> Dict[str, str]:
     """
     从文件加载哈希记录
     返回格式：{url: md5_hash}
     """
-    records = {}
+    records: Dict[str, str] = {}
     if os.path.exists(HASH_RECORD_FILE):
         try:
             with open(HASH_RECORD_FILE, 'r', encoding='utf-8') as f:
@@ -289,7 +552,7 @@ def load_hash_records():
     return records
 
 
-def save_hash_records(records):
+def save_hash_records(records: Dict[str, str]) -> bool:
     """
     保存哈希记录到文件
     格式：url=md5值（每行一个）
@@ -311,7 +574,7 @@ def save_hash_records(records):
 # 已通知条目管理（去重）
 # ============================================================
 
-def load_notified_items():
+def load_notified_items() -> Dict[str, Any]:
     """
     加载已通知条目
     新格式：dict{'items': [{'url', 'text', 'source', 'time'}, ...]}
@@ -332,7 +595,7 @@ def load_notified_items():
     return {'items': []}
 
 
-def save_notified_items(item_dict):
+def save_notified_items(item_dict: Dict[str, Any]) -> bool:
     """保存已通知条目URL集合到文件"""
     try:
         with open(NOTIFIED_ITEMS_FILE, 'w', encoding='utf-8') as f:
@@ -344,13 +607,13 @@ def save_notified_items(item_dict):
         return False
 
 
-def filter_new_items(items, notified):
+def filter_new_items(items: List[Any], notified: Dict[str, Any]) -> Tuple[List[Any], Set[str]]:
     """
     从条目列表中过滤出未通知过的新条目
     返回：(新条目列表, 本轮新增的URL集合)
     """
-    new_items = []
-    new_urls = set()
+    new_items: List[Any] = []
+    new_urls: Set[str] = set()
     for item in items:
         item_url = item['url'] if isinstance(item, dict) else item
         if item_url not in notified:
@@ -364,7 +627,7 @@ def filter_new_items(items, notified):
 # ============================================================
 
 # 内置关键词分类规则
-CATEGORY_KEYWORDS = {
+CATEGORY_KEYWORDS: Dict[str, List[str]] = {
     "京东": ["京东", "jd.com", "jd", "京豆", "京享"],
     "淘宝": ["淘宝", "天猫", "tmall", "taobao", "淘金币"],
     "拼多多": ["拼多多", "pdd", "拼多"],
@@ -373,7 +636,8 @@ CATEGORY_KEYWORDS = {
     "优惠券": ["优惠券", "券", "满减", "消费券", "领券"],
 }
 
-def auto_categorize(text):
+
+def auto_categorize(text: str) -> Optional[str]:
     """根据关键词自动分类"""
     for cat, keywords in CATEGORY_KEYWORDS.items():
         for kw in keywords:
@@ -381,7 +645,8 @@ def auto_categorize(text):
                 return cat
     return None
 
-def load_items_db():
+
+def load_items_db() -> Dict[str, Any]:
     """加载全量线报数据库"""
     if os.path.exists(ITEMS_DB_FILE):
         try:
@@ -393,7 +658,8 @@ def load_items_db():
             print(f"[警告] 读取线报数据库失败: {e}")
     return {'items': [], 'updated_at': ''}
 
-def save_items_db(db):
+
+def save_items_db(db: Dict[str, Any]) -> bool:
     """保存全量线报数据库"""
     try:
         with open(ITEMS_DB_FILE, 'w', encoding='utf-8') as f:
@@ -404,7 +670,8 @@ def save_items_db(db):
         print(f"[错误] 保存线报数据库失败: {e}")
         return False
 
-def merge_items_into_db(new_item_list, check_time):
+
+def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) -> int:
     """
     将本轮新抓取的线报合并到全量数据库中（按 URL 去重）
     新条目插入到列表头部（最新的在前面）
@@ -414,7 +681,7 @@ def merge_items_into_db(new_item_list, check_time):
 
     # 过滤出真正的新条目，并添加自动分类
     added = 0
-    fresh_items = []
+    fresh_items: List[Dict[str, Any]] = []
     for item in new_item_list:
         url = item.get('url', '')
         if url and url not in existing_urls:
@@ -449,9 +716,9 @@ def merge_items_into_db(new_item_list, check_time):
 # 站点专用解析器
 # ============================================================
 
-def parse_ypojie(soup):
+def parse_ypojie(soup: BeautifulSoup) -> str:
     """易破解 (WordPress DUX主题) - 精准提取最新文章标题和链接"""
-    items = []
+    items: List[str] = []
     for h2 in soup.select('#content h2 a, #content .entry-title a, #main-content h2 a'):
         text = h2.get_text(strip=True)
         href = h2.get('href', '')
@@ -466,9 +733,9 @@ def parse_ypojie(soup):
     return '\n'.join(items[:30])
 
 
-def parse_discuz_threadlist(soup):
+def parse_discuz_threadlist(soup: BeautifulSoup) -> str:
     """Discuz论坛通用解析器 - 精准提取帖子列表"""
-    items = []
+    items: List[str] = []
     for a in soup.select('.threadlist .t a, .tl .t a, #threadlist .t a, .threadlist tr td a.xst, .threadlist tr td a'):
         text = a.get_text(strip=True)
         href = a.get('href', '')
@@ -485,11 +752,10 @@ def parse_discuz_threadlist(soup):
     return '\n'.join(items[:30])
 
 
-def parse_discuz_items(soup, base_url):
+def parse_discuz_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """Discuz论坛 - 结构化条目提取"""
-    from urllib.parse import urljoin
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     for a in soup.select('.threadlist .t a, .tl .t a, #threadlist .t a, .threadlist tr td a.xst, .threadlist tr td a'):
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
@@ -515,21 +781,10 @@ def parse_discuz_items(soup, base_url):
     return items[:30]
 
 
-def parse_yxssp(soup):
-    """异星软件空间 (WordPress) - 精准提取文章列表，排除分类导航"""
-    items = []
-    for a in soup.select('.post-item h2 a, .entry-title a, .post-title a, article h2 a, article h3 a'):
-        text = a.get_text(strip=True)
-        href = a.get('href', '')
-        if text and len(text) > 5:
-            items.append(f"{text} ({href})")
-
-
-def parse_yxssp_items(soup, base_url):
+def parse_yxssp_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """异星软件空间 - 结构化条目提取"""
-    from urllib.parse import urljoin
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     for a in soup.select('.post-item h2 a, .entry-title a, .post-title a, article h2 a, article h3 a'):
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
@@ -541,21 +796,12 @@ def parse_yxssp_items(soup, base_url):
         if href.startswith('http'):
             items.append({'text': text, 'url': href})
     return items[:30]
-    if not items:
-        for article in soup.select('article, .post'):
-            h = article.select_one('h2 a, h3 a, h4 a')
-            if h:
-                text = h.get_text(strip=True)
-                href = h.get('href', '')
-                if text and len(text) > 5:
-                    items.append(f"{text} ({href})")
-    return '\n'.join(items[:30])
 
 
-def parse_423down(soup):
+def parse_423down(soup: BeautifulSoup) -> str:
     """423Down - 精准提取软件文章，排除分类导航和侧边栏"""
-    items = []
-    seen = set()
+    items: List[str] = []
+    seen: Set[str] = set()
     # 主内容区的文章标题链接（格式：/数字.html 才是文章页）
     for a in soup.select('.post-list a, .content-list a, article h2 a, .entry-title a, #main a, .list-item a'):
         text = a.get_text(strip=True)
@@ -563,7 +809,6 @@ def parse_423down(soup):
         if not text or len(text) < 5:
             continue
         # 只要文章页（/数字.html 格式）
-        import re
         if not re.search(r'/\d+\.html', href):
             continue
         if text in seen:
@@ -577,10 +822,9 @@ def parse_423down(soup):
             text = a.get_text(strip=True)
             if not text or len(text) < 5 or len(text) > 80:
                 continue
-            import re
             if not re.search(r'/\d+\.html', href):
                 continue
-            # 排除纯英文短标题（通常是导航）
+            # 排除纯英文薄标题（通常是导航）
             chinese_count = len(re.findall(r'[\u4e00-\u9fff]', text))
             if chinese_count < 2 and len(text) < 15:
                 continue
@@ -591,11 +835,10 @@ def parse_423down(soup):
     return '\n'.join(items[:30])
 
 
-def parse_423down_items(soup, base_url):
+def parse_423down_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """423Down - 提取文章条目，返回 [{'text':..., 'url':...}] 格式"""
-    import re
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
@@ -610,17 +853,15 @@ def parse_423down_items(soup, base_url):
             continue
         seen.add(text)
         if href.startswith('/'):
-            from urllib.parse import urljoin
             href = urljoin(base_url, href)
         items.append({'text': text, 'url': href})
     return items[:30]
 
 
-def parse_ziyuanting_items(soup, base_url):
+def parse_ziyuanting_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """晓晓资源网 - 只提取公告/文章，不提取网站目录导航"""
-    import re
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     # 只取 /bulletin/ 路径下的公告文章
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
@@ -633,15 +874,14 @@ def parse_ziyuanting_items(soup, base_url):
             continue
         seen.add(text)
         if href.startswith('/'):
-            from urllib.parse import urljoin
             href = urljoin(base_url, href)
         items.append({'text': text, 'url': href})
     return items[:20]
 
 
-def parse_ziyuanting(soup):
+def parse_ziyuanting(soup: BeautifulSoup) -> str:
     """晓晓资源网 - 只提取公告文本用于MD5比对"""
-    items = []
+    items: List[str] = []
     for a in soup.find_all('a', href=True):
         href = a.get('href', '')
         text = a.get_text(strip=True)
@@ -651,23 +891,22 @@ def parse_ziyuanting(soup):
     return '\n'.join(items[:20])
 
 
-def parse_wycad_items(soup, base_url):
+def parse_wycad_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """无忧软件网 - 提取真正的软件文章，排除标签/分类链接"""
-    import re
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
         if not text or len(text) < 4:
             continue
-        # 排除 /tag/ /soft/ /category/ 等分类链接
+        # 排除 /tag/ /soft/ /category/ /page/ 等分类链接
         if any(x in href for x in ['/tag/', '/soft/', '/category/', '/page/']):
             continue
         # 只取文章页：域名下的带数字slug或有汉字的路径
         if not re.search(r'wycad\.com/\w', href):
             continue
-        # 排除纯英文/数字短文本（通常是导航）
+        # 排除纯英文/数字短文本（通常为导航）
         chinese_count = len(re.findall(r'[\u4e00-\u9fff]', text))
         if chinese_count < 2 and len(text) < 10:
             continue
@@ -678,11 +917,10 @@ def parse_wycad_items(soup, base_url):
     return items[:20]
 
 
-
-def parse_h6room_items(soup, base_url):
+def parse_h6room_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """好料空间 - 提取最新发布的软件/资源文章"""
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     # 主内容区文章标题
     for a in soup.select('.post-title a, .item-title a, h2 a, h3 a, .content a[href*="/"]'):
         text = a.get_text(strip=True)
@@ -697,12 +935,10 @@ def parse_h6room_items(soup, base_url):
             continue
         seen.add(text)
         if href.startswith('/'):
-            from urllib.parse import urljoin
             href = urljoin(base_url, href)
         items.append({'text': text, 'url': href})
     # 如果主选择器失败，尝试通用文章链接
     if not items:
-        import re
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
@@ -710,8 +946,7 @@ def parse_h6room_items(soup, base_url):
                 continue
             if not re.search(r'h6room\.com/\w+/\w+', href):
                 continue
-            import re as _re
-            if len(_re.findall(r'[\u4e00-\u9fff]', text)) < 1:
+            if len(re.findall(r'[\u4e00-\u9fff]', text)) < 1:
                 continue
             if text in seen:
                 continue
@@ -720,10 +955,10 @@ def parse_h6room_items(soup, base_url):
     return items[:20]
 
 
-def parse_xzba_items(soup, base_url):
+def parse_xzba_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """游戏下载吧 - 提取最新游戏条目"""
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     for a in soup.select('.post-title a, .item-title a, h2 a, h3 a, .game-title a, .list-item a'):
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
@@ -736,12 +971,10 @@ def parse_xzba_items(soup, base_url):
             continue
         seen.add(text)
         if href.startswith('/'):
-            from urllib.parse import urljoin
             href = urljoin(base_url, href)
         items.append({'text': text, 'url': href})
     # 通用备选
     if len(items) < 3:
-        import re
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
@@ -756,10 +989,10 @@ def parse_xzba_items(soup, base_url):
     return items[:20]
 
 
-def parse_apprcn_items(soup, base_url):
+def parse_apprcn_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """反斗限免 - 提取限免软件列表"""
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     for a in soup.select('article a, .post a, h2 a, h3 a, .entry-title a'):
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
@@ -772,17 +1005,15 @@ def parse_apprcn_items(soup, base_url):
             continue
         seen.add(text)
         if href.startswith('/'):
-            from urllib.parse import urljoin
             href = urljoin(base_url, href)
         items.append({'text': text, 'url': href})
     return items[:20]
 
 
-def parse_daydayzhuan_items(soup, base_url):
+def parse_daydayzhuan_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """天天线报网 - 提取文章列表"""
-    from urllib.parse import urljoin
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     # 匹配 /article/{id} 模式
     for a in soup.select('a[href*="/article/"]'):
         href = a.get('href', '').strip()
@@ -802,12 +1033,11 @@ def parse_daydayzhuan_items(soup, base_url):
     return items[:20]
 
 
-def parse_007ymd_items(soup, base_url):
+def parse_007ymd_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """007线报网 - 提取文章列表"""
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     # 匹配 ?id={数字} 模式
-    import re
     for a in soup.select('a[href*="?id="]'):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
@@ -823,11 +1053,10 @@ def parse_007ymd_items(soup, base_url):
     return items[:20]
 
 
-def parse_baicaio_items_v2(soup, base_url):
+def parse_baicaio_items_v2(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """白菜哦 v2 - 提取文章列表"""
-    from urllib.parse import urljoin
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     # 匹配 /article/ 和 /item/ 模式
     for a in soup.select('a[href*="/article/"], a[href*="/item/"]'):
         href = a.get('href', '').strip()
@@ -843,10 +1072,10 @@ def parse_baicaio_items_v2(soup, base_url):
     return items[:20]
 
 
-def parse_manmanbuy_items(soup, base_url):
+def parse_manmanbuy_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """慢慢买 - 提取搜索结果"""
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     # 搜索结果链接
     for a in soup.select('a[href*="s.manmanbuy.com"], a[href*="pc/search"]'):
         href = a.get('href', '').strip()
@@ -860,13 +1089,10 @@ def parse_manmanbuy_items(soup, base_url):
     return items[:20]
 
 
-
-
-def parse_axutongxue_items(soup, base_url):
+def parse_axutongxue_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """阿虚同学的储物间 - 提取资源导航链接"""
-    from urllib.parse import urljoin
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     # 提取所有外部链接
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
@@ -889,11 +1115,11 @@ def parse_axutongxue_items(soup, base_url):
     return items[:30]
 
 
-def parse_rss_feed(content_bytes, base_url):
+def parse_rss_feed(content_bytes: bytes, base_url: str) -> List[Dict[str, str]]:
     """RSS/Atom Feed 解析器 - 直接从XML提取文章条目"""
     from xml.etree import ElementTree as ET
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
     try:
         root = ET.fromstring(content_bytes)
         ns = {'atom': 'http://www.w3.org/2005/Atom'}
@@ -921,9 +1147,9 @@ def parse_rss_feed(content_bytes, base_url):
     return items[:30]
 
 
-def parse_ghxi(soup):
+def parse_ghxi(soup: BeautifulSoup) -> str:
     """果核剥壳 (新版结构 .item-content h2 a) - 精准提取文章"""
-    items = []
+    items: List[str] = []
     for a in soup.select('.item-content h2 a, .item-content h3 a'):
         text = a.get_text(strip=True)
         href = a.get('href', '')
@@ -939,16 +1165,15 @@ def parse_ghxi(soup):
     return '\n'.join(items[:30])
 
 
-def parse_ghxi_items(soup, base_url):
+def parse_ghxi_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """果核剥壳 - 通过 WordPress REST API 获取文章（站点为 Vue SPA，HTML 无法直接解析）"""
-    import html as html_mod
     api_url = "https://www.ghxi.com/wp-json/wp/v2/posts?per_page=30"
     headers = {
         'User-Agent': get_random_ua(),
         'Accept': 'application/json, */*;q=0.8',
         'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
     }
-    items = []
+    items: List[Dict[str, str]] = []
     try:
         resp = requests.get(api_url, headers=headers, timeout=REQUEST_TIMEOUT)
         if resp.status_code == 200:
@@ -966,12 +1191,11 @@ def parse_ghxi_items(soup, base_url):
     return items
 
 
-def extract_article_items(soup, base_url=''):
+def extract_article_items(soup: BeautifulSoup, base_url: str = '') -> List[Dict[str, str]]:
     """
     从页面中提取独立文章条目列表（含链接）
     返回：[{'text': '标题', 'url': '链接'}, ...] 最多50条
     """
-    import re
     # 移除干扰元素
     for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside', 'iframe']):
         tag.decompose()
@@ -980,8 +1204,8 @@ def extract_article_items(soup, base_url=''):
     if not body:
         return []
 
-    items = []
-    seen = set()
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
 
     # 策略1: 提取 <a> 标签的文本 + href
     for a_tag in body.find_all('a', href=True):
@@ -998,11 +1222,7 @@ def extract_article_items(soup, base_url=''):
             continue
         href = a_tag['href'].strip()
         # 转绝对链接
-        if href.startswith('/'):
-            from urllib.parse import urljoin
-            href = urljoin(base_url, href)
-        elif not href.startswith('http'):
-            from urllib.parse import urljoin
+        if href.startswith('/') or not href.startswith('http'):
             href = urljoin(base_url, href)
         seen.add(text)
         items.append({'text': text, 'url': href})
@@ -1029,54 +1249,149 @@ def extract_article_items(soup, base_url=''):
     return items[:50]
 
 
-def fetch_page_content(url):
+# ============================================================
+# 解析器注册表（Parser Registry）
+# 将域名模式映射到 (items_parser, text_parser) 元组，
+# 替代 fetch_page_content 中冗长的 if/elif 链。
+# ============================================================
+
+# items_parser: (soup, base_url) -> List[Dict[str, str]]
+# text_parser:  (soup) -> str  或  None（此时 text 由 items 拼接得到）
+PARSER_REGISTRY: Dict[str, Tuple[Any, Optional[Any]]] = {
+    '423down.com':       (parse_423down_items,      parse_423down),
+    'ziyuanting.com':    (parse_ziyuanting_items,    parse_ziyuanting),
+    'wycad.com':         (parse_wycad_items,         None),
+    'baicaio.com':       (parse_baicaio_items_v2,    None),
+    'h6room.com':        (parse_h6room_items,        None),
+    'xzba.cc':           (parse_xzba_items,          None),
+    'free.apprcn.com':   (parse_apprcn_items,        None),
+    'kxdao.net':         (parse_discuz_items,         None),
+    'yxssp.com':         (parse_yxssp_items,          None),
+    'daydayzhuan.com':   (parse_daydayzhuan_items,   None),
+    '007ymd.com':        (parse_007ymd_items,         None),
+    'axutongxue.net':    (parse_axutongxue_items,    None),
+    'manmanbuy.com':     (parse_manmanbuy_items,      None),
+}
+
+
+def _match_parser(url: str) -> Optional[Tuple[Any, Optional[Any]]]:
     """
-    爬取页面完整正文
+    根据 URL 匹配 PARSER_REGISTRY 中的解析器。
+    返回 (items_parser, text_parser) 或 None（使用通用解析）。
+    """
+    for domain_pattern, parsers in PARSER_REGISTRY.items():
+        if domain_pattern in url:
+            return parsers
+    return None
+
+
+def fetch_page_content(url: str) -> Tuple[bool, Any]:
+    """
+    爬取页面完整正文。
     返回：(成功标志, 内容/错误信息)
     内容包含：(text, title, summary, response_time)
+
+    增强特性：
+    - 指数退避重试（最多 3 次）
+    - 每域名 Session 连接池复用
+    - Referer 头部增强反爬抗性
+    - HTTP 条件请求（ETag / If-Modified-Since）减少带宽
+    - 熔断器自动跳过连续失败域名
+    - robots.txt 合规检查
     """
-    def make_request(ua, fingerprint=None, accept_lang=None):
-        headers = {
+    parsed = urlparse(url)
+    domain = parsed.hostname or parsed.netloc
+
+    # 熔断器检查：如果该域名连续失败过多，直接跳过
+    if circuit_breaker.is_open(domain):
+        logger.info("熔断器打开，跳过该域名", extra={'site': domain, 'event': 'circuit_breaker_open'})
+        return False, "熔断器已打开（连续失败过多）"
+
+    # robots.txt 合规检查
+    if not is_allowed_by_robots(url):
+        return False, "robots.txt 禁止爬取"
+
+    session = get_session(domain)
+
+    def make_request(ua: str, fingerprint: Optional[Dict[str, str]] = None,
+                     accept_lang: Optional[str] = None) -> requests.Response:
+        """构建并发送 HTTP 请求，包含所有反检测头部和条件请求头。"""
+        headers: Dict[str, str] = {
             'User-Agent': ua,
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Language': accept_lang or 'zh-CN,zh;q=0.9,en;q=0.8',
-            'Accept-Encoding': 'gzip, deflate',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1',
-            'Cache-Control': 'max-age=0',
+            'Referer': get_referer(url),
         }
         # 添加浏览器指纹头部（Chrome/Edge 特有）
         if fingerprint:
             headers.update(fingerprint)
-        return requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT, allow_redirects=True)
+        # 添加 HTTP 条件请求头（If-None-Match / If-Modified-Since）
+        headers.update(get_conditional_headers(url))
+
+        return session.get(url, headers=headers, timeout=REQUEST_TIMEOUT, allow_redirects=True)
 
     try:
         print(f"[爬取] {url}")
-        ua = get_random_ua()
-        fingerprint = get_random_fingerprint()
-        accept_lang = get_random_accept_language()
+        logger.info("开始爬取", extra={'site': url, 'event': 'crawl_start'})
 
-        start_time = time.time()
-        response = make_request(ua, fingerprint, accept_lang)
-        elapsed = time.time() - start_time
+        # 指数退避重试循环
+        response: Optional[requests.Response] = None
+        elapsed: float = 0.0
 
-        # 403 时换 UA+指纹 重试一次
-        if response.status_code == 403:
-            new_ua = get_random_ua()
-            while new_ua == ua:
-                new_ua = get_random_ua()
-            new_fp = get_random_fingerprint()
-            new_lang = get_random_accept_language()
-            print(f"[重试] 403 → 切换 UA+指纹 重试")
-            time.sleep(random.uniform(1, 3))
+        for attempt in range(MAX_RETRIES):
+            ua = get_random_ua()
+            fingerprint = get_random_fingerprint()
+            accept_lang = get_random_accept_language()
+
             start_time = time.time()
-            response = make_request(new_ua, new_fp, new_lang)
+            response = make_request(ua, fingerprint, accept_lang)
             elapsed = time.time() - start_time
 
-        # 检查HTTP状态码
+            # 成功或非 403/5xx：直接使用
+            if response.status_code == 200:
+                break
+
+            # 304 Not Modified：页面未变更，使用缓存
+            if response.status_code == 304:
+                logger.info("HTTP 304 Not Modified", extra={'site': url, 'event': 'not_modified'})
+                # 304 时仍视为成功（页面未变更），返回特殊标记
+                circuit_breaker.record_success(domain)
+                return False, "304 页面未变更"
+
+            # 403 或 5xx：指数退避重试
+            if response.status_code in (403, 500, 502, 503, 504):
+                if attempt < MAX_RETRIES - 1:
+                    delay = RETRY_BASE_DELAY * (2 ** attempt) + random.uniform(0, 0.5)
+                    print(f"[重试] HTTP {response.status_code} -> 第 {attempt + 2}/{MAX_RETRIES} 次，延迟 {delay:.1f}s")
+                    logger.info("重试请求", extra={
+                        'site': url, 'event': 'retry',
+                        'status_code': response.status_code,
+                    })
+                    time.sleep(delay)
+                    continue
+
+            # 其他状态码：不重试，直接跳出
+            break
+
+        if response is None:
+            return False, "请求未发出"
+
+        # 记录条件请求缓存（ETag / Last-Modified）
+        update_conditional_cache(url, response)
+
+        # 检查最终 HTTP 状态码
         if response.status_code != 200:
+            circuit_breaker.record_failure(domain)
+            metrics.record_failure(domain)
+            logger.info("HTTP 请求失败", extra={
+                'site': url, 'event': 'http_error',
+                'status_code': response.status_code,
+            })
             return False, f"HTTP {response.status_code}"
-        
+
+        # 请求成功，重置熔断器
+        circuit_breaker.record_success(domain)
+        metrics.record_success(domain, elapsed)
+
         # 让 BeautifulSoup 直接用字节流自动检测编码（避免 requests 默认 ISO-8859-1 导致中文乱码）
         soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -1087,44 +1402,21 @@ def fetch_page_content(url):
                 encoding = 'gbk'
             content = response.content.decode(encoding, errors='ignore')
             soup = BeautifulSoup(content, 'html.parser')
-        
+
         # 获取页面标题
         title_tag = soup.find('title')
         title = title_tag.get_text(strip=True) if title_tag else url
 
-        # 站点专用解析器（精准提取正文+条目，避免抓到导航/侧边栏/旧目录）
+        # === 站点专用解析器（通过注册表查找） ===
+        parser_pair = _match_parser(url)
+
+        # 特殊处理：RSS/Atom Feed
         if 'feed.iplaysoft.com' in url or url.endswith('.xml'):
             # RSS/Atom Feed：直接解析XML
             article_items = parse_rss_feed(response.content, url)
             text = '\n'.join(item['text'] for item in article_items)
-        elif '423down.com' in url:
-            article_items = parse_423down_items(soup, url)
-            text = parse_423down(soup)
-        elif 'ziyuanting.com' in url:
-            article_items = parse_ziyuanting_items(soup, url)
-            text = parse_ziyuanting(soup)
-        elif 'wycad.com' in url:
-            article_items = parse_wycad_items(soup, url)
-            text = '\n'.join(item['text'] for item in article_items)
-        elif 'baicaio.com' in url:
-            article_items = parse_baicaio_items_v2(soup, url)
-            text = '\n'.join(item['text'] for item in article_items)
-        elif 'h6room.com' in url:
-            article_items = parse_h6room_items(soup, url)
-            text = '\n'.join(item['text'] for item in article_items)
-        elif 'xzba.cc' in url:
-            article_items = parse_xzba_items(soup, url)
-            text = '\n'.join(item['text'] for item in article_items)
-        elif 'free.apprcn.com' in url:
-            article_items = parse_apprcn_items(soup, url)
-            text = '\n'.join(item['text'] for item in article_items)
-        elif 'kxdao.net' in url:
-            article_items = parse_discuz_items(soup, url)
-            text = '\n'.join(item['text'] for item in article_items)
-        elif 'yxssp.com' in url:
-            article_items = parse_yxssp_items(soup, url)
-            text = '\n'.join(item['text'] for item in article_items)
         elif 'ghxi.com' in url:
+            # 果核剥壳特殊处理：优先 WP API，失败回退通用解析
             article_items = parse_ghxi_items(soup, url)
             if article_items:
                 text = '\n'.join(item['text'] for item in article_items)
@@ -1134,18 +1426,14 @@ def fetch_page_content(url):
                 body = soup.find('body')
                 text = body.get_text(separator=' ', strip=True) if body else ''
                 text = ' '.join(text.split())
-        elif 'daydayzhuan.com' in url:
-            article_items = parse_daydayzhuan_items(soup, url)
-            text = '\n'.join(item['text'] for item in article_items)
-        elif '007ymd.com' in url:
-            article_items = parse_007ymd_items(soup, url)
-            text = '\n'.join(item['text'] for item in article_items)
-        elif 'axutongxue.net' in url:
-            article_items = parse_axutongxue_items(soup, url)
-            text = '\n'.join(item['text'] for item in article_items)
-        elif 'manmanbuy.com' in url:
-            article_items = parse_manmanbuy_items(soup, url)
-            text = '\n'.join(item['text'] for item in article_items)
+        elif parser_pair is not None:
+            # 注册表命中：调用 items_parser 和可选的 text_parser
+            items_parser, text_parser = parser_pair
+            article_items = items_parser(soup, url)
+            if text_parser is not None:
+                text = text_parser(soup)
+            else:
+                text = '\n'.join(item['text'] for item in article_items)
         else:
             # 通用解析：移除干扰元素后取body文本，同时用通用条目提取器
             article_items = extract_article_items(soup, url)
@@ -1164,6 +1452,11 @@ def fetch_page_content(url):
         # 生成摘要（前300个字符）
         summary = text[:300] + '...' if len(text) > 300 else text
 
+        logger.info("爬取成功", extra={
+            'site': url, 'event': 'crawl_success',
+            'response_time': round(elapsed, 3),
+        })
+
         # 返回包含标题、摘要和文章条目的字典
         return True, {
             'text': text,
@@ -1172,32 +1465,44 @@ def fetch_page_content(url):
             'items': article_items,
             'response_time': round(elapsed, 3)
         }
-        
+
     except requests.Timeout:
+        circuit_breaker.record_failure(domain)
+        metrics.record_failure(domain)
+        logger.info("请求超时", extra={'site': url, 'event': 'timeout'})
         return False, "请求超时"
     except requests.ConnectionError:
+        circuit_breaker.record_failure(domain)
+        metrics.record_failure(domain)
+        logger.info("连接失败", extra={'site': url, 'event': 'connection_error'})
         return False, "连接失败"
     except requests.RequestException as e:
+        circuit_breaker.record_failure(domain)
+        metrics.record_failure(domain)
+        logger.info("请求异常", extra={'site': url, 'event': 'request_exception'})
         return False, f"请求异常: {str(e)[:50]}"
     except Exception as e:
+        circuit_breaker.record_failure(domain)
+        metrics.record_failure(domain)
+        logger.info("未知错误", extra={'site': url, 'event': 'unknown_error'})
         return False, f"未知错误: {str(e)[:50]}"
 
 
-def calculate_md5(text):
+def calculate_md5(text: str) -> str:
     """计算文本的MD5哈希值"""
     return hashlib.md5(text.encode('utf-8')).hexdigest()
 
 
-def check_site_update(url, old_records):
+def check_site_update(url: str, old_records: Dict[str, str]) -> Tuple[Optional[bool], Optional[str], str, Optional[Dict[str, Any]]]:
     """
     检查单个站点是否有更新
     返回：(是否更新, 新哈希值, 错误信息, 页面信息)
     """
     success, result = fetch_page_content(url)
-    
+
     if not success:
         return None, None, result, None  # 爬取失败
-    
+
     # result现在是一个字典
     text = result['text']
     page_info = {
@@ -1206,10 +1511,10 @@ def check_site_update(url, old_records):
         'summary': result['summary'],
         'items': result['items']
     }
-    
+
     new_hash = calculate_md5(text)
     old_hash = old_records.get(url)
-    
+
     if old_hash is None:
         # 首次监控，记录哈希但不视为更新
         return False, new_hash, "首次监控", page_info
@@ -1221,11 +1526,11 @@ def check_site_update(url, old_records):
         return False, new_hash, "无更新", page_info
 
 
-def git_commit_if_changed():
+def git_commit_if_changed() -> bool:
     """
     检查是否有变更，仅在有变更时执行commit & push
     变更条件：哈希文件修改
-    
+
     注意：此函数在GitHub Actions环境中会跳过git操作，
     """
     # 检查是否在GitHub Actions环境中
@@ -1233,7 +1538,7 @@ def git_commit_if_changed():
         print("[Git] 在GitHub Actions环境中，跳过脚本内git操作")
         print("[Git] 变更将由workflow的提交步骤处理")
         return False
-    
+
     try:
         # 检查工作区状态
         result = subprocess.run(
@@ -1242,22 +1547,22 @@ def git_commit_if_changed():
             text=True,
             timeout=10
         )
-        
+
         changes = result.stdout.strip()
         if not changes:
             print("[Git] 无变更，跳过提交")
             return False
-        
+
         # 有变更，执行提交
         now = get_beijing_time().strftime('%Y-%m-%d %H:%M:%S')
         commit_msg = f"站点更新检测 - {now}"
-        
+
         # Git add所有变更
         subprocess.run(['git', 'add', '-A'], check=True, timeout=30)
-        
+
         # Git commit
         subprocess.run(['git', 'commit', '-m', commit_msg], check=True, timeout=30)
-        
+
         # Git pull --rebase 再 push（避免远程有更新的推送冲突）
         try:
             subprocess.run(['git', 'pull', '--rebase'], check=True, timeout=60)
@@ -1280,9 +1585,9 @@ def git_commit_if_changed():
 # 运行日志管理
 # ============================================================
 
-def load_run_log():
+def load_run_log() -> List[Dict[str, Any]]:
     """加载历史运行日志"""
-    log = []
+    log: List[Dict[str, Any]] = []
     if os.path.exists(RUN_LOG_FILE):
         try:
             with open(RUN_LOG_FILE, 'r', encoding='utf-8') as f:
@@ -1295,7 +1600,7 @@ def load_run_log():
     return log
 
 
-def append_run_log(entry):
+def append_run_log(entry: Dict[str, Any]) -> None:
     """追加一条运行日志"""
     try:
         with open(RUN_LOG_FILE, 'a', encoding='utf-8') as f:
@@ -1304,7 +1609,7 @@ def append_run_log(entry):
         print(f"[警告] 运行日志写入失败: {e}")
 
 
-def analyze_and_fix(run_result):
+def analyze_and_fix(run_result: Dict[str, Any]) -> List[Dict[str, str]]:
     """
     运行后自分析 + 自动修复
     run_result: {'success': N, 'error': N, 'updated': N, 'total': N, 'errors': [...], 'updated_sites': [...]}
@@ -1313,7 +1618,7 @@ def analyze_and_fix(run_result):
     print("[自检] 运行后分析")
     print("-" * 60)
 
-    issues_found = []
+    issues_found: List[Dict[str, str]] = []
 
     # 1. 检查失败站点
     if run_result['errors']:
@@ -1321,7 +1626,7 @@ def analyze_and_fix(run_result):
             url = err['url']
             msg = err['message']
 
-            # 403 封锁 → 建议增加延迟
+            # 403 封锁 -> 建议增加延迟
             if '403' in msg:
                 issues_found.append({
                     'level': 'warn',
@@ -1330,7 +1635,7 @@ def analyze_and_fix(run_result):
                     'action': '已记录，建议该站点增加请求延迟或更换 User-Agent'
                 })
 
-            # 404 页面不存在 → 建议移除
+            # 404 页面不存在 -> 建议移除
             elif '404' in msg:
                 issues_found.append({
                     'level': 'error',
@@ -1339,7 +1644,7 @@ def analyze_and_fix(run_result):
                     'action': '建议从 MONITOR_SITES 中移除该站点'
                 })
 
-            # 页面正文为空 → JS 渲染问题
+            # 页面正文为空 -> JS 渲染问题
             elif '页面正文为空' in msg:
                 issues_found.append({
                     'level': 'warn',
@@ -1390,7 +1695,7 @@ def analyze_and_fix(run_result):
     # 4. 检查历史趋势：连续失败的站点
     run_log = load_run_log()
     if len(run_log) >= 3:
-        recent_errors = set()
+        recent_errors: Set[str] = set()
         for log_entry in run_log[-3:]:
             for err in log_entry.get('errors', []):
                 recent_errors.add(err['url'])
@@ -1419,7 +1724,7 @@ def analyze_and_fix(run_result):
 # 暂停站点管理（自动移除/恢复连续失败站点）
 # ============================================================
 
-def load_paused_sites():
+def load_paused_sites() -> Dict[str, Any]:
     """加载被暂停的站点 {url: {'paused_at': '...', 'reason': '...', 'fail_count': N}}"""
     if os.path.exists(PAUSED_SITES_FILE):
         try:
@@ -1430,7 +1735,7 @@ def load_paused_sites():
     return {}
 
 
-def save_paused_sites(paused):
+def save_paused_sites(paused: Dict[str, Any]) -> None:
     """保存暂停站点"""
     try:
         with open(PAUSED_SITES_FILE, 'w', encoding='utf-8') as f:
@@ -1439,528 +1744,7 @@ def save_paused_sites(paused):
         print(f"[警告] 暂停站点保存失败: {e}")
 
 
-def generate聚合_page(item_list):
-    """
-    生成好看的聚合线报页面 index.html
-    """
-    from datetime import datetime
-    from urllib.parse import urlparse
-    from collections import Counter
-
-    # 只保留有正文的条目，过滤垃圾
-    clean_items = []
-    junk_patterns = ["安卓软件", "办公软件", "安全软件", "查看详情", "直达链接", "阅读全文",
-                     "继续阅读", "更多", "首页", "登录", "注册", "搜索", "javascript:"]
-    for item in item_list:
-        text = item.get('text', '')
-        if len(text) < 5:
-            continue
-        if text.isdigit():
-            continue
-        skip = False
-        for jp in junk_patterns:
-            if text == jp or text.replace(" ", "") == jp:
-                skip = True
-                break
-        if skip:
-            continue
-        clean_items.append(item)
-
-    # 按时间倒序
-    clean_items.sort(key=lambda x: x.get('time', ''), reverse=True)
-    total = len(clean_items)
-
-    # 按来源分组统计
-    source_counts = Counter(item.get('source', '未知') for item in clean_items)
-    top_sources = source_counts.most_common(5)
-
-    # 生成每条线报的 HTML 卡片
-    cards_html = ""
-    for item in clean_items[:200]:
-        text = item.get('text', '')
-        url = item.get('url', '#')
-        source = item.get('source', '未知')
-        t = item.get('time', '')[:16]
-        try:
-            domain = urlparse(url).netloc.replace('www.', '')
-        except:
-            domain = source[:20]
-        cards_html += f'''
-        <a href="{url}" target="_blank" class="card" rel="noopener">
-            <div class="card-title">{text}</div>
-            <div class="card-meta">
-                <span class="card-source">{domain}</span>
-                <span class="card-time">{t}</span>
-            </div>
-        </a>
-'''
-
-    now_str = datetime.now().strftime('%Y-%m-%d %H:%M')
-
-    html = f'''<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>线报聚合 - 实时更新的羊毛线报合集</title>
-<meta name="description" content="聚合全网优质羊毛线报，实时更新，告别垃圾站">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-  :root {{
-    --bg: #f5f0eb;
-    --surface: #ffffff;
-    --primary: #e85d04;
-    --primary-light: #fff0e6;
-    --text: #1a1a1a;
-    --text-muted: #888;
-    --border: #e8e0d8;
-    --shadow: 0 2px 8px rgba(0,0,0,0.06);
-    --radius: 14px;
-  }}
-  body {{
-    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    line-height: 1.6;
-  }}
-  header {{
-    background: var(--primary);
-    color: #fff;
-    padding: 0 24px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 12px rgba(232,93,4,0.3);
-  }}
-  header .logo {{
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }}
-  header .logo span {{
-    background: rgba(255,255,255,0.2);
-    padding: 2px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-left: 8px;
-  }}
-  header .stats {{
-    font-size: 13px;
-    opacity: 0.9;
-  }}
-  .container {{
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 16px 60px;
-  }}
-  .hero {{
-    background: var(--primary);
-    color: #fff;
-    border-radius: var(--radius);
-    padding: 28px 32px;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }}
-  .hero .fire {{ font-size: 48px; }}
-  .hero h1 {{ font-size: 22px; font-weight: 700; margin-bottom: 6px; }}
-  .hero p {{ font-size: 14px; opacity: 0.85; }}
-  .sources {{
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-  }}
-  .source-tag {{
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 12px;
-    color: var(--text-muted);
-  }}
-  .cards {{
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }}
-  .card {{
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 20px;
-    text-decoration: none;
-    color: var(--text);
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    transition: all 0.15s ease;
-    box-shadow: var(--shadow);
-  }}
-  .card:hover {{
-    border-color: var(--primary);
-    background: var(--primary-light);
-    transform: translateX(3px);
-    box-shadow: 0 4px 16px rgba(232,93,4,0.15);
-  }}
-  .card::before {{
-    content: '◆';
-    color: var(--primary);
-    font-size: 8px;
-    margin-top: 7px;
-    flex-shrink: 0;
-  }}
-  .card-title {{
-    flex: 1;
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 1.5;
-    color: var(--text);
-  }}
-  .card-meta {{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-    flex-shrink: 0;
-  }}
-  .card-source {{
-    font-size: 11px;
-    color: var(--primary);
-    font-weight: 600;
-    background: var(--primary-light);
-    padding: 2px 8px;
-    border-radius: 10px;
-    white-space: nowrap;
-  }}
-  .card-time {{
-    font-size: 11px;
-    color: var(--text-muted);
-    white-space: nowrap;
-  }}
-  footer {{
-    text-align: center;
-    padding: 24px 16px;
-    color: var(--text-muted);
-    font-size: 12px;
-    border-top: 1px solid var(--border);
-    margin-top: 40px;
-  }}
-  footer a {{ color: var(--primary); text-decoration: none; }}
-  @media (max-width: 600px) {{
-    .hero {{ padding: 20px; flex-direction: column; text-align: center; }}
-    .card {{ padding: 14px 16px; }}
-    .card-meta {{ display: none; }}
-    header .stats {{ display: none; }}
-  }}
-</style>
-</head>
-<body>
-<header>
-  <div class="logo">🔥 线报聚合 <span>自动更新</span></div>
-  <div class="stats">{total} 条羊毛线报</div>
-</header>
-<div class="container">
-  <div class="hero">
-    <div class="fire">🔥</div>
-    <div>
-      <h1>全网羊毛线报实时聚合</h1>
-      <p>自动抓取多个线报站点，去重过滤，只保留真实有价值的线报信息</p>
-      <p style="margin-top:6px;font-size:12px;opacity:0.7;">最后更新：{now_str} · 共收录 {total} 条</p>
-    </div>
-  </div>
-  <div class="sources">
-    <span style="font-size:12px;color:var(--text-muted);margin-right:4px;">来源：</span>
-    <span class="source-tag">{top_sources[0][0]} ({top_sources[0][1]})</span>
-    <span class="source-tag">{top_sources[1][0]} ({top_sources[1][1]})</span>
-    <span class="source-tag">{top_sources[2][0]} ({top_sources[2][1]})</span>
-  </div>
-  <div class="cards">
-{cards_html}
-  </div>
-</div>
-<footer>
-  <p>自动更新 · 永不停止 · <a href="https://github.com/gitfox-enter/site-update-monitor">GitHub</a></p>
-</footer>
-</body>
-</html>'''
-
-    with open('index.html', 'w', encoding='utf-8') as f:
-        f.write(html)
-    print(f"[页面] 聚合页面已生成: index.html ({total} 条)")
-
-    """
-    生成好看的聚合线报页面 index.html
-    """
-    from datetime import datetime
-    from urllib.parse import urlparse
-    from collections import Counter
-
-    # 只保留有正文的条目，过滤垃圾
-    clean_items = []
-    junk_patterns = ["安卓软件", "办公软件", "安全软件", "查看详情", "直达链接", "阅读全文",
-                     "继续阅读", "更多", "首页", "登录", "注册", "搜索", "javascript:"]
-    for item in item_list:
-        text = item.get('text', '')
-        if len(text) < 5:
-            continue
-        if text.isdigit():
-            continue
-        skip = False
-        for jp in junk_patterns:
-            if text == jp or text.replace(" ", "") == jp:
-                skip = True
-                break
-        if skip:
-            continue
-        clean_items.append(item)
-
-    # 按时间倒序
-    clean_items.sort(key=lambda x: x.get('time', ''), reverse=True)
-    total = len(clean_items)
-
-    # 按来源分组统计
-    source_counts = Counter(item.get('source', '未知') for item in clean_items)
-    top_sources = source_counts.most_common(5)
-
-    # 生成每条线报的 HTML 卡片
-    cards_html = ""
-    for item in clean_items[:200]:
-        text = item.get('text', '')
-        url = item.get('url', '#')
-        source = item.get('source', '未知')
-        t = item.get('time', '')[:16]
-        try:
-            domain = urlparse(url).netloc.replace('www.', '')
-        except:
-            domain = source[:20]
-        cards_html += (
-            '\n        <a href="' + url + '" target="_blank" class="card" rel="noopener">\n'
-            '            <div class="card-title">' + text + '</div>\n'
-            '            <div class="card-meta">\n'
-            '                <span class="card-source">' + domain + '</span>\n'
-            '                <span class="card-time">' + t + '</span>\n'
-            '            </div>\n'
-            '        </a>\n'
-        )
-
-    now_str = datetime.now().strftime('%Y-%m-%d %H:%M')
-
-    html = (
-        '<!DOCTYPE html>\n'
-        '<html lang="zh-CN">\n'
-        '<head>\n'
-        '<meta charset="UTF-8">\n'
-        '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-        '<title>线报聚合 - 实时更新的羊毛线报合集</title>\n'
-        '<meta name="description" content="聚合全网优质羊毛线报，实时更新，告别垃圾站">\n'
-        '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
-        '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">\n'
-        '<style>\n'
-        '  * { margin: 0; padding: 0; box-sizing: border-box; }\n'
-        '  :root {\n'
-        '    --bg: #f5f0eb;\n'
-        '    --surface: #ffffff;\n'
-        '    --primary: #e85d04;\n'
-        '    --primary-light: #fff0e6;\n'
-        '    --text: #1a1a1a;\n'
-        '    --text-muted: #888;\n'
-        '    --border: #e8e0d8;\n'
-        '    --shadow: 0 2px 8px rgba(0,0,0,0.06);\n'
-        '    --radius: 14px;\n'
-        '  }\n'
-        '  body {\n'
-        '    font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;\n'
-        '    background: var(--bg);\n'
-        '    color: var(--text);\n'
-        '    min-height: 100vh;\n'
-        '    line-height: 1.6;\n'
-        '  }\n'
-        '  header {\n'
-        '    background: var(--primary);\n'
-        '    color: #fff;\n'
-        '    padding: 0 24px;\n'
-        '    height: 60px;\n'
-        '    display: flex;\n'
-        '    align-items: center;\n'
-        '    justify-content: space-between;\n'
-        '    position: sticky;\n'
-        '    top: 0;\n'
-        '    z-index: 100;\n'
-        '    box-shadow: 0 2px 12px rgba(232,93,4,0.3);\n'
-        '  }\n'
-        '  header .logo {\n'
-        '    font-size: 20px;\n'
-        '    font-weight: 700;\n'
-        '    letter-spacing: -0.5px;\n'
-        '  }\n'
-        '  header .logo span {\n'
-        '    background: rgba(255,255,255,0.2);\n'
-        '    padding: 2px 10px;\n'
-        '    border-radius: 6px;\n'
-        '    font-size: 12px;\n'
-        '    font-weight: 600;\n'
-        '    margin-left: 8px;\n'
-        '  }\n'
-        '  header .stats {\n'
-        '    font-size: 13px;\n'
-        '    opacity: 0.9;\n'
-        '  }\n'
-        '  .container {\n'
-        '    max-width: 900px;\n'
-        '    margin: 0 auto;\n'
-        '    padding: 24px 16px 60px;\n'
-        '  }\n'
-        '  .hero {\n'
-        '    background: var(--primary);\n'
-        '    color: #fff;\n'
-        '    border-radius: var(--radius);\n'
-        '    padding: 28px 32px;\n'
-        '    margin-bottom: 20px;\n'
-        '    box-shadow: var(--shadow);\n'
-        '    display: flex;\n'
-        '    align-items: center;\n'
-        '    gap: 20px;\n'
-        '  }\n'
-        '  .hero .fire { font-size: 48px; }\n'
-        '  .hero h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }\n'
-        '  .hero p { font-size: 14px; opacity: 0.85; }\n'
-        '  .sources {\n'
-        '    display: flex;\n'
-        '    gap: 8px;\n'
-        '    flex-wrap: wrap;\n'
-        '    margin-bottom: 24px;\n'
-        '  }\n'
-        '  .source-tag {\n'
-        '    background: var(--surface);\n'
-        '    border: 1px solid var(--border);\n'
-        '    border-radius: 20px;\n'
-        '    padding: 4px 12px;\n'
-        '    font-size: 12px;\n'
-        '    color: var(--text-muted);\n'
-        '  }\n'
-        '  .cards {\n'
-        '    display: flex;\n'
-        '    flex-direction: column;\n'
-        '    gap: 8px;\n'
-        '  }\n'
-        '  .card {\n'
-        '    background: var(--surface);\n'
-        '    border: 1px solid var(--border);\n'
-        '    border-radius: 12px;\n'
-        '    padding: 16px 20px;\n'
-        '    text-decoration: none;\n'
-        '    color: var(--text);\n'
-        '    display: flex;\n'
-        '    align-items: flex-start;\n'
-        '    gap: 12px;\n'
-        '    transition: all 0.15s ease;\n'
-        '    box-shadow: var(--shadow);\n'
-        '  }\n'
-        '  .card:hover {\n'
-        '    border-color: var(--primary);\n'
-        '    background: var(--primary-light);\n'
-        '    transform: translateX(3px);\n'
-        '    box-shadow: 0 4px 16px rgba(232,93,4,0.15);\n'
-        '  }\n'
-        '  .card::before {\n'
-        '    content: "◆";\n'
-        '    color: var(--primary);\n'
-        '    font-size: 8px;\n'
-        '    margin-top: 7px;\n'
-        '    flex-shrink: 0;\n'
-        '  }\n'
-        '  .card-title {\n'
-        '    flex: 1;\n'
-        '    font-size: 15px;\n'
-        '    font-weight: 500;\n'
-        '    line-height: 1.5;\n'
-        '    color: var(--text);\n'
-        '  }\n'
-        '  .card-meta {\n'
-        '    display: flex;\n'
-        '    flex-direction: column;\n'
-        '    align-items: flex-end;\n'
-        '    gap: 4px;\n'
-        '    flex-shrink: 0;\n'
-        '  }\n'
-        '  .card-source {\n'
-        '    font-size: 11px;\n'
-        '    color: var(--primary);\n'
-        '    font-weight: 600;\n'
-        '    background: var(--primary-light);\n'
-        '    padding: 2px 8px;\n'
-        '    border-radius: 10px;\n'
-        '    white-space: nowrap;\n'
-        '  }\n'
-        '  .card-time {\n'
-        '    font-size: 11px;\n'
-        '    color: var(--text-muted);\n'
-        '    white-space: nowrap;\n'
-        '  }\n'
-        '  footer {\n'
-        '    text-align: center;\n'
-        '    padding: 24px 16px;\n'
-        '    color: var(--text-muted);\n'
-        '    font-size: 12px;\n'
-        '    border-top: 1px solid var(--border);\n'
-        '    margin-top: 40px;\n'
-        '  }\n'
-        '  footer a { color: var(--primary); text-decoration: none; }\n'
-        '  @media (max-width: 600px) {\n'
-        '    .hero { padding: 20px; flex-direction: column; text-align: center; }\n'
-        '    .card { padding: 14px 16px; }\n'
-        '    .card-meta { display: none; }\n'
-        '    header .stats { display: none; }\n'
-        '  }\n'
-        '</style>\n'
-        '</head>\n'
-        '<body>\n'
-        '<header>\n'
-        '  <div class="logo">🔥 线报聚合 <span>自动更新</span></div>\n'
-        '  <div class="stats">' + str(total) + ' 条羊毛线报</div>\n'
-        '</header>\n'
-        '<div class="container">\n'
-        '  <div class="hero">\n'
-        '    <div class="fire">🔥</div>\n'
-        '    <div>\n'
-        '      <h1>全网羊毛线报实时聚合</h1>\n'
-        '      <p>自动抓取多个线报站点，去重过滤，只保留真实有价值的线报信息</p>\n'
-        '      <p style="margin-top:6px;font-size:12px;opacity:0.7;">最后更新：' + now_str + ' · 共收录 ' + str(total) + ' 条</p>\n'
-        '    </div>\n'
-        '  </div>\n'
-        '  <div class="sources">\n'
-        '    <span style="font-size:12px;color:var(--text-muted);margin-right:4px;">来源：</span>\n'
-        '    <span class="source-tag">' + top_sources[0][0] + ' (' + str(top_sources[0][1]) + ')</span>\n'
-        '    <span class="source-tag">' + top_sources[1][0] + ' (' + str(top_sources[1][1]) + ')</span>\n'
-        '    <span class="source-tag">' + top_sources[2][0] + ' (' + str(top_sources[2][1]) + ')</span>\n'
-        '  </div>\n'
-        '  <div class="cards">\n'
-        + cards_html +
-        '  </div>\n'
-        '</div>\n'
-        '<footer>\n'
-        '  <p>自动更新 · 永不停止 · <a href="https://github.com/gitfox-enter/site-update-monitor">GitHub</a></p>\n'
-        '</footer>\n'
-        '</body>\n'
-        '</html>\n'
-    )
-
-    with open('index.html', 'w', encoding='utf-8') as f:
-        f.write(html)
-    print(f"[页面] 聚合页面已生成: index.html (" + str(total) + " 条)")
-
-def main():
+def main() -> None:
     """主监控流程"""
     print("=" * 60)
     print("GitHub Actions 多站点更新监控系统 v2.0")
@@ -1975,7 +1759,7 @@ def main():
     print(f"[启动] 当日第 {round_num} 轮巡检")
 
     # 加载黑名单（用户讨厌/付费墙/反爬/无法访问/纯工具页）
-    blacklist_domains = []
+    blacklist_domains: List[str] = []
     try:
         with open(BLACKLIST_FILE, 'r', encoding='utf-8') as f:
             blacklist_data = json.load(f)
@@ -1983,7 +1767,7 @@ def main():
     except (FileNotFoundError, json.JSONDecodeError, KeyError):
         blacklist_domains = []
 
-    def is_blacklisted(url):
+    def is_blacklisted(url: str) -> bool:
         parsed = urlparse(url)
         host = parsed.hostname or parsed.netloc
         host = host.lower().lstrip('www.').lstrip('m.')
@@ -2019,17 +1803,17 @@ def main():
     print(f"[信息] 已加载历史条目: {len(notified.get('items', []))} 条")
 
     # 检查所有活跃站点更新
-    all_site_results = []  # 存储所有站点状态（含标题、摘要）
+    all_site_results: List[Dict[str, Any]] = []  # 存储所有站点状态（含标题、摘要）
     new_records = old_records.copy()
     success_count = 0
     error_count = 0
     updated_count = 0
-    response_times = []
+    response_times: List[float] = []
 
     # 并发抓取（max_workers=6，每个站点自带随机延迟防止封禁）
     results_lock = threading.Lock()
 
-    def check_one(url, idx):
+    def check_one(url: str, idx: int) -> Dict[str, Any]:
         is_updated, new_hash, message, page_info = check_site_update(url, old_records)
         time.sleep(get_random_delay())
         if is_updated is None:
@@ -2057,7 +1841,7 @@ def main():
                     error_count += 1
                 else:
                     if result['is_updated']:
-                        print(f"\n[{idx}/{len(active_sites)}] [更新] ✅ {result['message']}")
+                        print(f"\n[{idx}/{len(active_sites)}] [更新] [OK] {result['message']}")
                         updated_count += 1
                     else:
                         print(f"\n[{idx}/{len(active_sites)}] [正常] {result['message']}")
@@ -2088,13 +1872,25 @@ def main():
     print(f"[统计] 成功: {success_count} | 失败: {error_count} | 暂停: {len(paused_urls)}")
     print(f"[统计] 更新站点: {updated_count} 个")
 
+    # 输出运行指标摘要
+    metrics_summary = metrics.get_summary()
+    print(f"[指标] 总请求: {metrics_summary['total_requests']} | "
+          f"成功: {metrics_summary['success_count']} | "
+          f"失败: {metrics_summary['fail_count']}")
+
+    # 输出熔断器状态
+    cb_status = circuit_breaker.get_status()
+    open_circuits = {d: c for d, c in cb_status.items() if c >= MAX_CONSECUTIVE_FAILURES}
+    if open_circuits:
+        print(f"[熔断] 已熔断域名: {', '.join(open_circuits.keys())}")
+
     print("\n" + "-" * 60)
 
     # 总是更新哈希文件
     save_hash_records(new_records)
 
     # 构建完整条目字典（URL + 正文 + 来源 + 时间）
-    new_item_list = []
+    new_item_list: List[Dict[str, str]] = []
     for r in all_site_results:
         if r['status'] == 'updated':
             for item in r.get('items', []):
@@ -2143,7 +1939,8 @@ def main():
         'paused': len(paused_urls),
         'new_items': len(new_urls),
         'errors': errors_detail,
-        'updated_sites': updated_sites
+        'updated_sites': updated_sites,
+        'metrics': metrics_summary,
     }
     append_run_log(run_entry)
 
