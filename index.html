@@ -269,6 +269,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   color:var(--text-muted);
   font-size:14px;
 }
+.list-empty .empty-icon{font-size:40px;margin-bottom:12px;display:block;opacity:.5}
+.list-empty .empty-hint{font-size:13px;margin-top:8px;color:var(--text-muted);opacity:.7}
+.list-empty .empty-action{display:inline-block;margin-top:12px;padding:6px 18px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;color:var(--text-sec);cursor:pointer;transition:all .15s}
+.list-empty .empty-action:hover{border-color:var(--primary);color:var(--primary)}
+#last-update{font-size:11px;color:var(--text-muted);margin-left:8px;opacity:.7}
+.kbd-hint{position:fixed;bottom:24px;left:24px;font-size:11px;color:var(--text-muted);opacity:0;transition:opacity .3s;pointer-events:none;z-index:50}
+.kbd-hint.show{opacity:.6}
+.kbd-hint kbd{display:inline-block;padding:1px 6px;background:var(--bg);border:1px solid var(--border);border-radius:3px;font-family:inherit;font-size:10px;margin:0 2px}
 .item{
   border-bottom:1px solid var(--border-light);
   transition:background .1s;
@@ -617,6 +625,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
           <div class="skeleton-item"><div class="skeleton-badge"></div><div class="skeleton-body"><div class="skeleton-line w60"></div><div class="skeleton-line w40"></div></div></div>
           <div class="skeleton-item"><div class="skeleton-badge"></div><div class="skeleton-body"><div class="skeleton-line w80"></div><div class="skeleton-line w40"></div></div></div>
         </span>
+        <span id="last-update"></span>
       </div>
       <div class="list-wrap" id="item-list" role="list" aria-label="线报条目列表"></div>
       <nav id="pagination" role="navigation" aria-label="分页导航"></nav>
@@ -648,6 +657,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="返回顶部">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
 </button>
+
+<!-- Keyboard hints (desktop only) -->
+<div class="kbd-hint" id="kbd-hint" aria-hidden="true">
+  按 <kbd>/</kbd> 搜索 · <kbd>Esc</kbd> 关闭
+</div>
 
 <script>
 /* Frame-busting for clickjacking protection */
@@ -796,6 +810,20 @@ function loadData() {
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var rawItems = data.items || [];
+      /* Capture last update time */
+      var lastUpdate = data.updated_at || data.last_updated || '';
+      if (!lastUpdate && rawItems.length > 0) {
+        /* Fallback: use the most recent item time */
+        var latest = '';
+        for (var i = 0; i < Math.min(rawItems.length, 50); i++) {
+          if (rawItems[i].time && rawItems[i].time > latest) latest = rawItems[i].time;
+        }
+        lastUpdate = latest;
+      }
+      if (lastUpdate) {
+        var el = document.getElementById('last-update');
+        if (el) el.textContent = '更新于 ' + lastUpdate.replace(' ', ' ').slice(5, 16);
+      }
       /* Normalize sources & detect platform */
       allItems = rawItems.map(function(it) {
         return {
@@ -922,7 +950,18 @@ function renderList() {
   var container = document.getElementById('item-list');
 
   if (total === 0) {
-    container.innerHTML = '<div class="list-empty">暂无相关线报</div>';
+    var hint = searchQuery
+      ? '换个关键词试试，或清空搜索查看全部线报'
+      : (activeSource !== 'all' ? '该来源暂无线报，试试其他来源' : '暂无线报数据');
+    container.innerHTML =
+      '<div class="list-empty">' +
+        '<span class="empty-icon">📭</span>' +
+        '<div>暂无相关线报</div>' +
+        '<div class="empty-hint">' + esc(hint) + '</div>' +
+        (searchQuery || activeSource !== 'all'
+          ? '<button class="empty-action" onclick="resetFilters()">查看全部线报</button>'
+          : '') +
+      '</div>';
     document.getElementById('pagination').innerHTML = '';
     return;
   }
@@ -1098,6 +1137,18 @@ function handleSearch(e) {
   updateStatus();
 }
 
+function resetFilters() {
+  searchQuery = '';
+  activeSource = 'all';
+  currentPage = 1;
+  document.getElementById('search-input').value = '';
+  buildSidebar();
+  buildMobileDropdown();
+  renderAll();
+  updateStatus();
+  document.getElementById('cat-toggle-text').textContent = '全部线报';
+}
+
 /* ================================================================
    STATUS
    ================================================================ */
@@ -1154,6 +1205,54 @@ function esc(s) {
 function escAttr(s) {
   if (!s) return '';
   return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* ================================================================
+   KEYBOARD SHORTCUTS
+   ================================================================ */
+document.addEventListener('keydown', function(e) {
+  var tag = (e.target.tagName || '').toLowerCase();
+  var isInput = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
+
+  /* Esc: close dropdown, blur search, clear search */
+  if (e.key === 'Escape') {
+    if (catDropdownOpen) closeCatDropdown();
+    if (isInput) { e.target.blur(); }
+    if (searchQuery) {
+      document.getElementById('search-input').value = '';
+      searchQuery = '';
+      currentPage = 1;
+      renderAll();
+      updateStatus();
+    }
+    return;
+  }
+
+  /* / : focus search (when not already in an input) */
+  if (e.key === '/' && !isInput && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    e.preventDefault();
+    document.getElementById('search-input').focus();
+    return;
+  }
+});
+
+/* Show keyboard hints on desktop after load */
+if (window.innerWidth > 960) {
+  setTimeout(function() {
+    var hint = document.getElementById('kbd-hint');
+    hint.classList.add('show');
+    setTimeout(function() { hint.classList.remove('show'); }, 5000);
+  }, 2000);
+}
+
+/* ================================================================
+   REDUCED MOTION
+   ================================================================ */
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.documentElement.style.scrollBehavior = 'auto';
+  var style = document.createElement('style');
+  style.textContent = '*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}';
+  document.head.appendChild(style);
 }
 
 /* ================================================================
