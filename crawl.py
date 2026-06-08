@@ -1973,8 +1973,15 @@ def git_commit_if_changed() -> bool:
         now = get_beijing_time().strftime('%Y-%m-%d %H:%M:%S')
         commit_msg = f"站点更新检测 - {now}"
 
-        # Git add所有变更
-        subprocess.run(['git', 'add', '-A'], check=True, timeout=30)
+        # Git add 特定文件（避免 git add -A 在 Windows 上索引 nul 等设备名文件）
+        TRACKED_FILES = [
+            'items.json', 'hash_record.txt', 'monitor.db',
+            'notified_items.json', 'run_log.jsonl', '.gitignore',
+        ]
+        for f in TRACKED_FILES:
+            fpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), f)
+            if os.path.exists(fpath):
+                subprocess.run(['git', 'add', f], check=True, timeout=30)
 
         # Git commit
         subprocess.run(['git', 'commit', '-m', commit_msg], check=True, timeout=30)
