@@ -118,6 +118,8 @@ MONITOR_SITES: List[str] = [
     "https://www.ddooo.com/",
     "https://www.onlinedown.net/",
     "https://feed.iplaysoft.com/",
+    # 微信-最新羊毛线报（公众号：gh_b93bc69a87e5）
+    "https://mp.weixin.qq.com/mp/homepage?__biz=Mzk0NzIyODMzNw==&hid=1&sn=6e6711aa75856635fb729160041def86&scene=18",
 ]
 
 # URL -> 短名称映射（统一来源显示名称，避免使用页面标题导致名称过长/重复）
@@ -169,6 +171,7 @@ SOURCE_NAME_MAP: Dict[str, str] = {
     "https://www.ddooo.com/": "多多软件",
     "https://www.onlinedown.net/": "华军软件",
     "https://feed.iplaysoft.com/": "异次元RSS",
+    "https://mp.weixin.qq.com/": "微信-最新羊毛线报",
 }
 
 
@@ -1369,6 +1372,48 @@ def extract_article_items(soup: BeautifulSoup, base_url: str = '') -> List[Dict[
     return items[:50]
 
 
+def parse_wechat_articles(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """
+    微信公众账号首页 - 提取 appmsg_list JSON 数据中的文章列表。
+    公众号数据以 JSON 格式嵌入在 <script> 标签内的 data 变量中。
+    """
+    import html as html_mod
+    
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
+    
+    # 从所有 script 标签中查找包含 appmsg_list 的数据
+    for script in soup.find_all('script'):
+        text = script.string or ''
+        if 'appmsg_list' not in text:
+            continue
+        # 提取 data={...} 中的 JSON 内容
+        m = re.search(r'appmsg_list"\s*:\s*(\[[^\]]+\])', text)
+        if not m:
+            continue
+        try:
+            raw = html_mod.unescape(m.group(1))
+            articles = json.loads(raw)
+        except (json.JSONDecodeError, Exception):
+            continue
+        
+        for article in articles:
+            title = (article.get('title') or '').strip()
+            link = html_mod.unescape(article.get('link') or '').strip()
+            if not title or not link or len(title) < 4:
+                continue
+            if title in seen:
+                continue
+            seen.add(title)
+            # 统一使用 HTTPS
+            if link.startswith('http://'):
+                link = 'https://' + link[7:]
+            items.append({'text': title, 'url': link})
+        break  # 只处理第一个匹配的 script 标签
+    
+    return items[:30]
+
+
 # ============================================================
 # 解析器注册表（Parser Registry）
 # 将域名模式映射到 (items_parser, text_parser) 元组，
@@ -1397,6 +1442,7 @@ PARSER_REGISTRY: Dict[str, Tuple[Any, Optional[Any]]] = {
     'foxirj.com':        (parse_foxirj_items,         None),
     'ddooo.com':         (parse_ddooo_items,          None),
     'onlinedown.net':    (parse_onlinedown_items,     None),
+    'mp.weixin.qq.com':  (parse_wechat_articles,       None),
 }
 
 
