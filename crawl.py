@@ -35,6 +35,14 @@ import aiohttp
 import requests
 from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
 
+# Playwright: optional dependency for JS-rendered sites
+try:
+    from playwright.async_api import async_playwright
+    PLAYWRIGHT_AVAILABLE = True
+except ImportError:
+    PLAYWRIGHT_AVAILABLE = False
+    async_playwright = None  # type: ignore
+
 from common import (
     JsonFormatter, get_beijing_time, auto_categorize, CATEGORY_KEYWORDS,
     load_items_db, save_items_db, load_blacklist, is_blacklisted,
@@ -208,6 +216,15 @@ REQUEST_DELAY_MAX = 1.5  # 请求间隔最大值（秒）
 # 重试配置（指数退避）
 MAX_RETRIES = 3  # 最大重试次数
 RETRY_BASE_DELAY = 1.0  # 重试基础延迟（秒），实际延迟 = base * 2^attempt
+
+# 需要 Playwright JS 渲染的站点（域名匹配）
+# 这些站点通过 aiohttp 获取的 HTML 内容不完整（依赖 JS 加载数据）
+JS_RENDER_SITES: Set[str] = {
+    'kxdao.net',          # Discuz 论坛，帖子列表需要 JS 渲染
+    '79tao.linejia.com',  # 淘宝客站点，商品列表 JS 加载
+    '907k.cn',            # 线报站，部分内容 JS 渲染
+    'xiaodigu.com',       # 线报站，内容 JS 加载
+}
 
 # robots.txt 合规配置
 RESPECT_ROBOTS_TXT: bool = False  # 是否遵守 robots.txt（线报站 robots.txt 通常过严，个人监控工具建议关闭）
@@ -3173,6 +3190,89 @@ def fetch_page_content(url: str) -> Tuple[bool, Any]:
 # (kept for backward compatibility and tests)
 
 
+# ============================================================
+# Playwright: JS 渲染抓取
+# ============================================================
+
+# 全局 Playwright 浏览器实例（延迟初始化，复用跨站点）
+_pw_browser = None
+_pw_playwright = None
+
+
+async def _ensure_playwright_browser():
+    """延迟初始化 Playwright Chromium 浏览器实例（全局复用）。"""
+    global _pw_browser, _pw_playwright
+    if _pw_browser is not None:
+        return _pw_browser
+    if not PLAYWRIGHT_AVAILABLE:
+        raise RuntimeError("playwright 未安装，请运行: pip install playwright && playwright install chromium")
+    _pw_playwright = await async_playwright().start()
+    _pw_browser = await _pw_playwright.chromium.launch(
+        headless=True,
+        args=['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
+    )
+    logger.info("Playwright Chromium 浏览器已启动", extra={'event': 'playwright_init'})
+    return _pw_browser
+
+
+async def close_playwright():
+    """关闭 Playwright 浏览器（在 main 函数结束时调用）。"""
+    global _pw_browser, _pw_playwright
+    if _pw_browser:
+        await _pw_browser.close()
+        _pw_browser = None
+    if _pw_playwright:
+        await _pw_playwright.stop()
+        _pw_playwright = None
+
+
+async def fetch_with_playwright(url: str, timeout_ms: int = 20000) -> Tuple[bool, str]:
+    """使用 Playwright 抓取 JS 渲染页面。
+
+    Returns:
+        (success: bool, html_content: str)
+    """
+    try:
+        browser = await _ensure_playwright_browser()
+        context = await browser.new_context(
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+            locale='zh-CN',
+            timezone_id='Asia/Shanghai',
+        )
+        page = await context.new_page()
+        try:
+            await page.goto(url, wait_until='domcontentloaded', timeout=timeout_ms)
+            # 等待内容加载（给动态内容一点时间）
+            await page.wait_for_timeout(3000)
+            html = await page.content()
+            logger.info("Playwright 抓取成功: %s (%d bytes)", url, len(html),
+                        extra={'site': url, 'event': 'playwright_success'})
+            return True, html
+        except Exception as e:
+            logger.info("Playwright 抓取失败: %s - %s", url, str(e)[:100],
+                        extra={'site': url, 'event': 'playwright_error'})
+            return False, str(e)
+        finally:
+            await page.close()
+            await context.close()
+    except Exception as e:
+        logger.info("Playwright 初始化失败: %s", str(e)[:100],
+                    extra={'site': url, 'event': 'playwright_init_error'})
+        return False, str(e)
+
+
+def _needs_playwright(url: str) -> bool:
+    """判断 URL 是否需要 Playwright JS 渲染。"""
+    if not PLAYWRIGHT_AVAILABLE:
+        return False
+    parsed = urlparse(url)
+    domain = parsed.hostname or ''
+    for js_domain in JS_RENDER_SITES:
+        if domain == js_domain or domain.endswith('.' + js_domain):
+            return True
+    return False
+
+
 async def fetch_page_content_async(
     url: str,
     session: aiohttp.ClientSession,
@@ -3201,6 +3301,56 @@ async def fetch_page_content_async(
     # Per-domain rate limiting
     rate_limiter.wait(domain)
 
+    # === Playwright 路径：JS 渲染站点 ===
+    if _needs_playwright(url):
+        logger.info("Playwright 模式抓取: %s", url, extra={'site': url, 'event': 'playwright_start'})
+        start_time = time.time()
+        pw_ok, pw_result = await fetch_with_playwright(url)
+        elapsed = time.time() - start_time
+        if not pw_ok:
+            circuit_breaker.record_failure(domain)
+            metrics.record_failure(domain)
+            return False, f"Playwright 抓取失败: {pw_result[:80]}"
+
+        # 解析 Playwright 返回的 HTML
+        content_bytes = pw_result.encode('utf-8')
+        soup = BeautifulSoup(pw_result, 'html.parser')
+        title_tag = soup.find('title')
+        title = title_tag.get_text(strip=True) if title_tag else url
+
+        parser_pair = _match_parser(url)
+        if parser_pair is not None:
+            items_parser, text_parser = parser_pair
+            article_items = items_parser(soup, url)
+            if text_parser is not None:
+                text = text_parser(soup)
+            else:
+                text = '\n'.join(item['text'] for item in article_items)
+        else:
+            article_items = extract_article_items(soup, url)
+            for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
+                tag.decompose()
+            body = soup.find('body')
+            text = body.get_text(separator=' ', strip=True) if body else soup.get_text(separator=' ', strip=True)
+            text = ' '.join(text.split())
+
+        if not text:
+            return False, "Playwright: 页面正文为空"
+
+        summary = text[:300] + '...' if len(text) > 300 else text
+        logger.info("Playwright 爬取成功", extra={
+            'site': url, 'event': 'playwright_crawl_success',
+            'response_time': round(elapsed, 3),
+        })
+        return True, {
+            'text': text,
+            'title': title,
+            'summary': summary,
+            'items': article_items,
+            'response_time': round(elapsed, 3),
+        }
+
+    # === 普通 aiohttp 路径 ===
     profile = get_random_profile()
     headers: Dict[str, str] = {
         'User-Agent': profile['user_agent'],
@@ -4006,6 +4156,9 @@ async def main_async() -> None:
         'errors': errors_detail,
         'updated_sites': updated_sites,
     })
+
+    # Close Playwright browser
+    await close_playwright()
 
     # Close SQLite connection
     db_conn.close()

@@ -3150,6 +3150,46 @@ class TestParseYmxianbaoItems(unittest.TestCase):
 
 
 # ===================================================================
+# Playwright JS 渲染相关测试
+# ===================================================================
+
+class TestNeedsPlaywright(unittest.TestCase):
+    """Tests for crawl._needs_playwright()."""
+
+    def test_js_render_site_detected(self):
+        self.assertTrue(crawl._needs_playwright("https://www.kxdao.net/forum-42-1.html"))
+
+    def test_js_render_site_subdomain(self):
+        self.assertTrue(crawl._needs_playwright("https://79tao.linejia.com/"))
+
+    def test_normal_site_not_detected(self):
+        self.assertFalse(crawl._needs_playwright("https://www.423down.com/"))
+
+    def test_normal_site_not_detected_2(self):
+        self.assertFalse(crawl._needs_playwright("https://www.baicaio.com/"))
+
+    def test_js_render_set_contents(self):
+        """Verify JS_RENDER_SITES has expected entries."""
+        self.assertIn('kxdao.net', crawl.JS_RENDER_SITES)
+        self.assertIn('79tao.linejia.com', crawl.JS_RENDER_SITES)
+        self.assertIn('907k.cn', crawl.JS_RENDER_SITES)
+        self.assertIn('xiaodigu.com', crawl.JS_RENDER_SITES)
+
+
+class TestPlaywrightAvailability(unittest.TestCase):
+    """Tests for Playwright optional import."""
+
+    def test_playwright_flag_is_bool(self):
+        self.assertIsInstance(crawl.PLAYWRIGHT_AVAILABLE, bool)
+
+    def test_fetch_with_playwright_is_callable(self):
+        self.assertTrue(callable(crawl.fetch_with_playwright))
+
+    def test_close_playwright_is_callable(self):
+        self.assertTrue(callable(crawl.close_playwright))
+
+
+# ===================================================================
 # MAIN
 # ===================================================================
 
