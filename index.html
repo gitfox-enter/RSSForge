@@ -67,7 +67,11 @@
     --border-light:#222244;
     --shadow-sm:0 1px 3px rgba(0,0,0,.3);
   }
-  #header,#sidebar,#content,#footer,#cat-dropdown,#cat-toggle-bar,#pagination,.page-btn,.item>a,#page-select{background:var(--bg)}
+  #header,#sidebar,#content,#footer,#cat-dropdown,#cat-toggle-bar,#pagination,.page-btn,.item>a,#page-select,#filter-toolbar{background:var(--bg)}
+  .filter-btn{background:var(--bg);border-color:var(--border)}
+  .filter-btn:hover{border-color:var(--primary);color:var(--primary)}
+  .filter-btn.active{background:var(--primary);border-color:var(--primary);color:#fff}
+  .toolbar-sep{background:var(--border)}
   .item>a:hover{background:#1e1e3a}
   #search-input{background:var(--bg);color:var(--text);border-color:var(--border)}
   .cat-item.active{background:#1a237e33}
@@ -246,6 +250,51 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   border-bottom:1px solid var(--border-light);
 }
 #status-bar .highlight{color:var(--primary);font-weight:500}
+
+/* ========== FILTER TOOLBAR ========== */
+#filter-toolbar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 16px;
+  background:#fff;
+  border-bottom:1px solid var(--border-light);
+  flex-wrap:wrap;
+}
+.filter-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:4px 12px;
+  font-size:12px;
+  color:var(--text-sec);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+  background:var(--bg);
+  user-select:none;
+}
+.filter-btn:hover{border-color:var(--primary);color:var(--primary)}
+.filter-btn.active{
+  color:#fff;
+  background:var(--primary);
+  border-color:var(--primary);
+}
+.toolbar-sep{
+  width:1px;
+  height:16px;
+  background:var(--border-light);
+  flex-shrink:0;
+}
+#item-count{
+  font-size:12px;
+  color:var(--text-muted);
+  margin-left:auto;
+  white-space:nowrap;
+}
+#item-count .ct-hl{color:var(--primary);font-weight:500}
 
 /* ========== ITEM LIST ========== */
 .list-wrap{background:#fff;flex:1}
@@ -487,6 +536,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   .item-title{font-size:13px}
   .src-badge{min-width:24px;width:24px;height:24px;font-size:12px}
   #footer{padding:16px 12px}
+  #filter-toolbar{padding:6px 10px}
   #back-top{bottom:16px;right:16px;width:36px;height:36px}
 }
 </style>
@@ -543,6 +593,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
         </span>
         <span id="last-update"></span>
       </div>
+      <div id="filter-toolbar" role="toolbar" aria-label="筛选与排序工具栏">
+        <button id="today-toggle" class="filter-btn" onclick="toggleTodayFilter()" aria-label="只看今天的线报" aria-pressed="false">只看今天</button>
+        <div class="toolbar-sep" aria-hidden="true"></div>
+        <button id="sort-btn" class="filter-btn" onclick="toggleSortOrder()" aria-label="切换时间排序方式">最新优先 ↓</button>
+        <span id="item-count" aria-live="polite"></span>
+      </div>
       <div class="list-wrap" id="item-list" role="list" aria-label="线报条目列表"></div>
       <nav id="pagination" role="navigation" aria-label="分页导航"></nav>
     </section>
@@ -584,6 +640,8 @@ var searchQuery = '';
 var currentPage = 1;
 var PAGE_SIZE = 40;
 var currentView = 'list';
+var todayOnly = false;
+var sortOrder = 'newest'; // 'newest' or 'oldest'
 /* Source name normalization map */
 var SOURCE_MAP = {
   '线报酷 - 专注线报活动与优惠促销分享的线报网站': '线报酷',
@@ -651,6 +709,27 @@ function getSourceColor(name) {
 function getSourceChar(name) {
   if (!name) return '?';
   return name.charAt(0);
+}
+
+/* ================================================================
+   TODAY FILTER & SORT CONTROLS
+   ================================================================ */
+function toggleTodayFilter() {
+  todayOnly = !todayOnly;
+  currentPage = 1;
+  var btn = document.getElementById('today-toggle');
+  btn.classList.toggle('active', todayOnly);
+  btn.setAttribute('aria-pressed', String(todayOnly));
+  renderList();
+  updateStatus();
+}
+
+function toggleSortOrder() {
+  sortOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
+  currentPage = 1;
+  var btn = document.getElementById('sort-btn');
+  btn.textContent = sortOrder === 'newest' ? '最新优先 ↓' : '最早优先 ↑';
+  renderList();
 }
 
 /* ================================================================
@@ -822,6 +901,18 @@ function getFiltered() {
     filtered = filtered.filter(function(it) { return it.source === activeSource; });
   }
 
+  /* Today filter */
+  if (todayOnly) {
+    var now = new Date();
+    var y = now.getFullYear();
+    var m = String(now.getMonth() + 1).padStart(2, '0');
+    var d = String(now.getDate()).padStart(2, '0');
+    var todayStr = y + '-' + m + '-' + d;
+    filtered = filtered.filter(function(it) {
+      return it.time && it.time.substring(0, 10) === todayStr;
+    });
+  }
+
   /* Search filter */
   if (searchQuery) {
     var q = searchQuery.toLowerCase();
@@ -831,6 +922,15 @@ function getFiltered() {
              (it.platform && it.platform.toLowerCase().indexOf(q) !== -1);
     });
   }
+
+  /* Sort by time */
+  filtered.sort(function(a, b) {
+    if (sortOrder === 'newest') {
+      return (b.time || '').localeCompare(a.time || '');
+    } else {
+      return (a.time || '').localeCompare(b.time || '');
+    }
+  });
 
   return filtered;
 }
@@ -961,8 +1061,14 @@ function handleSearch(e) {
 function resetFilters() {
   searchQuery = '';
   activeSource = 'all';
+  todayOnly = false;
+  sortOrder = 'newest';
   currentPage = 1;
   document.getElementById('search-input').value = '';
+  var todayBtn = document.getElementById('today-toggle');
+  todayBtn.classList.remove('active');
+  todayBtn.setAttribute('aria-pressed', 'false');
+  document.getElementById('sort-btn').textContent = '最新优先 ↓';
   buildSidebar();
   buildMobileDropdown();
   renderAll();
@@ -985,9 +1091,29 @@ function updateStatus() {
   if (searchQuery) {
     parts.push('搜索: <span class="highlight">"' + esc(searchQuery) + '"</span>');
   }
-  parts.push('共 ' + filtered.length + ' 条线报');
+  if (todayOnly) {
+    parts.push('<span class="highlight">只看今天</span>');
+  }
+
+  var totalCount = allItems.length;
+  var filteredCount = filtered.length;
+  var countText = '共 ' + filteredCount + ' 条线报';
+  if (filteredCount !== totalCount) {
+    countText = '显示 <span class="ct-hl">' + filteredCount + '</span> / ' + totalCount + ' 条';
+  }
+  parts.push(countText);
 
   el.innerHTML = parts.join(' · ');
+
+  /* Also update the toolbar item count */
+  var countEl = document.getElementById('item-count');
+  if (countEl) {
+    if (filteredCount !== totalCount) {
+      countEl.innerHTML = '显示 <span class="ct-hl">' + filteredCount + '</span> / ' + totalCount + ' 条';
+    } else {
+      countEl.innerHTML = '共 ' + totalCount + ' 条';
+    }
+  }
 }
 
 /* ================================================================

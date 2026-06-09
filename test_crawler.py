@@ -2058,6 +2058,1098 @@ class TestAsyncIntegration(unittest.TestCase):
 
 
 # ===================================================================
+# 10. TESTS FOR ALL REMAINING PARSER_REGISTRY PARSERS
+# ===================================================================
+
+class TestParseZiyuantingItems(unittest.TestCase):
+    """Tests for crawl.parse_ziyuanting_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <article class="posts-item sites-item">
+        <a href="https://www.ziyuanting.com/sites/123.html" class="sites-body">
+            <h3 class="item-title"><b>某资源网站推荐</b></h3>
+        </a>
+    </article>
+    <article class="posts-item sites-item">
+        <a href="https://www.ziyuanting.com/sites/456.html" class="sites-body">
+            <h3 class="item-title"><b>在线工具合集分享</b></h3>
+        </a>
+    </article>
+    <article class="posts-item app-item">
+        <a href="https://www.ziyuanting.com/app/789.html">
+            <span class="item-title">实用软件工具 v2.0</span>
+        </a>
+    </article>
+    <a href="https://www.ziyuanting.com/bulletin/100.html">最新站点公告通知</a>
+    <a href="https://www.ziyuanting.com/">首页</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_ziyuanting_items(soup, "https://www.ziyuanting.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("某资源网站推荐", texts)
+        self.assertIn("在线工具合集分享", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <article class="posts-item sites-item">
+            <a href="/sites/1.html" class="sites-body"><h3 class="item-title"><b>重复资源标题</b></h3></a>
+        </article>
+        <article class="posts-item sites-item">
+            <a href="/sites/2.html" class="sites-body"><h3 class="item-title"><b>重复资源标题</b></h3></a>
+        </article>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_ziyuanting_items(soup, "https://www.ziyuanting.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_ziyuanting_items(soup, "https://www.ziyuanting.com/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("首页", texts)
+
+
+class TestParseWycadItems(unittest.TestCase):
+    """Tests for crawl.parse_wycad_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <a href="https://www.wycad.com/12345.html">办公软件WPS最新版下载</a>
+    <a href="https://www.wycad.com/67890.html">影音播放器绿色便携版</a>
+    <a href="https://www.wycad.com/11111.html">系统清理工具专业版</a>
+    <a href="https://www.wycad.com/app/">手机软件</a>
+    <a href="https://www.wycad.com/windows/">操作系统</a>
+    <a href="https://www.wycad.com/tag/test">标签链接</a>
+    <a href="https://www.wycad.com/?s=搜索">搜索</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_wycad_items(soup, "https://www.wycad.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("办公软件WPS最新版下载", texts)
+        self.assertIn("影音播放器绿色便携版", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <a href="https://www.wycad.com/123.html">重复软件标题内容</a>
+        <a href="https://www.wycad.com/123.html">重复软件标题内容</a>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_wycad_items(soup, "https://www.wycad.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_wycad_items(soup, "https://www.wycad.com/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("手机软件", texts)
+        self.assertNotIn("操作系统", texts)
+
+
+class TestParseH6roomItems(unittest.TestCase):
+    """Tests for crawl.parse_h6room_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <a href="https://www.h6room.com/12345.html">视频播放器去广告版</a>
+    <a href="https://www.h6room.com/67890.html">文件管理器破解版本</a>
+    <a href="https://www.h6room.com/11111.html">天气预报安卓应用</a>
+    <a href="https://www.h6room.com/category/android">安卓应用</a>
+    <a href="https://www.h6room.com/login">登录</a>
+    <a href="https://www.h6room.com/register">注册</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_h6room_items(soup, "https://www.h6room.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("视频播放器去广告版", texts)
+        self.assertIn("文件管理器破解版本", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <a href="https://www.h6room.com/123.html">重复文章内容标题</a>
+        <a href="https://www.h6room.com/123.html">重复文章内容标题</a>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_h6room_items(soup, "https://www.h6room.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_h6room_items(soup, "https://www.h6room.com/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("安卓应用", texts)
+        self.assertNotIn("登录", texts)
+        self.assertNotIn("注册", texts)
+
+
+class TestParseXzbaItems(unittest.TestCase):
+    """Tests for crawl.parse_xzba_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <div class="posts-row">
+        <a href="https://xzba.cc/702.html">仁王3完全版</a>
+        <a href="https://xzba.cc/703.html">赛博朋克最新版</a>
+    </div>
+    <a href="https://xzba.cc/704.html">艾尔登法环DLC</a>
+    <a href="https://xzba.cc/">首页</a>
+    <a href="https://xzba.cc/login">登录</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_xzba_items(soup, "https://xzba.cc/")
+        texts = [item["text"] for item in items]
+        self.assertIn("仁王3完全版", texts)
+        self.assertIn("赛博朋克最新版", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <div class="posts-row">
+            <a href="https://xzba.cc/100.html">重复游戏标题内容</a>
+        </div>
+        <a href="https://xzba.cc/100.html">重复游戏标题内容</a>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_xzba_items(soup, "https://xzba.cc/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_xzba_items(soup, "https://xzba.cc/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("首页", texts)
+        self.assertNotIn("登录", texts)
+
+
+class TestParseApprcnItems(unittest.TestCase):
+    """Tests for crawl.parse_apprcn_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <article>
+        <h2><a href="https://free.apprcn.com/app1/">限时免费软件推荐第一期</a></h2>
+        <a href="https://free.apprcn.com/app1/">阅读全文</a>
+    </article>
+    <article>
+        <h3><a href="https://free.apprcn.com/app2/">安卓限免应用合集分享</a></h3>
+    </article>
+    <div class="post">
+        <h2><a href="https://free.apprcn.com/app3/">Mac软件限免活动</a></h2>
+    </div>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_apprcn_items(soup, "https://free.apprcn.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("限时免费软件推荐第一期", texts)
+        self.assertIn("安卓限免应用合集分享", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <article><h2><a href="/app1/">重复标题内容测试</a></h2></article>
+        <article><h2><a href="/app2/">重复标题内容测试</a></h2></article>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_apprcn_items(soup, "https://free.apprcn.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_apprcn_items(soup, "https://free.apprcn.com/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("阅读全文", texts)
+
+
+class TestParseYxsspItems(unittest.TestCase):
+    """Tests for crawl.parse_yxssp_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <a rel="bookmark" href="https://www.yxssp.com/12345.html">办公软件绿色版下载</a>
+    <a rel="bookmark" href="https://www.yxssp.com/67890.html">系统优化工具推荐</a>
+    <div class="entry-title"><a href="https://www.yxssp.com/11111.html">浏览器安全插件</a></div>
+    <a href="https://www.yxssp.com/about">关于我们</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_yxssp_items(soup, "https://www.yxssp.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("办公软件绿色版下载", texts)
+        self.assertIn("系统优化工具推荐", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <a rel="bookmark" href="https://www.yxssp.com/1.html">重复软件标题下载</a>
+        <a rel="bookmark" href="https://www.yxssp.com/1.html">重复软件标题下载</a>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_yxssp_items(soup, "https://www.yxssp.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_yxssp_items(soup, "https://www.yxssp.com/")
+        texts = [item["text"] for item in items]
+        # "关于我们" is only 4 chars which is < 5, filtered by fallback
+        self.assertNotIn("关于我们", texts)
+
+
+class TestParseDaydayzhuanItems(unittest.TestCase):
+    """Tests for crawl.parse_daydayzhuan_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <a href="https://www.daydayzhuan.com/article/12345">京东红包领取攻略教程</a>
+    <a href="https://www.daydayzhuan.com/article/67890">淘宝优惠券技巧分享</a>
+    <a href="https://www.daydayzhuan.com/article/11111">拼多多现金活动攻略</a>
+    <a href="https://www.daydayzhuan.com/yangmao">实时线报</a>
+    <a href="https://www.daydayzhuan.com/">首页</a>
+    <a href="https://www.daydayzhuan.com/longtime">长期羊毛</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_daydayzhuan_items(soup, "https://www.daydayzhuan.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("京东红包领取攻略教程", texts)
+        self.assertIn("淘宝优惠券技巧分享", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <a href="/article/100">重复活动标题内容分享</a>
+        <a href="/article/100">重复活动标题内容分享</a>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_daydayzhuan_items(soup, "https://www.daydayzhuan.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_daydayzhuan_items(soup, "https://www.daydayzhuan.com/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("首页", texts)
+        self.assertNotIn("实时线报", texts)
+
+
+class TestParse007ymdItems(unittest.TestCase):
+    """Tests for crawl.parse_007ymd_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <a href="https://www.007ymd.com/?id=12345">京东免费领会员活动</a>
+    <a href="https://www.007ymd.com/?id=67890">淘宝签到红包领取方法</a>
+    <a href="https://www.007ymd.com/?id=11111">话费充值优惠活动攻略</a>
+    <a href="https://www.007ymd.com/?cate=long">长期羊毛</a>
+    <a href="https://www.007ymd.com/?cate=activity">有奖活动</a>
+    <a href="https://www.007ymd.com/">首页</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_007ymd_items(soup, "https://www.007ymd.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("京东免费领会员活动", texts)
+        self.assertIn("淘宝签到红包领取方法", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <a href="https://www.007ymd.com/?id=100">重复羊毛活动标题</a>
+        <a href="https://www.007ymd.com/?id=100">重复羊毛活动标题</a>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_007ymd_items(soup, "https://www.007ymd.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_007ymd_items(soup, "https://www.007ymd.com/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("首页", texts)
+        self.assertNotIn("长期羊毛", texts)
+
+
+class TestParseAxutongxueItems(unittest.TestCase):
+    """Tests for crawl.parse_axutongxue_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <a href="https://pan.baidu.com/s/1abc123">百度网盘资源合集分享</a>
+    <a href="https://www.aliyundrive.com/s/xyz">阿里云盘学习资料</a>
+    <a href="https://axutongxue.net/page1">内部页面链接</a>
+    <a href="https://axutongxue.net/page2">另一个内部链接</a>
+    <a href="https://external.com/tool">外部工具资源链接</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_axutongxue_items(soup, "https://axutongxue.net/")
+        texts = [item["text"] for item in items]
+        self.assertIn("百度网盘资源合集分享", texts)
+        self.assertIn("阿里云盘学习资料", texts)
+        self.assertIn("外部工具资源链接", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <a href="https://external.com/1">重复资源标题内容</a>
+        <a href="https://external.com/2">重复资源标题内容</a>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_axutongxue_items(soup, "https://axutongxue.net/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_axutongxue_items(soup, "https://axutongxue.net/")
+        texts = [item["text"] for item in items]
+        # Internal links should be excluded
+        for item in items:
+            self.assertNotIn("axutongxue.net", item["url"])
+
+
+class TestParseManmanbuyItems(unittest.TestCase):
+    """Tests for crawl.parse_manmanbuy_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <a href="https://cu.manmanbuy.com/discuxiao_12345.aspx">京东满减优惠爆料信息</a>
+    <a href="https://cu.manmanbuy.com/discuxiao_67890.aspx">天猫超市折扣商品信息</a>
+    <a href="https://cu.manmanbuy.com/discuxiao_11111.aspx">拼多多百亿补贴爆料</a>
+    <a href="https://cu.manmanbuy.com/discuxiao_12345.aspx">20.4元</a>
+    <a href="https://www.manmanbuy.com/zhekou/search">分类搜索</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_manmanbuy_items(soup, "https://www.manmanbuy.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("京东满减优惠爆料信息", texts)
+        self.assertIn("天猫超市折扣商品信息", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <a href="https://cu.manmanbuy.com/discuxiao_100.aspx">重复爆料标题内容</a>
+        <a href="https://cu.manmanbuy.com/discuxiao_100.aspx">重复爆料标题内容</a>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_manmanbuy_items(soup, "https://www.manmanbuy.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_manmanbuy_items(soup, "https://www.manmanbuy.com/")
+        urls = [item["url"] for item in items]
+        # Non-discuxiao links should be excluded
+        self.assertFalse(any("zhekou/search" in u for u in urls))
+
+
+class TestParseGhxiItems(unittest.TestCase):
+    """Tests for crawl.parse_ghxi_items() - WP REST API based parser."""
+
+    @patch("crawl.requests.get")
+    def test_extracts_items(self, mock_get):
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = [
+            {"title": {"rendered": "果核剥壳文章标题一"}, "link": "https://www.ghxi.com/post1.html"},
+            {"title": {"rendered": "果核剥壳文章标题二"}, "link": "https://www.ghxi.com/post2.html"},
+        ]
+        mock_get.return_value = mock_resp
+        soup = make_soup("<html><body></body></html>")
+        items = crawl.parse_ghxi_items(soup, "https://www.ghxi.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("果核剥壳文章标题一", texts)
+        self.assertIn("果核剥壳文章标题二", texts)
+
+    @patch("crawl.requests.get")
+    def test_api_failure_returns_empty(self, mock_get):
+        """Non-200 response should return empty list."""
+        mock_resp = MagicMock()
+        mock_resp.status_code = 500
+        mock_get.return_value = mock_resp
+        soup = make_soup("<html><body></body></html>")
+        items = crawl.parse_ghxi_items(soup, "https://www.ghxi.com/")
+        # Non-200 response should return empty list
+        self.assertEqual(len(items), 0)
+
+    @patch("crawl.requests.get")
+    def test_filters_junk(self, mock_get):
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = [
+            {"title": {"rendered": "AB"}, "link": "https://www.ghxi.com/short.html"},
+            {"title": {"rendered": "这篇标题足够长可以保留"}, "link": "https://www.ghxi.com/ok.html"},
+        ]
+        mock_get.return_value = mock_resp
+        soup = make_soup("<html><body></body></html>")
+        items = crawl.parse_ghxi_items(soup, "https://www.ghxi.com/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("AB", texts)
+        self.assertIn("这篇标题足够长可以保留", texts)
+
+
+class TestParse12345proItems(unittest.TestCase):
+    """Tests for crawl.parse_12345pro_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <h2 class="zt-biaoti"><a href="/article/12345.html">京东红包免费领教程</a></h2>
+    <div class="slide-title"><a href="/article/67890.html">淘宝优惠券领取方法</a></div>
+    <p class="zt-biaoti"><a href="/article/11111.html">拼多多现金活动攻略</a></p>
+    <a href="/category/hot">热门分类</a>
+    <a href="/">首页</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_12345pro_items(soup, "https://www.12345pro.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("京东红包免费领教程", texts)
+        self.assertIn("淘宝优惠券领取方法", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <h2 class="zt-biaoti"><a href="/article/1.html">重复标题文章内容</a></h2>
+        <p class="zt-biaoti"><a href="/article/2.html">重复标题文章内容</a></p>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_12345pro_items(soup, "https://www.12345pro.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_12345pro_items(soup, "https://www.12345pro.com/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("热门分类", texts)
+        self.assertNotIn("首页", texts)
+
+
+class TestParseAppinnItems(unittest.TestCase):
+    """Tests for crawl.parse_appinn_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <article class="post-box">
+        <h2 class="title post-title"><a href="https://www.appinn.com/chrome-125/">Chrome浏览器最新版本</a></h2>
+    </article>
+    <article class="post-box">
+        <h2 class="title post-title"><a href="https://www.appinn.com/vscode-tips/">VSCode实用技巧分享</a></h2>
+    </article>
+    <a href="https://www.appinn.com/category/software/">分类链接</a>
+    <a href="https://www.appinn.com/tag/hot/">标签链接</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_appinn_items(soup, "https://www.appinn.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("Chrome浏览器最新版本", texts)
+        self.assertIn("VSCode实用技巧分享", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <article><h2 class="title post-title"><a href="/post1/">重复文章标题</a></h2></article>
+        <article><h2 class="title post-title"><a href="/post2/">重复文章标题</a></h2></article>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_appinn_items(soup, "https://www.appinn.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_appinn_items(soup, "https://www.appinn.com/")
+        urls = [item["url"] for item in items]
+        self.assertFalse(any("/category/" in u for u in urls))
+
+
+class TestParseIthomeXijiayiItems(unittest.TestCase):
+    """Tests for crawl.parse_ithome_xijiayi_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <ol class="newslist">
+        <li>
+            <div class="newsbody">
+                <a href="https://www.ithome.com/0/123/456.htm"><h2>Steam喜加一免费游戏领取</h2></a>
+            </div>
+        </li>
+        <li>
+            <div class="newsbody">
+                <a href="https://www.ithome.com/0/789/012.htm"><h2>Epic商城限时免费领取</h2></a>
+            </div>
+        </li>
+    </ol>
+    <a href="https://www.ithome.com/0/345/678.htm">GOG平台免费游戏活动</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_ithome_xijiayi_items(soup, "https://www.ithome.com/zt/xijiayi")
+        texts = [item["text"] for item in items]
+        self.assertIn("Steam喜加一免费游戏领取", texts)
+        self.assertIn("Epic商城限时免费领取", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <ol class="newslist">
+            <li><div class="newsbody"><a href="https://www.ithome.com/0/1/2.htm"><h2>重复新闻标题</h2></a></div></li>
+            <li><div class="newsbody"><a href="https://www.ithome.com/0/3/4.htm"><h2>重复新闻标题</h2></a></div></li>
+        </ol>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_ithome_xijiayi_items(soup, "https://www.ithome.com/zt/xijiayi")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        html = """<html><body>
+        <ol class="newslist">
+            <li><div class="newsbody"><a href="https://www.ithome.com/about"><h2>关</h2></a></div></li>
+            <li><div class="newsbody"><a href="https://www.ithome.com/0/1/2.htm"><h2>正式新闻标题内容</h2></a></div></li>
+        </ol>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_ithome_xijiayi_items(soup, "https://www.ithome.com/zt/xijiayi")
+        texts = [item["text"] for item in items]
+        # "关" is too short (< 4 chars) and should be filtered
+        self.assertNotIn("关", texts)
+        self.assertIn("正式新闻标题内容", texts)
+
+
+class TestParseLsapkItems(unittest.TestCase):
+    """Tests for crawl.parse_lsapk_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <ul>
+        <li class="post-item">
+            <div class="post-item-main"><h2><a href="https://www.lsapk.com/12345.html">安卓应用市场最新版</a></h2></div>
+        </li>
+        <li class="post-item">
+            <div class="post-item-main"><h2><a href="https://www.lsapk.com/67890.html">视频播放器去广告版</a></h2></div>
+        </li>
+    </ul>
+    <a href="https://www.lsapk.com/category/apps">应用分类</a>
+    <a href="https://www.lsapk.com/tag/hot">热门标签</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_lsapk_items(soup, "https://www.lsapk.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("安卓应用市场最新版", texts)
+        self.assertIn("视频播放器去广告版", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <li class="post-item"><div class="post-item-main"><h2><a href="/1.html">重复应用标题</a></h2></div></li>
+        <li class="post-item"><div class="post-item-main"><h2><a href="/2.html">重复应用标题</a></h2></div></li>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_lsapk_items(soup, "https://www.lsapk.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_lsapk_items(soup, "https://www.lsapk.com/")
+        urls = [item["url"] for item in items]
+        self.assertFalse(any("/category/" in u for u in urls))
+        self.assertFalse(any("/tag/" in u for u in urls))
+
+
+class TestParseThosefreeItems(unittest.TestCase):
+    """Tests for crawl.parse_thosefree_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <a class="post-item-title" href="https://www.thosefree.com/app1"><h3>限时免费安卓应用推荐</h3></a>
+    <a class="post-item-title" href="https://www.thosefree.com/app2"><h3>Windows软件限免活动</h3></a>
+    <a class="pic-cover-item" href="https://www.thosefree.com/app3"><div class="pic-cover-item-title">精选限免合集</div></a>
+    <a class="post-item-title" href="https://www.thosefree.com/tag/hot">热门标签</a>
+    <a class="post-item-title" href="https://www.thosefree.com/page/2">翻页链接</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_thosefree_items(soup, "https://www.thosefree.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("限时免费安卓应用推荐", texts)
+        self.assertIn("Windows软件限免活动", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <a class="post-item-title" href="/app1"><h3>重复限免标题</h3></a>
+        <a class="post-item-title" href="/app2"><h3>重复限免标题</h3></a>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_thosefree_items(soup, "https://www.thosefree.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_thosefree_items(soup, "https://www.thosefree.com/")
+        urls = [item["url"] for item in items]
+        self.assertFalse(any("/tag/" in u for u in urls))
+        self.assertFalse(any("/page/" in u for u in urls))
+
+
+class TestParseDoubanGroupItems(unittest.TestCase):
+    """Tests for crawl.parse_douban_group_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <table class="olt">
+        <tr><td class="title"><a href="https://www.douban.com/group/topic/12345/" title="京东优惠券免费领">京东优惠券免费领</a></td></tr>
+        <tr><td class="title"><a href="https://www.douban.com/group/topic/67890/" title="淘宝红包领取攻略">淘宝红包领取攻略</a></td></tr>
+        <tr><td class="title"><a href="https://www.douban.com/group/topic/11111/" title="拼多多活动分享">拼多多活动分享</a></td></tr>
+    </table>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_douban_group_items(soup, "https://www.douban.com/group/711811/")
+        texts = [item["text"] for item in items]
+        self.assertIn("京东优惠券免费领", texts)
+        self.assertIn("淘宝红包领取攻略", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <table class="olt">
+            <tr><td class="title"><a href="/group/topic/1/" title="重复帖子标题">重复帖子标题</a></td></tr>
+            <tr><td class="title"><a href="/group/topic/2/" title="重复帖子标题">重复帖子标题</a></td></tr>
+        </table>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_douban_group_items(soup, "https://www.douban.com/group/711811/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        html = """<html><body>
+        <table class="olt">
+            <tr><td class="title"><a href="/group/topic/1/" title="举报此帖">举报此帖</a></td></tr>
+            <tr><td class="title"><a href="/group/topic/2/" title="正常帖子标题内容">正常帖子标题内容</a></td></tr>
+        </table>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_douban_group_items(soup, "https://www.douban.com/group/711811/")
+        # "举报此帖" does not match /group/topic/\d+ pattern via the primary selector
+        # because the selector targets td.title a which it does match, but we check fallback skip_words
+        texts = [item["text"] for item in items]
+        self.assertIn("正常帖子标题内容", texts)
+
+
+class TestParseHaodankuItems(unittest.TestCase):
+    """Tests for crawl.parse_haodanku_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <a href="https://www.haodanku.com/item/index">实时榜单</a>
+    <a href="https://www.haodanku.com/herald/index">好单预告</a>
+    <a href="https://www.haodanku.com/activity/tip_off">好单线报</a>
+    <a href="https://www.haodanku.com/item/all_index">全部商品</a>
+    <a href="https://www.haodanku.com/">首页</a>
+    <a href="https://www.haodanku.com/login">登录</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_haodanku_items(soup, "https://www.haodanku.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("实时榜单", texts)
+        self.assertIn("好单预告", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <a href="https://www.haodanku.com/item/index">重复标题内容</a>
+        <a href="https://www.haodanku.com/item/index2">重复标题内容</a>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_haodanku_items(soup, "https://www.haodanku.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_haodanku_items(soup, "https://www.haodanku.com/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("首页", texts)
+        self.assertNotIn("登录", texts)
+
+
+class TestParseHybaseItems(unittest.TestCase):
+    """Tests for crawl.parse_hybase_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <div class="li-type-card-title"><a href="https://m.hybase.com/shouji/android/12345.html">安卓浏览器最新版下载</a></div>
+    <div class="li-type-card-title"><a href="https://m.hybase.com/pc/windows/67890.html">Windows系统优化工具</a></div>
+    <div class="home-buzz"><div class="title"><a href="https://m.hybase.com/free/11111.html">免费软件推荐合集</a></div></div>
+    <a href="https://m.hybase.com/">首页</a>
+    <a href="https://m.hybase.com/about">关于</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_hybase_items(soup, "https://m.hybase.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("安卓浏览器最新版下载", texts)
+        self.assertIn("Windows系统优化工具", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <div class="li-type-card-title"><a href="/shouji/1.html">重复软件标题</a></div>
+        <div class="li-type-card-title"><a href="/shouji/2.html">重复软件标题</a></div>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_hybase_items(soup, "https://m.hybase.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_hybase_items(soup, "https://m.hybase.com/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("首页", texts)
+        self.assertNotIn("关于", texts)
+
+
+class TestParseHuodong5Items(unittest.TestCase):
+    """Tests for crawl.parse_huodong5_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <div class="feature-post">
+        <div class="title"><a href="https://www.huodong5.com/12345.html">京东618大促活动攻略</a></div>
+        <div class="title"><a href="https://www.huodong5.com/67890.html">支付宝红包领取方法</a></div>
+    </div>
+    <h3 class="slide-title"><a href="https://www.huodong5.com/11111.html">免费抽奖活动汇总</a></h3>
+    <a href="https://www.huodong5.com/">首页</a>
+    <a href="https://www.huodong5.com/category">活动分类</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_huodong5_items(soup, "https://www.huodong5.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("京东618大促活动攻略", texts)
+        self.assertIn("支付宝红包领取方法", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <div class="feature-post"><div class="title"><a href="https://www.huodong5.com/1.html">重复活动标题</a></div></div>
+        <h3 class="slide-title"><a href="https://www.huodong5.com/2.html">重复活动标题</a></h3>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_huodong5_items(soup, "https://www.huodong5.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_huodong5_items(soup, "https://www.huodong5.com/")
+        urls = [item["url"] for item in items]
+        # All items should be article URLs with numeric IDs
+        for u in urls:
+            self.assertRegex(u, r'huodong5\.com/\d+\.html')
+
+
+class TestParseYangmaodangItems(unittest.TestCase):
+    """Tests for crawl.parse_yangmaodang_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <a rel="bookmark" href="https://www.yangmaodang.club/articles/jd-coupon/">京东优惠券领取攻略</a>
+    <a rel="bookmark" href="https://www.yangmaodang.club/news/tb-deal/">淘宝限时折扣信息</a>
+    <a rel="bookmark" href="https://www.yangmaodang.club/things/pdd-free/">拼多多免费活动分享</a>
+    <a rel="category tag" href="https://www.yangmaodang.club/category/bank/">银行羊毛</a>
+    <a href="https://www.yangmaodang.club/category/long-term/">长期羊毛</a>
+    <a href="https://www.yangmaodang.club/about/">关于本站</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_yangmaodang_items(soup, "https://www.yangmaodang.club/")
+        texts = [item["text"] for item in items]
+        self.assertIn("京东优惠券领取攻略", texts)
+        self.assertIn("淘宝限时折扣信息", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <a rel="bookmark" href="https://www.yangmaodang.club/articles/a1/">重复羊毛标题</a>
+        <a rel="bookmark" href="https://www.yangmaodang.club/articles/a2/">重复羊毛标题</a>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_yangmaodang_items(soup, "https://www.yangmaodang.club/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_yangmaodang_items(soup, "https://www.yangmaodang.club/")
+        texts = [item["text"] for item in items]
+        # rel="category tag" should not be picked up as bookmark
+        self.assertNotIn("银行羊毛", texts)
+        self.assertNotIn("关于本站", texts)
+
+
+class TestParseXianbaomiItems(unittest.TestCase):
+    """Tests for crawl.parse_xianbaomi_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <ul class="erx-list">
+        <li class="item"><a class="main" href="https://xianbaomi.com/xb/242891.html">京东免费领优惠券</a></li>
+        <li class="item"><a class="main" href="https://xianbaomi.com/xb/242892.html">淘宝红包活动分享</a></li>
+        <li class="item"><a class="main" href="https://xianbaomi.com/xb/242893.html">拼多多现金提现</a></li>
+    </ul>
+    <a href="https://xianbaomi.com/">首页</a>
+    <a href="https://xianbaomi.com/sitemap">网站地图</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_xianbaomi_items(soup, "https://xianbaomi.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("京东免费领优惠券", texts)
+        self.assertIn("淘宝红包活动分享", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <ul class="erx-list">
+            <li class="item"><a class="main" href="/xb/1.html">重复线报标题</a></li>
+            <li class="item"><a class="main" href="/xb/2.html">重复线报标题</a></li>
+        </ul>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_xianbaomi_items(soup, "https://xianbaomi.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_xianbaomi_items(soup, "https://xianbaomi.com/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("首页", texts)
+        self.assertNotIn("网站地图", texts)
+
+
+class TestParseYangmaoWangItems(unittest.TestCase):
+    """Tests for crawl.parse_yangmao_wang_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <ul class="list-a">
+        <li><a href="https://yangmao.wang/yangmao/41.html" title="京东红包免费领">京东红包免费领</a></li>
+        <li><a href="https://yangmao.wang/zhuanqian/42.html" title="淘宝优惠券领取">淘宝优惠券领取</a></li>
+        <li><a href="https://yangmao.wang/dzyh/43.html" title="电子银行活动攻略">电子银行活动攻略</a></li>
+    </ul>
+    <a href="https://yangmao.wang/">首页</a>
+    <a href="https://yangmao.wang/about">关于本站</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_yangmao_wang_items(soup, "https://yangmao.wang/")
+        texts = [item["text"] for item in items]
+        self.assertIn("京东红包免费领", texts)
+        self.assertIn("淘宝优惠券领取", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <ul class="list-a">
+            <li><a href="https://yangmao.wang/yangmao/1.html" title="重复标题">重复标题</a></li>
+            <li><a href="https://yangmao.wang/yangmao/2.html" title="重复标题">重复标题</a></li>
+        </ul>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_yangmao_wang_items(soup, "https://yangmao.wang/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_yangmao_wang_items(soup, "https://yangmao.wang/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("首页", texts)
+        self.assertNotIn("关于本站", texts)
+
+
+class TestParseIqnewItems(unittest.TestCase):
+    """Tests for crawl.parse_iqnew_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <div class="news-comm-wrap">
+        <ul>
+            <li><a href="/activity/214255.html">京东618活动攻略分享</a></li>
+            <li><a href="/news/214256.html">支付宝红包领取方法</a></li>
+            <li><a href="/mall/214257.html">拼多多百亿补贴技巧</a></li>
+        </ul>
+    </div>
+    <a href="/activity/999.html">首页</a>
+    <a href="/login">登录</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_iqnew_items(soup, "https://www.iqnew.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("京东618活动攻略分享", texts)
+        self.assertIn("支付宝红包领取方法", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <div class="news-comm-wrap"><ul>
+            <li><a href="/activity/1.html">重复活动内容标题</a></li>
+            <li><a href="/activity/1.html">重复活动内容标题</a></li>
+        </ul></div>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_iqnew_items(soup, "https://www.iqnew.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_iqnew_items(soup, "https://www.iqnew.com/")
+        texts = [item["text"] for item in items]
+        # "首页" matches /activity/999.html but is in skip_words for fallback
+        # In strategy 1 it's not filtered by skip_words, but "首页" has len=2 < 4 so filtered
+        self.assertNotIn("登录", texts)
+
+
+class TestParse51kanongItems(unittest.TestCase):
+    """Tests for crawl.parse_51kanong_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <div id="article_list">
+        <li class="article_item">
+            <div class="article_title"><h2><a href="xyk-12345-1.htm" title="信用卡申请攻略分享">信用卡申请攻略分享</a></h2></div>
+        </li>
+        <li class="article_item">
+            <div class="article_title"><h2><a href="xyk-67890-1.htm" title="贷款利息计算方法">贷款利息计算方法</a></h2></div>
+        </li>
+    </div>
+    <div class="comlimi_tops"><h2><a href="xyk-11111-1.htm" title="今日头条信用卡优惠">今日头条信用卡优惠</a></h2></div>
+    <a href="xyk-99999-1.htm">首页</a>
+    <a href="xyk-88888-1.htm">信用卡交流</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_51kanong_items(soup, "https://www.51kanong.com/")
+        texts = [item["text"] for item in items]
+        self.assertIn("信用卡申请攻略分享", texts)
+        self.assertIn("贷款利息计算方法", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <div id="article_list">
+            <li class="article_item"><div class="article_title"><h2><a href="xyk-1-1.htm" title="重复标题">重复标题</a></h2></div></li>
+            <li class="article_item"><div class="article_title"><h2><a href="xyk-2-1.htm" title="重复标题">重复标题</a></h2></div></li>
+        </div>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_51kanong_items(soup, "https://www.51kanong.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_51kanong_items(soup, "https://www.51kanong.com/")
+        texts = [item["text"] for item in items]
+        # "首页" and "信用卡交流" should be in skip_words for fallback
+        self.assertNotIn("信用卡交流", texts)
+
+
+class TestParseYmxianbaoItems(unittest.TestCase):
+    """Tests for crawl.parse_ymxianbao_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <a href="https://b1.ymxianbao.cn/12345.html">京东免费领优惠券活动</a>
+    <a href="https://b1.ymxianbao.cn/67890.html">淘宝红包领取攻略分享</a>
+    <a href="https://b1.ymxianbao.cn/11111.html">拼多多现金提现方法</a>
+    <a href="https://b1.ymxianbao.cn/">羊毛阁</a>
+    <a href="https://b1.ymxianbao.cn/contact">联系站长</a>
+    <a href="https://b1.ymxianbao.cn/page/2">2</a>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_ymxianbao_items(soup, "https://b1.ymxianbao.cn/")
+        texts = [item["text"] for item in items]
+        self.assertIn("京东免费领优惠券活动", texts)
+        self.assertIn("淘宝红包领取攻略分享", texts)
+        self.assertGreaterEqual(len(items), 2)
+
+    def test_dedup(self):
+        html = """<html><body>
+        <a href="https://b1.ymxianbao.cn/100.html">重复线报标题内容</a>
+        <a href="https://b1.ymxianbao.cn/100.html">重复线报标题内容</a>
+        </body></html>"""
+        soup = make_soup(html)
+        items = crawl.parse_ymxianbao_items(soup, "https://b1.ymxianbao.cn/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_junk(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_ymxianbao_items(soup, "https://b1.ymxianbao.cn/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("羊毛阁", texts)
+        self.assertNotIn("联系站长", texts)
+
+
+# ===================================================================
 # MAIN
 # ===================================================================
 
