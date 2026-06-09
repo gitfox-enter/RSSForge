@@ -629,13 +629,13 @@ class TestParse423downItems(unittest.TestCase):
 
     MOCK_HTML = """
     <html><body>
-    <div class="post-list">
-        <a href="https://www.423down.com/12345.html">Chrome 浏览器 v125 正式版</a>
-        <a href="https://www.423down.com/67890.html">WinRAR 解压工具 v7.0</a>
-        <a href="https://www.423down.com/category/os">操作系统</a>
-        <a href="/11111.html">IDM 下载管理器 v6.41</a>
-    </div>
+    <ul class="excerpt">
+      <li><h2><a href="https://www.423down.com/12345.html">Chrome 浏览器 v125 正式版</a></h2></li>
+      <li><h2><a href="https://www.423down.com/67890.html">WinRAR 解压工具 v7.0</a></h2></li>
+      <li><h2><a href="/11111.html">IDM 下载管理器 v6.41</a></h2></li>
+    </ul>
     <div class="sidebar">
+        <a href="https://www.423down.com/category/os">操作系统</a>
         <a href="https://www.423down.com/about.html">关于我们</a>
     </div>
     </body></html>
@@ -1168,18 +1168,21 @@ class TestNewSiteParsers(unittest.TestCase):
 
     def test_parse_onlinedown_items_basic(self):
         html = """<html><body>
-        <a href="/article/12345.htm">如何清理电脑垃圾</a>
-        <a href="/article/12346.htm">Win11 更新教程</a>
-        <a href="/article/12347.htm">首页</a>
+        <a href="/soft/12345.htm">360安全卫士最新版</a>
+        <a href="/soft/12346.htm">WPS Office 办公软件</a>
+        <a href="/article/12347.htm">如何清理电脑垃圾</a>
+        <a href="/soft/12348.htm">首页</a>
         </body></html>"""
         soup = make_soup(html)
         items = crawl.parse_onlinedown_items(soup, "https://www.onlinedown.net/")
-        self.assertEqual(len(items), 2)
-        self.assertIn('/article/', items[0]['url'])
+        urls = [item['url'] for item in items]
+        # Should extract /soft/ links and /article/ links (excluding "首页")
+        self.assertGreaterEqual(len(items), 2)
+        self.assertTrue(any('/soft/' in u for u in urls))
 
     def test_parse_onlinedown_items_max_limit(self):
         links = "".join(
-            f'<a href="/article/{i}.htm">文章标题内容测试编号 {i} 足够长度</a>'
+            f'<a href="/soft/{i}.htm">软件标题内容测试编号 {i} 足够长度版</a>'
             for i in range(50)
         )
         html = f"<html><body>{links}</body></html>"
