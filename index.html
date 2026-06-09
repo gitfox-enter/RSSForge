@@ -234,25 +234,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   flex-direction:column;
 }
 
-/* -- View tabs (首页/排行) -- */
-#view-bar{
-  display:none;
-  background:#fff;
-  border-bottom:1px solid var(--border);
-  padding:0 16px;
-}
-#view-bar .view-tab{
-  display:inline-block;
-  padding:10px 16px;
-  font-size:14px;
-  color:var(--text-sec);
-  cursor:pointer;
-  border-bottom:2px solid transparent;
-  transition:all .15s;
-}
-#view-bar .view-tab:hover{color:var(--primary)}
-#view-bar .view-tab.active{color:var(--primary);font-weight:600;border-bottom-color:var(--primary)}
-
 /* -- Status bar -- */
 #status-bar{
   padding:10px 16px;
@@ -380,79 +361,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   background:#fff;
   color:var(--text);
   min-width:80px;
-}
-
-/* ========== RANKING SECTION ========== */
-#ranking-section{
-  background:#fff;
-  margin-top:8px;
-  border-top:1px solid var(--border);
-}
-.ranking-tabs{
-  display:flex;
-  border-bottom:1px solid var(--border-light);
-}
-.ranking-tab{
-  flex:1;
-  padding:10px 0;
-  font-size:13px;
-  color:var(--text-sec);
-  background:none;
-  border:none;
-  cursor:pointer;
-  text-align:center;
-  border-bottom:2px solid transparent;
-  transition:all .15s;
-}
-.ranking-tab:hover{color:var(--primary)}
-.ranking-tab.active{color:var(--primary);font-weight:600;border-bottom-color:var(--primary)}
-.ranking-list{list-style:none;padding:0}
-.ranking-item{
-  display:flex;
-  align-items:center;
-  padding:10px 16px;
-  gap:10px;
-  border-bottom:1px solid var(--border-light);
-  transition:background .1s;
-}
-.ranking-item:hover{background:#fafbfc}
-.ranking-item:last-child{border-bottom:none}
-.rank-num{
-  width:22px;
-  height:22px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:12px;
-  font-weight:700;
-  flex-shrink:0;
-  background:var(--bg-alt);
-  color:var(--text-muted);
-}
-.rank-num.top1{background:#fff3e0;color:#ef6c00}
-.rank-num.top2{background:#e3f2fd;color:#1976d2}
-.rank-num.top3{background:#e8f5e9;color:#2e7d32}
-.ranking-item .src-badge{width:22px;height:22px;font-size:11px}
-.ranking-item .rank-title{
-  flex:1;
-  min-width:0;
-  font-size:13px;
-  color:var(--text);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.ranking-item .rank-count{
-  font-size:12px;
-  color:var(--text-muted);
-  flex-shrink:0;
-}
-.ranking-empty{
-  padding:30px 16px;
-  text-align:center;
-  color:var(--text-muted);
-  font-size:13px;
 }
 
 /* ========== FOOTER ========== */
@@ -601,8 +509,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   </form>
   <nav id="menu" role="navigation" aria-label="主导航">
     <button class="active" data-view="list" onclick="switchView('list')" aria-label="查看首页列表" aria-current="page">首页</button>
-    <button data-view="ranking" onclick="switchView('ranking')" aria-label="查看热门排行">排行</button>
-  </nav>
+    </nav>
 </header>
 
 <!-- ===== MOBILE CATEGORY TOGGLE ===== -->
@@ -624,38 +531,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
     <!-- View bar (mobile only) -->
     <nav id="view-bar" role="navigation" aria-label="视图切换">
       <button class="view-tab active" data-view="list" onclick="switchView('list')" aria-current="page">首页</button>
-      <button class="view-tab" data-view="ranking" onclick="switchView('ranking')">排行</button>
-    </nav>
+      </nav>
 
     <!-- List View -->
-    <section id="list-view" aria-label="线报列表">
-      <h2 class="sr-only">线报列表</h2>
-      <div id="status-bar" role="status" aria-live="polite">
-        <span id="status-text" aria-busy="true">
-          <div class="skeleton-item"><div class="skeleton-badge"></div><div class="skeleton-body"><div class="skeleton-line w80"></div><div class="skeleton-line w40"></div></div></div>
-          <div class="skeleton-item"><div class="skeleton-badge"></div><div class="skeleton-body"><div class="skeleton-line w60"></div><div class="skeleton-line w40"></div></div></div>
-          <div class="skeleton-item"><div class="skeleton-badge"></div><div class="skeleton-body"><div class="skeleton-line w80"></div><div class="skeleton-line w40"></div></div></div>
-          <div class="skeleton-item"><div class="skeleton-badge"></div><div class="skeleton-body"><div class="skeleton-line w60"></div><div class="skeleton-line w40"></div></div></div>
-          <div class="skeleton-item"><div class="skeleton-badge"></div><div class="skeleton-body"><div class="skeleton-line w80"></div><div class="skeleton-line w40"></div></div></div>
-        </span>
-        <span id="last-update"></span>
-      </div>
-      <div class="list-wrap" id="item-list" role="list" aria-label="线报条目列表"></div>
-      <nav id="pagination" role="navigation" aria-label="分页导航"></nav>
-    </section>
 
-    <!-- Ranking View -->
-    <section id="ranking-view" style="display:none" aria-label="热门排行">
-      <h2 class="sr-only">热门排行</h2>
-      <div id="ranking-section">
-        <div class="ranking-tabs" role="tablist" aria-label="排行时间范围">
-          <button class="ranking-tab active" data-period="1h" onclick="switchRankTab('1h')" role="tab" aria-selected="true">一小时排行</button>
-          <button class="ranking-tab" data-period="3h" onclick="switchRankTab('3h')" role="tab" aria-selected="false">三小时排行</button>
-          <button class="ranking-tab" data-period="6h" onclick="switchRankTab('6h')" role="tab" aria-selected="false">六小时排行</button>
-        </div>
-        <div id="ranking-list" class="ranking-list" role="list" aria-label="排行结果"></div>
-      </div>
-    </section>
   </main>
 </div>
 
@@ -691,8 +570,6 @@ var searchQuery = '';
 var currentPage = 1;
 var PAGE_SIZE = 40;
 var currentView = 'list';
-var currentRankTab = '1h';
-
 /* Source name normalization map */
 var SOURCE_MAP = {
   '线报酷 - 专注线报活动与优惠促销分享的线报网站': '线报酷',
@@ -1045,79 +922,6 @@ function goToPage(p) {
 /* ================================================================
    RANKING
    ================================================================ */
-function renderRanking() {
-  var now = new Date();
-  var hours = {'1h': 1, '3h': 3, '6h': 6};
-  var h = hours[currentRankTab] || 1;
-  var cutoff = new Date(now.getTime() - h * 3600000);
-
-  /* Filter items within time window */
-  var recent = allItems.filter(function(it) {
-    if (!it.time) return false;
-    var t = new Date(it.time.replace(' ', 'T'));
-    return t >= cutoff;
-  });
-
-  /* Group by source */
-  var srcCount = {};
-  var srcLatest = {};
-  recent.forEach(function(it) {
-    srcCount[it.source] = (srcCount[it.source] || 0) + 1;
-    if (!srcLatest[it.source] || it.time > srcLatest[it.source]) {
-      srcLatest[it.source] = it.time;
-    }
-  });
-
-  var ranked = Object.keys(srcCount).map(function(name) {
-    return {name: name, count: srcCount[name], latest: srcLatest[name]};
-  }).sort(function(a, b) {
-    return b.count - a.count || (b.latest > a.latest ? 1 : -1);
-  }).slice(0, 15);
-
-  var container = document.getElementById('ranking-list');
-
-  if (ranked.length === 0) {
-    container.innerHTML = '<div class="ranking-empty">该时段暂无数据</div>';
-    return;
-  }
-
-  var html = '';
-  ranked.forEach(function(r, i) {
-    var rankClass = 'rank-num';
-    if (i === 0) rankClass += ' top1';
-    else if (i === 1) rankClass += ' top2';
-    else if (i === 2) rankClass += ' top3';
-
-    var char = getSourceChar(r.name);
-    var color = getSourceColor(r.name);
-
-    /* Find a sample item title for this source in the time window */
-    var sampleTitle = '';
-    for (var j = 0; j < recent.length; j++) {
-      if (recent[j].source === r.name) {
-        sampleTitle = recent[j].text;
-        break;
-      }
-    }
-
-    html += '<div class="ranking-item">' +
-      '<span class="' + rankClass + '">' + (i + 1) + '</span>' +
-      '<span class="src-badge" style="background:' + color + '">' + esc(char) + '</span>' +
-      '<span class="rank-title">' + esc(sampleTitle) + '</span>' +
-      '<span class="rank-count">' + r.count + '条</span>' +
-    '</div>';
-  });
-
-  container.innerHTML = html;
-}
-
-function switchRankTab(period) {
-  currentRankTab = period;
-  document.querySelectorAll('.ranking-tab').forEach(function(el) {
-    el.classList.toggle('active', el.getAttribute('data-period') === period);
-  });
-  renderRanking();
-}
 
 /* ================================================================
    VIEW SWITCHING
@@ -1135,10 +939,7 @@ function switchView(view) {
 
   /* Show/hide sections */
   document.getElementById('list-view').style.display = view === 'list' ? '' : 'none';
-  document.getElementById('ranking-view').style.display = view === 'ranking' ? '' : 'none';
-
-  if (view === 'ranking') renderRanking();
-}
+  }
 
 /* ================================================================
    SEARCH
@@ -1320,9 +1121,7 @@ document.addEventListener('touchend', function(e) {
   if (Math.abs(dx) > 80 && Math.abs(dx) > Math.abs(dy) * 1.5) {
     if (dx < 0 && currentView === 'list') {
       switchView('ranking');
-    } else if (dx > 0 && currentView === 'ranking') {
-      switchView('list');
-    }
+    
   }
 }, { passive: true });
 
