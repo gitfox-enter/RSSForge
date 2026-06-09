@@ -68,7 +68,7 @@
     --shadow-sm:0 1px 3px rgba(0,0,0,.3);
   }
   #header,#sidebar,#content,#footer,#cat-dropdown,#cat-toggle-bar,#pagination,.page-btn,.item>a,#page-select{background:var(--bg)}
-  .item>a:hover,.ranking-item:hover{background:#1e1e3a}
+  .item>a:hover{background:#1e1e3a}
   #search-input{background:var(--bg);color:var(--text);border-color:var(--border)}
   .cat-item.active{background:#1a237e33}
   .src-badge{opacity:.9}
@@ -826,7 +826,6 @@ function getFiltered() {
    ================================================================ */
 function renderAll() {
   renderList();
-  renderRanking();
 }
 
 function renderList() {
@@ -920,10 +919,6 @@ function goToPage(p) {
 }
 
 /* ================================================================
-   RANKING
-   ================================================================ */
-
-/* ================================================================
    VIEW SWITCHING
    ================================================================ */
 function switchView(view) {
@@ -933,13 +928,10 @@ function switchView(view) {
   document.querySelectorAll('#menu button').forEach(function(el) {
     el.classList.toggle('active', el.getAttribute('data-view') === view);
   });
-  document.querySelectorAll('#view-bar .view-tab').forEach(function(el) {
-    el.classList.toggle('active', el.getAttribute('data-view') === view);
-  });
 
   /* Show/hide sections */
   document.getElementById('list-view').style.display = view === 'list' ? '' : 'none';
-  }
+}
 
 /* ================================================================
    SEARCH
@@ -1120,9 +1112,7 @@ document.addEventListener('touchend', function(e) {
   /* Only trigger on horizontal swipes (>80px) that aren't mostly vertical */
   if (Math.abs(dx) > 80 && Math.abs(dx) > Math.abs(dy) * 1.5) {
     if (dx < 0 && currentView === 'list') {
-      switchView('ranking');
-    
-  }
+      }
 }, { passive: true });
 
 /* ================================================================
