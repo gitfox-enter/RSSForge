@@ -3160,7 +3160,7 @@ class TestNeedsPlaywright(unittest.TestCase):
         self.assertTrue(crawl._needs_playwright("https://www.kxdao.net/forum-42-1.html"))
 
     def test_js_render_site_subdomain(self):
-        self.assertTrue(crawl._needs_playwright("https://79tao.linejia.com/"))
+        self.assertTrue(crawl._needs_playwright("https://51kanong.com/"))
 
     def test_normal_site_not_detected(self):
         self.assertFalse(crawl._needs_playwright("https://www.423down.com/"))
@@ -3169,11 +3169,12 @@ class TestNeedsPlaywright(unittest.TestCase):
         self.assertFalse(crawl._needs_playwright("https://www.baicaio.com/"))
 
     def test_js_render_set_contents(self):
-        """Verify JS_RENDER_SITES has expected entries."""
+        """Verify JS_RENDER_SITES has expected entries (dead sites removed)."""
         self.assertIn('kxdao.net', crawl.JS_RENDER_SITES)
-        self.assertIn('79tao.linejia.com', crawl.JS_RENDER_SITES)
-        self.assertIn('907k.cn', crawl.JS_RENDER_SITES)
-        self.assertIn('xiaodigu.com', crawl.JS_RENDER_SITES)
+        self.assertIn('51kanong.com', crawl.JS_RENDER_SITES)
+        # 死站不应在 JS_RENDER_SITES 中（避免 Playwright 先于死站检查）
+        self.assertNotIn('907k.cn', crawl.JS_RENDER_SITES)
+        self.assertNotIn('xiaodigu.com', crawl.JS_RENDER_SITES)
 
 
 class TestPlaywrightAvailability(unittest.TestCase):

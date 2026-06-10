@@ -221,9 +221,6 @@ RETRY_BASE_DELAY = 1.0  # 重试基础延迟（秒），实际延迟 = base * 2^
 # 这些站点通过 aiohttp 获取的 HTML 内容不完整（依赖 JS 加载数据）
 JS_RENDER_SITES: Set[str] = {
     'kxdao.net',          # Discuz 论坛，帖子列表需要 JS 渲染
-    '79tao.linejia.com',  # 淘宝客站点，商品列表 JS 加载
-    '907k.cn',            # 线报站，部分内容 JS 渲染
-    'xiaodigu.com',       # 线报站，内容 JS 加载
     '51kanong.com',       # 反爬虫 JS 重定向页面（"页面重载开启"）
 }
 
