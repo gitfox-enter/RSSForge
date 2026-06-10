@@ -3198,23 +3198,28 @@ class TestDeadSites(unittest.TestCase):
     """Tests for DEAD_SITES blacklist and is_dead_site()."""
 
     def test_dead_sites_count(self):
-        self.assertEqual(len(crawl.DEAD_SITES), 4)
+        self.assertEqual(len(crawl.DEAD_SITES), 3)
 
     def test_dead_site_detected(self):
         self.assertIsNotNone(crawl.is_dead_site("https://907k.cn/"))
         self.assertIsNotNone(crawl.is_dead_site("http://www.xiaodigu.com/"))
         self.assertIsNotNone(crawl.is_dead_site("https://www.ym2.cc/"))
-        self.assertIsNotNone(crawl.is_dead_site("https://www.foxirj.com/"))
 
     def test_alive_site_not_dead(self):
         self.assertIsNone(crawl.is_dead_site("https://www.423down.com/"))
         self.assertIsNone(crawl.is_dead_site("https://www.baicaio.com/"))
+        self.assertIsNone(crawl.is_dead_site("https://www.foxirj.com/"))  # SSL过期但可访问
 
     def test_dead_site_has_reason(self):
         for url, info in crawl.DEAD_SITES.items():
             self.assertIn('reason', info, msg=f"{url} missing reason")
             self.assertIn('confirmed_at', info, msg=f"{url} missing confirmed_at")
             self.assertIn('test_result', info, msg=f"{url} missing test_result")
+
+    def test_ssl_skip_domains(self):
+        """SSL过期站点应在 SSL_SKIP_DOMAINS 中，不在死站中。"""
+        self.assertIn('foxirj.com', crawl.SSL_SKIP_DOMAINS)
+        self.assertIsNone(crawl.is_dead_site("https://www.foxirj.com/"))
 
 
 # ===================================================================

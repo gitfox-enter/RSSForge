@@ -250,11 +250,11 @@ DEAD_SITES: Dict[str, Dict[str, str]] = {
         "confirmed_at": "2026-06-10",
         "test_result": "HTTP 000 - 无法建立连接，域名无法解析或服务器已下线",
     },
-    "https://www.foxirj.com/": {
-        "reason": "DNS/连接失败",
-        "confirmed_at": "2026-06-10",
-        "test_result": "HTTP 000 - 无法建立连接，域名无法解析或服务器已下线",
-    },
+}
+
+# SSL 证书有问题的站点（跳过 SSL 验证继续爬取）
+SSL_SKIP_DOMAINS: Set[str] = {
+    'foxirj.com',         # 证书过期但站点可访问
 }
 
 
@@ -3468,6 +3468,9 @@ async def fetch_page_content_async(
     elapsed = 0.0
     active_proxy = _proxy_pool.get_proxy() if _proxy_pool else None
 
+    # SSL 跳过：证书有问题的域名
+    skip_ssl = any(domain in (parsed.hostname or '') for domain in SSL_SKIP_DOMAINS)
+
     for attempt in range(MAX_RETRIES):
         try:
             start_time = time.time()
@@ -3477,6 +3480,7 @@ async def fetch_page_content_async(
                 timeout=aiohttp.ClientTimeout(total=REQUEST_TIMEOUT),
                 allow_redirects=True,
                 proxy=active_proxy,
+                ssl=False if skip_ssl else None,
             ) as resp:
                 elapsed = time.time() - start_time
 
