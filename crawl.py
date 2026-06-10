@@ -206,7 +206,7 @@ PAUSED_SITES_FILE = "paused_sites.json"  # 因连续失败被暂停的站点
 # 自动移除/恢复配置
 MAX_CONSECUTIVE_FAILURES = 3  # 连续失败 N 轮后自动暂停
 RECOVERY_CHECK_INTERVAL = 6  # 每 N 轮尝试恢复一次暂停站点
-MAX_ITEMS_DB = 1500  # items.json 最多保留条目数（控制文件体积，~84KB gzip）
+MAX_ITEMS_DB = 5000  # items.json 最多保留条目数（与 common.py 保持一致）
 
 # 爬虫配置
 REQUEST_TIMEOUT = 15  # 单个站点超时时间（秒）
@@ -224,6 +224,7 @@ JS_RENDER_SITES: Set[str] = {
     '79tao.linejia.com',  # 淘宝客站点，商品列表 JS 加载
     '907k.cn',            # 线报站，部分内容 JS 渲染
     'xiaodigu.com',       # 线报站，内容 JS 加载
+    '51kanong.com',       # 反爬虫 JS 重定向页面（"页面重载开启"）
 }
 
 # robots.txt 合规配置
@@ -231,6 +232,40 @@ RESPECT_ROBOTS_TXT: bool = False  # 是否遵守 robots.txt（线报站 robots.t
 
 # 代理池（初始化后全局可用，None 表示直连模式）
 _proxy_pool: Optional[ProxyPool] = None
+
+# ============================================================
+# 死站黑名单（经多轮测试确认无法访问的站点）
+# 格式: {URL: {'reason': '原因', 'confirmed_at': '确认日期', 'test_result': '测试结果'}}
+# ============================================================
+DEAD_SITES: Dict[str, Dict[str, str]] = {
+    "https://907k.cn/": {
+        "reason": "DNS/连接失败",
+        "confirmed_at": "2026-06-10",
+        "test_result": "HTTP 000 - 无法建立连接，DNS 解析失败或服务器已下线",
+    },
+    "http://www.xiaodigu.com/": {
+        "reason": "服务器 502 错误",
+        "confirmed_at": "2026-06-10",
+        "test_result": "HTTP 502 Bad Gateway - 上游服务器不可用",
+    },
+    "https://www.ym2.cc/": {
+        "reason": "DNS/连接失败",
+        "confirmed_at": "2026-06-10",
+        "test_result": "HTTP 000 - 无法建立连接，域名无法解析或服务器已下线",
+    },
+    "https://www.foxirj.com/": {
+        "reason": "DNS/连接失败",
+        "confirmed_at": "2026-06-10",
+        "test_result": "HTTP 000 - 无法建立连接，域名无法解析或服务器已下线",
+    },
+}
+
+
+def is_dead_site(url: str) -> Optional[str]:
+    """检查 URL 是否在死站黑名单中，返回原因或 None。"""
+    if url in DEAD_SITES:
+        return DEAD_SITES[url].get('reason', '未知原因')
+    return None
 
 # 统一浏览器配置文件池（UA + 指纹 + 语言 一一对应，防止 Firefox UA 搭配 Chrome sec-ch-ua 头）
 BROWSER_PROFILES: List[Dict[str, Any]] = [
@@ -1526,8 +1561,23 @@ def parse_rss_feed(content_bytes: bytes, base_url: str) -> List[Dict[str, str]]:
     from xml.etree import ElementTree as ET
     items: List[Dict[str, str]] = []
     seen: Set[str] = set()
+
+    # 预处理：修复常见的 XML 格式问题
+    text = content_bytes.decode('utf-8', errors='ignore')
+    # 去除 BOM
+    if text.startswith('\ufeff'):
+        text = text[1:]
+    # 截断 </rss> 之后的内容（可能包含格式错误的注释等）
+    rss_end = text.rfind('</rss>')
+    if rss_end > 0:
+        text = text[:rss_end + len('</rss>')]
+    # 同样处理 </feed>（Atom）
+    feed_end = text.rfind('</feed>')
+    if feed_end > 0 and (rss_end < 0 or feed_end > rss_end):
+        text = text[:feed_end + len('</feed>')]
+
     try:
-        root = ET.fromstring(content_bytes)
+        root = ET.fromstring(text.encode('utf-8'))
         ns = {'atom': 'http://www.w3.org/2005/Atom'}
         # RSS 2.0
         for item in root.findall('.//item'):
@@ -1549,7 +1599,19 @@ def parse_rss_feed(content_bytes: bytes, base_url: str) -> List[Dict[str, str]]:
                     seen.add(title)
                     items.append({'text': title, 'url': link})
     except ET.ParseError:
-        pass
+        # 最后兜底：用 BeautifulSoup 解析 RSS
+        try:
+            soup = BeautifulSoup(text, 'html.parser')
+            for item in soup.find_all('item'):
+                title_el = item.find('title')
+                link_el = item.find('link')
+                title = title_el.get_text(strip=True) if title_el else ''
+                link = link_el.get_text(strip=True) if link_el else base_url
+                if title and title not in seen:
+                    seen.add(title)
+                    items.append({'text': title, 'url': link})
+        except Exception:
+            pass
     return items[:30]
 
 
@@ -2907,6 +2969,46 @@ def parse_ymxianbao_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, 
 # ---------------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------------
+# 79tao.linejia.com  (79淘/邻家惠)
+# ---------------------------------------------------------------------------
+
+def parse_linejia_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """79淘/邻家惠 (linejia.com) - 提取活动线报条目
+
+    HTML 结构: <ul class="list-wz"><li><a href="/huodong/xxx.html">标题</a>
+    """
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
+
+    # 主要结构: ul.list-wz li a
+    for a in soup.select('ul.list-wz li a, .list-wz a'):
+        text = a.get_text(strip=True)
+        href = a.get('href', '').strip()
+        if not text or len(text) < 3 or text in seen:
+            continue
+        if '/huodong/' not in href and not re.search(r'/\d+\.html', href):
+            continue
+        seen.add(text)
+        if href.startswith('/'):
+            href = urljoin(base_url, href)
+        if href.startswith('http'):
+            items.append({'text': text, 'url': href})
+
+    # 回退: 任何包含 /huodong/ 的链接
+    if not items:
+        for a in soup.find_all('a', href=True):
+            href = a.get('href', '').strip()
+            text = a.get_text(strip=True)
+            if not text or len(text) < 4 or text in seen:
+                continue
+            if '/huodong/' in href:
+                seen.add(text)
+                if href.startswith('/'):
+                    href = urljoin(base_url, href)
+                items.append({'text': text, 'url': href})
+
+    return items[:30]
 
 
 # ============================================================
@@ -2952,6 +3054,7 @@ PARSER_REGISTRY: Dict[str, Tuple[Any, Optional[Any]]] = {
     'iqnew.com':         (parse_iqnew_items,          None),
     '51kanong.com':      (parse_51kanong_items,       None),
     'ymxianbao.cn':     (parse_ymxianbao_items,      None),
+    'linejia.com':      (parse_linejia_items,        None),
 }
 
 
@@ -3900,6 +4003,17 @@ async def check_one_async(
                 'is_updated': None, 'new_hash': None, 'page_info': None,
             }
 
+        # 死站黑名单检查
+        dead_reason = is_dead_site(url)
+        if dead_reason:
+            logger.info("跳过死站: %s (%s)", url, dead_reason,
+                        extra={'site': url, 'event': 'dead_site_skip'})
+            return {
+                'url': url, 'title': url, 'summary': '', 'items': [],
+                'status': 'dead', 'message': f'死站: {dead_reason}',
+                'is_updated': None, 'new_hash': None, 'page_info': None,
+            }
+
         is_updated, new_hash, message, page_info = await check_site_update_async(
             url, old_records, session
         )
@@ -4033,6 +4147,9 @@ async def main_async() -> None:
             logger.info("[%d/%d] robots.txt 拒绝: %s", idx, len(active_sites), url,
                         extra={'site': url, 'event': 'crawl_result'})
             robots_denied_count += 1
+        elif result['status'] == 'dead':
+            logger.info("[%d/%d] 死站: %s - %s", idx, len(active_sites), url, result['message'],
+                        extra={'site': url, 'event': 'dead_site'})
         elif result['is_updated'] is None:
             logger.info("[%d/%d] 失败: %s", idx, len(active_sites), result['message'],
                         extra={'site': url, 'event': 'crawl_result'})
@@ -4068,8 +4185,11 @@ async def main_async() -> None:
 
     total_count = len(all_site_results)
 
-    logger.info("成功: %d | 失败: %d | robots.txt跳过: %d | 暂停: %d",
-                success_count, error_count, robots_denied_count, len(paused_urls))
+    # 统计死站数
+    dead_count = sum(1 for r in all_site_results if r.get('status') == 'dead')
+
+    logger.info("成功: %d | 失败: %d | 死站: %d | robots.txt跳过: %d | 暂停: %d",
+                success_count, error_count, dead_count, robots_denied_count, len(paused_urls))
     logger.info("更新站点: %d 个", updated_count)
 
     # 输出运行指标摘要
@@ -4089,10 +4209,10 @@ async def main_async() -> None:
     # Also save to JSON file for backward compat
     save_hash_records(new_records)
 
-    # 构建完整条目字典
+    # 构建完整条目字典（包含更新和首次爬取的站点）
     new_item_list: List[Dict[str, str]] = []
     for r in all_site_results:
-        if r['status'] == 'updated':
+        if r['status'] in ('updated', 'first'):
             for item in r.get('items', []):
                 item_url = item['url'] if isinstance(item, dict) else item
                 item_text = item['text'] if isinstance(item, dict) else str(item)

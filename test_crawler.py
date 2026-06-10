@@ -3190,6 +3190,113 @@ class TestPlaywrightAvailability(unittest.TestCase):
 
 
 # ===================================================================
+# 死站黑名单测试
+# ===================================================================
+
+class TestDeadSites(unittest.TestCase):
+    """Tests for DEAD_SITES blacklist and is_dead_site()."""
+
+    def test_dead_sites_count(self):
+        self.assertEqual(len(crawl.DEAD_SITES), 4)
+
+    def test_dead_site_detected(self):
+        self.assertIsNotNone(crawl.is_dead_site("https://907k.cn/"))
+        self.assertIsNotNone(crawl.is_dead_site("http://www.xiaodigu.com/"))
+        self.assertIsNotNone(crawl.is_dead_site("https://www.ym2.cc/"))
+        self.assertIsNotNone(crawl.is_dead_site("https://www.foxirj.com/"))
+
+    def test_alive_site_not_dead(self):
+        self.assertIsNone(crawl.is_dead_site("https://www.423down.com/"))
+        self.assertIsNone(crawl.is_dead_site("https://www.baicaio.com/"))
+
+    def test_dead_site_has_reason(self):
+        for url, info in crawl.DEAD_SITES.items():
+            self.assertIn('reason', info, msg=f"{url} missing reason")
+            self.assertIn('confirmed_at', info, msg=f"{url} missing confirmed_at")
+            self.assertIn('test_result', info, msg=f"{url} missing test_result")
+
+
+# ===================================================================
+# linejia (79淘) 解析器测试
+# ===================================================================
+
+class TestParseLinejiaItems(unittest.TestCase):
+    """Tests for crawl.parse_linejia_items()."""
+
+    MOCK_HTML = """
+    <html><body>
+    <ul class="list-wz">
+        <li><a href="/huodong/2478664.html">真便宜采销低价好物</a><span><i>06/09</i></span></li>
+        <li><a href="/huodong/2478370.html">京东果子太难了</a><span><i>06/09</i></span></li>
+        <li><a href="/about">关于我们</a></li>
+    </ul>
+    </body></html>
+    """
+
+    def test_extracts_items(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_linejia_items(soup, "http://79tao.linejia.com/")
+        self.assertEqual(len(items), 2)
+        texts = [item["text"] for item in items]
+        self.assertIn("真便宜采销低价好物", texts)
+        self.assertIn("京东果子太难了", texts)
+
+    def test_url_converted(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_linejia_items(soup, "http://79tao.linejia.com/")
+        for item in items:
+            self.assertTrue(item["url"].startswith("http"))
+
+    def test_dedup(self):
+        html = '<ul class="list-wz"><li><a href="/huodong/1.html">重复标题</a></li><li><a href="/huodong/2.html">重复标题</a></li></ul>'
+        soup = make_soup(html)
+        items = crawl.parse_linejia_items(soup, "http://79tao.linejia.com/")
+        self.assertEqual(len(items), 1)
+
+    def test_filters_nav(self):
+        soup = make_soup(self.MOCK_HTML)
+        items = crawl.parse_linejia_items(soup, "http://79tao.linejia.com/")
+        texts = [item["text"] for item in items]
+        self.assertNotIn("关于我们", texts)
+
+
+# ===================================================================
+# RSS 解析器增强测试
+# ===================================================================
+
+class TestParseRssFeedRobust(unittest.TestCase):
+    """Tests for parse_rss_feed with malformed XML handling."""
+
+    def test_trailing_comment_fixed(self):
+        """RSS with malformed trailing comment should still parse."""
+        xml = b'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><item><title>Test Article</title><link>https://example.com/1</link></item></channel></rss><!--Cached 12345--->'
+        items = crawl.parse_rss_feed(xml, "https://feed.example.com/")
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["text"], "Test Article")
+
+    def test_normal_rss(self):
+        xml = b'<?xml version="1.0"?><rss version="2.0"><channel><item><title>Article A</title><link>https://a.com</link></item><item><title>Article B</title><link>https://b.com</link></item></channel></rss>'
+        items = crawl.parse_rss_feed(xml, "https://feed.example.com/")
+        self.assertEqual(len(items), 2)
+
+    def test_empty_rss(self):
+        xml = b'<?xml version="1.0"?><rss version="2.0"><channel></channel></rss>'
+        items = crawl.parse_rss_feed(xml, "https://feed.example.com/")
+        self.assertEqual(len(items), 0)
+
+
+# ===================================================================
+# MAX_ITEMS_DB 一致性测试
+# ===================================================================
+
+class TestMaxItemsConsistency(unittest.TestCase):
+    """Ensure MAX_ITEMS_DB is consistent between crawl.py and common.py."""
+
+    def test_crawl_max_items(self):
+        self.assertEqual(crawl.MAX_ITEMS_DB, 5000)
+
+
+# ===================================================================
 # MAIN
 # ===================================================================
 
