@@ -9,58 +9,38 @@ from typing import Any, Dict, List
 # ============================================================
 
 # 47个监控站点（新增：薅羊毛/我不找/反斗限免/佛系软件/多多软件/华军软件/异次元RSS）
-MONITOR_SITES: List[str] = [
-    "https://axutongxue.net/",
-    "http://79tao.linejia.com/",
-    "http://news.ixbk.net/",
-    "http://www.0818tuan.com/",
-    "https://907k.cn/",
-    "https://b1.ymxianbao.cn/",
-    "https://cjx8.com/",
-    "https://m.hybase.com/",
-    "https://news.ixbk.fun/",
-    "https://www.007ymd.com/",
-    "https://www.12345pro.com/",
-    "https://www.423down.com/",
-    "https://www.appinn.com/",
-    "https://www.bacaoo.com/",
-    "https://www.baicaio.com/",
-    "https://www.daydayzhuan.com/",
-    "https://www.h6room.com/",
-    "https://www.huifabu.cn/",
-    "https://www.huodong5.com/",
-    "https://www.ithome.com/zt/xijiayi",
-    "https://www.kxdao.net/forum-42-1.html",
-    "https://www.lsapk.com/",
-    "https://www.manmanbuy.com/",
-    "https://www.thosefree.com/",
-    "https://www.wycad.com/",
-    "https://www.yangmaodang.club/",
-    "https://www.yxssp.com/",
-    "https://www.zhuanyes.com/xianbao/",
-    "https://www.ziyuanting.com/",
-    "https://xianbao.icu/",
-    "https://xianbaomi.com/",
-    "https://xzba.cc/",
-    "https://yangmao.wang/",
-    # === 果核剥壳 ===
-    "https://www.ghxi.com/",
-    # === 新增源站（来自 huifabu.cn 参考） ===
-    "https://www.iqnew.com/",
-    "https://www.51kanong.com/",
-    "https://v1.xianbao.net/",
-    "http://www.xiaodigu.com/",
-    "https://www.douban.com/group/711811/",
-    "https://www.haodanku.com/",
-    # === 新增源站（用户补充） ===
-    "https://www.ym2.cc/",
-    "https://www.wobangzhao.com/",
-    "https://free.apprcn.com/",
-    "https://www.foxirj.com/",
-    "https://www.ddooo.com/",
-    "https://www.onlinedown.net/",
-    "https://feed.iplaysoft.com/",
-]
+# 47个监控站点 — loaded from sites.yaml for no-code management
+def _load_sites_from_yaml() -> List[str]:
+    """Load site URLs from sites.yaml (falls back to hardcoded list if YAML missing)."""
+    yaml_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "sites.yaml")
+    try:
+        import yaml
+        with open(yaml_path, "r", encoding="utf-8") as f:
+            cfg = yaml.safe_load(f)
+        return [s["url"] for s in cfg.get("sites", [])]
+    except Exception:
+        return [  # fallback
+            "https://axutongxue.net/", "http://79tao.linejia.com/", "http://news.ixbk.net/",
+            "http://www.0818tuan.com/", "https://907k.cn/", "https://b1.ymxianbao.cn/",
+            "https://cjx8.com/", "https://m.hybase.com/", "https://news.ixbk.fun/",
+            "https://www.007ymd.com/", "https://www.12345pro.com/", "https://www.423down.com/",
+            "https://www.appinn.com/", "https://www.bacaoo.com/", "https://www.baicaio.com/",
+            "https://www.daydayzhuan.com/", "https://www.h6room.com/", "https://www.huifabu.cn/",
+            "https://www.huodong5.com/", "https://www.ithome.com/zt/xijiayi",
+            "https://www.kxdao.net/forum-42-1.html", "https://www.lsapk.com/",
+            "https://www.manmanbuy.com/", "https://www.thosefree.com/", "https://www.wycad.com/",
+            "https://www.yangmaodang.club/", "https://www.yxssp.com/",
+            "https://www.zhuanyes.com/xianbao/", "https://www.ziyuanting.com/",
+            "https://xianbao.icu/", "https://xianbaomi.com/", "https://xzba.cc/",
+            "https://yangmao.wang/", "https://www.ghxi.com/", "https://www.iqnew.com/",
+            "https://www.51kanong.com/", "https://v1.xianbao.net/", "http://www.xiaodigu.com/",
+            "https://www.douban.com/group/711811/", "https://www.haodanku.com/",
+            "https://www.ym2.cc/", "https://www.wobangzhao.com/", "https://free.apprcn.com/",
+            "https://www.foxirj.com/", "https://www.ddooo.com/", "https://www.onlinedown.net/",
+            "https://feed.iplaysoft.com/",
+        ]
+
+MONITOR_SITES: List[str] = _load_sites_from_yaml()
 
 # URL -> 短名称映射（统一来源显示名称，避免使用页面标题导致名称过长/重复）
 SOURCE_NAME_MAP: Dict[str, str] = {
