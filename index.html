@@ -567,6 +567,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   <nav id="menu" role="navigation" aria-label="主导航">
     <button class="active" data-view="list" onclick="switchView('list')" aria-label="查看首页列表" aria-current="page">首页</button>
     <button id="notif-bell" title="开启通知" aria-label="推送通知开关">🔔</button>
+    <button id="install-btn" onclick="installApp()" title="安装到主屏幕" aria-label="安装应用到主屏幕">⬇ 安装</button>
     </nav>
 </header>
 
@@ -1231,38 +1232,32 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 }
 
 /* ================================================================
-   PWA INSTALL PROMPT
+   PWA INSTALL PROMPT (header button, auto-hide when installed)
    ================================================================ */
 var deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', function(e) {
   e.preventDefault();
   deferredPrompt = e;
-  /* Show install button after 10 seconds */
-  setTimeout(showInstallBanner, 10000);
+  /* Show the install button in header */
+  var btn = document.getElementById('install-btn');
+  if (btn) btn.classList.add('visible');
 });
-function showInstallBanner() {
-  if (!deferredPrompt) return;
-  if (document.getElementById('install-banner')) return;
-  var banner = document.createElement('div');
-  banner.id = 'install-banner';
-  banner.setAttribute('role', 'dialog');
-  banner.setAttribute('aria-label', '安装线报聚合到主屏幕');
-  banner.innerHTML =
-    '<span>安装到主屏幕，获取实时线报</span>' +
-    '<button onclick="installApp()" aria-label="确认安装">安装</button>' +
-    '<button onclick="dismissInstall()" aria-label="关闭安装提示">&times;</button>';
-  document.body.appendChild(banner);
+/* Hide install button if app is already installed (standalone mode) */
+if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+  var ib = document.getElementById('install-btn');
+  if (ib) ib.style.display = 'none';
 }
 function installApp() {
   if (!deferredPrompt) return;
   deferredPrompt.prompt();
-  deferredPrompt.userChoice.then(function(r) { deferredPrompt = null; });
-  dismissInstall();
-}
-function dismissInstall() {
-  var b = document.getElementById('install-banner');
-  if (b) b.remove();
-  deferredPrompt = null;
+  deferredPrompt.userChoice.then(function(result) {
+    if (result.outcome === 'accepted') {
+      /* Hide button after successful install */
+      var btn = document.getElementById('install-btn');
+      if (btn) { btn.classList.remove('visible'); btn.style.display = 'none'; }
+    }
+    deferredPrompt = null;
+  });
 }
 
 /* ================================================================
