@@ -7,6 +7,7 @@ import threading
 import time
 import urllib.robotparser
 from typing import Any, Dict, Optional
+from crawler.config import MAX_CONSECUTIVE_FAILURES
 
 import requests
 
