@@ -540,6 +540,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   #filter-toolbar{padding:6px 10px}
   #back-top{bottom:16px;right:16px;width:36px;height:36px}
 }
+
+  /* Notification bell */
+  #notif-bell{background:none;border:none;font-size:1.3rem;cursor:pointer;padding:4px 8px;border-radius:6px;transition:background .2s}
+  #notif-bell:hover{background:rgba(0,0,0,.05)}
+  #notif-bell.active{color:#1976d2}
+  #notif-bell.disabled{color:#ccc;cursor:not-allowed}
+  #notif-tooltip{font-size:.7rem;color:#999;margin-left:4px}
 </style>
 </head>
 <body>
@@ -1270,6 +1277,53 @@ if ('serviceWorker' in navigator) {
    INIT
    ================================================================ */
 loadData();
+
+  // === Push Notification Subscription ===
+  (function initNotifications() {
+    var bell = document.getElementById('notif-bell');
+    if (!bell || !('serviceWorker' in navigator)) return;
+    
+    // Check current permission state
+    function updateBell() {
+      if (Notification.permission === 'granted') {
+        bell.classList.add('active');
+        bell.classList.remove('disabled');
+        bell.title = '通知已开启';
+      } else if (Notification.permission === 'denied') {
+        bell.classList.add('disabled');
+        bell.classList.remove('active');
+        bell.title = '通知已被禁止';
+        bell.textContent = '🔕';
+      } else {
+        bell.classList.remove('active', 'disabled');
+        bell.title = '点击开启通知';
+      }
+    }
+    updateBell();
+    
+    bell.addEventListener('click', function() {
+      if (Notification.permission === 'granted') {
+        // Already granted - toggle polling by registering SW
+        navigator.serviceWorker.ready.then(function(reg) {
+          bell.classList.toggle('active');
+          var isActive = bell.classList.contains('active');
+          bell.title = isActive ? '通知已开启' : '点击开启通知';
+          // Send message to SW to start/stop polling
+          reg.active.postMessage({ type: isActive ? 'START_POLLING' : 'STOP_POLLING' });
+        });
+      } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then(function(perm) {
+          updateBell();
+          if (perm === 'granted') {
+            navigator.serviceWorker.ready.then(function() {
+              console.log('Notification permission granted, SW polling active');
+            });
+          }
+        });
+      }
+    });
+  })();
+
 </script>
 </body>
 </html>
