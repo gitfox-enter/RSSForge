@@ -1,10 +1,14 @@
-const CACHE_NAME = 'xianbao-v4';
+const CACHE_NAME = 'xianbao-v5';
 const BASE = new URL('.', self.location.href).pathname.replace(/\/$/, '');
 const ASSETS = [
   BASE + '/public/favicon.svg',
   BASE + '/offline.html'
 ];
+const POLL_INTERVAL = 5 * 60 * 1000; // 5 minutes
+const NOTIFICATION_TAG = 'xianbao-update';
+let lastItemCount = 0;
 
+// === Install & Activate ===
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
@@ -19,14 +23,15 @@ self.addEventListener('activate', e => {
     )
   );
   self.clients.claim();
+  // Start polling for updates after activation
+  pollForUpdates();
 });
 
+// === Fetch handler (network-first for data, cache-first for assets) ===
 self.addEventListener('fetch', e => {
-  // Network first for HTML pages and data - always get fresh content
-  if (e.request.url.includes('items.json') ||
+  if (e.request.url.includes('items.json') || e.request.url.includes('items_latest.json') ||
       e.request.headers.get('accept')?.includes('text/html') ||
-      e.request.url.endsWith('.html') ||
-      e.request.url.endsWith('/')) {
+      e.request.url.endsWith('.html') || e.request.url.endsWith('/')) {
     e.respondWith(
       fetch(e.request)
         .then(res => {
@@ -37,7 +42,6 @@ self.addEventListener('fetch', e => {
         .catch(async () => {
           const cached = await caches.match(e.request);
           if (cached) return cached;
-          // For navigation requests, show offline page
           if (e.request.mode === 'navigate') {
             const offlinePage = await caches.match(BASE + '/offline.html');
             if (offlinePage) return offlinePage;
@@ -47,7 +51,6 @@ self.addEventListener('fetch', e => {
     );
     return;
   }
-  // Cache first for static assets (images, fonts, etc.)
   e.respondWith(
     caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
       const clone = res.clone();
@@ -56,3 +59,78 @@ self.addEventListener('fetch', e => {
     }))
   );
 });
+
+// === Push notification handler ===
+self.addEventListener('push', e => {
+  const data = e.data ? e.data.json() : {};
+  const title = data.title || '线报聚合';
+  const body = data.body || '发现新的羊毛线报，点击查看！';
+  e.waitUntil(
+    self.registration.showNotification(title, {
+      body: body,
+      icon: BASE + '/public/icon-192.png',
+      badge: BASE + '/public/favicon.svg',
+      tag: NOTIFICATION_TAG,
+      data: { url: data.url || BASE + '/' },
+      vibrate: [100, 50, 100],
+      requireInteraction: false,
+      renotify: true
+    })
+  );
+});
+
+// === Notification click handler ===
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = e.notification.data?.url || BASE + '/';
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
+      for (const client of clientList) {
+        if (client.url.includes(BASE) && 'focus' in client) return client.focus();
+      }
+      return clients.openWindow(url);
+    })
+  );
+});
+
+// === Polling: check items_latest.json for new items ===
+async function pollForUpdates() {
+  try {
+    const res = await fetch(BASE + '/items_latest.json?t=' + Date.now());
+    if (!res.ok) return;
+    const data = await res.json();
+    const currentCount = (data.items || []).length;
+    
+    // First poll: just record the count, don't notify
+    if (lastItemCount === 0) {
+      lastItemCount = currentCount;
+      return;
+    }
+    
+    // New items detected
+    if (currentCount > lastItemCount) {
+      const diff = currentCount - lastItemCount;
+      const latest = data.items[0];
+      const preview = latest ? latest.text?.substring(0, 60) : '';
+      
+      self.registration.showNotification('线报聚合 🐑', {
+        body: diff === 1 && preview
+          ? preview
+          : `发现 ${diff} 条新线报，点击查看`,
+        icon: BASE + '/public/icon-192.png',
+        badge: BASE + '/public/favicon.svg',
+        tag: NOTIFICATION_TAG,
+        data: { url: BASE + '/' },
+        vibrate: [100, 50, 100],
+        renotify: true
+      });
+      
+      lastItemCount = currentCount;
+    }
+  } catch (e) {
+    // Poll failed, will retry next interval
+  }
+  
+  // Schedule next poll
+  setTimeout(pollForUpdates, POLL_INTERVAL);
+}
