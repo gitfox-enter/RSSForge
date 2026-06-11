@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>线报聚合 - 爬虫健康面板</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f5f5f5;color:#333;max-width:960px;margin:0 auto;padding:20px}
+  h1{font-size:1.5rem;margin-bottom:16px;color:#1976d2}
+  .card{background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+  .card h2{font-size:1.1rem;margin-bottom:12px;color:#444}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+  .stat{text-align:center;padding:12px;background:#f8f9fa;border-radius:6px}
+  .stat .num{font-size:1.8rem;font-weight:700;color:#1976d2}
+  .stat .label{font-size:.75rem;color:#888;margin-top:4px}
+  .site-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid #eee;font-size:.85rem}
+  .site-row:last-child{border-bottom:none}
+  .site-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .site-status{padding:2px 8px;border-radius:10px;font-size:.75rem;font-weight:600}
+  .site-status.ok{background:#e8f5e9;color:#2e7d32}
+  .site-status.fail{background:#ffebee;color:#c62828}
+  .site-status.skip{background:#fff3e0;color:#e65100}
+  .site-time{color:#999;font-size:.75rem;margin-left:8px;min-width:50px;text-align:right}
+  .site-rt{color:#666;font-size:.75rem;min-width:60px;text-align:right}
+  .empty{color:#999;text-align:center;padding:40px}
+  .back{display:inline-block;margin-bottom:16px;color:#1976d2;text-decoration:none;font-size:.9rem}
+  .back:hover{text-decoration:underline}
+  .updated{font-size:.75rem;color:#999;margin-bottom:8px}
+</style>
+</head>
+<body>
+<a class="back" href="./">&larr; 返回主页</a>
+<h1>🩺 爬虫健康面板</h1>
+<div id="status" class="empty">加载中...</div>
+
+<script>
+fetch('crawl_status.json?t=' + Date.now())
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var el = document.getElementById('status');
+    if (!data || !data.last_run) {
+      el.textContent = '暂无爬虫运行数据';
+      return;
+    }
+    var run = data.last_run;
+    var sites = data.sites || [];
+    var ok = sites.filter(function(s) { return s.status === 'ok'; }).length;
+    var fail = sites.filter(function(s) { return s.status === 'fail'; }).length;
+    var skip = sites.filter(function(s) { return s.status === 'skip'; }).length;
+
+    var html = '<div class="updated">最后运行: ' + (run.check_time || '-') + '</div>';
+
+    // Overview stats
+    html += '<div class="card"><h2>📊 运行概览</h2><div class="grid">';
+    html += '<div class="stat"><div class="num">' + sites.length + '</div><div class="label">总站点</div></div>';
+    html += '<div class="stat"><div class="num">' + ok + '</div><div class="label">成功</div></div>';
+    html += '<div class="stat"><div class="num">' + fail + '</div><div class="label">失败</div></div>';
+    html += '<div class="stat"><div class="num">' + skip + '</div><div class="label">跳过</div></div>';
+    html += '<div class="stat"><div class="num">' + (run.new_items || 0) + '</div><div class="label">新条目</div></div>';
+    html += '<div class="stat"><div class="num">' + (run.total_items || 0) + '</div><div class="label">总条目</div></div>';
+    html += '</div></div>';
+
+    // Per-site status
+    html += '<div class="card"><h2>🔍 站点状态</h2>';
+    if (sites.length === 0) {
+      html += '<div class="empty">暂无站点数据</div>';
+    } else {
+      sites.sort(function(a, b) {
+        var order = {fail:0, skip:1, ok:2};
+        return (order[a.status] || 2) - (order[b.status] || 2);
+      });
+      sites.forEach(function(s) {
+        var cls = s.status === 'ok' ? 'ok' : (s.status === 'fail' ? 'fail' : 'skip');
+        var label = s.status === 'ok' ? 'OK' : (s.status === 'fail' ? 'FAIL' : 'SKIP');
+        html += '<div class="site-row">';
+        html += '<span class="site-name">' + (s.name || s.url) + '</span>';
+        html += '<span class="site-status ' + cls + '">' + label + '</span>';
+        if (s.response_time) html += '<span class="site-rt">' + s.response_time + 'ms</span>';
+        if (s.error) html += '<span class="site-time" title="' + s.error + '">ERR</span>';
+        html += '</div>';
+      });
+    }
+    html += '</div>';
+
+    el.className = '';
+    el.innerHTML = html;
+  })
+  .catch(function() {
+    document.getElementById('status').textContent = '加载失败，请检查 crawl_status.json 是否存在';
+  });
+</script>
+</body>
+</html>
