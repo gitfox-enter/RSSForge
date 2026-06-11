@@ -25,7 +25,7 @@ from common import (
     calculate_md5, upgrade_to_https, DomainRateLimiter, sanitize_href,
     sanitize_text, is_junk, ITEMS_DB_FILE, BLACKLIST_FILE,
     init_sqlite, sqlite_insert_items, sqlite_get_recent_items,
-    sqlite_get_existing_urls, sqlite_export_json, sqlite_load_hash_records,
+    sqlite_get_existing_urls, sqlite_export_json, sqlite_export_latest_json, sqlite_load_hash_records,
     sqlite_save_hash_records, SQLITE_DB_FILE, MAX_ITEMS_DB,
     ProxyPool, create_proxy_pool,
 )
