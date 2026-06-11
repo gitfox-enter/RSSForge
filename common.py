@@ -47,6 +47,8 @@ from urllib.parse import urlparse
 # ============================================================
 
 ITEMS_DB_FILE: str = "items.json"
+ITEMS_LATEST_FILE: str = "items_latest.json"
+CRAWL_STATUS_FILE: str = "crawl_status.json"
 
 BLACKLIST_FILE: str = "blacklist.json"
 
