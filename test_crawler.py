@@ -41,8 +41,13 @@ PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 if PROJECT_DIR not in sys.path:
     sys.path.insert(0, PROJECT_DIR)
 
-import crawl
+import crawler.config
+import crawler.network
+import crawler.storage
+import crawler.parsers
+import crawler.engine
 import common
+import crawl  # entry point, re-exports via crawler/__init__.py
 import fast_check
 
 # Reusable BeautifulSoup import (used throughout tests)
