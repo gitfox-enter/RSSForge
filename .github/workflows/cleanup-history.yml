@@ -38,6 +38,7 @@ jobs:
 
       - name: Force push cleaned history
         run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          # git filter-repo removes remotes; re-add origin
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git push --force --all
           git push --force --tags
