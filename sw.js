@@ -1,4 +1,4 @@
-const CACHE_NAME = 'xianbao-v5';
+const CACHE_NAME = 'xianbao-v6';
 const BASE = new URL('.', self.location.href).pathname.replace(/\/$/, '');
 const ASSETS = [
   BASE + '/public/favicon.svg',
@@ -94,7 +94,23 @@ self.addEventListener('notificationclick', e => {
 });
 
 // === Polling: check items_latest.json for new items ===
+
+
+// === Message handler from page ===
+let pollingEnabled = true;
+
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'START_POLLING') {
+    pollingEnabled = true;
+  } else if (e.data && e.data.type === 'STOP_POLLING') {
+    pollingEnabled = false;
+  }
+});
+
+// Modify pollForUpdates to respect pollingEnabled
+
 async function pollForUpdates() {
+  if (!pollingEnabled) { setTimeout(pollForUpdates, POLL_INTERVAL); return; }
   try {
     const res = await fetch(BASE + '/items_latest.json?t=' + Date.now());
     if (!res.ok) return;
