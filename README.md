@@ -46,7 +46,7 @@ GitHub Actions (cron)
 
 ## Live Demo
 
-Visit the live dashboard: [gitfox-enter.github.io/site-update-monitor](https://gitfox-enter.github.io/site-update-monitor/)
+Visit the live dashboard: [线报聚合](https://gitfox-enter.github.io/site-update-monitor/)
 
 ## License
 
