@@ -798,9 +798,16 @@ function cleanTitle(text) {
 function loadData() {
   document.getElementById('item-list').innerHTML = '<div class="loading">加载中</div>';
 
-  // Load latest 500 items first for instant display
+  // Load items_latest.json first (fast), fallback to items.json
   fetch('items_latest.json?t=' + Date.now(), { priority: 'high' })
-    .then(function(r) { return r.json(); })
+    .then(function(r) {
+      if (!r.ok) throw new Error('latest not available');
+      return r.json();
+    })
+    .catch(function() {
+      // Fallback to full items.json if items_latest.json doesn't exist yet
+      return fetch('items.json?t=' + Date.now()).then(function(r) { return r.json(); });
+    })
     .then(function(data) {
       var rawItems = data.items || [];
       /* Capture last update time */
