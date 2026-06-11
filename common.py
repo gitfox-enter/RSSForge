@@ -62,6 +62,7 @@ __all__ = [
     # Constants
     "ITEMS_DB_FILE",
     "ITEMS_LATEST_FILE",
+    "CRAWL_STATUS_FILE",
     "BLACKLIST_FILE",
     # Logging
     "JsonFormatter",
