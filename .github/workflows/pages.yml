@@ -30,7 +30,9 @@ jobs:
       - name: Prepare site
         run: |
           mkdir -p _site/public
-          cp index.html status.html offline.html sw.js manifest.json items.json items_latest.json crawl_status.json _site/
+          for f in index.html status.html offline.html sw.js manifest.json items.json items_latest.json crawl_status.json; do
+          [ -f "$f" ] && cp "$f" _site/
+        done
           cp -r public/ _site/public/
       - name: Setup Pages
         uses: actions/configure-pages@v4
