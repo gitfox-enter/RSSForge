@@ -3,9 +3,11 @@
 
 import os
 import json
+import random
 import logging
 from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Set, Tuple
+from urllib.parse import urlparse
 
 from common import (
     ITEMS_DB_FILE, BLACKLIST_FILE,
@@ -17,7 +19,7 @@ from common import (
     sqlite_save_hash_records, SQLITE_DB_FILE, MAX_ITEMS_DB,
     ProxyPool, create_proxy_pool,
 )
-from crawler.config import NOTIFIED_ITEMS_FILE, HASH_RECORD_FILE
+from crawler.config import NOTIFIED_ITEMS_FILE, HASH_RECORD_FILE, REQUEST_DELAY_MIN, REQUEST_DELAY_MAX, BROWSER_PROFILES
 
 logger = logging.getLogger('crawl')
 
