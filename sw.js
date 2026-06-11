@@ -1,7 +1,8 @@
 const CACHE_NAME = 'xianbao-v4';
+const BASE = new URL('.', self.location.href).pathname.replace(/\/$/, '');
 const ASSETS = [
-  '/site-update-monitor/public/favicon.svg',
-  '/site-update-monitor/offline.html'
+  BASE + '/public/favicon.svg',
+  BASE + '/offline.html'
 ];
 
 self.addEventListener('install', e => {
@@ -38,7 +39,7 @@ self.addEventListener('fetch', e => {
           if (cached) return cached;
           // For navigation requests, show offline page
           if (e.request.mode === 'navigate') {
-            const offlinePage = await caches.match('/site-update-monitor/offline.html');
+            const offlinePage = await caches.match(BASE + '/offline.html');
             if (offlinePage) return offlinePage;
           }
           return new Response('离线 - 线报聚合', { status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
