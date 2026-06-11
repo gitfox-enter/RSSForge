@@ -728,6 +728,42 @@ def save_paused_sites(paused: Dict[str, Any]) -> None:
             os.remove(tmp_file)
 
 
+
+def export_crawl_status(all_site_results, new_item_list, db_conn, metrics_summary):
+    """Export crawl_status.json for the health dashboard."""
+    from common import CRAWL_STATUS_FILE, sqlite_get_recent_items, get_source_name
+    sites = []
+    for r in all_site_results:
+        entry = {
+            "url": r.get("url", ""),
+            "name": get_source_name(r.get("url", "")),
+            "status": "ok" if r.get("status") == "updated" or r.get("status") == "no_change" else ("fail" if r.get("status") == "error" else "skip"),
+        }
+        if r.get("response_time"):
+            entry["response_time"] = round(r.get("response_time"), 0)
+        if r.get("message"):
+            entry["error"] = str(r.get("message", ""))[:200]
+        sites.append(entry)
+    total_items = len(sqlite_get_recent_items(db_conn))
+    status = {
+        "last_run": {
+            "check_time": new_item_list[0].get("time", "") if new_item_list else "",
+            "total_items": total_items,
+            "new_items": len(new_item_list),
+            "metrics": metrics_summary,
+        },
+        "sites": sites,
+    }
+    tmp = CRAWL_STATUS_FILE + ".tmp"
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(status, f, ensure_ascii=False, separators=(",", ":"))
+        os.replace(tmp, CRAWL_STATUS_FILE)
+    except Exception:
+        if os.path.exists(tmp):
+            os.remove(tmp)
+
+
 def main() -> None:
     """Legacy sync main - kept for backward compatibility. Use main() (async) instead."""
     logger.info("GitHub Actions 多站点更新监控系统 v2.0 (legacy sync mode)")
@@ -998,6 +1034,7 @@ async def main_async() -> None:
     logger.info("本轮新通知条目: %d 条", len(new_urls))
 
     # Git提交
+    export_crawl_status(all_site_results, new_item_list, db_conn, metrics_summary)
     git_commit_if_changed()
 
     # ===== 运行后自分析 =====
