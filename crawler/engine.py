@@ -23,12 +23,13 @@ from common import (
     load_items_db, save_items_db, load_blacklist, is_blacklisted,
     build_source_name_index, get_source_name as _get_source_name_by_index,
     calculate_md5, upgrade_to_https, DomainRateLimiter, sanitize_href,
-    sanitize_text, is_junk, ITEMS_DB_FILE, BLACKLIST_FILE,
+    sanitize_text, is_junk, ITEMS_DB_FILE, BLACKLIST_FILE, CRAWL_STATUS_FILE, MAX_ITEMS_DB, SQLITE_DB_FILE, MONITOR_SITES, CATEGORY_KEYWORDS,
     init_sqlite, sqlite_insert_items, sqlite_get_recent_items,
     sqlite_get_existing_urls, sqlite_export_json, sqlite_export_latest_json, sqlite_load_hash_records,
     sqlite_save_hash_records, SQLITE_DB_FILE, MAX_ITEMS_DB,
     ProxyPool, create_proxy_pool,
 )
+from crawler.config import JS_RENDER_SITES, MAX_CONSECUTIVE_FAILURES, MAX_RETRIES, PAUSED_SITES_FILE, REQUEST_TIMEOUT, RETRY_BASE_DELAY, RUN_LOG_FILE, MONITOR_SITES
 
 # Playwright: optional dependency for JS-rendered sites
 try:
