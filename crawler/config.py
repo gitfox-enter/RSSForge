@@ -4,7 +4,7 @@
 import os
 from typing import Any, Dict, List, Optional, Set
 from urllib.parse import urlparse
-from common import build_source_name_index
+from common import build_source_name_index, ProxyPool
 
 # ============================================================
 # 配置区域
