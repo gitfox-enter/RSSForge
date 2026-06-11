@@ -6,7 +6,7 @@ import re
 import time
 import html as html_mod
 from datetime import datetime, timezone, timedelta
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
