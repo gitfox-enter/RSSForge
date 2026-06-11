@@ -23,13 +23,14 @@ from common import (
     load_items_db, save_items_db, load_blacklist, is_blacklisted,
     build_source_name_index, get_source_name as _get_source_name_by_index,
     calculate_md5, upgrade_to_https, DomainRateLimiter, sanitize_href,
-    sanitize_text, is_junk, ITEMS_DB_FILE, BLACKLIST_FILE, CRAWL_STATUS_FILE, MAX_ITEMS_DB, SQLITE_DB_FILE, MONITOR_SITES, CATEGORY_KEYWORDS,
+    sanitize_text, is_junk, ITEMS_DB_FILE, BLACKLIST_FILE, CRAWL_STATUS_FILE, MAX_ITEMS_DB, SQLITE_DB_FILE,
     init_sqlite, sqlite_insert_items, sqlite_get_recent_items,
     sqlite_get_existing_urls, sqlite_export_json, sqlite_export_latest_json, sqlite_load_hash_records,
-    sqlite_save_hash_records, SQLITE_DB_FILE, MAX_ITEMS_DB,
+    sqlite_save_hash_records,
     ProxyPool, create_proxy_pool,
 )
 from crawler.config import JS_RENDER_SITES, MAX_CONSECUTIVE_FAILURES, MAX_RETRIES, PAUSED_SITES_FILE, REQUEST_TIMEOUT, RETRY_BASE_DELAY, RUN_LOG_FILE, MONITOR_SITES
+from crawler.storage import get_current_round, load_notified_items, save_notified_items, filter_new_items, merge_items_into_db
 
 # Playwright: optional dependency for JS-rendered sites
 try:
@@ -45,6 +46,9 @@ engine_logger.setLevel(logging.INFO)
 _handler = logging.StreamHandler(sys.stdout)
 _handler.setFormatter(JsonFormatter())
 engine_logger.addHandler(_handler)
+
+# Alias for backward compatibility
+logger = engine_logger
 
 # ============================================================
 # Playwright: JS 渲染抓取

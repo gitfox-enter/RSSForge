@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Crawler storage layer: hash records, notified items, items.json DB management."""
 
+import os
 import json
 import logging
 from datetime import datetime, timezone, timedelta
@@ -10,7 +11,7 @@ from common import (
     ITEMS_DB_FILE, BLACKLIST_FILE,
     load_items_db, save_items_db, load_blacklist, is_blacklisted,
     build_source_name_index, get_source_name as _get_source_name_by_index,
-    calculate_md5, upgrade_to_https,
+    calculate_md5, upgrade_to_https, get_beijing_time,
     init_sqlite, sqlite_insert_items, sqlite_get_recent_items,
     sqlite_get_existing_urls, sqlite_export_json, sqlite_load_hash_records,
     sqlite_save_hash_records, SQLITE_DB_FILE, MAX_ITEMS_DB,

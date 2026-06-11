@@ -72,7 +72,7 @@ from common import (
     is_junk,
     sqlite_export_json,
     sqlite_export_latest_json,
-    sqlite_init_db,
+    init_sqlite,
     sqlite_insert_items,
     sqlite_get_recent_items,
     ProxyPool,
