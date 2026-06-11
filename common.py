@@ -61,6 +61,7 @@ MAX_ITEMS_DB: int = 2000
 __all__ = [
     # Constants
     "ITEMS_DB_FILE",
+    "ITEMS_LATEST_FILE",
     "BLACKLIST_FILE",
     # Logging
     "JsonFormatter",
@@ -101,6 +102,7 @@ __all__ = [
     "sqlite_get_recent_items",
     "sqlite_get_existing_urls",
     "sqlite_export_json",
+    "sqlite_export_latest_json",
     "sqlite_load_hash_records",
     "sqlite_save_hash_records",
     "sqlite_get_meta",
@@ -843,6 +845,25 @@ def sqlite_export_json(conn: sqlite3.Connection, json_path: str = ITEMS_DB_FILE)
             os.remove(tmp_file)
         return False
 
+
+
+
+def sqlite_export_latest_json(conn: sqlite3.Connection, json_path: str = ITEMS_LATEST_FILE, limit: int = 500) -> bool:
+    """Export latest N items to items_latest.json for fast first-page load."""
+    items = sqlite_get_recent_items(conn, limit=limit)
+    updated_at = get_beijing_time().strftime("%Y-%m-%d %H:%M:%S")
+    total_count = len(sqlite_get_recent_items(conn))
+    db = {"items": items, "updated_at": updated_at, "total_items": total_count}
+    tmp_file = json_path + ".tmp"
+    try:
+        with open(tmp_file, "w", encoding="utf-8") as f:
+            json.dump(db, f, ensure_ascii=False, separators=(",", ":"))
+        os.replace(tmp_file, json_path)
+        return True
+    except Exception:
+        if os.path.exists(tmp_file):
+            os.remove(tmp_file)
+        return False
 
 def sqlite_load_hash_records(conn: sqlite3.Connection) -> Dict[str, str]:
     """Load all hash records from SQLite."""
