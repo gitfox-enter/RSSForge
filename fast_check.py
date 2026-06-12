@@ -23,18 +23,14 @@
 import asyncio
 import aiohttp
 import os
-import re
 import sys
 import time
 import json
 import random
 import logging
 import subprocess
-import urllib.request
-from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional, Set, Tuple
 from urllib.parse import urlparse, urljoin
-from urllib.robotparser import RobotFileParser
 
 from bs4 import BeautifulSoup
 
@@ -50,7 +46,11 @@ from common import (
     create_proxy_pool,
 )
 
-from crawler.storage import merge_items_into_db, export_items_latest_json, get_existing_urls
+from crawler.config import (
+    REQUEST_TIMEOUT, MAX_RETRIES, RETRY_BASE_DELAY,
+)
+from crawler.storage import merge_items_into_db, export_items_latest_json, get_existing_urls, get_random_profile
+from crawler.network import is_allowed_by_robots
 
 # ============================================================
 # 4. 结构化日志
@@ -65,7 +65,7 @@ _handler.setFormatter(JsonFormatter())
 logger.addHandler(_handler)
 
 # ============================================================
-# 配置
+# 配置（复用 crawler.config，避免重复定义）
 # ============================================================
 
 FAST_LOG_FILE: str = "fast_log.jsonl"
@@ -73,7 +73,7 @@ FAST_LOG_FILE: str = "fast_log.jsonl"
 # 代理池（初始化后全局可用，None 表示直连模式）
 _proxy_pool: Optional[ProxyPool] = None
 
-# 高频检查站点（按活跃度排序的 top 12）
+# 高频检查站点（按活跃度排序的 top 10）
 FAST_SITES: List[Dict[str, str]] = [
     {"url": "https://www.zhuanyes.com/xianbao/", "name": "专业线报"},
     {"url": "https://news.ixbk.net/", "name": "线报酷"},
@@ -90,127 +90,9 @@ FAST_SITES: List[Dict[str, str]] = [
 # - http://www.0818tuan.com/ (Connection refused)
 # - http://www.xiaodigu.com/ (502 Bad Gateway)
 
-# 爬虫配置
-REQUEST_TIMEOUT: int = 10
-MAX_RETRIES: int = 3                       # 3 次尝试
-RETRY_BACKOFF_BASE: float = 1.0            # 退避基数 (秒): 1, 2, 4
-RESPECT_ROBOTS_TXT: bool = False            # robots.txt 合规开关（线报站 robots.txt 通常过严，个人监控建议关闭）
-
-BROWSER_PROFILES: List[Dict[str, Any]] = [
-    {
-        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'fingerprint': {
-            'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-        },
-        'accept_language': 'zh-CN,zh;q=0.9,en;q=0.8',
-    },
-    {
-        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
-        'fingerprint': {
-            'sec-ch-ua': '"Not/A_Brand";v="8", "Chromium";v="125", "Google Chrome";v="125"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-        },
-        'accept_language': 'zh-CN,zh;q=0.9',
-    },
-    {
-        'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'fingerprint': {
-            'sec-ch-ua': '"Not A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"macOS"',
-        },
-        'accept_language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-    },
-    {
-        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
-        'fingerprint': {},  # Firefox does not send sec-ch-ua headers
-        'accept_language': 'zh-CN,zh;q=0.9,en;q=0.8',
-    },
-    {
-        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0',
-        'fingerprint': {},  # Firefox does not send sec-ch-ua headers
-        'accept_language': 'zh-TW,zh-CN;q=0.9,zh;q=0.8,en;q=0.7',
-    },
-    {
-        'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15',
-        'fingerprint': {},  # Safari does not send sec-ch-ua headers
-        'accept_language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-    },
-    {
-        'user_agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'fingerprint': {
-            'sec-ch-ua': '"Chromium";v="120", "Not A Brand";v="24", "Google Chrome";v="120"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Linux"',
-        },
-        'accept_language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
-    },
-    {
-        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edg/120.0.0.0 Safari/537.36',
-        'fingerprint': {
-            'sec-ch-ua': '"Not A Brand";v="8", "Chromium";v="120", "Microsoft Edge";v="120"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-        },
-        'accept_language': 'zh-CN,zh;q=0.9,en;q=0.8',
-    },
-]
-
-
-def get_random_profile() -> Dict[str, Any]:
-    """随机返回一组一致的浏览器配置（UA + 指纹 + 语言匹配）"""
-    return random.choice(BROWSER_PROFILES)
-
-
-# ============================================================
-# 6. robots.txt 缓存 (按域名)
-# ============================================================
-
-_robots_cache: Dict[str, RobotFileParser] = {}
-_robots_fetch_failures: Set[str] = set()  # 获取失败的域名，默认允许
-
-
-def _get_robots_parser(scheme_host: str) -> RobotFileParser:
-    """获取或创建指定域名的 robots.txt 解析器（带缓存）"""
-    if scheme_host in _robots_cache:
-        return _robots_cache[scheme_host]
-
-    rp = RobotFileParser()
-    robots_url = f"{scheme_host}/robots.txt"
-    try:
-        # 使用 urllib 抓取 robots.txt（同步、简单、一次性调用）
-        req = urllib.request.Request(robots_url, headers={"User-Agent": "*"})
-        with urllib.request.urlopen(req, timeout=5) as resp:
-            body = resp.read().decode("utf-8", errors="replace")
-            if resp.status == 200:
-                rp.parse(body.splitlines())
-            elif resp.status in (401, 403):
-                rp.parse(["User-agent: *", "Disallow: /"])
-            else:
-                _robots_fetch_failures.add(scheme_host)
-    except Exception:
-        _robots_fetch_failures.add(scheme_host)
-        # 获取失败时默认允许抓取（宽容策略）
-    _robots_cache[scheme_host] = rp
-    return rp
-
-
-def is_allowed_by_robots(url: str, user_agent: str = "*") -> bool:
-    """检查 URL 是否被 robots.txt 允许抓取"""
-    if not RESPECT_ROBOTS_TXT:
-        return True
-
-    parsed = urlparse(url)
-    scheme_host = f"{parsed.scheme}://{parsed.netloc}"
-
-    if scheme_host in _robots_fetch_failures:
-        return True  # robots.txt 不可达时默认允许
-
-    rp = _get_robots_parser(scheme_host)
-    return rp.can_fetch(user_agent, url)
+# 爬虫配置（REQUEST_TIMEOUT / MAX_RETRIES / RETRY_BASE_DELAY /
+# get_random_profile / is_allowed_by_robots 均从 crawler 包导入）
+RETRY_BACKOFF_BASE: float = RETRY_BASE_DELAY  # 本地别名，保持向后兼容
 
 
 # ============================================================
