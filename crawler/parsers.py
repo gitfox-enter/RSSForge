@@ -6,7 +6,6 @@ import re
 import time
 import html as html_mod
 import requests
-from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional, Set, Tuple
 from urllib.parse import urljoin, urlparse
 
@@ -14,52 +13,65 @@ from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
 import warnings
 warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 
-from common import (
-    auto_categorize, CATEGORY_KEYWORDS, sanitize_href, sanitize_text, is_junk,
-)
-from crawler.config import REQUEST_TIMEOUT
-from crawler.storage import get_random_ua
-
 logger = logging.getLogger('crawl')
+
+
+# ============================================================
+# 预编译正则 & 公共工具函数
+# ============================================================
+
+_RE_CHINESE = re.compile(r'[\u4e00-\u9fff]')
+
+
+def _has_chinese(text: str, min_count: int = 2) -> bool:
+    """检查文本中是否包含足够数量的中文字符。"""
+    return len(_RE_CHINESE.findall(text)) >= min_count
+
+
+def _is_valid_text(text: str, min_len: int = 4, max_len: int = 120) -> bool:
+    """检查文本长度是否在有效范围内。"""
+    return bool(text) and min_len <= len(text) <= max_len
+
+
+def _add_item(items: List[Dict[str, str]], seen: Set[str],
+              text: str, href: str, base_url: str = '') -> bool:
+    """去重、转换相对URL、追加条目到列表。
+
+    Returns:
+        True 如果条目被成功追加，False 表示已重复被跳过。
+    """
+    if not text or text in seen:
+        return False
+    seen.add(text)
+    if base_url and href.startswith('/'):
+        href = urljoin(base_url, href)
+    items.append({'text': text, 'url': href})
+    return True
+
+
+# 通用导航/功能性文字集合 — 各站点 skip 列表的公共基础
+COMMON_SKIP_WORDS: Set[str] = {
+    '首页', '关于', '联系我们', '留言', '搜索', '登录', '注册',
+    '下一页', '上一页', '返回顶部', '返回首页', '关于我们',
+    '登录/注册', '找回密码', '立即注册', '收藏本站', '设为首页',
+    '快捷导航', '更多', '最新', '热门', '分类', '标签',
+    '回复', '删除', '举报', '推荐', '点赞', '评论', '浏览',
+}
+
+
+def _make_skip_set(*extra_words: str) -> Set[str]:
+    """在 COMMON_SKIP_WORDS 基础上创建站点专用的过滤集合。"""
+    return COMMON_SKIP_WORDS | set(extra_words)
+
+
+# Direct imports (no circular dependency: storage/config don't import parsers)
+from crawler.storage import get_random_ua
+from crawler.config import REQUEST_TIMEOUT
 
 # ============================================================
 # 站点专用解析器
 # ============================================================
 
-def parse_ypojie(soup: BeautifulSoup) -> str:
-    """易破解 (WordPress DUX主题) - 精准提取最新文章标题和链接"""
-    items: List[str] = []
-    for h2 in soup.select('#content h2 a, #content .entry-title a, #main-content h2 a'):
-        text = h2.get_text(strip=True)
-        href = h2.get('href', '')
-        if text and len(text) > 5:
-            items.append(f"{text} ({href})")
-    if not items:
-        for a in soup.select('.widget_recent a, .widgets-list a, .recent-posts a'):
-            text = a.get_text(strip=True)
-            href = a.get('href', '')
-            if text and len(text) > 5 and not any(x in href for x in ['/page/', '/archives']):
-                items.append(f"{text} ({href})")
-    return '\n'.join(items[:30])
-
-
-def parse_discuz_threadlist(soup: BeautifulSoup) -> str:
-    """Discuz论坛通用解析器 - 精准提取帖子列表"""
-    items: List[str] = []
-    for a in soup.select('.threadlist .t a, .tl .t a, #threadlist .t a, .threadlist tr td a.xst, .threadlist tr td a'):
-        text = a.get_text(strip=True)
-        href = a.get('href', '')
-        if text and len(text) > 3 and '/thread-' in href:
-            items.append(f"{text} ({href})")
-    if not items:
-        for tr in soup.select('.forum tbody tr, table tbody tr'):
-            for a in tr.select('a'):
-                text = a.get_text(strip=True)
-                href = a.get('href', '')
-                if text and len(text) > 3 and '/thread-' in href:
-                    items.append(f"{text} ({href})")
-                    break
-    return '\n'.join(items[:30])
 
 
 def parse_discuz_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
@@ -143,65 +155,7 @@ def parse_yxssp_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
     return items[:30]
 
 
-# ---------------------------------------------------------------------------
-# 3. 资源厅 / 晓晓资源网  (ziyuanting.com)
-# ---------------------------------------------------------------------------
-# HTML structure: OneNav WordPress theme (navigation/directory site).
-#   Site entries:
-#     <article class="posts-item sites-item ...">
-#       <a href="https://www.ziyuanting.com/sites/{id}.html" class="sites-body">
-#         <h3 class="item-title"><b>Site Name</b></h3>
-#       </a>
-#     </article>
-#   Bulletin/announcement links:
-#     <a href="https://www.ziyuanting.com/bulletin/{id}.html">title</a>
-#   App/software entries:
-#     <article class="posts-item app-item ...">
-#       <a href="https://www.ziyuanting.com/app/{id}.html">
-#
-# The old parser only looked for /bulletin/, /article/, /post/ paths
-# which misses the main content: /sites/ and /app/ entries.
-# Fix: extract sites-item and app-item entries, plus bulletin links.
-# ---------------------------------------------------------------------------
 
-
-
-
-def parse_423down(soup: BeautifulSoup) -> str:
-    """423Down - 精准提取软件文章，排除分类导航和侧边栏"""
-    items: List[str] = []
-    seen: Set[str] = set()
-    # 主内容区的文章标题链接（格式：/数字.html 才是文章页）
-    for a in soup.select('.post-list a, .content-list a, article h2 a, .entry-title a, #main a, .list-item a'):
-        text = a.get_text(strip=True)
-        href = a.get('href', '')
-        if not text or len(text) < 5:
-            continue
-        # 只要文章页（/数字.html 格式）
-        if not re.search(r'/\d+\.html', href):
-            continue
-        if text in seen:
-            continue
-        seen.add(text)
-        items.append(f"{text} ({href})")
-    # 如果上面没找到，用更宽松的方式：取包含日期关键词的链接
-    if not items:
-        for a in soup.find_all('a', href=True):
-            href = a.get('href', '')
-            text = a.get_text(strip=True)
-            if not text or len(text) < 5 or len(text) > 80:
-                continue
-            if not re.search(r'/\d+\.html', href):
-                continue
-            # 排除纯英文薄标题（通常是导航）
-            chinese_count = len(re.findall(r'[\u4e00-\u9fff]', text))
-            if chinese_count < 2 and len(text) < 15:
-                continue
-            if text in seen:
-                continue
-            seen.add(text)
-            items.append(f"{text} ({href})")
-    return '\n'.join(items[:30])
 
 
 
@@ -359,20 +313,6 @@ def parse_ziyuanting_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str,
 # ---------------------------------------------------------------------------
 
 
-
-
-def parse_ziyuanting(soup: BeautifulSoup) -> str:
-    """晓晓资源网 - 只提取公告文本用于MD5比对"""
-    items: List[str] = []
-    for a in soup.find_all('a', href=True):
-        href = a.get('href', '')
-        text = a.get_text(strip=True)
-        if '/bulletin/' in href or '/article/' in href or '/post/' in href:
-            if text and len(text) > 5:
-                items.append(f"{text} ({href})")
-    return '\n'.join(items[:20])
-
-
 def parse_wycad_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """无忧软件网 - 提取软件/系统文章条目。
 
@@ -435,8 +375,7 @@ def parse_wycad_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
             continue
 
         # Ensure meaningful Chinese text
-        chinese_count = len(re.findall(r'[\u4e00-\u9fff]', text))
-        if chinese_count < 2:
+        if not _has_chinese(text):
             continue
 
         seen.add(text)
@@ -497,8 +436,7 @@ def parse_h6room_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
             continue
 
         # Ensure meaningful Chinese text
-        chinese_count = len(re.findall(r'[\u4e00-\u9fff]', text))
-        if chinese_count < 2:
+        if not _has_chinese(text):
             continue
 
         seen.add(text)
@@ -648,8 +586,7 @@ def parse_daydayzhuan_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str
             seen_ids.add(article_id)
 
         # Ensure meaningful Chinese text
-        chinese_count = len(re.findall(r'[\u4e00-\u9fff]', text))
-        if chinese_count < 2:
+        if not _has_chinese(text):
             continue
 
         seen.add(text)
@@ -704,8 +641,7 @@ def parse_007ymd_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
             continue
 
         # Ensure meaningful Chinese text
-        chinese_count = len(re.findall(r'[\u4e00-\u9fff]', text))
-        if chinese_count < 2:
+        if not _has_chinese(text):
             continue
 
         # Clean up text: remove zero-width characters
@@ -886,22 +822,7 @@ def parse_rss_feed(content_bytes: bytes, base_url: str) -> List[Dict[str, str]]:
     return items[:30]
 
 
-def parse_ghxi(soup: BeautifulSoup) -> str:
-    """果核剥壳 (新版结构 .item-content h2 a) - 精准提取文章"""
-    items: List[str] = []
-    for a in soup.select('.item-content h2 a, .item-content h3 a'):
-        text = a.get_text(strip=True)
-        href = a.get('href', '')
-        if text and len(text) > 5:
-            items.append(f"{text} ({href})")
-    # 兼容旧版结构
-    if not items:
-        for a in soup.select('.post-item .entry-title a, .post-item h2 a'):
-            text = a.get_text(strip=True)
-            href = a.get('href', '')
-            if text and len(text) > 5:
-                items.append(f"{text} ({href})")
-    return '\n'.join(items[:30])
+
 
 
 def parse_ghxi_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
@@ -2223,8 +2144,7 @@ def parse_ymxianbao_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, 
             continue
 
         # Ensure text has Chinese content (filter pure numbers / short nav)
-        chinese_count = len(re.findall(r'[\u4e00-\u9fff]', text))
-        if chinese_count < 2:
+        if not _has_chinese(text):
             continue
 
         seen.add(text)
@@ -2359,6 +2279,14 @@ def fetch_page_content(url: str) -> Tuple[bool, Any]:
     - 熔断器自动跳过连续失败域名
     - robots.txt 合规检查
     """
+    # Lazy imports to avoid circular dependency (parsers ↔ network ↔ config)
+    from crawler.network import (
+        circuit_breaker, is_allowed_by_robots, get_session,
+        get_conditional_headers, update_conditional_cache, metrics,
+    )
+    from crawler.config import MAX_RETRIES, RETRY_BASE_DELAY
+    from crawler.storage import get_referer, get_random_profile
+
     # URL scheme validation: only allow http/https
     if not url.startswith(('http://', 'https://')):
         return False, f"Invalid URL scheme: {url[:50]}"

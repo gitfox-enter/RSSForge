@@ -10,6 +10,7 @@ with tests and legacy scripts).
 import sys
 
 # Re-export everything from the crawler package and its submodules
+from common import *  # noqa: F401,F403
 from crawler import *  # noqa: F401,F403
 from crawler.config import *  # noqa: F401,F403
 from crawler.network import *  # noqa: F401,F403
