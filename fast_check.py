@@ -45,17 +45,12 @@ from common import (
     sanitize_href,
     sanitize_text,
     is_junk,
-    init_sqlite,
-    sqlite_insert_items,
-    sqlite_get_recent_items,
-    sqlite_get_existing_urls,
-    sqlite_export_json,
-    sqlite_export_latest_json,
-    SQLITE_DB_FILE,
     MAX_ITEMS_DB,
     ProxyPool,
     create_proxy_pool,
 )
+
+from crawler.storage import merge_items_into_db, export_items_latest_json, get_existing_urls
 
 # ============================================================
 # 4. 结构化日志
@@ -485,8 +480,7 @@ async def main() -> None:
         logger.warning("[Git] 拉取失败（继续）: %s", e)
 
     # 2. Initialize SQLite and load existing URLs
-    db_conn = init_sqlite()
-    existing_urls: Set[str] = sqlite_get_existing_urls(db_conn)
+    existing_urls: Set[str] = get_existing_urls()
     logger.info("[数据] 现有 %d 条线报", len(existing_urls))
 
     # 3. Concurrent async fetch
@@ -524,14 +518,12 @@ async def main() -> None:
 
     # 5. Save to SQLite
     if all_new_items:
-        added = sqlite_insert_items(db_conn, all_new_items)
+        added = merge_items_into_db(all_new_items, get_beijing_time().strftime("%Y-%m-%d %H:%M:%S"))
         logger.info("[结果] 新增 %d 条", added)
     else:
         logger.info("[结果] 无新增")
 
     # 6. Export items.json and items_latest.json for frontend
-    sqlite_export_json(db_conn)
-    sqlite_export_latest_json(db_conn)
 
     # 7. Metrics
     logger.info("[指标] %s", metrics.summary())
@@ -569,7 +561,7 @@ async def main() -> None:
     if all_new_items:
         try:
             subprocess.run(
-                ["git", "add", "items.json", SQLITE_DB_FILE, FAST_LOG_FILE],
+                ["git", "add", "items.json", FAST_LOG_FILE],
                 capture_output=True,
                 timeout=10,
             )
@@ -606,7 +598,6 @@ async def main() -> None:
         except Exception as e:
             logger.error("[Git] 提交失败: %s", e)
 
-    db_conn.close()
     logger.info("=" * 50)
 
 

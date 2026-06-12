@@ -10,13 +10,10 @@ from typing import Any, Dict, List, Set, Tuple
 from urllib.parse import urlparse
 
 from common import (
-    ITEMS_DB_FILE, BLACKLIST_FILE,
+    ITEMS_DB_FILE, ITEMS_LATEST_FILE, BLACKLIST_FILE, MAX_ITEMS_DB,
     load_items_db, save_items_db, load_blacklist, is_blacklisted,
     build_source_name_index, get_source_name as _get_source_name_by_index,
-    calculate_md5, upgrade_to_https, get_beijing_time,
-    init_sqlite, sqlite_insert_items, sqlite_get_recent_items,
-    sqlite_get_existing_urls, sqlite_export_json, sqlite_load_hash_records,
-    sqlite_save_hash_records, SQLITE_DB_FILE, MAX_ITEMS_DB,
+    calculate_md5, upgrade_to_https, get_beijing_time, auto_categorize,
     ProxyPool, create_proxy_pool,
 )
 from crawler.config import NOTIFIED_ITEMS_FILE, HASH_RECORD_FILE, REQUEST_DELAY_MIN, REQUEST_DELAY_MAX, BROWSER_PROFILES
@@ -200,6 +197,7 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
     """
     将本轮新抓取的线报合并到全量数据库中（按 URL 去重）
     新条目插入到列表头部（最新的在前面）
+    保留最近 7 天的数据（按 time 字段）
     """
     db = load_items_db()
     existing_urls = set(item['url'] for item in db['items'])
@@ -221,6 +219,17 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
     if fresh_items:
         db['items'] = fresh_items + db['items']
 
+    # 保留最近 7 天的数据（按 time 字段）
+    cutoff = (get_beijing_time() - timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
+    original_count = len(db['items'])
+    db['items'] = [
+        item for item in db['items']
+        if not item.get('time', '') or item['time'] >= cutoff
+    ]
+    retained_count = len(db['items'])
+    if original_count != retained_count:
+        logger.info("7天保留: 移除 %d 条旧数据，保留 %d 条", original_count - retained_count, retained_count)
+
     # 超出上限时裁剪（保留最新条目）
     if len(db['items']) > MAX_ITEMS_DB:
         removed = len(db['items']) - MAX_ITEMS_DB
@@ -230,5 +239,60 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
     db['updated_at'] = check_time
     save_items_db(db)
     logger.info("新增 %d 条，总计 %d 条", added, len(db['items']))
+
+    # 同时导出 items_latest.json
+    export_items_latest_json()
+
     return added
 
+
+
+# ============================================================
+# items_latest.json 导出（用于首页快速加载）
+# ============================================================
+
+_STICKY_ITEM: Dict[str, str] = {
+    "url": "./alipay-redpacket.html",
+    "text": "支付宝每日扫码领红包，大量支付红包等你来拿！",
+    "source": "支付宝",
+    "category": "置顶",
+    "sticky": true,
+}
+
+
+def _ensure_sticky_in_items(items: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    """Return a new list with the Alipay sticky item pinned to the top."""
+    # Drop any existing sticky-looking items to avoid duplication
+    filtered = [it for it in items if it.get("source") != "支付宝"]
+    return [_STICKY_ITEM] + filtered
+
+
+def export_items_latest_json(json_path: str = ITEMS_LATEST_FILE) -> bool:
+    """Export items to items_latest.json for fast first-page load.
+    
+    Format: {"items": [...], "updated_at": "...", "total_items": ...}
+    """
+    db = load_items_db()
+    items = db['items']
+    items = _ensure_sticky_in_items(items)
+    updated_at = db.get('updated_at', get_beijing_time().strftime("%Y-%m-%d %H:%M:%S"))
+    total_count = len(items)
+    output = {"items": items, "updated_at": updated_at, "total_items": total_count}
+    tmp_file = json_path + ".tmp"
+    try:
+        with open(tmp_file, "w", encoding="utf-8") as f:
+            json.dump(output, f, ensure_ascii=False, separators=(",", ":"))
+        os.replace(tmp_file, json_path)
+        logger.info("已导出 items_latest.json: %d 条", total_count)
+        return True
+    except Exception as e:
+        logger.error("导出 items_latest.json 失败: %s", e)
+        if os.path.exists(tmp_file):
+            os.remove(tmp_file)
+        return False
+
+
+def get_existing_urls() -> Set[str]:
+    """Get all existing item URLs from items.json."""
+    db = load_items_db()
+    return set(item['url'] for item in db['items'])

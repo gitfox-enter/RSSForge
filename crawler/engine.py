@@ -26,14 +26,11 @@ from common import (
     load_items_db, save_items_db, load_blacklist, is_blacklisted,
     build_source_name_index, get_source_name as _get_source_name_by_index,
     calculate_md5, upgrade_to_https, DomainRateLimiter, sanitize_href,
-    sanitize_text, is_junk, ITEMS_DB_FILE, BLACKLIST_FILE, CRAWL_STATUS_FILE, MAX_ITEMS_DB, SQLITE_DB_FILE,
-    init_sqlite, sqlite_insert_items, sqlite_get_recent_items,
-    sqlite_get_existing_urls, sqlite_export_json, sqlite_export_latest_json, sqlite_load_hash_records,
-    sqlite_save_hash_records,
+    sanitize_text, is_junk, ITEMS_DB_FILE, BLACKLIST_FILE, CRAWL_STATUS_FILE, MAX_ITEMS_DB,
     ProxyPool, create_proxy_pool,
 )
 from crawler.config import JS_RENDER_SITES, MAX_CONSECUTIVE_FAILURES, MAX_RETRIES, PAUSED_SITES_FILE, REQUEST_TIMEOUT, RETRY_BASE_DELAY, RUN_LOG_FILE, MONITOR_SITES, is_dead_site, get_source_name
-from crawler.storage import get_current_round, load_notified_items, save_notified_items, filter_new_items, merge_items_into_db, save_hash_records, get_random_delay, get_random_profile, get_referer
+from crawler.storage import get_current_round, load_notified_items, save_notified_items, filter_new_items, merge_items_into_db, load_hash_records, save_hash_records, export_items_latest_json, get_random_delay, get_random_profile, get_referer
 from crawler.network import MetricsTracker, metrics, CircuitBreaker, circuit_breaker, get_conditional_headers, rate_limiter, is_allowed_by_robots, update_conditional_cache
 from crawler.parsers import _match_parser, extract_article_items, parse_rss_feed, parse_ghxi_items
 
@@ -742,9 +739,9 @@ def save_paused_sites(paused: Dict[str, Any]) -> None:
 
 
 
-def export_crawl_status(all_site_results, new_item_list, db_conn, metrics_summary):
+def export_crawl_status(all_site_results, new_item_list, metrics_summary):
     """Export crawl_status.json for the health dashboard."""
-    from common import CRAWL_STATUS_FILE, sqlite_get_recent_items
+    from common import CRAWL_STATUS_FILE, load_items_db
     from crawler.config import get_source_name
     sites = []
     for r in all_site_results:
@@ -758,7 +755,9 @@ def export_crawl_status(all_site_results, new_item_list, db_conn, metrics_summar
         if r.get("message"):
             entry["error"] = str(r.get("message", ""))[:200]
         sites.append(entry)
-    total_items = len(sqlite_get_recent_items(db_conn))
+    # Load items from JSON to get total count
+    db = load_items_db()
+    total_items = len(db['items'])
     status = {
         "last_run": {
             "check_time": new_item_list[0].get("time", "") if new_item_list else "",
@@ -902,8 +901,7 @@ async def main_async() -> None:
     random.shuffle(active_sites)
 
     # Initialize SQLite and load hash records
-    db_conn = init_sqlite()
-    old_records = sqlite_load_hash_records(db_conn)
+    old_records = load_hash_records()
     logger.info("已加载哈希记录 (SQLite): %d 条", len(old_records))
 
     # Create aiohttp session with connection pooling (ssl=False: 全局跳过SSL验证，不惜代价抓内容)
@@ -1007,7 +1005,7 @@ async def main_async() -> None:
         logger.warning("已熔断域名: %s", ', '.join(open_circuits.keys()))
 
     # Save hash records to SQLite
-    sqlite_save_hash_records(db_conn, new_records)
+    save_hash_records(new_records)
 
     # Also save to JSON file for backward compat
     save_hash_records(new_records)
@@ -1034,13 +1032,11 @@ async def main_async() -> None:
 
     # Insert new items to SQLite
     if new_item_list:
-        added = sqlite_insert_items(db_conn, new_item_list, check_time)
+        added = merge_items_into_db(new_item_list, check_time)
         logger.info("SQLite 新增 %d 条线报", added)
 
     # Export items.json for frontend SPA
-    sqlite_export_json(db_conn)
     # Export items_latest.json for fast first-page load
-    sqlite_export_latest_json(db_conn)
 
     # 计算本轮新增URL数
     existing_urls_set = set(item['url'] for item in (notified.get('items', []) if isinstance(notified, dict) else []))
@@ -1048,7 +1044,7 @@ async def main_async() -> None:
     logger.info("本轮新通知条目: %d 条", len(new_urls))
 
     # Git提交
-    export_crawl_status(all_site_results, new_item_list, db_conn, metrics_summary)
+    export_crawl_status(all_site_results, new_item_list, metrics_summary)
     git_commit_if_changed()
 
     # ===== 运行后自分析 =====
@@ -1087,7 +1083,6 @@ async def main_async() -> None:
     await close_playwright()
 
     # Close SQLite connection
-    db_conn.close()
 
     logger.info("本轮巡检结束")
 

@@ -3307,6 +3307,113 @@ class TestMaxItemsConsistency(unittest.TestCase):
 
 
 # ===================================================================
+# engine.py 关键逻辑测试
+# ===================================================================
+
+class TestExportCrawlStatus(unittest.TestCase):
+    """Tests for crawler.engine.export_crawl_status status mapping."""
+
+    def test_first_status_mapped_to_ok(self):
+        """'first' (首次监控) should map to 'ok', not 'skip'."""
+        from crawler.engine import export_crawl_status
+        import tempfile, json as json_mod
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False, encoding='utf-8') as f:
+            tmp_path = f.name
+        try:
+            import crawler.engine as eng
+            orig = eng.CRAWL_STATUS_FILE
+            eng.CRAWL_STATUS_FILE = tmp_path
+            eng.export_crawl_status(
+                [{'url': 'https://example.com/', 'status': 'first', 'message': '首次监控'}],
+                [], None, {}
+            )
+            eng.CRAWL_STATUS_FILE = orig
+            with open(tmp_path, 'r', encoding='utf-8') as rf:
+                data = json_mod.load(rf)
+            site = data['sites'][0]
+            self.assertEqual(site['status'], 'ok',
+                             "'first' status should map to 'ok', got: " + site['status'])
+        finally:
+            os.unlink(tmp_path)
+
+    def test_updated_status_mapped_to_ok(self):
+        from crawler.engine import export_crawl_status
+        import tempfile, json as json_mod
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False, encoding='utf-8') as f:
+            tmp_path = f.name
+        try:
+            import crawler.engine as eng
+            orig = eng.CRAWL_STATUS_FILE
+            eng.CRAWL_STATUS_FILE = tmp_path
+            eng.export_crawl_status(
+                [{'url': 'https://example.com/', 'status': 'updated', 'message': ''}],
+                [], None, {}
+            )
+            eng.CRAWL_STATUS_FILE = orig
+            with open(tmp_path, 'r', encoding='utf-8') as rf:
+                data = json_mod.load(rf)
+            self.assertEqual(data['sites'][0]['status'], 'ok')
+        finally:
+            os.unlink(tmp_path)
+
+    def test_error_status_mapped_to_fail(self):
+        from crawler.engine import export_crawl_status
+        import tempfile, json as json_mod
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False, encoding='utf-8') as f:
+            tmp_path = f.name
+        try:
+            import crawler.engine as eng
+            orig = eng.CRAWL_STATUS_FILE
+            eng.CRAWL_STATUS_FILE = tmp_path
+            eng.export_crawl_status(
+                [{'url': 'https://bad.com/', 'status': 'error', 'message': '连接失败'}],
+                [], None, {}
+            )
+            eng.CRAWL_STATUS_FILE = orig
+            with open(tmp_path, 'r', encoding='utf-8') as rf:
+                data = json_mod.load(rf)
+            self.assertEqual(data['sites'][0]['status'], 'fail')
+        finally:
+            os.unlink(tmp_path)
+
+
+class TestEngineImports(unittest.TestCase):
+    """Verify all functions called in engine.py are properly imported."""
+
+    def test_parse_rss_feed_imported(self):
+        from crawler.engine import parse_rss_feed
+        self.assertTrue(callable(parse_rss_feed))
+
+    def test_parse_ghxi_items_imported(self):
+        from crawler.engine import parse_ghxi_items
+        self.assertTrue(callable(parse_ghxi_items))
+
+    def test_match_parser_imported(self):
+        from crawler.engine import _match_parser
+        self.assertTrue(callable(_match_parser))
+
+
+class TestRedirectHtml(unittest.TestCase):
+    """Static checks on redirect.html to catch onclick handler issues."""
+
+    def test_onclick_handlers_defined(self):
+        import re
+        with open(os.path.join(PROJECT_DIR, 'redirect.html'), 'r', encoding='utf-8') as f:
+            html = f.read()
+        # goToUrl should be assigned to window.goToUrl
+        self.assertIn('window.goToUrl = function', html,
+                         'goToUrl not exposed on window')
+        self.assertIn('window.copyOriginalUrl = function', html,
+                         'copyOriginalUrl not exposed on window')
+
+    def test_onclick_references_exist(self):
+        with open(os.path.join(PROJECT_DIR, 'redirect.html'), 'r', encoding='utf-8') as f:
+            html = f.read()
+        self.assertIn('onclick="goToUrl()"', html)
+        self.assertIn('onclick="copyOriginalUrl()"', html)
+
+
+# ===================================================================
 # MAIN
 # ===================================================================
 

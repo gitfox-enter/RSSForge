@@ -34,7 +34,6 @@ import re
 import json
 import time
 import random
-import sqlite3
 import hashlib
 import logging
 import threading
@@ -52,8 +51,6 @@ CRAWL_STATUS_FILE: str = "crawl_status.json"
 
 BLACKLIST_FILE: str = "blacklist.json"
 
-SQLITE_DB_FILE: str = "monitor.db"
-
 MAX_ITEMS_DB: int = 2000
 
 # ============================================================
@@ -66,6 +63,7 @@ __all__ = [
     "ITEMS_LATEST_FILE",
     "CRAWL_STATUS_FILE",
     "BLACKLIST_FILE",
+    "MAX_ITEMS_DB",
     # Logging
     "JsonFormatter",
     # Time helpers
@@ -97,19 +95,6 @@ __all__ = [
     # Proxy pool
     "ProxyPool",
     "create_proxy_pool",
-    # SQLite
-    "SQLITE_DB_FILE",
-    "MAX_ITEMS_DB",
-    "init_sqlite",
-    "sqlite_insert_items",
-    "sqlite_get_recent_items",
-    "sqlite_get_existing_urls",
-    "sqlite_export_json",
-    "sqlite_export_latest_json",
-    "sqlite_load_hash_records",
-    "sqlite_save_hash_records",
-    "sqlite_get_meta",
-    "sqlite_set_meta",
 ]
 
 
@@ -730,191 +715,3 @@ def create_proxy_pool(extra_proxies: Optional[List[str]] = None) -> ProxyPool:
         for url in extra_proxies:
             pool.add_proxy(url)
     return pool
-
-
-# ============================================================
-# SQLite Data Layer
-# ============================================================
-
-_SQLITE_SCHEMA = """
-CREATE TABLE IF NOT EXISTS items (
-    url TEXT PRIMARY KEY,
-    text TEXT NOT NULL,
-    source TEXT DEFAULT '',
-    category TEXT,
-    time TEXT DEFAULT '',
-    inserted_at TEXT DEFAULT (datetime('now'))
-);
-CREATE INDEX IF NOT EXISTS idx_items_source ON items(source);
-CREATE INDEX IF NOT EXISTS idx_items_time ON items(time DESC);
-CREATE INDEX IF NOT EXISTS idx_items_inserted ON items(inserted_at DESC);
-
-CREATE TABLE IF NOT EXISTS hash_records (
-    url TEXT PRIMARY KEY,
-    hash TEXT NOT NULL,
-    updated_at TEXT DEFAULT ''
-);
-
-CREATE TABLE IF NOT EXISTS meta (
-    key TEXT PRIMARY KEY,
-    value TEXT
-);
-"""
-
-
-def init_sqlite(db_path: str = SQLITE_DB_FILE) -> sqlite3.Connection:
-    """Initialize SQLite database with schema. Returns the connection."""
-    conn = sqlite3.connect(db_path, timeout=10)
-    conn.execute("PRAGMA journal_mode=WAL")  # Write-Ahead Logging for concurrency
-    conn.execute("PRAGMA synchronous=NORMAL")
-    conn.executescript(_SQLITE_SCHEMA)
-    conn.commit()
-    return conn
-
-
-def sqlite_insert_items(conn: sqlite3.Connection, items: List[Dict[str, str]],
-                        check_time: str = "") -> int:
-    """Insert items into SQLite (INSERT OR IGNORE for dedup). Returns count of new inserts."""
-    if not items:
-        return 0
-    added = 0
-    for item in items:
-        url = item.get("url", "")
-        if not url:
-            continue
-        text = item.get("text", "")
-        source = item.get("source", "")
-        category = item.get("category") or auto_categorize(text)
-        t = item.get("time", check_time)
-        try:
-            conn.execute(
-                "INSERT OR IGNORE INTO items (url, text, source, category, time) VALUES (?, ?, ?, ?, ?)",
-                (url, text, source, category, t),
-            )
-            if conn.total_changes:
-                added += 1
-        except sqlite3.Error:
-            pass
-    conn.commit()
-    # 保留最近 7 天的数据（按 time 字段），不设条数上限
-    cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
-    conn.execute("DELETE FROM items WHERE time < ?", (cutoff,))
-    conn.commit()
-    return added
-
-
-def sqlite_get_recent_items(conn: sqlite3.Connection, limit: Optional[int] = None) -> List[Dict[str, str]]:
-    """Get the most recent items from SQLite."""
-    if limit:
-        cursor = conn.execute(
-            "SELECT url, text, source, category, time FROM items ORDER BY inserted_at DESC LIMIT ?",
-            (limit,),
-        )
-    else:
-        cursor = conn.execute(
-            "SELECT url, text, source, category, time FROM items ORDER BY inserted_at DESC"
-        )
-    items = []
-    for row in cursor:
-        items.append({
-            "url": row[0],
-            "text": row[1],
-            "source": row[2],
-            "category": row[3],
-            "time": row[4],
-        })
-    return items
-
-
-def sqlite_get_existing_urls(conn: sqlite3.Connection) -> Set[str]:
-    """Get all existing item URLs from SQLite."""
-    cursor = conn.execute("SELECT url FROM items")
-    return {row[0] for row in cursor}
-
-
-_STICKY_ITEM: Dict[str, str] = {
-    "url": "./alipay-redpacket.html",
-    "text": "支付宝每日扫码领红包，大量支付红包等你来拿！",
-    "source": "支付宝",
-    "category": "置顶",
-    "time": "2099-12-31 23:59:59",
-}
-
-
-def _ensure_sticky_in_items(items: List[Dict[str, str]]) -> List[Dict[str, str]]:
-    """Return a new list with the Alipay sticky item pinned to the top."""
-    # Drop any existing sticky-looking items to avoid duplication
-    filtered = [it for it in items if it.get("source") != "支付宝"]
-    return [_STICKY_ITEM] + filtered
-
-
-def sqlite_export_json(conn: sqlite3.Connection, json_path: str = ITEMS_DB_FILE) -> bool:
-    """Export SQLite items to items.json for frontend SPA consumption (atomic write)."""
-    items = sqlite_get_recent_items(conn)
-    items = _ensure_sticky_in_items(items)
-    updated_at = get_beijing_time().strftime("%Y-%m-%d %H:%M:%S")
-    db = {"items": items, "updated_at": updated_at}
-    tmp_file = json_path + ".tmp"
-    try:
-        with open(tmp_file, "w", encoding="utf-8") as f:
-            json.dump(db, f, ensure_ascii=False, separators=(",", ":"))
-        os.replace(tmp_file, json_path)
-        return True
-    except Exception:
-        if os.path.exists(tmp_file):
-            os.remove(tmp_file)
-        return False
-
-
-
-
-def sqlite_export_latest_json(conn: sqlite3.Connection, json_path: str = ITEMS_LATEST_FILE, limit: Optional[int] = None) -> bool:
-    """Export latest items to items_latest.json for fast first-page load.
-    By default exports all items (no hard limit) because data is already
-    pruned to last 7 days in sqlite_insert_items.
-    """
-    items = sqlite_get_recent_items(conn, limit=limit if limit else None)
-    items = _ensure_sticky_in_items(items)
-    updated_at = get_beijing_time().strftime("%Y-%m-%d %H:%M:%S")
-    total_count = len(items)
-    db = {"items": items, "updated_at": updated_at, "total_items": total_count}
-    tmp_file = json_path + ".tmp"
-    try:
-        with open(tmp_file, "w", encoding="utf-8") as f:
-            json.dump(db, f, ensure_ascii=False, separators=(",", ":"))
-        os.replace(tmp_file, json_path)
-        return True
-    except Exception:
-        if os.path.exists(tmp_file):
-            os.remove(tmp_file)
-        return False
-
-def sqlite_load_hash_records(conn: sqlite3.Connection) -> Dict[str, str]:
-    """Load all hash records from SQLite."""
-    cursor = conn.execute("SELECT url, hash FROM hash_records")
-    return {row[0]: row[1] for row in cursor}
-
-
-def sqlite_save_hash_records(conn: sqlite3.Connection, records: Dict[str, str]) -> None:
-    """Save hash records to SQLite (upsert)."""
-    updated_at = get_beijing_time().isoformat()
-    for url, hash_val in records.items():
-        conn.execute(
-            "INSERT OR REPLACE INTO hash_records (url, hash, updated_at) VALUES (?, ?, ?)",
-            (url, hash_val, updated_at),
-        )
-    conn.commit()
-
-
-def sqlite_get_meta(conn: sqlite3.Connection, key: str, default: str = "") -> str:
-    """Get a metadata value from SQLite."""
-    row = conn.execute("SELECT value FROM meta WHERE key = ?", (key,)).fetchone()
-    return row[0] if row else default
-
-
-def sqlite_set_meta(conn: sqlite3.Connection, key: str, value: str) -> None:
-    """Set a metadata value in SQLite."""
-    conn.execute(
-        "INSERT OR REPLACE INTO meta (key, value) VALUES (?, ?)", (key, value)
-    )
-    conn.commit()
