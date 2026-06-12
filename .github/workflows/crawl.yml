@@ -2,8 +2,8 @@ name: 站点更新监控
 
 on:
   schedule:
-    # 每小时整点执行一次爬取（UTC 每小时 = 北京时间每小时整点）
-    - cron: '0 * * * *'
+    # 每 30 分钟执行一次全量爬取（补漏，覆盖更多站点）
+    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 concurrency:

@@ -50,6 +50,7 @@ from common import (
     sqlite_get_recent_items,
     sqlite_get_existing_urls,
     sqlite_export_json,
+    sqlite_export_latest_json,
     SQLITE_DB_FILE,
     MAX_ITEMS_DB,
     ProxyPool,
@@ -528,8 +529,9 @@ async def main() -> None:
     else:
         logger.info("[结果] 无新增")
 
-    # 6. Export items.json for frontend
+    # 6. Export items.json and items_latest.json for frontend
     sqlite_export_json(db_conn)
+    sqlite_export_latest_json(db_conn)
 
     # 7. Metrics
     logger.info("[指标] %s", metrics.summary())

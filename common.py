@@ -851,7 +851,7 @@ def sqlite_export_json(conn: sqlite3.Connection, json_path: str = ITEMS_DB_FILE)
 
 
 
-def sqlite_export_latest_json(conn: sqlite3.Connection, json_path: str = ITEMS_LATEST_FILE, limit: int = 500) -> bool:
+def sqlite_export_latest_json(conn: sqlite3.Connection, json_path: str = ITEMS_LATEST_FILE, limit: int = 1500) -> bool:
     """Export latest N items to items_latest.json for fast first-page load."""
     items = sqlite_get_recent_items(conn, limit=limit)
     updated_at = get_beijing_time().strftime("%Y-%m-%d %H:%M:%S")
