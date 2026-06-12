@@ -260,7 +260,7 @@ class TestGetSourceName(unittest.TestCase):
         self.assertEqual(crawl.get_source_name("https://www.baicaio.com/"), "白菜哦")
 
     def test_http_site(self):
-        self.assertEqual(crawl.get_source_name("http://www.0818tuan.com/"), "0818团")
+        self.assertEqual(crawl.get_source_name("http://news.ixbk.net/"), "线报酷")
 
     def test_unknown_url_returns_none(self):
         self.assertIsNone(crawl.get_source_name("https://www.unknown-site.example.com/"))
@@ -3231,7 +3231,7 @@ class TestDeadSites(unittest.TestCase):
     """Tests for DEAD_SITES blacklist and is_dead_site()."""
 
     def test_dead_sites_count(self):
-        self.assertEqual(len(crawl.DEAD_SITES), 5)
+        self.assertEqual(len(crawl.DEAD_SITES), 7)
 
     def test_dead_site_detected(self):
         self.assertIsNotNone(crawl.is_dead_site("https://907k.cn/"))

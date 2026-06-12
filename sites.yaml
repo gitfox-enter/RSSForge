@@ -20,8 +20,6 @@ sites:
   - url: "https://axutongxue.net/"         # 爱Q生活
   - url: "https://www.007ymd.com/"         # 007羊毛党
   - url: "https://www.12345pro.com/"       # 12345线报
-  - url: "http://www.0818tuan.com/"        # 0818团
-  - url: "http://79tao.linejia.com/"       # 79淘
   - url: "https://m.hybase.com/"           # 好赚网
   - url: "https://www.huodong5.com/"       # 活动5
   - url: "https://www.daydayzhuan.com/"    # 天天赚
@@ -61,12 +59,12 @@ sites:
 # - https://907k.cn/ (DNS失败)
 # - http://www.xiaodigu.com/ (502错误)
 # - https://www.ym2.cc/ (DNS失败)
+# - http://79tao.linejia.com/ (连接被拒绝，2026-06-12)
+# - http://www.0818tuan.com/ (连接被拒绝，2026-06-12)
 
 # Human-readable source names
 source_names:
-  "http://79tao.linejia.com/": "79淘"
   "http://news.ixbk.net/": "线报酷"
-  "http://www.0818tuan.com/": "0818团"
   "https://10000yun.com/": "万云积分"
   "https://axutongxue.net/": "爱Q生活"
   "https://b1.ymxianbao.cn/": "羊毛线报"

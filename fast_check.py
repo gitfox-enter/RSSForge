@@ -78,7 +78,6 @@ FAST_SITES: List[Dict[str, str]] = [
     {"url": "https://www.zhuanyes.com/xianbao/", "name": "专业线报"},
     {"url": "https://news.ixbk.net/", "name": "线报酷"},
     {"url": "https://news.ixbk.fun/", "name": "线报酷"},
-    {"url": "http://www.0818tuan.com/", "name": "0818团"},
     {"url": "https://www.huifabu.cn/", "name": "汇发部"},
     {"url": "https://cjx8.com/", "name": "超级线报"},
     {"url": "https://xianbao.icu/", "name": "线报ICU"},
@@ -86,8 +85,10 @@ FAST_SITES: List[Dict[str, str]] = [
     {"url": "https://www.iqnew.com/", "name": "爱Q社区"},
     {"url": "https://www.51kanong.com/", "name": "51卡农"},
     {"url": "https://v1.xianbao.net/", "name": "线报网"},
-    {"url": "http://www.xiaodigu.com/", "name": "小嘀咕"},
 ]
+# 已移除的死站 (2026-06-12):
+# - http://www.0818tuan.com/ (Connection refused)
+# - http://www.xiaodigu.com/ (502 Bad Gateway)
 
 # 爬虫配置
 REQUEST_TIMEOUT: int = 10

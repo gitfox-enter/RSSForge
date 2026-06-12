@@ -22,8 +22,8 @@ def _load_sites_from_yaml() -> List[str]:
         return [s["url"] for s in cfg.get("sites", [])]
     except Exception:
         return [  # fallback
-            "https://axutongxue.net/", "http://79tao.linejia.com/", "http://news.ixbk.net/",
-            "http://www.0818tuan.com/", "https://907k.cn/", "https://b1.ymxianbao.cn/",
+            "https://axutongxue.net/", "http://news.ixbk.net/",
+            "https://907k.cn/", "https://b1.ymxianbao.cn/",
             "https://cjx8.com/", "https://m.hybase.com/", "https://news.ixbk.fun/",
             "https://www.007ymd.com/", "https://www.12345pro.com/", "https://www.423down.com/",
             "https://www.appinn.com/", "https://www.bacaoo.com/", "https://www.baicaio.com/",
@@ -35,7 +35,7 @@ def _load_sites_from_yaml() -> List[str]:
             "https://www.zhuanyes.com/xianbao/", "https://www.ziyuanting.com/",
             "https://xianbao.icu/", "https://xianbaomi.com/", "https://xzba.cc/",
             "https://yangmao.wang/", "https://www.ghxi.com/", "https://www.iqnew.com/",
-            "https://www.51kanong.com/", "https://v1.xianbao.net/", "http://www.xiaodigu.com/",
+            "https://www.51kanong.com/", "https://v1.xianbao.net/",
             "https://www.douban.com/group/711811/", "https://www.haodanku.com/",
             "https://www.ym2.cc/", "https://www.wobangzhao.com/", "https://free.apprcn.com/",
             "https://www.foxirj.com/", "https://www.ddooo.com/", "https://www.onlinedown.net/",
@@ -48,9 +48,7 @@ MONITOR_SITES: List[str] = _load_sites_from_yaml()
 # URL -> 短名称映射（统一来源显示名称，避免使用页面标题导致名称过长/重复）
 SOURCE_NAME_MAP: Dict[str, str] = {
     "https://axutongxue.net/": "爱Q生活",
-    "http://79tao.linejia.com/": "79淘",
     "http://news.ixbk.net/": "线报酷",
-    "http://www.0818tuan.com/": "0818团",
     "https://907k.cn/": "907线报",
     "https://b1.ymxianbao.cn/": "羊毛线报",
     "https://cjx8.com/": "超级线报",
@@ -83,7 +81,6 @@ SOURCE_NAME_MAP: Dict[str, str] = {
     "https://www.iqnew.com/": "爱Q社区",
     "https://www.51kanong.com/": "51卡农",
     "https://v1.xianbao.net/": "线报网",
-    "http://www.xiaodigu.com/": "小嘀咕",
     "https://www.douban.com/group/711811/": "豆瓣小组",
     "https://www.haodanku.com/": "好单库",
     "https://www.ghxi.com/": "果核剥壳",
@@ -96,6 +93,10 @@ SOURCE_NAME_MAP: Dict[str, str] = {
     "https://feed.iplaysoft.com/": "异次元RSS",
     "https://10000yun.com/": "万云积分",
 }
+# 已移除的死站映射 (2026-06-12):
+# "http://79tao.linejia.com/": "79淘"
+# "http://www.0818tuan.com/": "0818团"
+# "http://www.xiaodigu.com/": "小嘀咕"
 
 
 # Build O(1) source name index at module load time
@@ -174,6 +175,17 @@ DEAD_SITES: Dict[str, Dict[str, str]] = {
         "test_result": "Connection refused - 服务器拒绝连接或已下线",
     },
     "https://www.0818tuan.com/": {
+        "reason": "连接失败(Connection refused)",
+        "confirmed_at": "2026-06-12",
+        "test_result": "Connection refused - 服务器拒绝连接或已下线",
+    },
+    # 以下为 http 协议版本（engine 会通过 upgrade_to_https 自动升级为 https）
+    "http://79tao.linejia.com/": {
+        "reason": "连接失败(Connection refused)",
+        "confirmed_at": "2026-06-12",
+        "test_result": "Connection refused - 服务器拒绝连接或已下线",
+    },
+    "http://www.0818tuan.com/": {
         "reason": "连接失败(Connection refused)",
         "confirmed_at": "2026-06-12",
         "test_result": "Connection refused - 服务器拒绝连接或已下线",
