@@ -796,24 +796,24 @@ def sqlite_insert_items(conn: sqlite3.Connection, items: List[Dict[str, str]],
         except sqlite3.Error:
             pass
     conn.commit()
-    # Enforce MAX_ITEMS_DB: keep only the most recent entries
-    count = conn.execute("SELECT COUNT(*) FROM items").fetchone()[0]
-    if count > MAX_ITEMS_DB:
-        excess = count - MAX_ITEMS_DB
-        conn.execute(
-            "DELETE FROM items WHERE url IN (SELECT url FROM items ORDER BY inserted_at ASC LIMIT ?)",
-            (excess,),
-        )
-        conn.commit()
+    # 保留最近 7 天的数据（按 time 字段），不设条数上限
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
+    conn.execute("DELETE FROM items WHERE time < ?", (cutoff,))
+    conn.commit()
     return added
 
 
-def sqlite_get_recent_items(conn: sqlite3.Connection, limit: int = MAX_ITEMS_DB) -> List[Dict[str, str]]:
+def sqlite_get_recent_items(conn: sqlite3.Connection, limit: Optional[int] = None) -> List[Dict[str, str]]:
     """Get the most recent items from SQLite."""
-    cursor = conn.execute(
-        "SELECT url, text, source, category, time FROM items ORDER BY inserted_at DESC LIMIT ?",
-        (limit,),
-    )
+    if limit:
+        cursor = conn.execute(
+            "SELECT url, text, source, category, time FROM items ORDER BY inserted_at DESC LIMIT ?",
+            (limit,),
+        )
+    else:
+        cursor = conn.execute(
+            "SELECT url, text, source, category, time FROM items ORDER BY inserted_at DESC"
+        )
     items = []
     for row in cursor:
         items.append({
@@ -851,11 +851,14 @@ def sqlite_export_json(conn: sqlite3.Connection, json_path: str = ITEMS_DB_FILE)
 
 
 
-def sqlite_export_latest_json(conn: sqlite3.Connection, json_path: str = ITEMS_LATEST_FILE, limit: int = 1500) -> bool:
-    """Export latest N items to items_latest.json for fast first-page load."""
-    items = sqlite_get_recent_items(conn, limit=limit)
+def sqlite_export_latest_json(conn: sqlite3.Connection, json_path: str = ITEMS_LATEST_FILE, limit: Optional[int] = None) -> bool:
+    """Export latest items to items_latest.json for fast first-page load.
+    By default exports all items (no hard limit) because data is already
+    pruned to last 7 days in sqlite_insert_items.
+    """
+    items = sqlite_get_recent_items(conn, limit=limit if limit else None)
     updated_at = get_beijing_time().strftime("%Y-%m-%d %H:%M:%S")
-    total_count = len(sqlite_get_recent_items(conn))
+    total_count = len(items)
     db = {"items": items, "updated_at": updated_at, "total_items": total_count}
     tmp_file = json_path + ".tmp"
     try:
