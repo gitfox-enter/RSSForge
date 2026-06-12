@@ -1,6 +1,7 @@
-const CACHE_NAME = 'xianbao-v7';
+const CACHE_NAME = 'xianbao-v8';
 const BASE = new URL('.', self.location.href).pathname.replace(/\/$/, '');
 const ASSETS = [
+  BASE + '/index.html',
   BASE + '/public/favicon.svg',
   BASE + '/offline.html',
   BASE + '/redirect.html'
