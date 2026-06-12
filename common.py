@@ -832,9 +832,26 @@ def sqlite_get_existing_urls(conn: sqlite3.Connection) -> Set[str]:
     return {row[0] for row in cursor}
 
 
+_STICKY_ITEM: Dict[str, str] = {
+    "url": "./alipay-redpacket.html",
+    "text": "支付宝每日扫码领红包，大量支付红包等你来拿！",
+    "source": "支付宝",
+    "category": "置顶",
+    "time": "2099-12-31 23:59:59",
+}
+
+
+def _ensure_sticky_in_items(items: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    """Return a new list with the Alipay sticky item pinned to the top."""
+    # Drop any existing sticky-looking items to avoid duplication
+    filtered = [it for it in items if it.get("source") != "支付宝"]
+    return [_STICKY_ITEM] + filtered
+
+
 def sqlite_export_json(conn: sqlite3.Connection, json_path: str = ITEMS_DB_FILE) -> bool:
     """Export SQLite items to items.json for frontend SPA consumption (atomic write)."""
     items = sqlite_get_recent_items(conn)
+    items = _ensure_sticky_in_items(items)
     updated_at = get_beijing_time().strftime("%Y-%m-%d %H:%M:%S")
     db = {"items": items, "updated_at": updated_at}
     tmp_file = json_path + ".tmp"
@@ -857,6 +874,7 @@ def sqlite_export_latest_json(conn: sqlite3.Connection, json_path: str = ITEMS_L
     pruned to last 7 days in sqlite_insert_items.
     """
     items = sqlite_get_recent_items(conn, limit=limit if limit else None)
+    items = _ensure_sticky_in_items(items)
     updated_at = get_beijing_time().strftime("%Y-%m-%d %H:%M:%S")
     total_count = len(items)
     db = {"items": items, "updated_at": updated_at, "total_items": total_count}

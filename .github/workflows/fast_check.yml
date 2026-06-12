@@ -42,3 +42,37 @@ jobs:
 
       - name: 运行快速检查
         run: python fast_check.py
+
+      - name: 提交变更
+        run: |
+          set +e
+          git add items.json items_latest.json crawl_status.json hash_record.txt notified_items.json paused_sites.json failed_sites.json monitor.db 2>/dev/null || true
+          git status
+          if git diff --staged --quiet 2>/dev/null; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "fast-check: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
+          push_success=false
+          for i in 1 2 3 4 5; do
+            echo "=== Push attempt $i ==="
+            git rebase --abort 2>/dev/null || true
+            git pull --rebase --strategy-option=theirs origin main
+            rebase_rc=$?
+            if [ $rebase_rc -ne 0 ]; then
+              git diff --name-only --diff-filter=U | while read conflict_file; do
+                git checkout --theirs "$conflict_file"
+                git add "$conflict_file"
+              done
+              git -c core.editor=true rebase --continue || true
+            fi
+            if git push origin main; then
+              push_success=true
+              break
+            fi
+            sleep 2
+          done
+          if [ "$push_success" != "true" ]; then
+            echo "All push attempts failed"
+            exit 1
+          fi
