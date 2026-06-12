@@ -1,4 +1,4 @@
-const CACHE_NAME = 'xianbao-v8';
+const CACHE_NAME = 'xianbao-v9';
 const BASE = new URL('.', self.location.href).pathname.replace(/\/$/, '');
 const ASSETS = [
   BASE + '/index.html',

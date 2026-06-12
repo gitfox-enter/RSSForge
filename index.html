@@ -1062,7 +1062,7 @@ function loadData() {
           sources = Object.keys(srcMap2).map(function(name) { return { name: name, count: srcMap2[name], color: getSourceColor(name) }; }).sort(function(a, b) { return b.count - a.count; });
           buildSidebar();
           buildMobileDropdown();
-          renderItems();
+          renderList();
         }
       }).catch(function() { /* full load failed, latest is enough */ });
       renderAll();
