@@ -195,7 +195,7 @@ a{color:inherit;text-decoration:none}
   urlDisplay.textContent = targetUrl;
 
   // Copy the redirect page URL (our link for引流)
-  function copyOriginalUrl() {
+  window.copyOriginalUrl = function() {
     var myUrl = window.location.href;
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(myUrl).then(function() {
@@ -218,9 +218,9 @@ a{color:inherit;text-decoration:none}
   }
 
   // Navigate to target
-  function goToUrl() {
+  window.goToUrl = function() {
     window.open(targetUrl, '_blank', 'noopener,noreferrer');
-  }
+  };
 
   // Toast
   function showToast(msg) {
