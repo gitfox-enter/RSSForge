@@ -1130,8 +1130,26 @@ function selectSource(name) {
 /* ================================================================
    FILTERING
    ================================================================ */
+function isNoiseItem(item) {
+  if (!item || !item.url) return false;
+  var url = item.url;
+  /* Navigation / non-content page patterns */
+  if (/forum\.php/i.test(url)) return true;
+  if (/xianbao-my\.html/i.test(url)) return true;
+  if (/xianbao-day\.html/i.test(url)) return true;
+  if (/member\.php\?mod=logging/i.test(url)) return true;
+  if (/beian\.miit\.gov\.cn/i.test(url)) return true;
+  if (/beian\.mps\.gov\.cn/i.test(url)) return true;
+  /* ICP/micp registration text patterns */
+  if (item.text && /鲁ICP|鲁公网安备|粤ICP|京ICP|苏ICP/.test(item.text)) return true;
+  return false;
+}
+
 function getFiltered() {
   var filtered = allItems;
+
+  /* Noise filter */
+  filtered = filtered.filter(function(it) { return !isNoiseItem(it); });
 
   /* Source filter */
   if (activeSource !== 'all') {
@@ -1232,7 +1250,13 @@ function renderList() {
     '</article>';
   });
 
-  container.innerHTML = html;
+  try {
+    container.innerHTML = html;
+  } catch(e) {
+    console.error('renderList error:', e);
+    container.innerHTML = '<div class="list-empty">数据渲染出错，请刷新页面重试</div>';
+    return;
+  }
   renderPagination(totalPages);
 }
 

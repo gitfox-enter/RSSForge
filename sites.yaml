@@ -53,8 +53,7 @@ sites:
   # 购物比价 (MEDIUM tier - 每2轮爬一次)
   - url: "https://www.manmanbuy.com/"      # 慢慢买
     tier: medium
-  - url: "https://www.haodanku.com/"       # 好单库
-    tier: medium
+
   - url: "https://www.baicaio.com/"        # 白菜哦
     tier: medium
   - url: "https://www.bacaoo.com/"         # 拔草哦
@@ -130,7 +129,6 @@ source_names:
   "https://www.foxirj.com/": "佛系软件"
   "https://www.ghxi.com/": "果核剥壳"
   "https://www.h6room.com/": "H6线报"
-  "https://www.haodanku.com/": "好单库"
   "https://www.huifabu.cn/": "汇发部"
   "https://www.huodong5.com/": "活动5"
   "https://www.iqnew.com/": "爱Q社区"
