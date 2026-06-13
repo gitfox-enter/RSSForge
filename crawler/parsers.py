@@ -116,41 +116,34 @@ def parse_yxssp_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
     for a in soup.select('a[rel="bookmark"]'):
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
-        if not text or len(text) < 4:
+        if not _is_valid_text(text, max_len=999):
             continue
         if text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Secondary: entry-title links within td modules
     for a in soup.select('.entry-title a, .td-module-title a, td-module-title a'):
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
-        if not text or len(text) < 4 or text in seen:
+        if not _is_valid_text(text, max_len=999) or text in seen:
             continue
         if not re.search(r'yxssp\.com/\d+\.html', href):
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Fallback: broad URL pattern match
     if len(items) < 3:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 5 or len(text) > 200:
+            if not _is_valid_text(text, min_len=5, max_len=200):
                 continue
             if not re.search(r'yxssp\.com/\d+\.html', href):
                 continue
             if text in seen:
                 continue
-            seen.add(text)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href)
 
     return items[:30]
 
@@ -190,35 +183,31 @@ def parse_423down_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, st
     for a in soup.select('ul.excerpt li h2 a, .excerpt h2 a'):
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
-        if not text or len(text) < 3:
+        if not _is_valid_text(text, min_len=3, max_len=999):
             continue
         if text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Fallback: any link matching the article URL pattern
     if len(items) < 3:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 4 or len(text) > 120:
+            if not _is_valid_text(text):
                 continue
             if not re.search(r'423down\.com/\d+\.html', href):
                 continue
             if text in seen:
                 continue
             # Skip navigation-like short text
-            skip_words = {'首页', '关于', '搜索', '登录', '安卓软件', '电脑软件',
-                          '操作系统', '原创软件', '媒体播放', '网页浏览', '图形图像',
-                          '聊天软件', '办公软件', '上传下载', '实用软件', '系统辅助',
-                          '系统必备', '安全软件', '补丁相关', '硬件相关'}
+            skip_words = _make_skip_set(
+                '安卓软件', '电脑软件', '操作系统', '原创软件', '媒体播放',
+                '网页浏览', '图形图像', '聊天软件', '办公软件', '上传下载',
+                '实用软件', '系统辅助', '系统必备', '安全软件', '补丁相关', '硬件相关')
             if text in skip_words:
                 continue
-            seen.add(text)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href)
 
     return items[:30]
 
@@ -242,14 +231,11 @@ def parse_ziyuanting_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str,
         title_el = article.select_one('.item-title b, .item-title')
         text = title_el.get_text(strip=True) if title_el else a_tag.get('title', '').strip()
         href = a_tag.get('href', '').strip()
-        if not text or len(text) < 2:
+        if not _is_valid_text(text, min_len=2, max_len=999):
             continue
         if text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Secondary: app/software download entries
     for article in soup.select('article.app-item, article.posts-item.app-item'):
@@ -261,39 +247,30 @@ def parse_ziyuanting_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str,
         # Clean version suffix like " - 1.0.1"
         text = re.sub(r'\s*-\s*[\d.]+$', '', text).strip()
         href = a_tag.get('href', '').strip()
-        if not text or len(text) < 2 or text in seen:
+        if not _is_valid_text(text, min_len=2, max_len=999) or text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Tertiary: bulletin/announcement links
     for a in soup.select('a[href*="/bulletin/"]'):
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
-        if not text or len(text) < 4 or text in seen:
+        if not _is_valid_text(text, max_len=999) or text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Fallback: broad pattern for any content links
     if len(items) < 5:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 3 or len(text) > 120:
+            if not _is_valid_text(text, min_len=3):
                 continue
             if not re.search(r'ziyuanting\.com/(sites|app|bulletin)/\d+\.html', href):
                 continue
             if text in seen:
                 continue
-            seen.add(text)
-            if href.startswith('/'):
-                href = urljoin(base_url, href)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href, base_url)
 
     return items[:50]
 
@@ -332,20 +309,19 @@ def parse_wycad_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
     ]
 
     # Navigation / junk texts to skip
-    skip_texts = {
-        '首页', '手机软件', '电脑软件', '操作系统', '影音娱乐', '教程课程',
+    skip_texts = _make_skip_set(
+        '手机软件', '电脑软件', '操作系统', '影音娱乐', '教程课程',
         '办公软件', '影音软件', '实用软件', '图形图像', '媒体工具',
         '教育教学', '上传下载', '社交聊天', '系统工具', '浏览器',
         '安卓游戏', '其他安卓', '图片图像', '视频工具', '安全防护',
         '即时通讯', '设计软件', 'Windows11', 'Windows10', 'Windows7',
-        'WinPE', '原镜像', 'PC游戏', '电影分享', '音乐分享',
-    }
+        'WinPE', '原镜像', 'PC游戏', '电影分享', '音乐分享')
 
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
 
-        if not text or len(text) < 6 or len(text) > 150:
+        if not _is_valid_text(text, min_len=6, max_len=150):
             continue
         if text in seen or text in skip_texts:
             continue
@@ -378,10 +354,7 @@ def parse_wycad_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
         if not _has_chinese(text):
             continue
 
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
@@ -401,20 +374,17 @@ def parse_h6room_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
     seen_ids: Set[str] = set()
 
     # Navigation / junk texts to skip
-    skip_texts = {
-        '首页', '安卓应用', '实用工具', '系统办公', '拍照修图',
-        '影视影音', '办公学习', '小说阅读', '电影动漫', '社交聊天',
-        '资源下载', '音乐铃声', '天气生活', '美化壁纸', '生活服务',
-        'TV盒子', 'PC软件', '技巧教程', '会员专区',
-        '更新', '浏览', '点赞', '评论',
-        '登录', '注册', '找回密码', '普通会员', '黄金会员',
-    }
+    skip_texts = _make_skip_set(
+        '安卓应用', '实用工具', '系统办公', '拍照修图', '影视影音',
+        '办公学习', '小说阅读', '电影动漫', '社交聊天', '资源下载',
+        '音乐铃声', '天气生活', '美化壁纸', '生活服务', 'TV盒子',
+        'PC软件', '技巧教程', '会员专区', '更新', '普通会员', '黄金会员')
 
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
 
-        if not text or len(text) < 4 or len(text) > 120:
+        if not _is_valid_text(text):
             continue
         if text in seen or text in skip_texts:
             continue
@@ -439,8 +409,7 @@ def parse_h6room_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
         if not _has_chinese(text):
             continue
 
-        seen.add(text)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href)
 
     return items[:30]
 
@@ -455,41 +424,35 @@ def parse_xzba_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]
     seen: Set[str] = set()
 
     # Navigation / category words to skip
-    skip_words = {'首页', '最新发布', '角色扮演', '动作', '模拟', '休闲',
-                  '独立', '冒险', '策略', 'switch模拟', '找游戏', '登录',
-                  '注册', '找回密码', '最新', '关于'}
+    skip_words = _make_skip_set(
+        '最新发布', '角色扮演', '动作', '模拟', '休闲', '独立',
+        '冒险', '策略', 'switch模拟', '找游戏')
 
     # Primary: post entry links within content containers
     for a in soup.select('.posts-row a, .home-tab-content a, .tab-content a, '
                          'article a, .post-entry a, .entry-title a'):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 2 or len(text) > 120:
+        if not _is_valid_text(text, min_len=2):
             continue
         if not re.search(r'xzba\.cc/\d+\.html', href):
             continue
         if text in seen or text in skip_words:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Fallback: broad URL pattern match across all links
     if len(items) < 3:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 2 or len(text) > 120:
+            if not _is_valid_text(text, min_len=2):
                 continue
             if not re.search(r'xzba\.cc/\d+\.html', href):
                 continue
             if text in seen or text in skip_words:
                 continue
-            seen.add(text)
-            if href.startswith('/'):
-                href = urljoin(base_url, href)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
@@ -531,17 +494,14 @@ def parse_apprcn_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
     for a in soup.select('article a, .post a, h2 a, h3 a, .entry-title a'):
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
-        if not text or len(text) < 3 or len(text) > 80:
+        if not _is_valid_text(text, min_len=3, max_len=80):
             continue
         skip = ['阅读全文', '赞', '评论', '去评论', '下一页', '上一页', '返回顶部']
         if text in skip:
             continue
         if text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
     return items[:20]
 
 
@@ -558,17 +518,16 @@ def parse_daydayzhuan_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str
     seen_ids: Set[str] = set()
 
     # Navigation / junk texts to skip
-    skip_texts = {
-        '首页', '实时线报', '项目首码', '手机赚钱', '爆款秒杀',
-        '随笔', '去下载', '资讯', '网站地图',
-    }
+    skip_texts = _make_skip_set(
+        '实时线报', '项目首码', '手机赚钱', '爆款秒杀',
+        '随笔', '去下载', '资讯', '网站地图')
 
     # Strategy 1: Match /article/{id} links
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
 
-        if not text or len(text) < 5 or len(text) > 120:
+        if not _is_valid_text(text, min_len=5):
             continue
         if text in seen or text in skip_texts:
             continue
@@ -589,10 +548,7 @@ def parse_daydayzhuan_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str
         if not _has_chinese(text):
             continue
 
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
@@ -609,17 +565,16 @@ def parse_007ymd_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
     seen_ids: Set[str] = set()
 
     # Navigation / junk texts to skip
-    skip_texts = {
-        '首页', '关于我们', '长期羊毛', '有奖活动', '撸实物',
-        '影音会员', '话费流量活动', '[查看详情]', '趣闲赚',
-        '长期 >', '活动 >', '实物 >',
-    }
+    skip_texts = _make_skip_set(
+        '长期羊毛', '有奖活动', '撸实物', '影音会员',
+        '话费流量活动', '[查看详情]', '趣闲赚',
+        '长期 >', '活动 >', '实物 >')
 
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
 
-        if not text or len(text) < 5 or len(text) > 120:
+        if not _is_valid_text(text, min_len=5):
             continue
         if text in seen or text in skip_texts:
             continue
@@ -646,11 +601,10 @@ def parse_007ymd_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
 
         # Clean up text: remove zero-width characters
         text = re.sub(r'[\u200b\u200c\u200d\ufeff\u202e\u202c]', '', text).strip()
-        if not text or len(text) < 5:
+        if not _is_valid_text(text, min_len=5, max_len=999):
             continue
 
-        seen.add(text)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href)
 
     return items[:30]
 
@@ -670,14 +624,11 @@ def parse_baicaio_items_v2(soup: BeautifulSoup, base_url: str) -> List[Dict[str,
     for a in soup.select('a[href*="/article/"], a[href*="/item/"]'):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 5:
+        if not _is_valid_text(text, min_len=5, max_len=999):
             continue
         if text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
     return items[:20]
 
 
@@ -697,7 +648,7 @@ def parse_manmanbuy_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, 
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
 
-        if not text or len(text) < 3 or len(text) > 150:
+        if not _is_valid_text(text, min_len=3, max_len=150):
             continue
         if text in seen:
             continue
@@ -720,12 +671,10 @@ def parse_manmanbuy_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, 
             continue
 
         # Ensure some meaningful content
-        chinese_count = len(re.findall(r'[\u4e00-\u9fff]', text))
-        if chinese_count < 1 and len(text) < 8:
+        if not _has_chinese(text, min_count=1) and len(text) < 8:
             continue
 
-        seen.add(text)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href)
 
     return items[:30]
 
@@ -747,7 +696,7 @@ def parse_axutongxue_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str,
         text = a.get_text(strip=True)
         if not href.startswith('http'):
             continue
-        if not text or len(text) < 3:
+        if not _is_valid_text(text, min_len=3, max_len=999):
             continue
         # 过滤内部链接
         if 'axutongxue.net' in href:
@@ -758,8 +707,7 @@ def parse_axutongxue_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str,
         skip = ['获取公众号自动回复资源', '搜索储物间', '搜索公众号文章']
         if text in skip:
             continue
-        seen.add(text)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href)
     return items[:30]
 
 
@@ -861,17 +809,14 @@ def parse_ym2cc_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
     for a in soup.select('a[href*="/ymxb/"]'):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 4 or len(text) > 120:
+        if not _is_valid_text(text):
             continue
         if text in seen:
             continue
-        skip_words = ['首页', '关于', '联系', '留言', '搜索', '登录', '注册']
+        skip_words = _make_skip_set('联系')
         if text in skip_words:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
     return items[:30]
 
 
@@ -884,18 +829,16 @@ def parse_wobangzhao_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str,
     items: List[Dict[str, str]] = []
     seen: Set[str] = set()
 
-    skip_words = {'版块', '主题', '帖子', '更多', '下一页', '上一页',
-                  '返回列表', '首页', 'BBS', '搜索', '登录', '注册',
-                  '快捷导航', '联系我们', '找回密码', '立即注册',
-                  '关于我们', '修复日志', '下载教程', '解压教程',
-                  '加入天寻计划', '无法登陆？', '切换到宽版',
-                  '设为首页', '收藏本站', '2026精选资源'}
+    skip_words = _make_skip_set(
+        '版块', '主题', '帖子', '返回列表', 'BBS',
+        '修复日志', '下载教程', '解压教程', '加入天寻计划',
+        '无法登陆？', '切换到宽版', '2026精选资源')
 
     # Primary: thread links with title attributes (portal blocks, hot lists)
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get('title', '').strip() or a.get_text(strip=True)
-        if not text or len(text) < 4 or len(text) > 150:
+        if not _is_valid_text(text, max_len=150):
             continue
 
         # Match Discuz thread URLs (both formats)
@@ -909,7 +852,7 @@ def parse_wobangzhao_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str,
             continue
 
         # Filter out navigation/junk
-        if any(w in text for w in skip_words):
+        if text in skip_words:
             continue
         if text in seen:
             continue
@@ -957,17 +900,14 @@ def parse_foxirj_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
     for a in soup.select('div.post-item h2 a, .entry-title a, article h2 a, .post-title a'):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 3 or len(text) > 120:
+        if not _is_valid_text(text, min_len=3):
             continue
         if text in seen:
             continue
-        skip_words = ['首页', '关于', '联系', '留言', '搜索', '登录', '注册', '分类', '标签']
+        skip_words = _make_skip_set('联系')
         if text in skip_words:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
     return items[:30]
 
 
@@ -989,7 +929,7 @@ def parse_ddooo_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 2 or len(text) > 120:
+        if not _is_valid_text(text, min_len=2):
             continue
         if '/softdown/' not in href:
             continue
@@ -997,10 +937,7 @@ def parse_ddooo_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
             continue
         if text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Secondary: latest update list items (often in a dedicated section)
     for li in soup.select('.update-list li, .new-list li, .CRCSList li'):
@@ -1009,12 +946,9 @@ def parse_ddooo_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
             continue
         text = a_tag.get_text(strip=True)
         href = a_tag.get('href', '').strip()
-        if not text or len(text) < 2 or text in seen:
+        if not _is_valid_text(text, min_len=2, max_len=999) or text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
@@ -1037,7 +971,7 @@ def parse_onlinedown_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str,
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 2 or len(text) > 120:
+        if not _is_valid_text(text, min_len=2):
             continue
 
         is_content = False
@@ -1063,7 +997,7 @@ def parse_onlinedown_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str,
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 4 or len(text) > 120:
+        if not _is_valid_text(text):
             continue
         if not re.search(r'(onlinedown\.net)?/article/\d+\.htm', href):
             continue
@@ -1100,7 +1034,7 @@ def extract_article_items(soup: BeautifulSoup, base_url: str = '') -> List[Dict[
     # 策略1: 提取 <a> 标签的文本 + href
     for a_tag in body.find_all('a', href=True):
         text = a_tag.get_text(strip=True)
-        if not text or len(text) < 4 or len(text) > 120:
+        if not _is_valid_text(text):
             continue
         text = ' '.join(text.split())
         if text in seen:
@@ -1114,8 +1048,7 @@ def extract_article_items(soup: BeautifulSoup, base_url: str = '') -> List[Dict[
         # 转绝对链接
         if href.startswith('/') or not href.startswith('http'):
             href = urljoin(base_url, href)
-        seen.add(text)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href)
 
     # 策略2: 如果 <a> 标签太少，用正文分句作为备选
     if len(items) < 2:
@@ -1164,33 +1097,27 @@ def parse_12345pro_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
         for a in soup.select(selector):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 3 or len(text) > 120:
+            if not _is_valid_text(text, min_len=3):
                 continue
             if text in seen:
                 continue
             # 仅保留文章链接 (/article/{id}.html)
             if not re.search(r'/article/\d+\.html', href):
                 continue
-            seen.add(text)
-            if href.startswith('/'):
-                href = urljoin(base_url, href)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href, base_url)
 
     # 策略2：通用兜底 - 匹配所有 /article/{id}.html 链接
     if len(items) < 3:
         for a in soup.select('a[href*="/article/"]'):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 3 or len(text) > 120:
+            if not _is_valid_text(text, min_len=3):
                 continue
             if not re.search(r'/article/\d+\.html', href):
                 continue
             if text in seen:
                 continue
-            seen.add(text)
-            if href.startswith('/'):
-                href = urljoin(base_url, href)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
@@ -1219,7 +1146,7 @@ def parse_appinn_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
         for a in soup.select(selector):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 3 or len(text) > 120:
+            if not _is_valid_text(text, min_len=3):
                 continue
             # h2.slide-title 本身不是 <a>，取其文本
             if not href:
@@ -1232,17 +1159,14 @@ def parse_appinn_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
             # 仅保留 appinn.com 域名下的文章链接
             if 'appinn.com' not in href and not href.startswith('/'):
                 continue
-            seen.add(text)
-            if href.startswith('/'):
-                href = urljoin(base_url, href)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href, base_url)
 
     # 策略2：通用兜底 - 匹配 appinn.com 下的 slug 链接
     if len(items) < 3:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 5 or len(text) > 120:
+            if not _is_valid_text(text, min_len=5):
                 continue
             if text in seen:
                 continue
@@ -1251,8 +1175,7 @@ def parse_appinn_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
                 continue
             if '/category/' in href or '/tag/' in href or '/page/' in href:
                 continue
-            seen.add(text)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href)
 
     return items[:30]
 
@@ -1287,28 +1210,24 @@ def parse_ithome_xijiayi_items(soup: BeautifulSoup, base_url: str) -> List[Dict[
             continue
         href = a_tag.get('href', '').strip()
         text = a_tag.get_text(strip=True)
-        if not text or len(text) < 4 or len(text) > 120:
+        if not _is_valid_text(text):
             continue
         if text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # 策略2：通用兜底 - 匹配 ithome.com/0/{xxx}/{xxx}.htm 链接
     if len(items) < 3:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 5 or len(text) > 120:
+            if not _is_valid_text(text, min_len=5):
                 continue
             if not re.search(r'ithome\.com/0/\d+/\d+\.htm', href):
                 continue
             if text in seen:
                 continue
-            seen.add(text)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href)
 
     return items[:30]
 
@@ -1331,7 +1250,7 @@ def parse_lsapk_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
     for a in soup.select('li.post-item .post-item-main h2 a'):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 3 or len(text) > 120:
+        if not _is_valid_text(text, min_len=3):
             continue
         if text in seen:
             continue
@@ -1341,24 +1260,20 @@ def parse_lsapk_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
         # 排除分类、标签等导航链接
         if '/category/' in href or '/tag/' in href or '/page/' in href:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # 策略2：通用兜底 - 匹配 lsapk.com/{digits}.html 格式
     if len(items) < 3:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 3 or len(text) > 120:
+            if not _is_valid_text(text, min_len=3):
                 continue
             if not re.search(r'lsapk\.com/\d+\.html', href):
                 continue
             if text in seen:
                 continue
-            seen.add(text)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href)
 
     return items[:30]
 
@@ -1384,7 +1299,7 @@ def parse_thosefree_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, 
         # 标题在 h3 子元素中
         h3 = a.find('h3')
         text = h3.get_text(strip=True) if h3 else a.get_text(strip=True)
-        if not text or len(text) < 3 or len(text) > 150:
+        if not _is_valid_text(text, min_len=3, max_len=150):
             continue
         if text in seen:
             continue
@@ -1393,38 +1308,29 @@ def parse_thosefree_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, 
             continue
         if '/apps/' in href and '/' == href.rstrip('/').split('thosefree.com')[-1]:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # 策略2：幻灯片封面链接
     for a in soup.select('a.pic-cover-item'):
         href = a.get('href', '').strip()
         h3 = a.select_one('.pic-cover-item-title')
         text = h3.get_text(strip=True) if h3 else a.get_text(strip=True)
-        if not text or len(text) < 3 or len(text) > 150:
+        if not _is_valid_text(text, min_len=3, max_len=150):
             continue
         if text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # 策略3：侧边栏推荐文章
     for a in soup.select('a.sider-post-item-title'):
         href = a.get('href', '').strip()
         h3 = a.find('h3')
         text = h3.get_text(strip=True) if h3 else a.get_text(strip=True)
-        if not text or len(text) < 3 or len(text) > 150:
+        if not _is_valid_text(text, min_len=3, max_len=150):
             continue
         if text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
@@ -1448,7 +1354,7 @@ def parse_douban_group_items(soup: BeautifulSoup, base_url: str) -> List[Dict[st
         href = a.get('href', '').strip()
         # 优先使用 title 属性（完整标题），其次使用文本内容
         text = a.get('title', '').strip() or a.get_text(strip=True)
-        if not text or len(text) < 3 or len(text) > 150:
+        if not _is_valid_text(text, min_len=3, max_len=150):
             continue
         if not re.search(r'/group/topic/\d+', href):
             continue
@@ -1466,13 +1372,13 @@ def parse_douban_group_items(soup: BeautifulSoup, base_url: str) -> List[Dict[st
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get('title', '').strip() or a.get_text(strip=True)
-            if not text or len(text) < 3 or len(text) > 150:
+            if not _is_valid_text(text, min_len=3, max_len=150):
                 continue
             if not re.search(r'douban\.com/group/topic/\d+', href):
                 continue
             if text in seen:
                 continue
-            skip_words = ['回复', '删除', '举报', '推荐', '加入小组', '登录/注册']
+            skip_words = _make_skip_set('加入小组')
             if any(w in text for w in skip_words):
                 continue
             seen.add(text)
@@ -1516,23 +1422,22 @@ def parse_haodanku_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
     }
 
     # 过滤纯功能性/辅助性文字（非内容页面）
-    skip_words = {
-        '首页', '登录', '注册', '搜索', '好单库首页', '好单库APP',
-        '客户服务', '联系客服', '建议反馈', 'API文档', '活动中心',
-        '我的应用', '招商入驻', '开放平台', '商家合作',
-        'CMS中心', '帮助中心', '退出登录',
-    }
+    skip_words = _make_skip_set(
+        '好单库首页', '好单库APP', '客户服务', '联系客服',
+        '建议反馈', 'API文档', '活动中心', '我的应用',
+        '招商入驻', '开放平台', '商家合作', 'CMS中心',
+        '帮助中心', '退出登录')
 
     # 策略1：提取服务端渲染的导航链接
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 2 or len(text) > 80:
+        if not _is_valid_text(text, min_len=2, max_len=80):
             continue
         # 清除 Vue 模板碎片（如 {{oTag.index}}）
         if '{{' in text:
             text = re.sub(r'\{\{[^}]*\}\}', '', text).strip()
-            if not text or len(text) < 2:
+            if not _is_valid_text(text, min_len=2, max_len=999):
                 continue
         if text in seen:
             continue
@@ -1563,10 +1468,7 @@ def parse_haodanku_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
         if not is_valid:
             continue
 
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # 策略2：提取公告详情链接 (notice_detail)
     for a in soup.select('a[href*="notice_detail"]'):
@@ -1574,16 +1476,13 @@ def parse_haodanku_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
         text = a.get_text(strip=True) or '好单库公告'
         if text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # 策略3：提取 Vue 模板中嵌入的外部工具链接
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 2:
+        if not _is_valid_text(text, min_len=2, max_len=999):
             continue
         if text in seen:
             continue
@@ -1596,8 +1495,7 @@ def parse_haodanku_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
             ]
             if any(d in href for d in skip_domains):
                 continue
-            seen.add(text)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href)
 
     return items[:30]
 
@@ -1638,41 +1536,35 @@ def parse_hybase_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
             href = a.get('href', '').strip()
             # Prefer 'title' attribute (full text), fall back to inner text
             text = (a.get('title', '') or a.get_text(strip=True)).strip()
-            if not text or len(text) < 4 or len(text) > 120:
+            if not _is_valid_text(text):
                 continue
             if text in seen:
                 continue
             # Must be an article link (contains .html and a numeric segment)
             if not re.search(r'/\d+\.html', href):
                 continue
-            seen.add(text)
-            if href.startswith('/'):
-                href = urljoin(base_url, href)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href, base_url)
 
     # Strategy 2: Fallback - scan all <a> tags matching article URL pattern
     if len(items) < 5:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 5 or len(text) > 120:
+            if not _is_valid_text(text, min_len=5):
                 continue
             if not re.search(r'/\d+\.html', href):
                 continue
             # Filter out navigation keywords
-            skip_words = ['首页', '导航', '站点地图', '联系', '关于', '搜索',
-                          '精选软件', '精选博客', '最新软件', '最新博客']
+            skip_words = _make_skip_set(
+                '导航', '站点地图', '联系', '精选软件', '精选博客',
+                '最新软件', '最新博客')
             if text in skip_words:
                 continue
             if text in seen:
                 continue
-            chinese_count = len(re.findall(r'[\u4e00-\u9fff]', text))
-            if chinese_count < 2 and len(text) < 15:
+            if not _has_chinese(text) and len(text) < 15:
                 continue
-            seen.add(text)
-            if href.startswith('/'):
-                href = urljoin(base_url, href)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
@@ -1703,7 +1595,7 @@ def parse_huodong5_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
     for a in soup.select('.feature-post .title a, h3.slide-title a, .slider-ad li a'):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 5 or len(text) > 120:
+        if not _is_valid_text(text, min_len=5):
             continue
         if text in seen:
             continue
@@ -1714,17 +1606,14 @@ def parse_huodong5_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
         text = re.sub(r'^【推荐】', '', text).strip()
         if len(text) < 5:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Strategy 2: Broader fallback - any link matching article URL pattern
     if len(items) < 5:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 5 or len(text) > 120:
+            if not _is_valid_text(text, min_len=5):
                 continue
             if not re.search(r'huodong5\.com/\d+\.html', href):
                 continue
@@ -1733,8 +1622,7 @@ def parse_huodong5_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
             text = re.sub(r'^【推荐】', '', text).strip()
             if len(text) < 5:
                 continue
-            seen.add(text)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href)
 
     return items[:30]
 
@@ -1764,7 +1652,7 @@ def parse_yangmaodang_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str
     for a in soup.select('a[rel="bookmark"]'):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 4 or len(text) > 120:
+        if not _is_valid_text(text):
             continue
         if text in seen:
             continue
@@ -1773,17 +1661,14 @@ def parse_yangmaodang_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str
             # Also accept standalone article pages (e.g. /dache/, /one-click-urls/)
             if not re.search(r'yangmaodang\.club/[a-z0-9\-]+/$', href):
                 continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Strategy 2: Fallback - scan article links by URL pattern
     if len(items) < 3:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 4 or len(text) > 120:
+            if not _is_valid_text(text):
                 continue
             if text in seen:
                 continue
@@ -1792,14 +1677,12 @@ def parse_yangmaodang_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str
             # Skip category/tag pages
             if '/category/' in href or '/tag/' in href:
                 continue
-            skip_words = ['首页', '最新羊毛', '伙伴事物', '银行羊毛', '阿里羊毛',
-                          '腾讯羊毛', '其他羊毛', '长期羊毛', '关于本站', '联系']
+            skip_words = _make_skip_set(
+                '最新羊毛', '伙伴事物', '银行羊毛', '阿里羊毛',
+                '腾讯羊毛', '其他羊毛', '长期羊毛', '关于本站', '联系')
             if text in skip_words:
                 continue
-            seen.add(text)
-            if href.startswith('/'):
-                href = urljoin(base_url, href)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
@@ -1833,21 +1716,18 @@ def parse_xianbaomi_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, 
             continue
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
-        if not text or len(text) < 2 or len(text) > 120:
+        if not _is_valid_text(text, min_len=2):
             continue
         if text in seen:
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Strategy 2: Broader fallback for all article links
     if len(items) < 3:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 2 or len(text) > 120:
+            if not _is_valid_text(text, min_len=2):
                 continue
             if text in seen:
                 continue
@@ -1855,14 +1735,12 @@ def parse_xianbaomi_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, 
             if 'xianbaomi.com/xb/' not in href and not href.startswith('http'):
                 continue
             # Filter navigation
-            skip_words = ['首页', '活动线报', '24小时热门线报', '1周热门线报',
-                          '最新内容', '网站地图', '查券', '一周热门', '神车群']
+            skip_words = _make_skip_set(
+                '活动线报', '24小时热门线报', '1周热门线报',
+                '最新内容', '网站地图', '查券', '一周热门', '神车群')
             if text in skip_words:
                 continue
-            seen.add(text)
-            if href.startswith('/'):
-                href = urljoin(base_url, href)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href, base_url)
 
     return items[:50]
 
@@ -1894,37 +1772,32 @@ def parse_yangmao_wang_items(soup: BeautifulSoup, base_url: str) -> List[Dict[st
         href = a.get('href', '').strip()
         # Prefer title attribute for full text
         text = (a.get('title', '') or a.get_text(strip=True)).strip()
-        if not text or len(text) < 4 or len(text) > 120:
+        if not _is_valid_text(text):
             continue
         if text in seen:
             continue
         # Must match article URL pattern
         if not re.search(r'yangmao\.wang/\w+/\d+\.html', href):
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Strategy 2: Broader fallback
     if len(items) < 3:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = (a.get('title', '') or a.get_text(strip=True)).strip()
-            if not text or len(text) < 4 or len(text) > 120:
+            if not _is_valid_text(text):
                 continue
             if text in seen:
                 continue
             if not re.search(r'yangmao\.wang/\w+/\d+\.html', href):
                 continue
-            skip_words = ['首页', '羊毛活动', '赚钱软件', '打折优惠', '赚钱攻略',
-                          '更多', '关于本站', '网站地图']
+            skip_words = _make_skip_set(
+                '羊毛活动', '赚钱软件', '打折优惠', '赚钱攻略',
+                '关于本站', '网站地图')
             if text in skip_words:
                 continue
-            seen.add(text)
-            if href.startswith('/'):
-                href = urljoin(base_url, href)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
@@ -1957,55 +1830,46 @@ def parse_iqnew_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
         text = a.get_text(strip=True)
         # Strip any <font> tag artifacts from text
         text = re.sub(r'<[^>]+>', '', text).strip()
-        if not text or len(text) < 4 or len(text) > 120:
+        if not _is_valid_text(text):
             continue
         if text in seen:
             continue
         # Must be an article link
         if not re.search(r'/(activity|news|mall)/\d+\.html', href):
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Strategy 2: Banner/carousel links
     for a in soup.select('#myFocus .pic li a'):
         href = a.get('href', '').strip()
         text = (a.get('title', '') or a.get_text(strip=True)).strip()
-        if not text or len(text) < 4 or len(text) > 120:
+        if not _is_valid_text(text):
             continue
         if text in seen:
             continue
         if not re.search(r'/(activity|news|mall)/\d+\.html', href):
             continue
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     # Strategy 3: Fallback - scan all links
     if len(items) < 5:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 4 or len(text) > 120:
+            if not _is_valid_text(text):
                 continue
             if text in seen:
                 continue
             if not re.search(r'/(activity|news|mall)/\d+\.html', href):
                 continue
-            skip_words = ['首页', 'QQ活动', '最新活动', '手机活动', '电脑软件',
-                          '购物商城', '投稿', '注册', '登录', 'QQ群', '关注我们']
+            skip_words = _make_skip_set(
+                'QQ活动', '最新活动', '手机活动', '电脑软件',
+                '购物商城', '投稿', 'QQ群', '关注我们')
             if text in skip_words:
                 continue
-            chinese_count = len(re.findall(r'[\u4e00-\u9fff]', text))
-            if chinese_count < 2 and len(text) < 15:
+            if not _has_chinese(text) and len(text) < 15:
                 continue
-            seen.add(text)
-            if href.startswith('/'):
-                href = urljoin(base_url, href)
-            items.append({'text': text, 'url': href})
+            _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
@@ -2038,7 +1902,7 @@ def parse_51kanong_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
     for a in soup.select('#article_list .article_title h2 a'):
         href = a.get('href', '').strip()
         text = (a.get('title', '') or a.get_text(strip=True)).strip()
-        if not text or len(text) < 3 or len(text) > 120:
+        if not _is_valid_text(text, min_len=3):
             continue
         if text in seen:
             continue
@@ -2051,7 +1915,7 @@ def parse_51kanong_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
     for a in soup.select('.comlimi_tops h2 a, .comlimi_hots h4 a'):
         href = a.get('href', '').strip()
         text = (a.get('title', '') or a.get_text(strip=True)).strip()
-        if not text or len(text) < 3 or len(text) > 120:
+        if not _is_valid_text(text, min_len=3):
             continue
         if text in seen:
             continue
@@ -2064,7 +1928,7 @@ def parse_51kanong_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
     for a in soup.select('.slideshow li a.slide_pic, .slideshow h3 a'):
         href = a.get('href', '').strip()
         text = (a.get('title', '') or a.get_text(strip=True)).strip()
-        if not text or len(text) < 3 or len(text) > 120:
+        if not _is_valid_text(text, min_len=3):
             continue
         if text in seen:
             continue
@@ -2078,7 +1942,7 @@ def parse_51kanong_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 3 or len(text) > 120:
+            if not _is_valid_text(text, min_len=3):
                 continue
             if text in seen:
                 continue
@@ -2086,8 +1950,9 @@ def parse_51kanong_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
             if not re.search(r'(xyk-\d+-\d+\.htm|a-\d+-\d+\.htm|thread-\d+)', href):
                 continue
             # Filter navigation
-            skip_words = ['首页', '信用卡交流', '贷款交流', '热帖推荐', '租机交流',
-                          '信用卡产品', '更多', '投稿', '注册', '登录', '找回密码']
+            skip_words = _make_skip_set(
+                '信用卡交流', '贷款交流', '热帖推荐', '租机交流',
+                '信用卡产品', '投稿')
             if text in skip_words:
                 continue
             seen.add(text)
@@ -2114,17 +1979,16 @@ def parse_ymxianbao_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, 
     seen: Set[str] = set()
 
     # Non-article navigation texts to skip
-    skip_texts = {
-        '羊毛阁', '首页', '联系站长', '联系我们', '500G流量卡', '任务平台合集',
-        '1', '2', '3', '4', '5', '...679',
-    }
+    skip_texts = _make_skip_set(
+        '羊毛阁', '联系站长', '500G流量卡', '任务平台合集',
+        '1', '2', '3', '4', '5', '...679')
 
     # Strategy 1: Match article links with numeric .html pattern on ymxianbao domain
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
 
-        if not text or len(text) < 4 or len(text) > 120:
+        if not _is_valid_text(text):
             continue
         if text in seen or text in skip_texts:
             continue
@@ -2147,10 +2011,7 @@ def parse_ymxianbao_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, 
         if not _has_chinese(text):
             continue
 
-        seen.add(text)
-        if href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
+        _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
@@ -2176,7 +2037,7 @@ def parse_linejia_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, st
     for a in soup.select('ul.list-wz li a, .list-wz a'):
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
-        if not text or len(text) < 3 or text in seen:
+        if not _is_valid_text(text, min_len=3, max_len=999) or text in seen:
             continue
         if '/huodong/' not in href and not re.search(r'/\d+\.html', href):
             continue
@@ -2191,13 +2052,10 @@ def parse_linejia_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, st
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = a.get_text(strip=True)
-            if not text or len(text) < 4 or text in seen:
+            if not _is_valid_text(text, max_len=999) or text in seen:
                 continue
             if '/huodong/' in href:
-                seen.add(text)
-                if href.startswith('/'):
-                    href = urljoin(base_url, href)
-                items.append({'text': text, 'url': href})
+                _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
