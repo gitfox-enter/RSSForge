@@ -29,7 +29,7 @@ from common import (
     sanitize_text, is_junk, ITEMS_DB_FILE, BLACKLIST_FILE, CRAWL_STATUS_FILE, MAX_ITEMS_DB,
     ProxyPool, create_proxy_pool,
 )
-from crawler.config import JS_RENDER_SITES, MAX_CONSECUTIVE_FAILURES, MAX_RETRIES, PAUSED_SITES_FILE, REQUEST_TIMEOUT, RETRY_BASE_DELAY, RUN_LOG_FILE, MONITOR_SITES, is_dead_site, get_source_name
+from crawler.config import JS_RENDER_SITES, MAX_CONSECUTIVE_FAILURES, MAX_RETRIES, PAUSED_SITES_FILE, REQUEST_TIMEOUT, RETRY_BASE_DELAY, RUN_LOG_FILE, MONITOR_SITES, is_dead_site, get_source_name, get_site_tier
 from crawler.storage import get_current_round, load_notified_items, save_notified_items, filter_new_items, merge_items_into_db, load_hash_records, save_hash_records, export_items_latest_json, get_random_delay, get_random_profile, get_referer
 from crawler.network import MetricsTracker, metrics, CircuitBreaker, circuit_breaker, get_conditional_headers, rate_limiter, is_allowed_by_robots, update_conditional_cache
 from crawler.parsers import _match_parser, extract_article_items, parse_rss_feed, parse_ghxi_items, fetch_page_content
@@ -879,6 +879,24 @@ async def main_async() -> None:
 
     # 实际监控列表
     active_sites = [upgrade_to_https(url) for url in monitor_sites if url not in paused_urls]
+    
+    # === 分级爬取：根据轮次决定本次爬取哪些站点 ===
+    # high: 每轮都爬, medium: 每2轮爬一次, low: 每4轮爬一次
+    tier_filtered = []
+    for url in active_sites:
+        tier = get_site_tier(url)
+        if tier == 'high':
+            pass  # always crawl
+        elif tier == 'medium' and round_num % 2 == 0:
+            pass  # crawl on even rounds
+        elif tier == 'low' and round_num % 4 == 0:
+            pass  # crawl every 4th round
+        else:
+            tier_filtered.append(url)
+    if tier_filtered:
+        active_sites = [url for url in active_sites if url not in set(tier_filtered)]
+        logger.info("分级过滤跳过 %d 个站点 (medium/low 本轮不爬)", len(tier_filtered))
+    
     logger.info("监控站点数: %d (活跃) + %d (黑名单) + %d (暂停)",
                 len(active_sites), len(blacklist_domains), len(paused_urls))
     if paused_urls:

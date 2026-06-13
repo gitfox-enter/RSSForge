@@ -1,0 +1,12 @@
+name = "site-update-monitor-cron"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+# Cron triggers: every 15 minutes
+# The worker decides which workflow to trigger based on the current minute
+[triggers]
+crons = ["*/15 * * * *"]
+
+# Environment variables (set via: wrangler secret put GITHUB_TOKEN)
+[vars]
+# GITHUB_TOKEN is stored as a secret, not in vars

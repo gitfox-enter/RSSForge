@@ -45,6 +45,30 @@ def _load_sites_from_yaml() -> List[str]:
 
 MONITOR_SITES: List[str] = _load_sites_from_yaml()
 
+
+def _load_site_tiers() -> Dict[str, str]:
+    """Load site tier from sites.yaml. Returns {url: tier} dict. Default tier is 'high'."""
+    yaml_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "sites.yaml")
+    tiers: Dict[str, str] = {}
+    try:
+        import yaml
+        with open(yaml_path, "r", encoding="utf-8") as f:
+            cfg = yaml.safe_load(f)
+        for s in cfg.get("sites", []):
+            tiers[s["url"]] = s.get("tier", "high")
+    except Exception:
+        pass  # all default to 'high' via get_site_tier()
+    return tiers
+
+
+SITE_TIERS: Dict[str, str] = _load_site_tiers()
+
+
+def get_site_tier(url: str) -> str:
+    """Get the crawl tier for a site. Returns 'high', 'medium', or 'low'. Default: 'high'."""
+    return SITE_TIERS.get(url, 'high')
+
+
 # URL -> 短名称映射（统一来源显示名称，避免使用页面标题导致名称过长/重复）
 SOURCE_NAME_MAP: Dict[str, str] = {
     "https://axutongxue.net/": "爱Q生活",

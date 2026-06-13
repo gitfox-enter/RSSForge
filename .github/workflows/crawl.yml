@@ -2,13 +2,13 @@ name: 站点更新监控
 
 on:
   schedule:
-    # 每 30 分钟执行一次全量爬取（补漏，覆盖更多站点）
-    - cron: '*/30 * * * *'
+    # 每 2 小时作为兜底调度（Cloudflare Worker 负责精准 30 分钟触发）
+    - cron: '0 */2 * * *'
   workflow_dispatch:
 
 concurrency:
   group: site-monitor
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   monitor:

@@ -2,8 +2,8 @@ name: 快速增量检查
 
 on:
   schedule:
-    # 每 30 分钟跑一次（降低频率，避免调度器卡住）
-    - cron: '*/30 * * * *'
+    # 每 2 小时偏移 30 分钟作为兜底（Cloudflare Worker 负责精准触发）
+    - cron: '30 */2 * * *'
   workflow_dispatch:
 
 concurrency:
