@@ -8,6 +8,7 @@ import logging
 from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Set, Tuple
 from urllib.parse import urlparse
+import re
 
 from common import (
     ITEMS_DB_FILE, ITEMS_LATEST_FILE, BLACKLIST_FILE, MAX_ITEMS_DB,
@@ -200,6 +201,44 @@ def filter_new_items(items: List[Any], notified: Dict[str, Any]) -> Tuple[List[A
 # 线报数据库（items.json）- 持久化累积所有历史线报
 # ============================================================
 
+# URL patterns that indicate navigation/non-content pages
+_NOISE_URL_PATTERNS = [
+    r'\bforum\.php\?',       # forum.php noise pages (except mod=redirect)
+    r'xianbao-my\.html',
+    r'xianbao-day\.html',
+    r'member\.php\?mod=logging',
+    r'beian\.miit\.gov\.cn',
+    r'beian\.mps\.gov\.cn',
+]
+
+# All Chinese province abbreviations for ICP/police registration numbers
+_NOISE_TEXT_PATTERN = re.compile(
+    r'[京津沪渝冀晋辽吉黑苏浙皖闽赣鲁豫鄂湘粤桂琼川贵云藏陕甘青宁新]'
+    r'(?:ICP|公网安备)'
+)
+
+def is_noise_item(item: Dict[str, str]) -> bool:
+    """Check if an item is a navigation/non-content noise entry."""
+    url = item.get('url', '')
+    text = item.get('text', '')
+
+    # Check URL patterns
+    for pattern in _NOISE_URL_PATTERNS:
+        if re.search(pattern, url):
+            # Special case: forum.php?mod=redirect is a real item, not noise
+            if 'forum.php' in pattern or 'forum\.php' in pattern:
+                if 'mod=redirect' in url:
+                    continue
+            return True
+
+    # Check text patterns (ICP/police registration numbers)
+    if text and _NOISE_TEXT_PATTERN.search(text):
+        return True
+
+    return False
+
+
+
 
 def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) -> int:
     """
@@ -214,6 +253,10 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
     added = 0
     fresh_items: List[Dict[str, Any]] = []
     for item in new_item_list:
+        # 噪声过滤
+        if is_noise_item(item):
+            logger.debug("过滤噪声条目: %s", item.get('text', '')[:50])
+            continue
         url = item.get('url', '')
         if url and url not in existing_urls:
             # 添加自动分类
