@@ -1066,10 +1066,12 @@ function loadData() {
           buildSidebar();
           buildMobileDropdown();
           renderList();
+          updateStatus();
         }
       }).catch(function() { /* full load failed, latest is enough */ });
       renderAll();
       updateStatus();
+      checkNewItems();
     })
     .catch(function(err) {
       document.getElementById('item-list').innerHTML =
@@ -1603,9 +1605,6 @@ if ('serviceWorker' in navigator) {
     }
     try { localStorage.setItem('xb_last_count', String(allItems.length)); } catch(e) {}
   }
-  // Run after data loads
-  setTimeout(checkNewItems, 3000);
-
   // === Promo banner: show only on first 3 visits, then hide ===
   try {
     var visitCount = parseInt(localStorage.getItem('xb_visits') || '0') + 1;
