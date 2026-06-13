@@ -11,14 +11,11 @@ import random
 import json
 import asyncio
 from urllib.parse import urlparse
-from collections import Counter
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone, timedelta
 from types import SimpleNamespace
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 import aiohttp
-import requests
 from bs4 import BeautifulSoup
 
 from common import (
@@ -138,6 +135,97 @@ def _needs_playwright(url: str) -> bool:
     return False
 
 
+def _parse_response_html(
+    content: bytes,
+    encoding: str,
+    url: str,
+    elapsed: float = 0.0,
+) -> Tuple[bool, Any]:
+    """Parse HTML response bytes → extracted content dict or error.
+
+    Shared by both Playwright and aiohttp fetch paths.
+    Returns (True, result_dict) on success, (False, error_msg) on failure.
+    """
+    soup = BeautifulSoup(content, 'html.parser')
+
+    # Encoding fallback when BS4 auto-detection fails (common for Chinese GB* sites)
+    if not soup.original_encoding:
+        enc = encoding or 'utf-8'
+        if enc.lower() in ('gb2312', 'gbk', 'gb18030'):
+            enc = 'gbk'
+        decoded = content.decode(enc, errors='ignore')
+        soup = BeautifulSoup(decoded, 'html.parser')
+
+    title_tag = soup.find('title')
+    title = title_tag.get_text(strip=True) if title_tag else url
+
+    # Site-specific parser dispatch
+    parser_pair = _match_parser(url)
+
+    # Special handling: RSS/Atom Feed
+    if 'feed.iplaysoft.com' in url or url.endswith('.xml'):
+        article_items = parse_rss_feed(content, url)
+        text = '\n'.join(item['text'] for item in article_items)
+    elif 'ghxi.com' in url:
+        article_items = parse_ghxi_items(soup, url)
+        if article_items:
+            text = '\n'.join(item['text'] for item in article_items)
+        else:
+            article_items = extract_article_items(soup, url)
+            body = soup.find('body')
+            text = body.get_text(separator=' ', strip=True) if body else ''
+            text = ' '.join(text.split())
+    elif parser_pair is not None:
+        items_parser, text_parser = parser_pair
+        article_items = items_parser(soup, url)
+        if text_parser is not None:
+            text = text_parser(soup)
+        else:
+            text = '\n'.join(item['text'] for item in article_items)
+    else:
+        # Generic extraction
+        article_items = extract_article_items(soup, url)
+        for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
+            tag.decompose()
+        body = soup.find('body')
+        text = body.get_text(separator=' ', strip=True) if body else soup.get_text(separator=' ', strip=True)
+        text = ' '.join(text.split())
+
+    if not text:
+        return False, "页面正文为空"
+
+    summary = text[:300] + '...' if len(text) > 300 else text
+    return True, {
+        'text': text, 'title': title, 'summary': summary,
+        'items': article_items, 'response_time': round(elapsed, 3),
+    }
+
+
+def _compute_hash_diff(
+    result: Dict[str, Any], old_records: Dict[str, str], url: str,
+) -> Tuple[bool, str, str]:
+    """Compute content hash and compare with old records.
+
+    Returns (is_updated, new_hash, message).
+    """
+    article_items = result.get('items', [])
+    if article_items:
+        items_text = json.dumps(
+            [{'t': it['text'], 'u': it['url']} for it in article_items],
+            ensure_ascii=False, sort_keys=True,
+        )
+        new_hash = calculate_md5(items_text)
+    else:
+        new_hash = calculate_md5(result['text'])
+
+    old_hash = old_records.get(url)
+    if old_hash is None:
+        return False, new_hash, "首次监控"
+    elif old_hash != new_hash:
+        return True, new_hash, "内容已更新"
+    return False, new_hash, "无更新"
+
+
 async def fetch_page_content_async(
     url: str,
     session: aiohttp.ClientSession,
@@ -177,42 +265,8 @@ async def fetch_page_content_async(
             metrics.record_failure(domain)
             return False, f"Playwright 抓取失败: {pw_result[:80]}"
 
-        # 解析 Playwright 返回的 HTML
-        soup = BeautifulSoup(pw_result, 'html.parser')
-        title_tag = soup.find('title')
-        title = title_tag.get_text(strip=True) if title_tag else url
-
-        parser_pair = _match_parser(url)
-        if parser_pair is not None:
-            items_parser, text_parser = parser_pair
-            article_items = items_parser(soup, url)
-            if text_parser is not None:
-                text = text_parser(soup)
-            else:
-                text = '\n'.join(item['text'] for item in article_items)
-        else:
-            article_items = extract_article_items(soup, url)
-            for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
-                tag.decompose()
-            body = soup.find('body')
-            text = body.get_text(separator=' ', strip=True) if body else soup.get_text(separator=' ', strip=True)
-            text = ' '.join(text.split())
-
-        if not text:
-            return False, "Playwright: 页面正文为空"
-
-        summary = text[:300] + '...' if len(text) > 300 else text
-        logger.info("Playwright 爬取成功", extra={
-            'site': url, 'event': 'playwright_crawl_success',
-            'response_time': round(elapsed, 3),
-        })
-        return True, {
-            'text': text,
-            'title': title,
-            'summary': summary,
-            'items': article_items,
-            'response_time': round(elapsed, 3),
-        }
+        pw_encoding = 'utf-8'
+        return _parse_response_html(pw_result.encode(pw_encoding), pw_encoding, url, elapsed)
 
     # === 普通 aiohttp 路径 ===
     profile = get_random_profile()
@@ -360,71 +414,18 @@ async def fetch_page_content_async(
     circuit_breaker.record_success(domain)
     metrics.record_success(domain, elapsed)
 
-    # Parse HTML with BeautifulSoup
-    soup = BeautifulSoup(response.content, 'html.parser')
-    if not soup.original_encoding:
-        encoding = response.encoding or 'utf-8'
-        if encoding.lower() in ['gb2312', 'gbk', 'gb18030']:
-            encoding = 'gbk'
-        content = response.content.decode(encoding, errors='ignore')
-        soup = BeautifulSoup(content, 'html.parser')
-
-    title_tag = soup.find('title')
-    title = title_tag.get_text(strip=True) if title_tag else url
-
-    # === Site-specific parser dispatch (same logic as sync version) ===
-    parser_pair = _match_parser(url)
-
-    # Special handling: RSS/Atom Feed
-    if 'feed.iplaysoft.com' in url or url.endswith('.xml'):
-        article_items = parse_rss_feed(response.content, url)
-        text = '\n'.join(item['text'] for item in article_items)
-    elif 'ghxi.com' in url:
-        # ghxi special: prefer WP API, fallback to generic
-        article_items = parse_ghxi_items(soup, url)
-        if article_items:
-            text = '\n'.join(item['text'] for item in article_items)
-        else:
-            article_items = extract_article_items(soup, url)
-            body = soup.find('body')
-            text = body.get_text(separator=' ', strip=True) if body else ''
-            text = ' '.join(text.split())
-    elif parser_pair is not None:
-        items_parser, text_parser = parser_pair
-        article_items = items_parser(soup, url)
-        if text_parser is not None:
-            text = text_parser(soup)
-        else:
-            text = '\n'.join(item['text'] for item in article_items)
-    else:
-        # Generic extraction
-        article_items = extract_article_items(soup, url)
-        for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
-            tag.decompose()
-        body = soup.find('body')
-        if body:
-            text = body.get_text(separator=' ', strip=True)
-        else:
-            text = soup.get_text(separator=' ', strip=True)
-        text = ' '.join(text.split())
-
-    if not text:
-        return False, "页面正文为空"
-
-    summary = text[:300] + '...' if len(text) > 300 else text
+    # Parse HTML response (shared logic)
+    ok, parse_result = _parse_response_html(
+        response.content, response.encoding, url, elapsed,
+    )
+    if not ok:
+        return False, parse_result
 
     logger.info("爬取成功", extra={
         'site': url, 'event': 'crawl_success',
-        'response_time': round(elapsed, 3),
+        'response_time': parse_result['response_time'],
     })
-
-    return True, {
-        'text': text,
-        'title': title,
-        'summary': summary,
-        'items': article_items,
-        'response_time': round(elapsed, 3),
-    }
+    return True, parse_result
 
 
 def check_site_update(url: str, old_records: Dict[str, str]) -> Tuple[Optional[bool], Optional[str], str, Optional[Dict[str, Any]]]:
@@ -437,8 +438,6 @@ def check_site_update(url: str, old_records: Dict[str, str]) -> Tuple[Optional[b
     if not success:
         return None, None, result, None  # 爬取失败
 
-    # result现在是一个字典
-    text = result['text']
     page_info = {
         'url': url,
         'title': result['title'],
@@ -446,26 +445,8 @@ def check_site_update(url: str, old_records: Dict[str, str]) -> Tuple[Optional[b
         'items': result['items']
     }
 
-    # Hash the article items list (titles+urls) instead of full body text.
-    # This prevents false positives from timestamps, ads, or dynamic widgets.
-    article_items = result.get('items', [])
-    if article_items:
-        items_text = json.dumps([{'t': item['text'], 'u': item['url']} for item in article_items],
-                                ensure_ascii=False, sort_keys=True)
-        new_hash = calculate_md5(items_text)
-    else:
-        new_hash = calculate_md5(text)
-    old_hash = old_records.get(url)
-
-    if old_hash is None:
-        # 首次监控，记录哈希但不视为更新
-        return False, new_hash, "首次监控", page_info
-    elif old_hash != new_hash:
-        # 检测到更新
-        return True, new_hash, "内容已更新", page_info
-    else:
-        # 无更新
-        return False, new_hash, "无更新", page_info
+    is_updated, new_hash, message = _compute_hash_diff(result, old_records, url)
+    return is_updated, new_hash, message, page_info
 
 
 async def check_site_update_async(
@@ -479,7 +460,6 @@ async def check_site_update_async(
     if not success:
         return None, None, result, None
 
-    text = result['text']
     page_info = {
         'url': url,
         'title': result['title'],
@@ -487,21 +467,8 @@ async def check_site_update_async(
         'items': result['items'],
     }
 
-    article_items = result.get('items', [])
-    if article_items:
-        items_text = json.dumps([{'t': item['text'], 'u': item['url']} for item in article_items],
-                                ensure_ascii=False, sort_keys=True)
-        new_hash = calculate_md5(items_text)
-    else:
-        new_hash = calculate_md5(text)
-    old_hash = old_records.get(url)
-
-    if old_hash is None:
-        return False, new_hash, "首次监控", page_info
-    elif old_hash != new_hash:
-        return True, new_hash, "内容已更新", page_info
-    else:
-        return False, new_hash, "无更新", page_info
+    is_updated, new_hash, message = _compute_hash_diff(result, old_records, url)
+    return is_updated, new_hash, message, page_info
 
 
 def git_commit_if_changed() -> bool:
@@ -750,8 +717,6 @@ def save_paused_sites(paused: Dict[str, Any]) -> None:
 
 def export_crawl_status(all_site_results, new_item_list, metrics_summary, output_path=None):
     """Export crawl_status.json for the health dashboard."""
-    from common import load_items_db
-    from crawler.config import get_source_name
     _output_path = output_path or CRAWL_STATUS_FILE
     sites = []
     for r in all_site_results:
@@ -888,20 +853,15 @@ async def main_async() -> None:
     
     # === 分级爬取：根据轮次决定本次爬取哪些站点 ===
     # high: 每轮都爬, medium: 每2轮爬一次, low: 每4轮爬一次
-    tier_filtered = []
-    for url in active_sites:
-        tier = get_site_tier(url)
-        if tier == 'high':
-            pass  # always crawl
-        elif tier == 'medium' and round_num % 2 == 0:
-            pass  # crawl on even rounds
-        elif tier == 'low' and round_num % 4 == 0:
-            pass  # crawl every 4th round
-        else:
-            tier_filtered.append(url)
-    if tier_filtered:
-        active_sites = [url for url in active_sites if url not in set(tier_filtered)]
-        logger.info("分级过滤跳过 %d 个站点 (medium/low 本轮不爬)", len(tier_filtered))
+    _TIER_FREQ = {'high': 1, 'medium': 2, 'low': 4}
+    prev_count = len(active_sites)
+    active_sites = [
+        url for url in active_sites
+        if round_num % _TIER_FREQ.get(get_site_tier(url), 1) == 0
+    ]
+    skipped = prev_count - len(active_sites)
+    if skipped:
+        logger.info("分级过滤跳过 %d 个站点 (medium/low 本轮不爬)", skipped)
     
     logger.info("监控站点数: %d (活跃) + %d (黑名单) + %d (暂停)",
                 len(active_sites), len(blacklist_domains), len(paused_urls))
@@ -911,19 +871,6 @@ async def main_async() -> None:
     # 加载已通知过的条目URL（去重用）
     notified = load_notified_items()
     logger.info("已加载历史条目: %d 条", len(notified.get('items', [])))
-
-    # Run log rotation: keep only the last 30 entries
-    run_log = load_run_log()
-    if len(run_log) > 30:
-        run_log = run_log[-30:]
-        tmp_file = RUN_LOG_FILE + '.tmp'
-        try:
-            with open(tmp_file, 'w', encoding='utf-8') as f:
-                for entry in run_log:
-                    f.write(json.dumps(entry, ensure_ascii=False) + '\n')
-            os.replace(tmp_file, RUN_LOG_FILE)
-        except Exception:
-            pass
 
     # Shuffle site order to avoid deterministic crawl patterns
     random.shuffle(active_sites)
