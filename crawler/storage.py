@@ -313,8 +313,9 @@ _STICKY_ITEM: Dict[str, Any] = {
 
 def _ensure_sticky_in_items(items: List[Dict[str, str]]) -> List[Dict[str, str]]:
     """Return a new list with the Alipay sticky item pinned to the top."""
-    # Drop any existing sticky-looking items to avoid duplication
-    filtered = [it for it in items if it.get("source") != "支付宝"]
+    # Drop the exact sticky item if already present, to avoid duplication
+    sticky_url = _STICKY_ITEM["url"]
+    filtered = [it for it in items if it.get("url") != sticky_url]
     return [_STICKY_ITEM] + filtered
 
 

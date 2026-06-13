@@ -124,7 +124,7 @@ def parse_yxssp_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
         _add_item(items, seen, text, href, base_url)
 
     # Secondary: entry-title links within td modules
-    for a in soup.select('.entry-title a, .td-module-title a, td-module-title a'):
+    for a in soup.select('.entry-title a, .td-module-title a'):
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
         if not _is_valid_text(text, max_len=999) or text in seen:

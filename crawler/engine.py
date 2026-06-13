@@ -504,11 +504,14 @@ def git_commit_if_changed() -> bool:
 
         # Git add 特定文件（避免 git add -A 在 Windows 上索引 nul 等设备名文件）
         TRACKED_FILES = [
-            'items.json', 'hash_record.txt', 'monitor.db',
+            'items.json', 'items_latest.json', 'crawl_status.json',
+            'hash_record.txt', 'monitor.db',
             'notified_items.json', 'run_log.jsonl', '.gitignore',
         ]
+        # Resolve project root (one level up from crawler/)
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         for f in TRACKED_FILES:
-            fpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), f)
+            fpath = os.path.join(project_root, f)
             if os.path.exists(fpath):
                 subprocess.run(['git', 'add', f], check=True, timeout=30)
 
