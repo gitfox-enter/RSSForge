@@ -375,6 +375,15 @@ async def fetch_page_content_async(
                         headers.update(profile.get('fingerprint', {}))
                         active_proxy = _proxy_pool.get_proxy() if _proxy_pool else None
                         continue
+                    # Last attempt: read response body for proper HTTP error reporting
+                    content_bytes = await resp.read()
+                    response_headers = {k: v for k, v in resp.headers.items()}
+                    response = SimpleNamespace(
+                        status=resp.status,
+                        headers=response_headers,
+                        content=content_bytes,
+                        encoding=resp.get_encoding() or 'utf-8',
+                    )
                 else:
                     # Other status codes: don't retry
                     response_status = resp.status
