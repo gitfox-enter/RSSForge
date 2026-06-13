@@ -84,10 +84,10 @@ def parse_discuz_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
         href = a.get('href', '').strip()
         if not text or len(text) < 3 or text in seen or '/thread-' not in href:
             continue
-        seen.add(text)
         if href.startswith('/'):
             href = urljoin(base_url, href)
         if href.startswith('http'):
+            seen.add(text)
             items.append({'text': text, 'url': href})
     if not items:
         for tr in soup.select('.forum tbody tr, table tbody tr'):
@@ -95,12 +95,12 @@ def parse_discuz_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
                 text = a.get_text(strip=True)
                 href = a.get('href', '').strip()
                 if text and len(text) > 3 and '/thread-' in href and text not in seen:
-                    seen.add(text)
                     if href.startswith('/'):
                         href = urljoin(base_url, href)
                     if href.startswith('http'):
+                        seen.add(text)
                         items.append({'text': text, 'url': href})
-                    break
+                        break
     return items[:30]
 
 
@@ -2042,10 +2042,10 @@ def parse_linejia_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, st
             continue
         if '/huodong/' not in href and not re.search(r'/\d+\.html', href):
             continue
-        seen.add(text)
         if href.startswith('/'):
             href = urljoin(base_url, href)
         if href.startswith('http'):
+            seen.add(text)
             items.append({'text': text, 'url': href})
 
     # 回退: 任何包含 /huodong/ 的链接

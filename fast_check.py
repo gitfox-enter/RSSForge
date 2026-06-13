@@ -406,12 +406,10 @@ async def main() -> None:
     else:
         logger.info("[结果] 无新增")
 
-    # 6. Export items.json and items_latest.json for frontend
-
-    # 7. Metrics
+    # 6. Metrics
     logger.info("[指标] %s", metrics.summary())
 
-    # 8. Log entry
+    # 7. Log entry
     log_entry: Dict[str, Any] = {
         "time": get_beijing_time().strftime("%Y-%m-%d %H:%M:%S"),
         "new_items": len(all_new_items),

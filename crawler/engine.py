@@ -1010,9 +1010,6 @@ async def main_async() -> None:
         added = merge_items_into_db(new_item_list, check_time)
         logger.info("SQLite 新增 %d 条线报", added)
 
-    # Export items.json for frontend SPA
-    # Export items_latest.json for fast first-page load
-
     # 计算本轮新增URL数
     existing_urls_set = set(item['url'] for item in (notified.get('items', []) if isinstance(notified, dict) else []))
     new_urls = set(item['url'] for item in new_item_list if item['url'] not in existing_urls_set)
