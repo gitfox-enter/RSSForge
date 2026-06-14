@@ -3331,7 +3331,7 @@ class TestMaxItemsConsistency(unittest.TestCase):
     """Ensure MAX_ITEMS_DB is consistent between crawl.py and common.py."""
 
     def test_crawl_max_items(self):
-        self.assertEqual(crawl.MAX_ITEMS_DB, 2000)
+        self.assertEqual(crawl.MAX_ITEMS_DB, 8000)
 
 
 # ===================================================================
