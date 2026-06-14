@@ -1776,6 +1776,15 @@ window.addEventListener('pageshow', function(e) {
     }
     updateBell();
     
+    // Auto-start polling if permission already granted
+    if (Notification.permission === 'granted') {
+      navigator.serviceWorker.ready.then(function(reg) {
+        if (reg.active) {
+          reg.active.postMessage({ type: 'START_POLLING' });
+        }
+      });
+    }
+    
     bell.addEventListener('click', function() {
       if (Notification.permission === 'granted') {
         // Already granted - toggle polling by registering SW
@@ -1784,14 +1793,14 @@ window.addEventListener('pageshow', function(e) {
           var isActive = bell.classList.contains('active');
           bell.title = isActive ? '通知已开启' : '点击开启通知';
           // Send message to SW to start/stop polling
-          reg.active.postMessage({ type: isActive ? 'START_POLLING' : 'STOP_POLLING' });
+          if (reg.active) reg.active.postMessage({ type: isActive ? 'START_POLLING' : 'STOP_POLLING' });
         });
       } else if (Notification.permission !== 'denied') {
         Notification.requestPermission().then(function(perm) {
           updateBell();
           if (perm === 'granted') {
-            navigator.serviceWorker.ready.then(function() {
-              console.log('Notification permission granted, SW polling active');
+            navigator.serviceWorker.ready.then(function(reg) {
+              if (reg.active) reg.active.postMessage({ type: 'START_POLLING' });
             });
           }
         });

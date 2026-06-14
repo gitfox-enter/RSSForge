@@ -1,4 +1,4 @@
-const CACHE_NAME = 'xianbao-v9';
+const CACHE_NAME = 'xianbao-v10';
 const BASE = new URL('.', self.location.href).pathname.replace(/\/$/, '');
 const ASSETS = [
   BASE + '/index.html',
@@ -10,6 +10,7 @@ const ASSETS = [
 ];
 const POLL_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const NOTIFICATION_TAG = 'xianbao-update';
+const LAST_COUNT_KEY = 'xb_last_item_count';
 let lastItemCount = 0;
 
 // === Install & Activate ===
@@ -23,7 +24,13 @@ self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    )
+    ).then(function() {
+      // Restore lastItemCount from IndexedDB or just use localStorage via clients
+      // For simplicity, we'll fetch the current count first
+      return fetch(BASE + '/items_latest.json').then(r => r.json()).then(data => {
+        lastItemCount = (data.items || []).length;
+      }).catch(() => {});
+    })
   );
   self.clients.claim();
   // Start polling for updates after activation
