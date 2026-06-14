@@ -556,52 +556,37 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
    #footer{padding:16px 12px}
    #filter-toolbar{padding:6px 10px}
    #back-top{bottom:16px;right:16px;width:36px;height:36px}
-  }
+   }
 
-  /* Notification bell */
+   /* Notification bell */
+   #notif-bell{position:relative}
+   #notif-badge{
+     position:absolute;top:-2px;right:-2px;
+     background:#e53935;color:#fff;font-size:10px;font-weight:700;
+     min-width:16px;height:16px;border-radius:8px;
+     display:none;align-items:center;justify-content:center;
+     padding:0 4px;
+   }
+   #notif-badge.show{display:flex}
 
-/* ========== STICKY TOP (支付宝红包) ========== */
-.sticky-top{
-  display:flex;align-items:center;gap:12px;
-  padding:12px 16px;margin-bottom:10px;
-  background:linear-gradient(135deg,#fff5f5 0%,#ffe0e0 100%);
-  border:1px solid #ffcdd2;border-radius:var(--radius);
-  box-shadow:0 2px 8px rgba(229,57,53,.08);
-  cursor:pointer;
-  transition:all .2s;
-  position:relative;overflow:hidden;
-}
-.sticky-top:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(229,57,53,.15);}
-.sticky-top:active{transform:translateY(0);}
-.sticky-top::before{
-  content:"置顶";position:absolute;top:4px;right:4px;
-  background:#e53935;color:#fff;font-size:10px;font-weight:700;
-  padding:2px 6px;border-radius:3px;letter-spacing:.5px;
-}
-.sticky-top .st-body{flex:1;min-width:0;}
-.sticky-top .st-title{
-  font-size:15px;font-weight:700;color:#c62828;
-  margin-bottom:4px;display:flex;align-items:center;gap:6px;
-}
-.sticky-top .st-title::before{
-  content:"🧧";font-size:16px;
-}
-.sticky-top .st-desc{
-  font-size:13px;color:#b71c1c;line-height:1.5;
-}
-.sticky-top .st-tag{
-  display:inline-block;font-size:11px;font-weight:600;
-  color:#e53935;background:#ffebee;
-  padding:2px 8px;border-radius:10px;margin-top:4px;
-}
-@media(prefers-color-scheme:dark){
-  .sticky-top{background:linear-gradient(135deg,#2a1a1a 0%,#3a1a1a 100%);border-color:#5a2a2a;}
-  .sticky-top .st-title{color:#ff8a80;}
-  .sticky-top .st-desc{color:#ef9a9a;}
-  .sticky-top .st-tag{color:#ff8a80;background:#4a1a1a;}
-  .st-qr{border-color:#5a2a2a;}
-}
-.st-qr{width:56px;height:56px;border-radius:8px;flex-shrink:0;border:1px solid #ffcdd2;object-fit:contain;background:#fff}
+   /* Red packet button (支付宝红包) */
+   #redpacket-btn{
+     padding:6px 12px;
+     font-size:14px;
+     color:var(--text-sec);
+     border-radius:var(--radius);
+     cursor:pointer;
+     transition:all .15s;
+     white-space:nowrap;
+     background:transparent;
+     border:none;
+     display:inline-flex;
+     align-items:center;
+     gap:4px;
+     text-decoration:none;
+   }
+   #redpacket-btn:hover{color:#e53935;background:#ffebee}
+   #redpacket-btn svg{width:18px;height:18px}
 
 /* ========== PROMO BANNER ========== */
 #promo-banner{
@@ -731,9 +716,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       <span>安装</span>
     </button>
-    <button id="bookmark-btn" onclick="showBookmarkTip()" title="收藏本站" aria-label="收藏本站到浏览器">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-    </button>
+    <a id="redpacket-btn" href="./alipay-redpacket.html" title="支付宝领红包" aria-label="支付宝每日领红包">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="8" width="18" height="14" rx="2"/><path d="M12 8V6c0-1.1.9-2 2-2h2"/><circle cx="12" cy="15" r="2"/></svg>
+    </a>
   </nav>
 </header>
 
@@ -782,17 +767,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
           <button class="promo-btn promo-btn-primary" onclick="copySiteLink()">📎复制链接</button>
           <button class="promo-btn promo-btn-secondary" onclick="showBookmarkTip()">⭐收藏本站</button>
         </span>
-      </div>
-      <!-- 置顶广告 -->
-      <div id="sticky-ad">
-        <a href="./alipay-redpacket.html" class="sticky-top" aria-label="支付宝每日领红包，点击进入">
-          <img src="public/alipay-redpacket.jpg" alt="支付宝红包二维码" class="st-qr" width="56" height="56" loading="lazy">
-          <div class="st-body">
-            <div class="st-title">支付宝每日领红包</div>
-            <div class="st-desc">每天可领一次，天天有优惠！点击查看详情 →</div>
-            <span class="st-tag">📱 去领红包</span>
-          </div>
-        </a>
       </div>
       <div class="list-wrap" id="item-list" role="list" aria-label="线报条目列表"></div>
       <nav id="pagination" role="navigation" aria-label="分页导航"></nav>
