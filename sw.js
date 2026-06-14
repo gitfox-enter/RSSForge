@@ -1,4 +1,4 @@
-const CACHE_NAME = 'xianbao-v11';
+const CACHE_NAME = 'xianbao-v12';
 const BASE = new URL('.', self.location.href).pathname.replace(/\/$/, '');
 const ASSETS = [
   BASE + '/index.html',
@@ -8,10 +8,6 @@ const ASSETS = [
   BASE + '/status.html',
   BASE + '/alipay-redpacket.html'
 ];
-const POLL_INTERVAL = 15 * 60 * 1000; // 15 minutes (爬虫最快2小时更新，15分钟检查一次足够)
-const NOTIFICATION_TAG = 'xianbao-update';
-const LAST_COUNT_KEY = 'xb_last_item_count';
-let lastItemCount = 0;
 
 // === Install & Activate ===
 self.addEventListener('install', e => {
@@ -24,17 +20,9 @@ self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    ).then(function() {
-      // Restore lastItemCount from IndexedDB or just use localStorage via clients
-      // For simplicity, we'll fetch the current count first
-      return fetch(BASE + '/items_latest.json').then(r => r.json()).then(data => {
-        lastItemCount = (data.items || []).length;
-      }).catch(() => {});
-    })
+    )
   );
   self.clients.claim();
-  // Start polling for updates after activation
-  pollForUpdates();
 });
 
 // === Fetch handler (network-first for data, cache-first for assets) ===
@@ -69,94 +57,3 @@ self.addEventListener('fetch', e => {
     }))
   );
 });
-
-// === Push notification handler ===
-self.addEventListener('push', e => {
-  const data = e.data ? e.data.json() : {};
-  const title = data.title || '线报聚合';
-  const body = data.body || '发现新的羊毛线报，点击查看！';
-  e.waitUntil(
-    self.registration.showNotification(title, {
-      body: body,
-      icon: BASE + '/public/icon-192.png',
-      badge: BASE + '/public/favicon.svg',
-      tag: NOTIFICATION_TAG,
-      data: { url: data.url || BASE + '/' },
-      vibrate: [100, 50, 100],
-      requireInteraction: false,
-      renotify: true
-    })
-  );
-});
-
-// === Notification click handler ===
-self.addEventListener('notificationclick', e => {
-  e.notification.close();
-  const url = e.notification.data?.url || BASE + '/';
-  e.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-      for (const client of clientList) {
-        if (client.url.includes(BASE) && 'focus' in client) return client.focus();
-      }
-      return clients.openWindow(url);
-    })
-  );
-});
-
-// === Polling: check items_latest.json for new items (managed by page, not SW) ===
-
-// === Message handler from page ===
-let pollingEnabled = true;
-
-self.addEventListener('message', e => {
-  if (e.data && e.data.type === 'START_POLLING') {
-    pollingEnabled = true;
-  } else if (e.data && e.data.type === 'STOP_POLLING') {
-    pollingEnabled = false;
-  }
-});
-
-// Modify pollForUpdates to respect pollingEnabled
-
-async function pollForUpdates() {
-  if (!pollingEnabled) { setTimeout(pollForUpdates, POLL_INTERVAL); return; }
-  try {
-    const res = await fetch(BASE + '/items_latest.json?t=' + Date.now());
-    if (!res.ok) { setTimeout(pollForUpdates, POLL_INTERVAL); return; }
-    const data = await res.json();
-    const currentCount = (data.items || []).length;
-    
-    // First poll: just record the count, don't notify
-    if (lastItemCount === 0) {
-      lastItemCount = currentCount;
-      setTimeout(pollForUpdates, POLL_INTERVAL);
-      return;
-    }
-    
-    // New items detected
-    if (currentCount > lastItemCount) {
-      const diff = currentCount - lastItemCount;
-      const latest = data.items[0];
-      const preview = latest ? latest.text?.substring(0, 60) : '';
-      
-      self.registration.showNotification('线报聚合 🐑', {
-        body: diff === 1 && preview
-          ? preview
-          : `发现 ${diff} 条新线报，点击查看`,
-        icon: BASE + '/public/icon-192.png',
-        badge: BASE + '/public/favicon.svg',
-        tag: NOTIFICATION_TAG,
-        data: { url: BASE + '/' },
-        vibrate: [100, 50, 100],
-        renotify: true
-      });
-      
-      lastItemCount = currentCount;
-    }
-  } catch (e) {
-    // Poll failed, will retry next interval
-  }
-  
-  // Schedule next poll
-  setTimeout(pollForUpdates, POLL_INTERVAL);
-}
