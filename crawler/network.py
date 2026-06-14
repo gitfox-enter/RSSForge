@@ -87,6 +87,8 @@ class CircuitBreaker:
     def is_open(self, domain: str) -> bool:
         """检查某域名的熔断器是否处于打开（拒绝请求）状态。"""
         with self._lock:
+            if self._threshold <= 0:
+                return False  # 阈值为0表示关闭熔断器
             return self._failures.get(domain, 0) >= self._threshold
 
     def record_success(self, domain: str) -> None:

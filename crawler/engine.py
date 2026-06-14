@@ -26,7 +26,7 @@ from common import (
     sanitize_text, is_junk, ITEMS_DB_FILE, BLACKLIST_FILE, CRAWL_STATUS_FILE, MAX_ITEMS_DB,
     ProxyPool, create_proxy_pool,
 )
-from crawler.config import JS_RENDER_SITES, MAX_CONSECUTIVE_FAILURES, MAX_RETRIES, PAUSED_SITES_FILE, REQUEST_TIMEOUT, RETRY_BASE_DELAY, RUN_LOG_FILE, MONITOR_SITES, is_dead_site, get_source_name, get_site_tier
+from crawler.config import JS_RENDER_SITES, MAX_CONSECUTIVE_FAILURES, MAX_RETRIES, PAUSED_SITES_FILE, REQUEST_TIMEOUT, RETRY_BASE_DELAY, RUN_LOG_FILE, MONITOR_SITES, is_dead_site, get_source_name, get_site_tier, init_adaptive_tiers, update_adaptive_tier, save_adaptive_tiers, get_all_adaptive_tiers
 from crawler.storage import get_current_round, load_notified_items, save_notified_items, filter_new_items, merge_items_into_db, load_hash_records, save_hash_records, export_items_latest_json, get_random_delay, get_random_profile, get_referer
 from crawler.network import MetricsTracker, metrics, CircuitBreaker, circuit_breaker, get_conditional_headers, rate_limiter, is_allowed_by_robots, update_conditional_cache
 from crawler.parsers import _match_parser, extract_article_items, parse_rss_feed, parse_ghxi_items, fetch_page_content, fetch_ghxi_items_async
@@ -897,9 +897,12 @@ async def main_async() -> None:
     if filtered_by_blacklist:
         logger.info("黑名单过滤 %d 个站点: %s", len(filtered_by_blacklist), ', '.join(filtered_by_blacklist))
 
-    # 加载暂停站点
+    # 加载暂停站点（已关闭自动暂停，保留兼容）
     paused = load_paused_sites()
     paused_urls = set(paused.keys())
+
+    # 加载自适应 tier 记录
+    init_adaptive_tiers()
 
     # 实际监控列表
     active_sites = [upgrade_to_https(url) for url in monitor_sites if url not in paused_urls]
@@ -1012,13 +1015,33 @@ async def main_async() -> None:
             'message': paused[url].get('reason', '已暂停'),
         })
 
+    # === 自适应 Tier 调整：根据爬取结果升级/降级 ===
+    tier_changes = []
+    for r in all_site_results:
+        url = r['url']
+        if r['status'] in ('dead', 'paused', 'robots_denied'):
+            continue
+        is_fail = r['status'] == 'error'
+        has_items = r['status'] in ('updated', 'first')
+        new_tier = update_adaptive_tier(
+            url,
+            status='fail' if is_fail else 'ok',
+            has_new_items=has_items,
+        )
+        if new_tier:
+            tier_changes.append(f"{url} → {new_tier}")
+    # 保存自适应 tier 记录
+    save_adaptive_tiers(get_all_adaptive_tiers())
+    if tier_changes:
+        logger.info("自适应 tier 调整: %s", '; '.join(tier_changes))
+
     total_count = len(all_site_results)
 
     # 统计死站数
     dead_count = sum(1 for r in all_site_results if r.get('status') == 'dead')
 
-    logger.info("成功: %d | 失败: %d | 死站: %d | robots.txt跳过: %d | 暂停: %d",
-                success_count, error_count, dead_count, robots_denied_count, len(paused_urls))
+    logger.info("成功: %d | 失败: %d | 死站: %d | robots.txt跳过: %d | tier调整: %d",
+                success_count, error_count, dead_count, robots_denied_count, len(tier_changes))
     logger.info("更新站点: %d 个", updated_count)
 
     # 输出运行指标摘要
@@ -1028,7 +1051,7 @@ async def main_async() -> None:
 
     # 输出熔断器状态
     cb_status = circuit_breaker.get_status()
-    open_circuits = {d: c for d, c in cb_status.items() if c >= MAX_CONSECUTIVE_FAILURES}
+    open_circuits = {d: c for d, c in cb_status.items() if MAX_CONSECUTIVE_FAILURES > 0 and c >= MAX_CONSECUTIVE_FAILURES}
     if open_circuits:
         logger.warning("已熔断域名: %s", ', '.join(open_circuits.keys()))
 
@@ -1086,6 +1109,7 @@ async def main_async() -> None:
         'robots_denied': robots_denied_count,
         'updated': updated_count,
         'paused': len(paused_urls),
+        'tier_changes': tier_changes,
         'new_items': len(new_urls),
         'errors': errors_detail,
         'updated_sites': updated_sites,

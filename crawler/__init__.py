@@ -13,6 +13,7 @@ from crawler.config import (
     RUN_LOG_FILE,
     FAILED_SITES_FILE,
     PAUSED_SITES_FILE,
+    ADAPTIVE_TIERS_FILE,
     MAX_ITEMS_DB,
     MAX_CONSECUTIVE_FAILURES,
     RECOVERY_CHECK_INTERVAL,
@@ -27,6 +28,11 @@ from crawler.config import (
     DEAD_SITES,
     is_dead_site,
     get_source_name,
+    get_site_tier,
+    init_adaptive_tiers,
+    update_adaptive_tier,
+    save_adaptive_tiers,
+    get_all_adaptive_tiers,
 )
 
 # --- Network ---
