@@ -148,7 +148,6 @@ a{color:inherit;text-decoration:none}
 
     <div class="btn-group">
       <button class="btn btn-primary" onclick="goToUrl()">继续访问 →</button>
-      <button class="btn btn-secondary" onclick="goBack()">返回首页</button>
     </div>
   </div>
 
@@ -220,15 +219,6 @@ a{color:inherit;text-decoration:none}
   // Navigate to target
   window.goToUrl = function() {
     window.open(targetUrl, '_blank', 'noopener,noreferrer');
-  };
-
-  // Go back to homepage (use history.back to preserve scroll position)
-  window.goBack = function() {
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      window.location.href = './';
-    }
   };
 
   // Toast

@@ -1246,7 +1246,7 @@ function renderList() {
     var platformHtml = it.platform ? '<span class="platform-tag">' + esc(it.platform) + '</span>' : '';
 
     html += '<article class="item" role="listitem">' +
-      '<a href="redirect.html?url=' + encodeURIComponent(it.url) + '&title=' + encodeURIComponent(cleanTitle(it.text)) + '" rel="noopener noreferrer" aria-label="' + escAttr(cleanTitle(it.text)) + ' - 来源: ' + escAttr(it.source) + ' (安全跳转)" onclick="trackClick(event)" data-redirect="' + escAttr(it.url) + '">' +
+      '<a href="redirect.html?url=' + encodeURIComponent(it.url) + '&title=' + encodeURIComponent(cleanTitle(it.text)) + '" target="_blank" rel="noopener noreferrer" aria-label="' + escAttr(cleanTitle(it.text)) + ' - 来源: ' + escAttr(it.source) + ' (安全跳转)">' +
         '<span class="src-badge" style="background:' + color + '" aria-hidden="true">' + esc(char) + '</span>' +
         '<div class="item-body">' +
           '<div class="item-title">' + title + '</div>' +
@@ -1629,17 +1629,6 @@ window.addEventListener('pageshow', function(e) {
 /* ================================================================
    INIT
    ================================================================ */
-
-  // === Safe Redirect Tracker ===
-  function trackClick(e) {
-    // Allow normal navigation to redirect.html
-    // Just for analytics/UX tracking
-    var link = e.currentTarget;
-    var redirectUrl = link.getAttribute('data-redirect');
-    if (redirectUrl) {
-      try { localStorage.setItem('xb_last_click', redirectUrl); } catch(e) {}
-    }
-  }
 
   // === Copy Site Link ===
   function copySiteLink() {
