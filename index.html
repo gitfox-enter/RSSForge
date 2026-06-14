@@ -1002,7 +1002,16 @@ function loadData() {
   document.getElementById('item-list').innerHTML = '<div class="loading">加载中</div>';
 
   // Load items_latest.json first (fast), fallback to items.json
-  fetch('items_latest.json?t=' + Date.now(), { priority: 'high' })
+  // Use cache for back-navigation (within 2 min), fresh fetch otherwise
+  var fetchOpts = {};
+  var isBackNav = false;
+  try { isBackNav = sessionStorage.getItem(SCROLL_KEY) !== null; } catch(e) {}
+  if (!isBackNav) {
+    fetchOpts.cache = 'no-cache'; // Fresh data for normal visits
+  }
+  // else: default cache policy, allows browser to use cached response
+
+  fetch('items_latest.json' + (isBackNav ? '' : '?t=' + Date.now()), Object.assign({priority: 'high'}, fetchOpts))
     .then(function(r) {
       if (!r.ok) throw new Error('latest not available');
       return r.json();
@@ -1052,8 +1061,12 @@ function loadData() {
       buildSidebar();
       buildMobileDropdown();
 
-      // Load full items.json in background for complete archive
-      fetch('items.json?t=' + Date.now()).then(function(r) { return r.json(); }).then(function(fullData) {
+      // Restore scroll position & state after data loads
+      var savedScrollY = restoreScrollState();
+
+      // Load full items.json in background for complete archive (skip on back-nav to avoid re-render)
+      if (!isBackNav) {
+        fetch('items.json?t=' + Date.now()).then(function(r) { return r.json(); }).then(function(fullData) {
         var fullItems = fullData.items || [];
         if (fullItems.length > allItems.length) {
           allItems = fullItems.map(function(it) {
@@ -1070,10 +1083,21 @@ function loadData() {
           // Sync localStorage count with full dataset (no badge flash)
           try { localStorage.setItem('xb_last_count', String(allItems.length)); } catch(e) {}
         }
-      }).catch(function() { /* full load failed, latest is enough */ });
+        }).catch(function() { /* full load failed, latest is enough */ });
+      } // end if (!isBackNav)
       renderAll();
       updateStatus();
       checkNewItems();
+
+      // Restore scroll position after render
+      if (savedScrollY) {
+        // Use requestAnimationFrame to ensure DOM is painted
+        requestAnimationFrame(function() {
+          window.scrollTo(0, savedScrollY);
+        });
+        // Clear saved state after restoring
+        try { sessionStorage.removeItem(SCROLL_KEY); } catch(e) {}
+      }
     })
     .catch(function(err) {
       var el = document.getElementById('item-list');
@@ -1499,6 +1523,93 @@ function installApp() {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(function(){});
 }
+
+/* ================================================================
+   SCROLL POSITION & STATE RESTORE (back-navigation fix)
+   ================================================================ */
+var SCROLL_KEY = 'xb_scroll_state';
+
+function saveScrollState() {
+  try {
+    sessionStorage.setItem(SCROLL_KEY, JSON.stringify({
+      scrollY: window.scrollY,
+      activeSource: activeSource,
+      searchQuery: searchQuery,
+      currentPage: currentPage,
+      todayOnly: todayOnly,
+      sortOrder: sortOrder,
+      timestamp: Date.now()
+    }));
+  } catch(e) {}
+}
+
+function restoreScrollState() {
+  try {
+    var raw = sessionStorage.getItem(SCROLL_KEY);
+    if (!raw) return false;
+    var state = JSON.parse(raw);
+    // Only restore if within 30 minutes
+    if (Date.now() - state.timestamp > 30 * 60 * 1000) {
+      sessionStorage.removeItem(SCROLL_KEY);
+      return false;
+    }
+    // Restore filters
+    if (state.activeSource && state.activeSource !== 'all') {
+      activeSource = state.activeSource;
+    }
+    if (state.searchQuery) {
+      searchQuery = state.searchQuery;
+      document.getElementById('search-input').value = searchQuery;
+    }
+    if (state.currentPage) currentPage = state.currentPage;
+    if (state.todayOnly) {
+      todayOnly = true;
+      var todayBtn = document.getElementById('today-toggle');
+      if (todayBtn) { todayBtn.classList.add('active'); todayBtn.setAttribute('aria-pressed', 'true'); }
+    }
+    if (state.sortOrder && state.sortOrder !== 'newest') {
+      sortOrder = state.sortOrder;
+      var sortBtn = document.getElementById('sort-btn');
+      if (sortBtn) sortBtn.textContent = '最早优先 ↑';
+    }
+    // Update category toggle text
+    var toggleText = document.getElementById('cat-toggle-text');
+    if (toggleText) toggleText.textContent = activeSource === 'all' ? '全部线报' : activeSource;
+    return state.scrollY || 0;
+  } catch(e) {
+    return false;
+  }
+}
+
+/* Save state before navigating away (clicking a link) */
+window.addEventListener('beforeunload', saveScrollState);
+/* Also save on link clicks specifically */
+document.addEventListener('click', function(e) {
+  var link = e.target.closest('a');
+  if (link && link.href && !link.href.startsWith('javascript:')) {
+    saveScrollState();
+  }
+});
+
+/* Handle bfcache restore (browser back-forward cache) */
+window.addEventListener('pageshow', function(e) {
+  if (e.persisted) {
+    // Page restored from bfcache - scroll position is usually preserved,
+    // but we still restore state if needed
+    var savedState = null;
+    try {
+      var raw = sessionStorage.getItem(SCROLL_KEY);
+      if (raw) savedState = JSON.parse(raw);
+    } catch(ex) {}
+    if (savedState && Date.now() - savedState.timestamp < 30 * 60 * 1000) {
+      // bfcache usually preserves scroll, but just in case
+      if (window.scrollY === 0 && savedState.scrollY > 0) {
+        window.scrollTo(0, savedState.scrollY);
+      }
+      try { sessionStorage.removeItem(SCROLL_KEY); } catch(ex) {}
+    }
+  }
+});
 
 /* ================================================================
    INIT
