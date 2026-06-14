@@ -581,32 +581,34 @@ class TestMergeItemsIntoDb(unittest.TestCase):
         self.assertEqual(db["items"][0]["url"], "https://new.com/1")
         self.assertEqual(db["items"][1]["url"], "https://old.com/1")
 
-    def test_max_items_trimming(self):
-        """When total exceeds MAX_ITEMS_DB, oldest items are trimmed."""
-        # Temporarily lower the max for testing
+    def test_max_items_no_longer_enforced(self):
+        """When MAX_ITEMS_DB is 0 (no limit), items are not trimmed by count cap.
+        Only 7-day time-based retention applies."""
+        # Set a cap for testing but verify it's not enforced since cap logic is removed
         orig_max = crawl.MAX_ITEMS_DB
         orig_storage_max = crawler.storage.MAX_ITEMS_DB
         crawl.MAX_ITEMS_DB = 10
         crawler.storage.MAX_ITEMS_DB = 10
 
         try:
-            # Pre-populate with 8 items
+            # Pre-populate with 8 items (all with recent time to pass 7-day filter)
             existing = [
-                {"url": f"https://old.com/{i}", "text": f"Old {i}"}
+                {"url": f"https://old.com/{i}", "text": f"Old {i}", "time": "2026-06-13 12:00:00"}
                 for i in range(8)
             ]
             crawl.save_items_db({"items": existing, "updated_at": "old"})
 
-            # Add 5 new items -> total 13, should trim to 10
+            # Add 5 new items -> total 13, should NOT trim to 10 (count cap removed)
             new_items = [
-                {"url": f"https://new.com/{i}", "text": f"New {i}"}
+                {"url": f"https://new.com/{i}", "text": f"New {i}", "time": "2026-06-13 13:00:00"}
                 for i in range(5)
             ]
-            added = crawl.merge_items_into_db(new_items, "2026-06-08 12:00:00")
+            added = crawl.merge_items_into_db(new_items, "2026-06-13 12:00:00")
             self.assertEqual(added, 5)
 
             db = crawl.load_items_db()
-            self.assertEqual(len(db["items"]), 10)
+            # Should have all 13 items (no count cap trimming)
+            self.assertEqual(len(db["items"]), 13)
             # Newest items should be at the front
             self.assertTrue(db["items"][0]["url"].startswith("https://new.com/"))
         finally:
@@ -3331,7 +3333,7 @@ class TestMaxItemsConsistency(unittest.TestCase):
     """Ensure MAX_ITEMS_DB is consistent between crawl.py and common.py."""
 
     def test_crawl_max_items(self):
-        self.assertEqual(crawl.MAX_ITEMS_DB, 8000)
+        self.assertEqual(crawl.MAX_ITEMS_DB, 0)
 
 
 # ===================================================================

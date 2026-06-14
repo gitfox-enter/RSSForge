@@ -244,7 +244,7 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
     """
     将本轮新抓取的线报合并到全量数据库中（按 URL 去重）
     新条目插入到列表头部（最新的在前面）
-    保留最近 7 天的数据（按 time 字段）
+    保留最近 7 天的数据（按 time 字段，无数量上限）
     """
     db = load_items_db()
     existing_urls = set(item['url'] for item in db['items'])
@@ -280,12 +280,6 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
     retained_count = len(db['items'])
     if original_count != retained_count:
         logger.info("7天保留: 移除 %d 条旧数据，保留 %d 条", original_count - retained_count, retained_count)
-
-    # 超出上限时裁剪（保留最新条目）
-    if len(db['items']) > MAX_ITEMS_DB:
-        removed = len(db['items']) - MAX_ITEMS_DB
-        db['items'] = db['items'][:MAX_ITEMS_DB]
-        logger.info("裁剪旧条目: 移除 %d 条，保留最新 %d 条", removed, MAX_ITEMS_DB)
 
     db['updated_at'] = check_time
     save_items_db(db)

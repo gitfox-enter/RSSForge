@@ -51,7 +51,7 @@ CRAWL_STATUS_FILE: str = "crawl_status.json"
 
 BLACKLIST_FILE: str = "blacklist.json"
 
-MAX_ITEMS_DB: int = 8000
+MAX_ITEMS_DB: int = 0  # 0 = 无上限，仅按7天时间窗口保留
 
 # ============================================================
 # Public API
