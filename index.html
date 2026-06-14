@@ -552,8 +552,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
    /* Red packet button (支付宝红包) */
    #redpacket-btn{
      padding:6px 12px;
-     font-size:14px;
-     color:var(--text-sec);
+     font-size:20px;
      border-radius:var(--radius);
      cursor:pointer;
      transition:all .15s;
@@ -565,8 +564,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
      gap:4px;
      text-decoration:none;
    }
-   #redpacket-btn:hover{color:#e53935;background:#ffebee}
-   #redpacket-btn svg{width:18px;height:18px}
+   #redpacket-btn:hover{background:#ffebee;transform:scale(1.1)}
 
 /* ========== PROMO BANNER ========== */
 #promo-banner{
@@ -683,8 +681,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       <span>安装</span>
     </button>
-    <a id="redpacket-btn" href="./alipay-redpacket.html" title="支付宝领红包" aria-label="支付宝每日领红包">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="8" width="18" height="14" rx="2"/><path d="M12 8V6c0-1.1.9-2 2-2h2"/><circle cx="12" cy="15" r="2"/></svg>
+    <a id="redpacket-btn" href="./alipay-redpacket.html" title="支付宝领红包" aria-label="支付宝每日领红包" style="color:#e53935;">
+      🧧
     </a>
   </nav>
 </header>
