@@ -34,6 +34,11 @@ run_log.jsonl
 fast_log.jsonl
 rss_history.json
 
+# 大数据文件 - 已迁移到 GitHub Gist 存储
+# 前端通过 items_ref.json 中的 Gist URL 加载数据
+items.json
+items_latest.json
+
 # 邮件备份 - 一次性快照，不再维护
 email_backup/
 

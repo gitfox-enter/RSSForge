@@ -18,6 +18,7 @@ jobs:
       TZ: Asia/Shanghai
     permissions:
       contents: write
+      gist: write
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
@@ -43,6 +44,13 @@ jobs:
         run: python crawl.py
       - name: 生成 RSS Feed
         run: python rss_feed.py
+      - name: 同步数据到 Gist
+        run: python gist_store.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 生成数据引用
+        run: python -c "from gist_store import get_gist_raw_url; import json; gist_id=open('gist_config.json').read(); ref={'version':1,'source':'gist','gist_id':json.loads(gist_id)['data_gist_id'],'files':{'items':get_gist_raw_url('items.json'),'items_latest':get_gist_raw_url('items_latest.json')}}; open('items_ref.json','w').write(json.dumps(ref,indent=2))"
       - name: 提交变更
         run: |
           set +e
@@ -52,7 +60,10 @@ jobs:
           # 总是添加 crawl_status.json，确保网页显示最后爬取时间
           git add crawl_status.json 2>/dev/null || true
           # 其他文件按需添加
-          git add items.json items_latest.json hash_record.txt notified_items.json adaptive_tiers.json feed.xml 2>/dev/null || true
+          git add hash_record.txt notified_items.json adaptive_tiers.json feed.xml gist_config.json 2>/dev/null || true
+          # items.json / items_latest.json 已迁移到 Gist，不再 commit
+          # 仅 commit 一个轻量引用文件指向 Gist
+          git add items_ref.json 2>/dev/null || true
 
           git status
           if git diff --staged --quiet 2>/dev/null; then
@@ -60,10 +71,10 @@ jobs:
             exit 0
           fi
 
-          # 检查是否有新内容（items.json 有变更）
-          if git diff --staged --name-only | grep -q "items.json"; then
+          # 检查是否有新内容
+          if git diff --staged --name-only | grep -q "items_ref.json"; then
             COMMIT_MSG="自动更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
-          else
+          elif git diff --staged --name-only | grep -q "adaptive_tiers.json"; then
             COMMIT_MSG="状态更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
           fi
 
