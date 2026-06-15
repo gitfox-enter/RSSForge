@@ -226,7 +226,7 @@ def is_noise_item(item: Dict[str, str]) -> bool:
     for pattern in _NOISE_URL_PATTERNS:
         if re.search(pattern, url):
             # Special case: forum.php?mod=redirect is a real item, not noise
-            if 'forum.php' in pattern or 'forum\.php' in pattern:
+            if 'forum.php' in pattern or 'forum\\.php' in pattern:
                 if 'mod=redirect' in url:
                     continue
             return True
@@ -240,14 +240,37 @@ def is_noise_item(item: Dict[str, str]) -> bool:
 
 
 
+def _fuzzy_dedupe_key(text: str) -> str:
+    """Generate a fuzzy dedup key by normalizing text.
+    
+    Strips whitespace, punctuation, and lowercases for approximate matching.
+    Two items with similar titles from different sources will share the same key.
+    """
+    import re as _re
+    # Remove common prefixes/suffixes, whitespace, and punctuation
+    normalized = _re.sub(r'[\s\-_【】\[\]（）()《》<>""\'\'·.,;:!?！？…]', '', text)
+    normalized = normalized.lower()
+    # Truncate to first 20 chars for comparison (catches "京东红包" vs "京东红包活动")
+    return normalized[:20]
+
+
 def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) -> int:
     """
-    将本轮新抓取的线报合并到全量数据库中（按 URL 去重）
+    将本轮新抓取的线报合并到全量数据库中（按 URL 去重 + 模糊标题去重）
     新条目插入到列表头部（最新的在前面）
     保留最近 7 天的数据（按 time 字段，无数量上限）
+    
+    多源聚合：同一模糊标题的线报只保留最早出现的版本，
+    但在 item 中记录所有来源（sources 列表），便于前端展示"多源"标识。
     """
     db = load_items_db()
     existing_urls = set(item['url'] for item in db['items'])
+    # Build fuzzy dedup index from existing items
+    existing_fuzzy_keys: Dict[str, str] = {}
+    for item in db['items']:
+        key = _fuzzy_dedupe_key(item.get('text', ''))
+        if key and key not in existing_fuzzy_keys:
+            existing_fuzzy_keys[key] = item.get('url', '')
 
     # 过滤出真正的新条目，并添加自动分类
     added = 0
@@ -259,11 +282,28 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
             continue
         url = item.get('url', '')
         if url and url not in existing_urls:
+            # 模糊去重：如果标题高度相似，视为同一线报
+            fuzzy_key = _fuzzy_dedupe_key(item.get('text', ''))
+            existing_fuzzy_url = existing_fuzzy_keys.get(fuzzy_key)
+            if existing_fuzzy_url and fuzzy_key:
+                # 同一线报，多源聚合 — 在已有条目中添加来源
+                for existing in db['items']:
+                    if existing.get('url') == existing_fuzzy_url:
+                        sources = existing.setdefault('sources', [existing.get('source', '')])
+                        new_source = item.get('source', '')
+                        if new_source and new_source not in sources:
+                            sources.append(new_source)
+                        break
+                existing_urls.add(url)
+                continue
+
             # 添加自动分类
             if not item.get('category'):
                 item['category'] = auto_categorize(item.get('text', ''))
             fresh_items.append(item)
             existing_urls.add(url)
+            if fuzzy_key:
+                existing_fuzzy_keys[fuzzy_key] = url
             added += 1
 
     # 新条目插到头部

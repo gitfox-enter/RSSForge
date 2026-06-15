@@ -1,150 +1,240 @@
 # Site configuration for site-update-monitor
-# 清理重复条目，移除死站 (2026-06-11)
+# 所有站点配置的单一真相源 (Single Source of Truth)
+# 最后清理: 2026-06-15
 
 sites:
+  # ============================================================
   # 综合线报站 (HIGH tier - 每轮都爬)
+  # ============================================================
   - url: "https://news.ixbk.fun/"          # 线报酷 (主要数据源)
+    name: 线报酷
     tier: high
+    fast_check: true
+
   - url: "http://news.ixbk.net/"           # 线报酷镜像
+    name: 线报酷
     tier: high
+    fast_check: true
+
   - url: "https://xianbao.icu/"            # 线报ICU
+    name: 线报ICU
     tier: high
+    fast_check: true
+
   - url: "https://www.zhuanyes.com/xianbao/"  # 专业线报
+    name: 专业线报
     tier: high
+    fast_check: true
+
   - url: "https://xianbaomi.com/"          # 线报迷
+    name: 线报迷
     tier: high
+
   - url: "https://v1.xianbao.net/"         # 线报网
+    name: 线报网
     tier: high
+    fast_check: true
+
   - url: "https://xzba.cc/"                # 新赚吧
+    name: 新赚吧
     tier: high
+
   - url: "https://www.h6room.com/"         # H6线报
+    name: H6线报
     tier: high
+
   - url: "https://yangmao.wang/"           # 羊毛王
+    name: 羊毛王
     tier: high
+
   - url: "https://www.yangmaodang.club/"   # 羊毛党
+    name: 羊毛党
     tier: high
+
   - url: "https://b1.ymxianbao.cn/"        # 羊毛线报
+    name: 羊毛线报
     tier: high
+
   - url: "https://cjx8.com/"               # 超级线报
+    name: 超级线报
     tier: high
+    fast_check: true
+
   - url: "https://www.huifabu.cn/"         # 汇发部
+    name: 汇发部
     tier: high
+    fast_check: true
+
   - url: "https://www.iqnew.com/"          # 爱Q社区
+    name: 爱Q社区
     tier: high
+    fast_check: true
+
   - url: "https://axutongxue.net/"         # 爱Q生活
+    name: 爱Q生活
     tier: high
+
   - url: "https://www.007ymd.com/"         # 007羊毛党
+    name: 007羊毛党
     tier: high
+
   - url: "https://www.12345pro.com/"       # 12345线报
+    name: 12345线报
     tier: high
+
   - url: "https://m.hybase.com/"           # 好赚网
+    name: 好赚网
     tier: medium
+
   - url: "https://www.huodong5.com/"       # 活动5
+    name: 活动5
     tier: medium
+
   - url: "https://www.daydayzhuan.com/"    # 天天赚
+    name: 天天赚
     tier: high
+
   - url: "https://www.ziyuanting.com/"     # 资源厅
+    name: 资源厅
     tier: medium
+
   - url: "https://www.wycad.com/"          # 网赚
+    name: 网赚
     tier: high
+
   - url: "https://www.wobangzhao.com/"     # 我不找
+    name: 我不找
     tier: medium
-  
+
+  # ============================================================
   # 购物比价 (MEDIUM tier - 每2轮爬一次)
+  # ============================================================
   - url: "https://www.manmanbuy.com/"      # 慢慢买
+    name: 慢慢买
     tier: medium
 
   - url: "https://www.baicaio.com/"        # 白菜哦
+    name: 白菜哦
     tier: medium
+    fast_check: true
+
   - url: "https://www.bacaoo.com/"         # 拔草哦
+    name: 拔草哦
     tier: medium
+
   - url: "https://www.yxssp.com/"          # 优惠线报
+    name: 优惠线报
     tier: medium
-  
+
+  # ============================================================
   # 软件资源 (LOW tier - 每4轮爬一次)
+  # ============================================================
   - url: "https://www.ghxi.com/"           # 果核剥壳
+    name: 果核剥壳
     tier: low
+    parser: ghxi
+
+    # 果核剥壳: WP REST API 直取，跳过首页 HTML
+
   - url: "https://www.423down.com/"        # 423Down
+    name: 423Down
     tier: low
+    parser: custom_423down
+
   - url: "https://www.appinn.com/"         # 小众软件
+    name: 小众软件
     tier: low
+    rss_feed: "https://www.appinn.com/feed/"
+
   - url: "https://www.lsapk.com/"          # LSapk
+    name: LSapk
     tier: low
+
   - url: "https://www.thosefree.com/"      # 免费族
+    name: 免费族
     tier: low
+    rss_feed: "https://www.thosefree.com/feed/"
+
   - url: "https://www.foxirj.com/"         # 佛系软件
+    name: 佛系软件
     tier: low
+    rss_feed: "https://www.foxirj.com/feed/"
+
   - url: "https://www.ddooo.com/"          # 多多软件
+    name: 多多软件
     tier: low
+
   - url: "https://www.onlinedown.net/"     # 华军软件
+    name: 华军软件
     tier: low
+
   - url: "https://free.apprcn.com/"        # 反斗限免
+    name: 反斗限免
     tier: low
+
   - url: "https://feed.iplaysoft.com/"     # 异次元RSS
+    name: 异次元RSS
     tier: low
-  
+    parser: rss
+
+  # ============================================================
   # 社区论坛 (MEDIUM tier - 每2轮爬一次)
+  # ============================================================
   - url: "https://www.douban.com/group/711811/"  # 豆瓣小组
+    name: 豆瓣小组
     tier: medium
+
   - url: "https://www.kxdao.net/forum-42-1.html" # 开心赚
+    name: 开心赚
     tier: medium
+    js_render: true           # Discuz 论坛需要 JS 渲染
+
   - url: "https://www.51kanong.com/"       # 51卡农
+    name: 51卡农
     tier: medium
+    js_render: true           # 反爬虫 JS 重定向
+    fast_check: true
+
   - url: "https://www.ithome.com/zt/xijiayi"  # IT之家
+    name: IT之家
     tier: medium
-  
+
+  # ============================================================
   # 其他 (MEDIUM tier)
+  # ============================================================
   - url: "https://10000yun.com/"           # 万云积分
+    name: 万云积分
     tier: medium
 
-# 已移除的死站：
-# - https://907k.cn/ (DNS失败)
-# - http://www.xiaodigu.com/ (502错误)
-# - https://www.ym2.cc/ (DNS失败)
-# - http://79tao.linejia.com/ (连接被拒绝，2026-06-12)
-# - http://www.0818tuan.com/ (连接被拒绝，2026-06-12)
-
-# Human-readable source names
-source_names:
-  "http://news.ixbk.net/": "线报酷"
-  "https://10000yun.com/": "万云积分"
-  "https://axutongxue.net/": "爱Q生活"
-  "https://b1.ymxianbao.cn/": "羊毛线报"
-  "https://cjx8.com/": "超级线报"
-  "https://feed.iplaysoft.com/": "异次元RSS"
-  "https://free.apprcn.com/": "反斗限免"
-  "https://m.hybase.com/": "好赚网"
-  "https://news.ixbk.fun/": "线报酷"
-  "https://v1.xianbao.net/": "线报网"
-  "https://www.007ymd.com/": "007羊毛党"
-  "https://www.12345pro.com/": "12345线报"
-  "https://www.423down.com/": "423Down"
-  "https://www.51kanong.com/": "51卡农"
-  "https://www.appinn.com/": "小众软件"
-  "https://www.bacaoo.com/": "拔草哦"
-  "https://www.baicaio.com/": "白菜哦"
-  "https://www.daydayzhuan.com/": "天天赚"
-  "https://www.ddooo.com/": "多多软件"
-  "https://www.douban.com/group/711811/": "豆瓣小组"
-  "https://www.foxirj.com/": "佛系软件"
-  "https://www.ghxi.com/": "果核剥壳"
-  "https://www.h6room.com/": "H6线报"
-  "https://www.huifabu.cn/": "汇发部"
-  "https://www.huodong5.com/": "活动5"
-  "https://www.iqnew.com/": "爱Q社区"
-  "https://www.ithome.com/zt/xijiayi": "IT之家"
-  "https://www.kxdao.net/forum-42-1.html": "开心赚"
-  "https://www.lsapk.com/": "LSapk"
-  "https://www.manmanbuy.com/": "慢慢买"
-  "https://www.onlinedown.net/": "华军软件"
-  "https://www.thosefree.com/": "免费族"
-  "https://www.wobangzhao.com/": "我不找"
-  "https://www.wycad.com/": "网赚"
-  "https://www.yangmaodang.club/": "羊毛党"
-  "https://www.yxssp.com/": "优惠线报"
-  "https://www.zhuanyes.com/xianbao/": "专业线报"
-  "https://www.ziyuanting.com/": "资源厅"
-  "https://xianbao.icu/": "线报ICU"
-  "https://xianbaomi.com/": "线报迷"
-  "https://xzba.cc/": "新赚吧"
-  "https://yangmao.wang/": "羊毛王"
+# ============================================================
+# 死站列表（经多轮测试确认无法访问）
+# ============================================================
+dead_sites:
+  "https://907k.cn/":
+    reason: "DNS/连接失败"
+    confirmed_at: "2026-06-10"
+    test_result: "HTTP 000 - 无法建立连接"
+  "http://www.xiaodigu.com/":
+    reason: "服务器 502 错误"
+    confirmed_at: "2026-06-10"
+    test_result: "HTTP 502 Bad Gateway"
+  "https://www.ym2.cc/":
+    reason: "DNS/连接失败"
+    confirmed_at: "2026-06-10"
+    test_result: "HTTP 000 - 域名无法解析"
+  "https://79tao.linejia.com/":
+    reason: "连接失败(Connection refused)"
+    confirmed_at: "2026-06-12"
+    test_result: "Connection refused"
+  "https://www.0818tuan.com/":
+    reason: "连接失败(Connection refused)"
+    confirmed_at: "2026-06-12"
+    test_result: "Connection refused"
+  "http://79tao.linejia.com/":
+    reason: "连接失败(Connection refused)"
+    confirmed_at: "2026-06-12"
+    test_result: "Connection refused"
+  "http://www.0818tuan.com/":
+    reason: "连接失败(Connection refused)"
+    confirmed_at: "2026-06-12"
+    test_result: "Connection refused"

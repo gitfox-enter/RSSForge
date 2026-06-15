@@ -41,6 +41,8 @@ jobs:
           git config --local user.name "github-actions[bot]"
       - name: 运行监控
         run: python crawl.py
+      - name: 生成 RSS Feed
+        run: python rss_feed.py
       - name: 提交变更
         run: |
           set +e
@@ -50,7 +52,7 @@ jobs:
           # 总是添加 crawl_status.json，确保网页显示最后爬取时间
           git add crawl_status.json 2>/dev/null || true
           # 其他文件按需添加
-          git add items.json items_latest.json hash_record.txt notified_items.json adaptive_tiers.json 2>/dev/null || true
+          git add items.json items_latest.json hash_record.txt notified_items.json adaptive_tiers.json feed.xml 2>/dev/null || true
 
           git status
           if git diff --staged --quiet 2>/dev/null; then

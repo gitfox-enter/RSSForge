@@ -48,6 +48,7 @@ from common import (
 
 from crawler.config import (
     REQUEST_TIMEOUT, MAX_RETRIES, RETRY_BASE_DELAY,
+    FAST_SITES,
 )
 from crawler.storage import merge_items_into_db, export_items_latest_json, get_existing_urls, get_random_profile
 from crawler.network import is_allowed_by_robots
@@ -73,22 +74,8 @@ FAST_LOG_FILE: str = "fast_log.jsonl"
 # 代理池（初始化后全局可用，None 表示直连模式）
 _proxy_pool: Optional[ProxyPool] = None
 
-# 高频检查站点（按活跃度排序的 top 10）
-FAST_SITES: List[Dict[str, str]] = [
-    {"url": "https://www.zhuanyes.com/xianbao/", "name": "专业线报"},
-    {"url": "https://news.ixbk.net/", "name": "线报酷"},
-    {"url": "https://news.ixbk.fun/", "name": "线报酷"},
-    {"url": "https://www.huifabu.cn/", "name": "汇发部"},
-    {"url": "https://cjx8.com/", "name": "超级线报"},
-    {"url": "https://xianbao.icu/", "name": "线报ICU"},
-    {"url": "https://www.baicaio.com/", "name": "白菜哦"},
-    {"url": "https://www.iqnew.com/", "name": "爱Q社区"},
-    {"url": "https://www.51kanong.com/", "name": "51卡农"},
-    {"url": "https://v1.xianbao.net/", "name": "线报网"},
-]
-# 已移除的死站 (2026-06-12):
-# - http://www.0818tuan.com/ (Connection refused)
-# - http://www.xiaodigu.com/ (502 Bad Gateway)
+# 高频检查站点 — 从 sites.yaml (fast_check: true) 自动加载
+# 参见 crawler.config.FAST_SITES
 
 # 爬虫配置（REQUEST_TIMEOUT / MAX_RETRIES / RETRY_BASE_DELAY /
 # get_random_profile / is_allowed_by_robots 均从 crawler 包导入）

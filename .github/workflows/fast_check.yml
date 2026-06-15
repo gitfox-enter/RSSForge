@@ -43,6 +43,9 @@ jobs:
       - name: 运行快速检查
         run: python fast_check.py
 
+      - name: 生成 RSS Feed
+        run: python rss_feed.py
+
       - name: 提交变更
         run: |
           set +e

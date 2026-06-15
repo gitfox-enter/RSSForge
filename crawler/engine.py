@@ -31,6 +31,13 @@ from crawler.storage import get_current_round, load_notified_items, save_notifie
 from crawler.network import MetricsTracker, metrics, get_conditional_headers, rate_limiter, is_allowed_by_robots, update_conditional_cache
 from crawler.parsers import _match_parser, extract_article_items, parse_rss_feed, parse_ghxi_items, fetch_page_content, fetch_ghxi_items_async, fetch_rss_feed_async
 
+# Alerting
+try:
+    from alerter import check_consecutive_failures, send_consecutive_failure_alert, send_dead_tier_alert
+    ALERTER_AVAILABLE = True
+except ImportError:
+    ALERTER_AVAILABLE = False
+
 # Playwright: optional dependency for JS-rendered sites
 try:
     from playwright.async_api import async_playwright
@@ -907,14 +914,21 @@ async def main_async() -> None:
     active_sites = [upgrade_to_https(url) for url in monitor_sites]
     
     # === 分级爬取：根据轮次决定本次爬取哪些站点 ===
-    # high: 每轮都爬, medium: 每2轮爬一次, low: 每4轮爬一次
-    _TIER_FREQ = {'high': 1, 'medium': 2, 'low': 4}
+    # high: 每轮都爬, medium: 每2轮爬一次, low: 每4轮爬一次, dead: 不爬
+    _TIER_FREQ = {'high': 1, 'medium': 2, 'low': 4, 'dead': 0}
     prev_count = len(active_sites)
-    active_sites = [
+    # First filter dead tier sites (never crawl)
+    dead_tier_count = sum(1 for url in active_sites if get_site_tier(url) == 'dead')
+    active_sites = [url for url in active_sites if get_site_tier(url) != 'dead']
+    # Then filter by round frequency
+    _round_filtered = [
         url for url in active_sites
         if round_num % _TIER_FREQ.get(get_site_tier(url), 1) == 0
     ]
-    skipped = prev_count - len(active_sites)
+    skipped = prev_count - len(_round_filtered) - dead_tier_count
+    active_sites = _round_filtered
+    if dead_tier_count:
+        logger.info("dead tier 跳过 %d 个站点（自动降级）", dead_tier_count)
     if skipped:
         logger.info("分级过滤跳过 %d 个站点 (medium/low 本轮不爬)", skipped)
     
@@ -1010,6 +1024,7 @@ async def main_async() -> None:
             continue
         is_fail = r['status'] == 'error'
         has_items = r['status'] in ('updated', 'first')
+        old_tier = get_site_tier(url)
         new_tier = update_adaptive_tier(
             url,
             status='fail' if is_fail else 'ok',
@@ -1017,6 +1032,10 @@ async def main_async() -> None:
         )
         if new_tier:
             tier_changes.append(f"{url} → {new_tier}")
+            # Dead tier alert
+            if new_tier == 'dead' and ALERTER_AVAILABLE:
+                site_name = get_source_name(url) or url
+                send_dead_tier_alert(url, site_name, old_tier)
     # 保存自适应 tier 记录
     save_adaptive_tiers(get_all_adaptive_tiers())
     if tier_changes:
@@ -1106,6 +1125,13 @@ async def main_async() -> None:
         'errors': errors_detail,
         'updated_sites': updated_sites,
     })
+
+    # === 连续失败告警 ===
+    if ALERTER_AVAILABLE:
+        run_log = load_run_log()
+        alerts = check_consecutive_failures(run_log)
+        if alerts:
+            send_consecutive_failure_alert(alerts)
 
     # Close Playwright browser
     await close_playwright()
