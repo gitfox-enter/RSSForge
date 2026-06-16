@@ -1,9 +1,8 @@
 {
-  "version": 1,
-  "source": "gist",
-  "gist_id": "60b65401c2f4df6a42a0386805479e48",
+  "version": 2,
+  "source": "local",
   "files": {
-    "items": "https://gist.githubusercontent.com/gitfox-enter/60b65401c2f4df6a42a0386805479e48/raw/items.json",
-    "items_latest": "https://gist.githubusercontent.com/gitfox-enter/60b65401c2f4df6a42a0386805479e48/raw/items_latest.json"
+    "items": "items.json",
+    "items_latest": "items_latest.json"
   }
 }
