@@ -188,6 +188,13 @@ def save_items_db(db: Dict[str, Any]) -> bool:
         with open(tmp_file, "w", encoding="utf-8") as f:
             json.dump(db, f, ensure_ascii=False, separators=(",", ":"))
         os.replace(tmp_file, ITEMS_DB_FILE)
+        # 写后验证：确保文件可读且为有效 JSON
+        try:
+            with open(ITEMS_DB_FILE, 'r', encoding='utf-8') as f:
+                json.load(f)
+        except Exception as ve:
+            logger.error('JSON 验证失败: %s', ve)
+            return False
         return True
     except Exception:
         if os.path.exists(tmp_file):
