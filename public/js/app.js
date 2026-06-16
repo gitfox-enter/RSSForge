@@ -145,6 +145,18 @@ function _fetchData(filename) {
       })
       .catch(function() { return null; });
 
+  function _tryFallback(ref, key) {
+    // Try fallback from ref or local file
+    var fallbackUrl = (ref && ref.fallback && ref.fallback[key])
+      ? ref.fallback[key] + '?t=' + Date.now()
+      : filename + '?t=' + Date.now();
+    return fetch(fallbackUrl, {priority: 'high'})
+      .then(function(r) {
+        if (!r.ok) throw new Error('Fallback fetch failed: ' + r.status);
+        return r.json();
+      });
+  }
+
   return refPromise.then(function(ref) {
     if (ref) _gistRef = ref;
     var key = filename.replace('.json', '');
@@ -155,17 +167,16 @@ function _fetchData(filename) {
       return fetch(url, {priority: 'high'}).then(function(r) {
         if (!r.ok) throw new Error('Gist fetch failed: ' + r.status);
         return r.json();
+      }).then(function(data) {
+        // If Gist returned empty items, try local fallback
+        if (data && data.items && data.items.length === 0 && ref.fallback && ref.fallback[key]) {
+          return _tryFallback(ref, key);
+        }
+        return data;
       }).catch(function(err) {
-        // Gist failed — try fallback from ref or local
+        // Gist fetch failed — try fallback
         console.warn('Gist load failed, trying fallback:', err.message);
-        var fallbackUrl = (ref && ref.fallback && ref.fallback[key])
-          ? ref.fallback[key] + '?t=' + Date.now()
-          : filename + '?t=' + Date.now();
-        return fetch(fallbackUrl, {priority: 'high'})
-          .then(function(r) {
-            if (!r.ok) throw new Error('Fallback fetch also failed: ' + r.status);
-            return r.json();
-          });
+        return _tryFallback(ref, key);
       });
     }
 
