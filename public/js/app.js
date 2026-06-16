@@ -132,34 +132,13 @@ function detectPlatform(item) {
    Loads data from GitHub Gist (CDN-cached) with local fallback.
    Reduces Git repo size by keeping items.json out of version control.
    ================================================================ */
-var _gistRef = null;  // Cached items_ref.json data
-
 function _fetchData(filename) {
-  // Strategy: try Gist (via items_ref.json) first, then local file
-  var refPromise = _gistRef
-    ? Promise.resolve(_gistRef)
-    : fetch('items_ref.json?t=' + Date.now())
-      .then(function(r) { return r.ok ? r.json() : null; })
-      .catch(function() { return null; });
-
-  return refPromise.then(function(ref) {
-    if (ref) _gistRef = ref;
-    // If ref has the file URL, fetch from Gist
-    if (ref && ref.files && ref.files[filename.replace('.json', '')]) {
-      var key = filename.replace('.json', '');
-      var url = ref.files[key] + '?t=' + Date.now();
-      return fetch(url, {priority: 'high'}).then(function(r) {
-        if (!r.ok) throw new Error('Gist fetch failed: ' + r.status);
-        return r.json();
-      });
-    }
-    // Fallback to local file
-    return fetch(filename + '?t=' + Date.now(), {priority: 'high'})
-      .then(function(r) {
-        if (!r.ok) throw new Error('Local fetch failed: ' + r.status);
-        return r.json();
-      });
-  });
+  // 直接加载本地文件，数据保存在 Git 历史中，安全可靠
+  return fetch(filename + '?t=' + Date.now(), {priority: 'high'})
+    .then(function(r) {
+      if (!r.ok) throw new Error('Local fetch failed: ' + r.status);
+      return r.json();
+    });
 }
 
 /* ================================================================
