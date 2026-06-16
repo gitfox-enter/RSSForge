@@ -138,6 +138,10 @@ function _fetchData(filename) {
     .then(function(r) {
       if (!r.ok) throw new Error('Local fetch failed: ' + r.status);
       return r.json();
+    })
+    .catch(function(err) {
+      console.error('数据加载失败:', filename, err);
+      return {items: [], updated_at: '', total_items: 0};
     });
 }
 
