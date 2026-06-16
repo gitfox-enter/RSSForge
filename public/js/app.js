@@ -132,17 +132,59 @@ function detectPlatform(item) {
    Loads data from GitHub Gist (CDN-cached) with local fallback.
    Reduces Git repo size by keeping items.json out of version control.
    ================================================================ */
+var _gistRef = null;  // Cached items_ref.json data
+
 function _fetchData(filename) {
-  // 直接加载本地文件，数据保存在 Git 历史中，安全可靠
-  return fetch(filename + '?t=' + Date.now(), {priority: 'high'})
-    .then(function(r) {
-      if (!r.ok) throw new Error('Local fetch failed: ' + r.status);
-      return r.json();
-    })
-    .catch(function(err) {
-      console.error('数据加载失败:', filename, err);
-      return {items: [], updated_at: '', total_items: 0};
-    });
+  // Strategy: try Gist (via items_ref.json) first, then local fallback
+  var refPromise = _gistRef
+    ? Promise.resolve(_gistRef)
+    : fetch('items_ref.json?t=' + Date.now())
+      .then(function(r) {
+        if (!r.ok) return null;
+        return r.json();
+      })
+      .catch(function() { return null; });
+
+  return refPromise.then(function(ref) {
+    if (ref) _gistRef = ref;
+    var key = filename.replace('.json', '');
+
+    // Try Gist URL first if available
+    if (ref && ref.files && ref.files[key]) {
+      var url = ref.files[key] + '?t=' + Date.now();
+      return fetch(url, {priority: 'high'}).then(function(r) {
+        if (!r.ok) throw new Error('Gist fetch failed: ' + r.status);
+        return r.json();
+      }).catch(function(err) {
+        // Gist failed — try fallback from ref or local
+        console.warn('Gist load failed, trying fallback:', err.message);
+        var fallbackUrl = (ref && ref.fallback && ref.fallback[key])
+          ? ref.fallback[key] + '?t=' + Date.now()
+          : filename + '?t=' + Date.now();
+        return fetch(fallbackUrl, {priority: 'high'})
+          .then(function(r) {
+            if (!r.ok) throw new Error('Fallback fetch also failed: ' + r.status);
+            return r.json();
+          });
+      });
+    }
+
+    // If ref has local/fallback paths, use them
+    if (ref && ref.fallback && ref.fallback[key]) {
+      return fetch(ref.fallback[key] + '?t=' + Date.now(), {priority: 'high'})
+        .then(function(r) {
+          if (!r.ok) throw new Error('Local fetch failed: ' + r.status);
+          return r.json();
+        });
+    }
+
+    // Final fallback: try local file directly
+    return fetch(filename + '?t=' + Date.now(), {priority: 'high'})
+      .then(function(r) {
+        if (!r.ok) throw new Error('Local fetch failed: ' + r.status);
+        return r.json();
+      });
+  });
 }
 
 /* ================================================================
@@ -207,9 +249,6 @@ function loadData() {
 
     // Refresh data in background (silently, no re-render unless new items found)
     _fetchData('items_latest.json').then(function(data) {
-      if (!r.ok) return null;
-      return r.json();
-    }).then(function(data) {
       if (!data || !data.items) return;
       var newItems = data.items.map(function(it) {
         return { url: it.url || '', text: (it.text || '').trim(), source: normalizeSource(it.source), rawSource: it.source || '', time: it.time || '', category: it.category || null, platform: detectPlatform(it) };
