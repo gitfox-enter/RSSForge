@@ -6,7 +6,7 @@ export default defineConfig({
   description: '⚡ 基于 GitHub Actions 的免费 RSS 订阅源生成器，给任何网站生成 RSS，无服务器、零成本、可持续更新。',
   lang: 'zh-CN',
   head: [
-    ['link', { rel: 'icon', href: 'https://gitfox-enter.github.io/RSSForge/favicon.ico' }],
+    ['link', { rel: 'icon', href: 'https://gitfox-enter.github.io/RSSForge/favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#e91e8e' }],
   ],
   locales: {
@@ -27,7 +27,7 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    logo: { src: 'https://gitfox-enter.github.io/RSSForge/favicon.ico', width: 24, height: 24 },
+    logo: { src: 'https://gitfox-enter.github.io/RSSForge/favicon.svg', width: 24, height: 24 },
     siteTitle: 'RSSForge',
     nav: [
       { text: '指南', link: '/guide/introduction' },
