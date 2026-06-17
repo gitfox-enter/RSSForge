@@ -302,6 +302,46 @@ hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 10px;
 }
+
+/* 多分类父站点 */
+.feed-parent-section {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.feed-parent-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  cursor: pointer;
+  background: var(--card-bg);
+  transition: background 0.15s;
+}
+.feed-parent-header:hover { background: rgba(233,30,142,0.05); }
+.feed-parent-header .feed-icon-wrap { width: 32px; height: 32px; flex-shrink: 0; margin-right: 10px; }
+.feed-parent-header .feed-icon-wrap img { width: 32px; height: 32px; border-radius: 6px; object-fit: contain; }
+.feed-parent-info { flex: 1; min-width: 0; }
+.feed-parent-name { font-weight: 600; font-size: 14px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.feed-parent-meta { font-size: 11px; color: var(--text2); margin-top: 1px; }
+.feed-parent-arrow { color: var(--text2); font-size: 12px; transition: transform 0.2s; flex-shrink: 0; margin-left: 8px; }
+.feed-parent-arrow.open { transform: rotate(180deg); }
+.feed-parent-children {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.feed-parent-children.open { max-height: 2000px; }
+.feed-parent-children .feed-card {
+  border: none;
+  border-radius: 0;
+  background: var(--card-bg);
+}
 .feed-card {
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -629,31 +669,73 @@ function copyFeedLink(feedUrl) {
   });
 }
 
-/* ========== 渲染 Feed 列表 ========== */
+/* ========== 渲染 Feed 列表（支持多分类分组） ========== */
 (function() {
+  function escapeHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function renderCard(name, m) {
+    var freq = m.freq_label || '定期更新';
+    var count = m.count || 0;
+    var feedFile = 'feeds/' + encodeURIComponent(name) + '.xml';
+    return '<div class="feed-card">'
+      + '<div class="feed-icon-wrap">'
+      +   '<img class="feed-icon" src="' + escapeHtml(m.icon || '') + '" alt="' + escapeHtml(name) + '" onerror="this.style.display=\'none\';">'
+      + '</div>'
+      + '<div class="feed-info">'
+      +   '<div class="feed-name">' + escapeHtml(name) + '</div>'
+      +   '<div class="feed-freq">' + freq + ' · ' + count + ' 条</div>'
+      + '</div>'
+      + '<div class="feed-actions">'
+      +   '<a class="feed-btn rss" href="' + feedFile + '" target="_blank">订阅</a>'
+      +   '<button class="feed-btn" onclick="copyFeedLink(\'' + feedFile + '\')">复制</button>'
+      + '</div>'
+      + '</div>';
+  }
   fetch('feeds_meta.json')
     .then(function(r) { return r.json(); })
     .then(function(meta) {
       var grid = document.getElementById('feeds-grid');
       var html = '';
+      var parents = {};   // parent_name -> [child_names]
+      var standalone = []; // feeds without parent
       Object.keys(meta).forEach(function(name) {
         var m = meta[name];
-        var freq = m.freq_label || '定期更新';
-        var count = m.count || 0;
-        var feedFile = 'feeds/' + encodeURIComponent(name) + '.xml';
-        html += '<div class="feed-card">\
-          <div class="feed-icon-wrap">\
-            <img class="feed-icon" src="' + (m.icon || '') + '" alt="' + name + '" onerror="this.style.display=' + "'none'" + '">\
-          </div>\
-          <div class="feed-info">\
-            <div class="feed-name">' + name + '</div>\
-            <div class="feed-freq">' + freq + ' · ' + count + ' 条</div>\
-          </div>\
-          <div class="feed-actions">\
-            <a class="feed-btn rss" href="' + feedFile + '" target="_blank">订阅</a>\
-            <button class="feed-btn" onclick="copyFeedLink(\'' + feedFile + '\')">复制</button>\
-          </div>\
-        </div>';
+        var parent = m.parent || '';
+        if (parent) {
+          if (!parents[parent]) parents[parent] = [];
+          parents[parent].push(name);
+        } else {
+          standalone.push(name);
+        }
+      });
+      // Render standalone feeds (grid)
+      standalone.forEach(function(name) {
+        html += renderCard(name, meta[name]);
+      });
+      // Render parent sections with children
+      Object.keys(parents).sort().forEach(function(parent) {
+        var children = parents[parent];
+        var parentMeta = meta[children[0]] || {}; // use first child's icon
+        var totalCount = children.reduce(function(s, n) { return s + (meta[n] && meta[n].count || 0); }, 0);
+        var parentIcon = parentMeta.icon || '';
+        html += '<div class="feed-parent-section">';
+        html +=   '<div class="feed-parent-header" onclick="var c=this.nextElementSibling;c.classList.toggle(\'open\');this.querySelector(\'.feed-parent-arrow\').classList.toggle(\'open\');">';
+        html +=     '<div class="feed-icon-wrap">';
+        html +=       '<img class="feed-icon" src="' + escapeHtml(parentIcon) + '" alt="' + escapeHtml(parent) + '" onerror="this.style.display=\'none\';">';
+        html +=     '</div>';
+        html +=     '<div class="feed-parent-info">';
+        html +=       '<div class="feed-parent-name">' + escapeHtml(parent) + ' <span style="color:var(--text2);font-weight:400">(' + children.length + ' 个分类)</span></div>';
+        html +=       '<div class="feed-parent-meta">' + totalCount + ' 条内容 · 点击展开分类</div>';
+        html +=     '</div>';
+        html +=     '<div class="feed-parent-arrow">▼</div>';
+        html +=   '</div>';
+        html +=   '<div class="feed-parent-children">';
+        children.forEach(function(childName) {
+          html += renderCard(childName, meta[childName]);
+        });
+        html +=   '</div>';
+        html += '</div>';
       });
       grid.innerHTML = html || '<p style="color:var(--text2);font-size:13px">暂无数据，请等待 GitHub Actions 首次运行</p>';
     })
