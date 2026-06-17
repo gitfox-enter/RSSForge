@@ -38,7 +38,7 @@ jobs:
           cache-dependency-path: package.json
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build VitePress documentation
         run: npm run docs:build
@@ -80,3 +80,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
