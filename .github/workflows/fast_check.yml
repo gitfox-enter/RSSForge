@@ -46,6 +46,9 @@ jobs:
       - name: 生成 RSS Feed
         run: python rss_feed.py
 
+      - name: 生成 OPML
+        run: python opml_generator.py
+
       - name: 提交变更
         run: |
           set +e
@@ -56,6 +59,8 @@ jobs:
           git add scheduler_state.json fast_log.jsonl 2>/dev/null || true
           # 数据和状态文件
           git add hash_record.txt notified_items.json adaptive_tiers.json feed.xml 2>/dev/null || true
+          # Per-site feeds 和 OPML
+          git add feeds/ opml.xml opml-*.xml 2>/dev/null || true
 
           git status
           if git diff --staged --quiet 2>/dev/null; then

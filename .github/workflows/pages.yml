@@ -33,6 +33,20 @@ jobs:
           for f in index.html status.html feed.xml crawl_status.json; do
             [ -f "$f" ] && cp "$f" _site/
           done
+          # Per-site feeds
+          if [ -d "feeds" ]; then
+            mkdir -p _site/feeds
+            cp feeds/*.xml _site/feeds/ 2>/dev/null || true
+          fi
+          # OPML files
+          for f in opml.xml opml-*.xml; do
+            [ -f "$f" ] && cp "$f" _site/
+          done
+          # Alipay red packet image
+          if [ -f "public/alipay-redpacket.jpg" ]; then
+            mkdir -p _site/public
+            cp public/alipay-redpacket.jpg _site/public/
+          fi
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact

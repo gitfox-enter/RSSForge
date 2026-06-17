@@ -3,69 +3,248 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>线报聚合 - RSS 阅读器</title>
-<meta name="description" content="全网羊毛线报实时聚合，RSS 在线阅读">
+<title>线报聚合 - RSS 订阅中心</title>
+<meta name="description" content="全网羊毛线报 RSS 订阅服务，每个站点独立 feed，OPML 一键导入">
 <meta name="theme-color" content="#1a73e8">
 <link rel="alternate" type="application/atom+xml" title="RSS Feed" href="feed.xml">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f5f5f5;--card:#fff;--text:#333;--text2:#888;--accent:#1a73e8;--border:#e0e0e0;--tag:#e8f0fe;--tag-text:#1a73e8;--new:#e8f5e9;--hover:#fafafa}
-@media(prefers-color-scheme:dark){:root{--bg:#1a1a1a;--card:#2a2a2a;--text:#e0e0e0;--text2:#999;--accent:#8ab4f8;--border:#404040;--tag:#1a3a5c;--tag-text:#8ab4f8;--new:#1a3a1a;--hover:#333}}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
-header{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-header h1{font-size:18px;white-space:nowrap}
-header h1 a{color:var(--text);text-decoration:none}
-header h1 span{color:var(--accent);font-size:14px;font-weight:normal;margin-left:6px}
-.search-box{flex:1;min-width:160px;max-width:320px;position:relative}
-.search-box input{width:100%;padding:6px 10px 6px 30px;border:1px solid var(--border);border-radius:20px;font-size:14px;background:var(--bg);color:var(--text);outline:none}
+:root{--bg:#f5f5f5;--card:#fff;--text:#333;--text2:#888;--accent:#1a73e8;--border:#e0e0e0;--tag:#e8f0fe;--tag-text:#1a73e8;--new-bg:#e8f5e9;--hover:#fafafa;--rss:#ee802f}
+@media(prefers-color-scheme:dark){:root{--bg:#1a1a1a;--card:#2a2a2a;--text:#e0e0e0;--text2:#999;--accent:#8ab4f8;--border:#404040;--tag:#1a3a5c;--tag-text:#8ab4f8;--new-bg:#1a3a1a;--hover:#333;--rss:#f0a050}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Header */
+header{background:var(--card);border-bottom:1px solid var(--border);padding:16px;position:sticky;top:0;z-index:10}
+.header-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{font-size:20px;white-space:nowrap}
+header h1 a{color:var(--text)}
+.desc{font-size:13px;color:var(--text2);margin-top:4px}
+
+/* Nav tabs */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--card);position:sticky;top:58px;z-index:9}
+.tab{padding:10px 20px;font-size:14px;cursor:pointer;border-bottom:2px solid transparent;color:var(--text2);background:none;border-top:none;border-left:none;border-right:none}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+.tab:hover{color:var(--accent)}
+
+/* Main */
+main{max-width:900px;margin:0 auto;padding:16px}
+.section{display:none}
+.section.active{display:block}
+
+/* OPML cards */
+.opml-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:24px}
+.opml-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;transition:border-color .15s}
+.opml-card:hover{border-color:var(--accent)}
+.opml-card h3{font-size:15px;margin-bottom:6px}
+.opml-card p{font-size:12px;color:var(--text2);margin-bottom:10px}
+.opml-card .btn{display:inline-block;padding:5px 14px;border-radius:16px;font-size:12px;cursor:pointer;margin-right:6px}
+.btn-rss{background:var(--rss);color:#fff}
+.btn-opml{background:var(--accent);color:#fff}
+
+/* Feed list */
+.cat-section{margin-bottom:24px}
+.cat-title{font-size:16px;font-weight:600;padding:8px 0;border-bottom:1px solid var(--border);margin-bottom:8px}
+.feed-list{list-style:none}
+.feed-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;transition:background .1s}
+.feed-item:hover{background:var(--hover)}
+.feed-icon{color:var(--rss);font-size:16px;flex-shrink:0}
+.feed-name{font-size:14px;flex:1}
+.feed-count{font-size:12px;color:var(--text2);background:var(--tag);padding:1px 8px;border-radius:10px}
+.feed-copy{font-size:12px;padding:3px 10px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text2);cursor:pointer}
+.feed-copy:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Reader */
+.search-box{margin-bottom:12px}
+.search-box input{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:20px;font-size:14px;background:var(--card);color:var(--text);outline:none}
 .search-box input:focus{border-color:var(--accent)}
-.search-box::before{content:"🔍";position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:12px}
-.source-filter{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.source-filter button{padding:3px 10px;border:1px solid var(--border);border-radius:14px;font-size:12px;background:var(--card);color:var(--text);cursor:pointer;white-space:nowrap}
+.source-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.source-filter button{padding:3px 10px;border:1px solid var(--border);border-radius:14px;font-size:12px;background:var(--card);color:var(--text);cursor:pointer}
 .source-filter button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.source-filter button:hover{opacity:.85}
-.stats{font-size:12px;color:var(--text2);white-space:nowrap}
-main{max-width:800px;margin:0 auto;padding:8px}
-.entry{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:8px;transition:background .15s}
+.entry{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:8px}
 .entry:hover{background:var(--hover)}
 .entry.is-new{border-left:3px solid var(--accent)}
 .entry-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.entry-source{font-size:11px;padding:1px 6px;border-radius:8px;background:var(--tag);color:var(--tag-text);white-space:nowrap}
+.entry-source{font-size:11px;padding:1px 6px;border-radius:8px;background:var(--tag);color:var(--tag-text)}
 .entry-time{font-size:11px;color:var(--text2)}
 .entry-title{font-size:15px;font-weight:500}
 .entry-title a{color:var(--text);text-decoration:none}
 .entry-title a:hover{color:var(--accent)}
-.entry-cat{font-size:11px;padding:1px 6px;border-radius:8px;background:var(--new);color:#4caf50}
-.empty{text-align:center;padding:60px 20px;color:var(--text2)}
-.empty p{margin-top:8px;font-size:14px}
 .load-more{text-align:center;padding:16px}
 .load-more button{padding:8px 24px;border:1px solid var(--border);border-radius:20px;background:var(--card);color:var(--text);cursor:pointer;font-size:14px}
 .load-more button:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Red packet */
+.redpacket{text-align:center;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0}
+.redpacket h3{font-size:16px;margin-bottom:8px;color:#e53935}
+.redpacket p{font-size:13px;color:var(--text2);margin-bottom:12px}
+.redpacket img{max-width:200px;border-radius:8px}
+
+/* Footer */
 footer{text-align:center;padding:20px;font-size:12px;color:var(--text2)}
-footer a{color:var(--accent);text-decoration:none}
-.loading{text-align:center;padding:40px;color:var(--text2)}
+footer a{color:var(--accent)}
+
+.empty{text-align:center;padding:40px;color:var(--text2)}
 @media(max-width:600px){
-  header{padding:8px 12px;gap:8px}
-  header h1{font-size:16px}
-  .search-box{max-width:none;min-width:100px}
-  main{padding:4px}
-  .entry{padding:10px 12px;border-radius:6px}
-  .entry-title{font-size:14px}
+  .opml-grid{grid-template-columns:1fr}
+  .feed-item{flex-wrap:wrap}
+  header{padding:12px}
+  main{padding:8px}
 }
 </style>
 </head>
 <body>
 <header>
-  <h1><a href="./">📡 线报聚合</a><span id="count"></span></h1>
-  <div class="search-box"><input type="text" id="search" placeholder="搜索线报..."></div>
-  <div class="source-filter" id="sources"></div>
+  <div class="header-top">
+    <h1><a href="./">📡 线报聚合</a></h1>
+  </div>
+  <p class="desc">GitHub 原生的 RSS 订阅服务 — 每站独立 feed，OPML 一键导入，fork 自用</p>
 </header>
-<main id="feed"><div class="loading">加载中...</div></main>
-<div class="load-more" id="more" style="display:none"><button onclick="showMore()">加载更多</button></div>
-<footer>线报聚合 · RSS 在线阅读 · <a href="feed.xml" target="_blank">RSS 订阅</a> · <a href="status.html">监控状态</a></footer>
+
+<nav class="tabs">
+  <button class="tab active" onclick="switchTab('reader')">在线阅读</button>
+  <button class="tab" onclick="switchTab('feeds')">Feed 目录</button>
+  <button class="tab" onclick="switchTab('opml')">OPML 订阅</button>
+</nav>
+
+<main>
+  <!-- Reader -->
+  <div class="section active" id="sec-reader">
+    <div class="search-box"><input type="text" id="search" placeholder="搜索线报..."></div>
+    <div class="source-filter" id="sources"></div>
+    <div id="feed"></div>
+    <div class="load-more" id="more" style="display:none"><button onclick="showMore()">加载更多</button></div>
+  </div>
+
+  <!-- Feeds directory -->
+  <div class="section" id="sec-feeds">
+    <h2 style="font-size:18px;margin-bottom:16px">可用 RSS Feed</h2>
+    <div class="opml-grid">
+      <div class="opml-card">
+        <h3>📡 全量聚合</h3>
+        <p>所有站点线报合并输出</p>
+        <a class="btn btn-rss" href="feed.xml" target="_blank">订阅</a>
+        <button class="btn btn-opml" onclick="copyUrl('feed.xml')">复制链接</button>
+      </div>
+    </div>
+    <div id="feed-directory"></div>
+  </div>
+
+  <!-- OPML -->
+  <div class="section" id="sec-opml">
+    <h2 style="font-size:18px;margin-bottom:8px">OPML 一键导入</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:16px">下载 OPML 文件后导入 RSS 阅读器（FeedMe / Reeder / inoreader 等），自动添加全部或分类订阅</p>
+    <div class="opml-grid">
+      <div class="opml-card">
+        <h3>📦 全部订阅</h3>
+        <p>42 个站点，含分类文件夹</p>
+        <a class="btn btn-opml" href="opml.xml" download>下载 OPML</a>
+      </div>
+      <div class="opml-card">
+        <h3>🔥 线报站</h3>
+        <p>23 个综合线报源</p>
+        <a class="btn btn-opml" href="opml-线报站.xml" download>下载</a>
+      </div>
+      <div class="opml-card">
+        <h3>💰 购物比价</h3>
+        <p>4 个购物优惠源</p>
+        <a class="btn btn-opml" href="opml-购物比价.xml" download>下载</a>
+      </div>
+      <div class="opml-card">
+        <h3>💿 软件站</h3>
+        <p>10 个软件资源源</p>
+        <a class="btn btn-opml" href="opml-软件站.xml" download>下载</a>
+      </div>
+      <div class="opml-card">
+        <h3>💬 论坛</h3>
+        <p>4 个社区论坛源</p>
+        <a class="btn btn-opml" href="opml-论坛.xml" download>下载</a>
+      </div>
+    </div>
+    <div class="redpacket">
+      <h3>🧧 支付宝扫码领红包</h3>
+      <p>每天可领，消费直接抵扣</p>
+      <img src="public/alipay-redpacket.jpg" alt="支付宝红包" onerror="this.style.display='none';this.parentElement.querySelector('p').textContent='保存下方二维码图片到支付宝扫码'">
+      <p style="margin-top:8px;font-size:12px">觉得有用？领个红包支持一下 ❤️</p>
+    </div>
+  </div>
+</main>
+
+<footer>线报聚合 · 基于 GitHub Actions 的 RSS 订阅服务 · <a href="status.html">监控状态</a> · <a href="https://github.com/gitfox-enter/site-update-monitor">GitHub</a></footer>
 
 <script>
+/* ========== Tab switching ========== */
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(function(t,i) {
+    t.classList.toggle('active', ['reader','feeds','opml'][i] === name);
+  });
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('sec-' + name).classList.add('active');
+}
+
+/* ========== Copy URL ========== */
+function copyUrl(path) {
+  var url = location.origin + location.pathname.replace(/[^/]*$/, '') + path;
+  navigator.clipboard.writeText(url).then(function() {
+    alert('已复制: ' + url);
+  }).catch(function() {
+    prompt('复制链接:', url);
+  });
+}
+
+/* ========== Feed directory ========== */
+var feedCatalog = null;
+function loadFeedCatalog() {
+  if (feedCatalog) return Promise.resolve(feedCatalog);
+  return fetch('feed.xml?t=' + Date.now()).then(function(r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.text();
+  }).then(function(xml) {
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(xml, 'text/xml');
+    var ns = 'http://www.w3.org/2005/Atom';
+    var els = doc.getElementsByTagNameNS(ns, 'entry');
+    var counts = {};
+    for (var i = 0; i < els.length; i++) {
+      var content = els[i].getElementsByTagNameNS(ns, 'content');
+      if (content.length && content[0].textContent) {
+        var parts = content[0].textContent.split('|');
+        for (var j = 0; j < parts.length; j++) {
+          var p = parts[j].trim();
+          if (p.indexOf('来源:') === 0 || p.indexOf('来源：') === 0) {
+            var src = p.replace(/^来源[:：]\s*/, '');
+            counts[src] = (counts[src] || 0) + 1;
+            break;
+          }
+        }
+      }
+    }
+    feedCatalog = counts;
+    return counts;
+  });
+}
+
+function renderFeedDirectory(counts) {
+  var sorted = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
+  var html = '<div class="cat-section"><div class="cat-title">按来源订阅</div><ul class="feed-list">';
+  sorted.forEach(function(name) {
+    var safeName = name.replace(/[^\w\u4e00-\u9fff]/g, '');
+    var feedUrl = 'feeds/' + safeName + '.xml';
+    html += '<li class="feed-item">';
+    html += '<span class="feed-icon">📡</span>';
+    html += '<span class="feed-name">' + esc(name) + '</span>';
+    html += '<span class="feed-count">' + counts[name] + ' 条</span>';
+    html += '<a class="btn btn-rss" href="' + feedUrl + '" target="_blank" style="font-size:11px;padding:3px 10px">订阅</a>';
+    html += '<button class="feed-copy" onclick="copyUrl(\'' + feedUrl + '\')">复制</button>';
+    html += '</li>';
+  });
+  html += '</ul></div>';
+  document.getElementById('feed-directory').innerHTML = html;
+}
+
+/* ========== Reader ========== */
 var PAGE_SIZE = 30;
 var allEntries = [];
 var filtered = [];
@@ -86,14 +265,11 @@ function parseFeed(xml) {
     var updated = e.getElementsByTagNameNS(ns, 'updated');
     var content = e.getElementsByTagNameNS(ns, 'content');
     var category = e.getElementsByTagNameNS(ns, 'category');
-
     var titleText = title.length ? title[0].textContent : '';
     var href = link.length ? link[0].getAttribute('href') : '';
     var timeText = updated.length ? updated[0].textContent : '';
     var contentText = content.length ? content[0].textContent : '';
     var catText = category.length ? category[0].getAttribute('term') : '';
-
-    // Extract source from content like "来源: XXX | 链接: ..."
     var source = '';
     if (contentText) {
       var parts = contentText.split('|');
@@ -105,74 +281,42 @@ function parseFeed(xml) {
         }
       }
     }
-
-    // Format time for display
     var displayTime = '';
     var diffMin = 0;
     if (timeText) {
       var d = new Date(timeText);
       if (!isNaN(d.getTime())) {
         diffMin = Math.floor((Date.now() - d.getTime()) / 60000);
-        if (diffMin < 60) {
-          displayTime = diffMin <= 1 ? '刚刚' : diffMin + ' 分钟前';
-        } else if (diffMin < 1440) {
-          displayTime = Math.floor(diffMin / 60) + ' 小时前';
-        } else {
-          displayTime = (d.getMonth() + 1) + '/' + d.getDate() + ' ' +
-            String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
-        }
+        if (diffMin < 60) displayTime = diffMin <= 1 ? '刚刚' : diffMin + ' 分钟前';
+        else if (diffMin < 1440) displayTime = Math.floor(diffMin / 60) + ' 小时前';
+        else displayTime = (d.getMonth()+1) + '/' + d.getDate() + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
       }
     }
-
-    entries.push({
-      title: titleText,
-      href: href,
-      time: timeText,
-      displayTime: displayTime,
-      source: source,
-      category: catText,
-      isNew: diffMin > 0 && diffMin < 60
-    });
+    entries.push({ title: titleText, href: href, time: timeText, displayTime: displayTime, source: source, category: catText, isNew: diffMin > 0 && diffMin < 60 });
   }
   return entries;
 }
 
 function render() {
   var feed = document.getElementById('feed');
-  if (filtered.length === 0) {
-    feed.innerHTML = '<div class="empty"><p>没有匹配的线报</p></div>';
-    document.getElementById('more').style.display = 'none';
-    return;
-  }
-
+  if (filtered.length === 0) { feed.innerHTML = '<div class="empty">没有匹配的线报</div>'; document.getElementById('more').style.display='none'; return; }
   var end = Math.min(shown + PAGE_SIZE, filtered.length);
   var html = '';
   for (var i = shown; i < end; i++) {
     var e = filtered[i];
     var cls = 'entry' + (e.isNew ? ' is-new' : '');
-    html += '<div class="' + cls + '">';
-    html += '<div class="entry-header">';
+    html += '<div class="' + cls + '"><div class="entry-header">';
     if (e.source) html += '<span class="entry-source">' + esc(e.source) + '</span>';
-    if (e.category) html += '<span class="entry-cat">' + esc(e.category) + '</span>';
     html += '<span class="entry-time">' + esc(e.displayTime) + '</span>';
-    html += '</div>';
-    html += '<div class="entry-title"><a href="' + esc(e.href) + '" target="_blank" rel="noopener">' + esc(e.title) + '</a></div>';
-    html += '</div>';
+    html += '</div><div class="entry-title"><a href="' + esc(e.href) + '" target="_blank" rel="noopener">' + esc(e.title) + '</a></div></div>';
   }
-  if (shown === 0) {
-    feed.innerHTML = html;
-  } else {
-    feed.insertAdjacentHTML('beforeend', html);
-  }
+  if (shown === 0) feed.innerHTML = html;
+  else feed.insertAdjacentHTML('beforeend', html);
   shown = end;
   document.getElementById('more').style.display = shown < filtered.length ? '' : 'none';
-  document.getElementById('count').textContent = filtered.length + ' 条';
 }
 
-function esc(s) {
-  if (!s) return '';
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
+function esc(s) { if (!s) return ''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 function applyFilter() {
   filtered = allEntries.filter(function(e) {
@@ -184,53 +328,41 @@ function applyFilter() {
   render();
 }
 
-function showMore() {
-  render();
-}
+function showMore() { render(); }
 
 function buildSourceFilter() {
   var counts = {};
-  allEntries.forEach(function(e) {
-    if (e.source) counts[e.source] = (counts[e.source] || 0) + 1;
-  });
-  var sorted = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
-  var html = '<button class="' + (activeSource === 'all' ? 'active' : '') + '" onclick="setSource(\'all\')">全部</button>';
+  allEntries.forEach(function(e) { if (e.source) counts[e.source] = (counts[e.source]||0) + 1; });
+  var sorted = Object.keys(counts).sort(function(a,b) { return counts[b]-counts[a]; });
+  var html = '<button class="' + (activeSource==='all'?'active':'') + '" onclick="setSource(\'all\')">全部 ' + allEntries.length + '</button>';
   sorted.forEach(function(s) {
-    html += '<button class="' + (activeSource === s ? 'active' : '') + '" onclick="setSource(\'' + esc(s) + '\')">' + esc(s) + ' ' + counts[s] + '</button>';
+    html += '<button class="' + (activeSource===s?'active':'') + '" onclick="setSource(\'' + esc(s) + '\')">' + esc(s) + ' ' + counts[s] + '</button>';
   });
   document.getElementById('sources').innerHTML = html;
 }
 
-function setSource(s) {
-  activeSource = s;
-  buildSourceFilter();
-  applyFilter();
-}
+function setSource(s) { activeSource = s; buildSourceFilter(); applyFilter(); }
 
-// Search
 var searchTimer;
 document.getElementById('search').addEventListener('input', function() {
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(function() {
-    searchQuery = document.getElementById('search').value.trim();
-    applyFilter();
-  }, 200);
+  searchTimer = setTimeout(function() { searchQuery = document.getElementById('search').value.trim(); applyFilter(); }, 200);
 });
 
-// Load feed
+/* ========== Init ========== */
 fetch('feed.xml?t=' + Date.now())
-  .then(function(r) {
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.text();
-  })
+  .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
   .then(function(xml) {
     allEntries = parseFeed(xml);
     buildSourceFilter();
     applyFilter();
+    // Also build feed directory
+    var counts = {};
+    allEntries.forEach(function(e) { if (e.source) counts[e.source] = (counts[e.source]||0) + 1; });
+    renderFeedDirectory(counts);
   })
   .catch(function(err) {
-    document.getElementById('feed').innerHTML =
-      '<div class="empty"><p>加载失败: ' + esc(err.message) + '</p></div>';
+    document.getElementById('feed').innerHTML = '<div class="empty">加载失败: ' + esc(err.message) + '</div>';
   });
 </script>
 </body>
