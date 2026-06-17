@@ -1,4 +1,13 @@
 {
+  "423Down": {
+    "interval": 360,
+    "freq_label": "每6小时",
+    "count": 64,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/423Down.xml",
+    "icon": "https://www.google.com/s2/favicons?domain=www.423down.com&sz=64",
+    "parent": "",
+    "category": ""
+  },
   "线报酷": {
     "interval": 15,
     "freq_label": "每15分钟",
@@ -149,15 +158,6 @@
     "count": 21,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/12345线报.xml",
     "icon": "https://www.google.com/s2/favicons?domain=www.12345pro.com&sz=64",
-    "parent": "",
-    "category": ""
-  },
-  "423Down": {
-    "interval": 360,
-    "freq_label": "每6小时",
-    "count": 25,
-    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/423Down.xml",
-    "icon": "https://www.google.com/s2/favicons?domain=www.423down.com&sz=64",
     "parent": "",
     "category": ""
   }
