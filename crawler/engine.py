@@ -270,6 +270,23 @@ def _compute_hash_diff(
     return False, new_hash, "无更新"
 
 
+def _check_update(
+    url: str, new_hash: str, old_records: Dict[str, str],
+) -> Tuple[bool, str, str]:
+    """Compare pre-computed hash with old records.
+
+    Unlike _compute_hash_diff which takes the full result dict,
+    this function accepts a pre-computed hash string.
+
+    Returns (is_updated, new_hash, message).
+    """
+    old_hash = old_records.get(url)
+    if old_hash is None:
+        return False, new_hash, "首次监控"
+    elif old_hash != new_hash:
+        return True, new_hash, "内容已更新"
+    return False, new_hash, "无更新"
+
 
 async def _fetch_paginated(
     url: str,
