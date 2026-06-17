@@ -30,7 +30,7 @@ jobs:
       - name: Prepare site
         run: |
           mkdir -p _site
-          for f in index.html status.html feed.xml crawl_status.json feeds_meta.json; do
+          for f in index.html status.html crawl_status.json feeds_meta.json; do
             [ -f "$f" ] && cp "$f" _site/
           done
           # Per-site feeds
@@ -52,7 +52,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '_site'
+          path: _site
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
