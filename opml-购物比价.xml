@@ -3,12 +3,12 @@
   <head>
     <title>线报聚合 - 购物比价</title>
     <ownerName>线报聚合</ownerName>
-    <ownerId>https://gitfox-enter.github.io/site-update-monitor/</ownerId>
+    <ownerId>https://gitfox-enter.github.io/RSSForge/</ownerId>
   </head>
   <body>
-    <outline type="rss" text="慢慢买" title="慢慢买" xmlUrl="https://gitfox-enter.github.io/site-update-monitor/feeds/慢慢买.xml" htmlUrl="https://www.manmanbuy.com/" />
-    <outline type="rss" text="白菜哦" title="白菜哦" xmlUrl="https://gitfox-enter.github.io/site-update-monitor/feeds/白菜哦.xml" htmlUrl="https://www.baicaio.com/" />
-    <outline type="rss" text="拔草哦" title="拔草哦" xmlUrl="https://gitfox-enter.github.io/site-update-monitor/feeds/拔草哦.xml" htmlUrl="https://www.bacaoo.com/" />
-    <outline type="rss" text="优惠线报" title="优惠线报" xmlUrl="https://gitfox-enter.github.io/site-update-monitor/feeds/优惠线报.xml" htmlUrl="https://www.yxssp.com/" />
+    <outline type="rss" text="慢慢买" title="慢慢买" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/慢慢买.xml" htmlUrl="https://www.manmanbuy.com/" />
+    <outline type="rss" text="白菜哦" title="白菜哦" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/白菜哦.xml" htmlUrl="https://www.baicaio.com/" />
+    <outline type="rss" text="拔草哦" title="拔草哦" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/拔草哦.xml" htmlUrl="https://www.bacaoo.com/" />
+    <outline type="rss" text="优惠线报" title="优惠线报" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/优惠线报.xml" htmlUrl="https://www.yxssp.com/" />
   </body>
 </opml>
