@@ -2,7 +2,7 @@
 
 > ⚡ 基于 GitHub Actions 的免费 RSS 订阅源生成器，无服务器、零成本、可持续更新
 
-👉 [在线演示](https://gitfox-enter.github.io/site-update-monitor/) · 📡 [订阅全量 Feed](https://gitfox-enter.github.io/site-update-monitor/feed.xml)
+👉 [在线演示](https://gitfox-enter.github.io/RSSForge/) · 📡 [订阅全量 Feed](https://gitfox-enter.github.io/RSSForge/feed.xml)
 
 ---
 
@@ -86,7 +86,7 @@ sites:
 
 在 RSS 阅读器中添加订阅：
 
-- **全量聚合**：`https://[你的用户名].github.io/site-update-monitor/feed.xml`
+- **全量聚合**：`https://[你的用户名].github.io/RSSForge/feed.xml`
 - **OPML 导入**：下载 `opml.xml`，导入 Reeder / FeedMe / inoreader 等阅读器
 
 ---
@@ -142,43 +142,4 @@ feeds/                     生成的每站独立 feed
 
 ## 添加新站点
 
-1. 在 `sites.yaml` 中添加站点，设置 `url`/`name`/`tier`/`interval`
-2. 标准 HTML 站点无需额外操作（通用解析器自动处理）
-3. 有特殊结构的站点，在 `crawler/parsers/` 中添加解析函数并注册
-4. SPA 站点设置 `js_render: true`
-5. 有 RSS 源的站点，设置 `rss_feed` 字段跳过 HTML 抓取
-6. 本地运行 `python crawl.py` 验证
-
----
-
-## 自适应分级
-
-- 连续成功 ≥ 2 次 → 提升 1 级
-- 连续失败 ≥ 2 次 → 降低 1 级
-- low 级别连续失败 → 标记为 dead（停止爬取）
-- dead 站点恢复 → 回到 low 级别
-
----
-
-## 贡献规则
-
-发现了好站点？想支持这个项目？多种方式参与：
-
-- ⭐ **Star** 本项目，让更多人看到
-- 🔧 **提交 PR** 贡献新的站点抓取规则
-- 🐛 **反馈问题** 站点失效 / 新功能建议
-- 🧧 **支付宝领红包** 扫描页面底部的红包码，每天可领一次
-
----
-
-## 灵感来源
-
-- [RSSHub](https://github.com/DIYgod/RSSHub) — 万物皆 RSS
-- [RSS-Bridge](https://github.com/RSS-Bridge/rss-bridge) — PHP 版 RSS 生成器
-- [wewe-rss](https://github.com/cooderl/wewe-rss) — 微信公众号 RSS
-
----
-
-## License
-
-MIT
+1. 在 `sites.yam
