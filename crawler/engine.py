@@ -26,7 +26,7 @@ from common import (
     sanitize_text, is_junk, ITEMS_DB_FILE, BLACKLIST_FILE, CRAWL_STATUS_FILE, MAX_ITEMS_DB,
     ProxyPool, create_proxy_pool,
 )
-from crawler.config import JS_RENDER_SITES, MAX_RETRIES, REQUEST_TIMEOUT, RETRY_BASE_DELAY, RUN_LOG_FILE, MONITOR_SITES, is_dead_site, get_source_name, get_site_tier, init_adaptive_tiers, update_adaptive_tier, save_adaptive_tiers, get_all_adaptive_tiers, RSS_FIRST_SITES, SITE_MAX_PAGES
+from crawler.config import JS_RENDER_SITES, MAX_RETRIES, REQUEST_TIMEOUT, RETRY_BASE_DELAY, RUN_LOG_FILE, MONITOR_SITES, is_dead_site, get_source_name, get_site_tier, init_adaptive_tiers, update_adaptive_tier, save_adaptive_tiers, get_all_adaptive_tiers, RSS_FIRST_SITES, SITE_MAX_PAGES, get_site_categories
 from crawler.storage import get_current_round, load_notified_items, save_notified_items, filter_new_items, merge_items_into_db, load_hash_records, save_hash_records, export_items_latest_json, get_random_delay, get_random_profile, get_referer
 from crawler.network import MetricsTracker, metrics, get_conditional_headers, rate_limiter, is_allowed_by_robots, update_conditional_cache
 from crawler.parsers import _match_parser, extract_article_items, parse_rss_feed, parse_ghxi_items, fetch_page_content, fetch_ghxi_items_async, fetch_rss_feed_async
@@ -1193,11 +1193,36 @@ async def main_async() -> None:
     _sites_to_crawl, _sites_skipped = get_sites_to_crawl(active_sites, mode='crawl')
     active_sites = _sites_to_crawl
     
+    # === 多分类站点展开：将 categories 拆成独立 URL ===
+    expanded_sites: List[str] = []
+    expanded_meta: Dict[str, Dict[str, str]] = {}  # url -> {parent, category_name}
+    for url in active_sites:
+        cats = get_site_categories(url)
+        if cats:
+            # 父站点（生成 {站点名}.xml）
+            expanded_sites.append(url)
+            expanded_meta[url] = {'parent': '', 'cat_name': ''}
+            # 分类站点（生成 {站点名}-{分类名}.xml）
+            for cat in cats:
+                cat_path = cat['path'].lstrip('/')
+                cat_url = url.rstrip('/') + '/' + cat_path
+                if cat_url not in expanded_sites:
+                    expanded_sites.append(cat_url)
+                    expanded_meta[cat_url] = {
+                        'parent': url,
+                        'cat_name': cat['name'],
+                    }
+            logger.info("多分类展开: %s → %d 个分类", url, len(cats),
+                        extra={'site': url, 'event': 'category_expand', 'count': len(cats)})
+        else:
+            expanded_sites.append(url)
+    active_sites = expanded_sites
+
     if dead_tier_count:
         logger.info("dead tier 跳过 %d 个站点（自动降级）", dead_tier_count)
     if _sites_skipped:
         logger.info("智能调度跳过 %d 个站点（间隔未到）", len(_sites_skipped))
-    
+
     logger.info("监控站点数: %d (活跃) + %d (黑名单)",
                 len(active_sites), len(blacklist_domains))
 
