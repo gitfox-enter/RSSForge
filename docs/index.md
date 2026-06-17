@@ -6,7 +6,7 @@ hero:
   text: 万物皆可 RSS
   tagline: ⚡ 基于 GitHub Actions 的免费 RSS 订阅源生成器<br>给任何网站生成 RSS，无服务器、零成本、可持续更新
   image:
-    src: https://gitfox-enter.github.io/RSSForge/favicon.ico
+    src: https://gitfox-enter.github.io/RSSForge/favicon.svg
     alt: RSSForge
   actions:
     - theme: brand
