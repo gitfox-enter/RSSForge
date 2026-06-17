@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/syndication/1.0">
-  <title>423Down - 线报聚合</title>
-  <subtitle>来自 423Down 的线报更新</subtitle>
-  <link href="https://gitfox-enter.github.io/site-update-monitor/" rel="alternate" />
-  <link href="https://gitfox-enter.github.io/site-update-monitor/feeds/423Down.xml" rel="self" type="application/atom+xml" />
-  <id>https://gitfox-enter.github.io/site-update-monitor/feeds/423Down.xml</id>
-  <updated>2026-06-17T08:08:14+08:00</updated>
-  <generator uri="https://github.com/gitfox-enter/site-update-monitor">site-update-monitor</generator>
+  <title>423Down - RSSForge</title>
+  <subtitle>423Down 的 RSS 订阅源（由 RSSForge 生成）</subtitle>
+  <link href="https://gitfox-enter.github.io/RSSForge/" rel="alternate" />
+  <link href="https://gitfox-enter.github.io/RSSForge/feeds/423Down.xml" rel="self" type="application/atom+xml" />
+  <id>https://gitfox-enter.github.io/RSSForge/feeds/423Down.xml</id>
+  <updated>2026-06-17T12:26:10+08:00</updated>
+  <generator uri="https://github.com/gitfox-enter/RSSForge">RSSForge</generator>
   <sy:updatePeriod>daily</sy:updatePeriod>
   <sy:updateFrequency>4</sy:updateFrequency>
   <sy:updateBase>2000-01-01T00:00:00+08:00</sy:updateBase>
   <author>
-    <name>线报聚合</name>
+    <name>RSSForge</name>
   </author>
+  <icon>https://www.google.com/s2/favicons?domain=gitfox-enter.github.io&amp;sz=64</icon>
   <entry>
     <title type="text">飞球直播|最强看球神器|全球体育赛事免费畅看</title>
     <link href="https://www.423down.com/16499.html" rel="alternate" />

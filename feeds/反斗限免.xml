@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/syndication/1.0">
-  <title>反斗限免 - 线报聚合</title>
-  <subtitle>来自 反斗限免 的线报更新</subtitle>
-  <link href="https://gitfox-enter.github.io/site-update-monitor/" rel="alternate" />
-  <link href="https://gitfox-enter.github.io/site-update-monitor/feeds/反斗限免.xml" rel="self" type="application/atom+xml" />
-  <id>https://gitfox-enter.github.io/site-update-monitor/feeds/反斗限免.xml</id>
-  <updated>2026-06-17T08:08:14+08:00</updated>
-  <generator uri="https://github.com/gitfox-enter/site-update-monitor">site-update-monitor</generator>
+  <title>反斗限免 - RSSForge</title>
+  <subtitle>反斗限免 的 RSS 订阅源（由 RSSForge 生成）</subtitle>
+  <link href="https://gitfox-enter.github.io/RSSForge/" rel="alternate" />
+  <link href="https://gitfox-enter.github.io/RSSForge/feeds/反斗限免.xml" rel="self" type="application/atom+xml" />
+  <id>https://gitfox-enter.github.io/RSSForge/feeds/反斗限免.xml</id>
+  <updated>2026-06-17T12:26:10+08:00</updated>
+  <generator uri="https://github.com/gitfox-enter/RSSForge">RSSForge</generator>
   <sy:updatePeriod>daily</sy:updatePeriod>
   <sy:updateFrequency>6</sy:updateFrequency>
   <sy:updateBase>2000-01-01T00:00:00+08:00</sy:updateBase>
   <author>
-    <name>线报聚合</name>
+    <name>RSSForge</name>
   </author>
+  <icon>https://www.google.com/s2/favicons?domain=gitfox-enter.github.io&amp;sz=64</icon>
   <entry>
     <title type="text">Photo Stamp Remover – 去除图片特征[终身不可升级授权][Windows][$17.99→0]</title>
     <link href="https://free.apprcn.com/photo-stamp-remover-55/" rel="alternate" />
