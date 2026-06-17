@@ -195,6 +195,21 @@ def get_source_name(url: str) -> Optional[str]:
 
 
 # ============================================================
+# 站点最大分页数（从 sites.yaml max_pages 字段加载）
+# ============================================================
+
+def _load_site_max_pages() -> Dict[str, int]:
+    """Load per-site max pages to crawl for historical backfill. Returns {url: max_pages}."""
+    sites = _get_sites_list()
+    if not sites:
+        return {}
+    return {s["url"]: s.get("max_pages", 1) for s in sites}
+
+
+SITE_MAX_PAGES: Dict[str, int] = _load_site_max_pages()
+
+
+# ============================================================
 # 快速检查站点（从 sites.yaml fast_check 字段加载）
 # ============================================================
 
