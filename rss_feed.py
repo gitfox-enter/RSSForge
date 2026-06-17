@@ -11,6 +11,10 @@ RSS/Atom Feed 生成器 — 为每个订阅站点生成独立 feed。
 import json
 import os
 import re
+try:
+    import httpx
+except ImportError:
+    httpx = None
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional
@@ -34,6 +38,49 @@ SITE_URL = "https://gitfox-enter.github.io/RSSForge/"
 FEEDS_DIR = "feeds"
 FEED_TITLE = "RSSForge"
 FEED_DESCRIPTION = "基于 GitHub Actions 的免费 RSS 订阅源生成器"
+
+# ============================================================
+# 图标检测（自动为每个 feed 提取对应网站图标）
+# ============================================================
+
+_IMG_EXT_RE = __import__('re').compile(r'\.(jpg|jpeg|png|gif|webp|bmp|svg)\b', __import__('re').IGNORECASE)
+
+
+def _extract_favicon_url(url: str) -> str:
+    """根据 URL 返回网站 favicon。
+
+    原理：使用 Google Favicon Proxy 服务
+    https://www.google.com/s2/favicons?domain={domain}&sz=64
+    - 自动处理 HTTPS/HTTP 混合
+    - 自动处理 www/non-www
+    - 返回 PNG 格式，大多数 RSS 阅读器都支持
+    """
+    from urllib.parse import urlparse
+    domain = urlparse(url).hostname or ''
+    return f"https://www.google.com/s2/favicons?domain={domain}&sz=64"
+
+
+def _extract_item_image(item, site_url: str = '') -> str:
+    """从条目字段中提取第一张图片 URL。
+
+    优先级：item['image'] > content 中的 <img> > url 本身是图片文件
+    """
+    img = item.get('image', '')
+    if img and _IMG_EXT_RE.search(img):
+        return img
+
+    raw = item.get('content', '') or item.get('html', '') or item.get('summary', '')
+    if raw:
+        m = __import__('re').search(r'<img[^>]+src=["\']([^"\']+)["\']', raw, __import__('re').IGNORECASE)
+        if m and _IMG_EXT_RE.search(m.group(1)):
+            return m.group(1)
+
+    url = item.get('url', '')
+    if url and _IMG_EXT_RE.search(url):
+        return url
+    return ''
+
+
 
 # 来源名 → 安全文件名映射
 def _safe_filename(name: str) -> str:
@@ -96,8 +143,10 @@ def _build_atom_feed(items: List[Dict], title: str, feed_url: str,
     """
     NS = 'http://www.w3.org/2005/Atom'
     SY_NS = 'http://purl.org/syndication/1.0'
+    MEDIA_NS = 'http://search.yahoo.com/mrss/'
     ET.register_namespace('', NS)
     ET.register_namespace('sy', SY_NS)
+    ET.register_namespace('media', MEDIA_NS)
 
     root = ET.Element(f'{{{NS}}}feed')
 
@@ -117,7 +166,11 @@ def _build_atom_feed(items: List[Dict], title: str, feed_url: str,
         ET.SubElement(root, f'{{{SY_NS}}}updateBase').text = '2000-01-01T00:00:00+08:00'
 
     author = ET.SubElement(root, f'{{{NS}}}author')
-    ET.SubElement(author, f'{{{NS}}}name').text = '线报聚合'
+    ET.SubElement(author, f'{{{NS}}}name').text = 'RSSForge'
+
+    # Feed 级别 icon（Google Favicon Proxy）
+    icon_url = _extract_favicon_url(feed_url)
+    ET.SubElement(root, f'{{{NS}}}icon').text = icon_url
 
     for item in items:
         entry = ET.SubElement(root, f'{{{NS}}}entry')
@@ -148,6 +201,11 @@ def _build_atom_feed(items: List[Dict], title: str, feed_url: str,
         content_el = ET.SubElement(entry, f'{{{NS}}}content')
         content_el.text = _sanitize_xml(content_text)
         content_el.set('type', 'text')
+
+        # 自动提取条目图片（缩略图）
+        thumb = _extract_item_image(item, feed_url)
+        if thumb:
+            ET.SubElement(entry, f'{{{MEDIA_NS}}}thumbnail', url=thumb, width='300')
 
         if category:
             ET.SubElement(entry, f'{{{NS}}}category', term=category)
@@ -252,6 +310,7 @@ def generate_all_feeds() -> Dict[str, int]:
             'freq_label': freq_label,
             'count': count,
             'feed_url': SITE_URL + FEEDS_DIR + '/' + _safe_filename(source) + '.xml',
+            'icon': _extract_favicon_url(sample_url) if sample_url else _extract_favicon_url(SITE_URL),
         }
     try:
         tmp_path = 'feeds_meta.json.tmp'
