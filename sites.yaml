@@ -196,7 +196,34 @@ sites:
     name: 423Down
     tier: low
     interval: 360
-    parser: custom_423down
+    parser: 423down.com
+    categories:
+      - path: /apk
+        name: 安卓软件
+      - path: /zd423
+        name: 原创软件
+      - path: /multimedia
+        name: 媒体播放
+      - path: /browser
+        name: 网页浏览
+      - path: /image
+        name: 图形图像
+      - path: /im
+        name: 聊天软件
+      - path: /work
+        name: 办公软件
+      - path: /down
+        name: 上传下载
+      - path: /softtool
+        name: 实用软件
+      - path: /systemsoft
+        name: 系统辅助
+      - path: /systemplus
+        name: 系统必备
+      - path: /security
+        name: 安全软件
+      - path: /hardware
+        name: 硬件相关
 
   - url: "https://www.appinn.com/"         # 小众软件
     max_pages: 5
