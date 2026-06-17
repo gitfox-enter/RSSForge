@@ -27,32 +27,56 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: package.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build VitePress documentation
+        run: npm run docs:build
+
       - name: Prepare site
         run: |
           mkdir -p _site
-          for f in index.html status.html crawl_status.json feeds_meta.json; do
-            [ -f "$f" ] && cp "$f" _site/
-          done
-          # Per-site feeds
+          # VitePress 文档构建产物
+          if [ -d "docs/.vitepress/dist" ]; then
+            cp -r docs/.vitepress/dist/* _site/
+          fi
+          # 订阅源（feeds）
           if [ -d "feeds" ]; then
             mkdir -p _site/feeds
             cp feeds/*.xml _site/feeds/ 2>/dev/null || true
           fi
-          # OPML files
+          # OPML 文件
           for f in opml.xml opml-*.xml; do
             [ -f "$f" ] && cp "$f" _site/
           done
-          # Alipay red packet image
-          if [ -f "public/alipay-redpacket.jpg" ]; then
+          # 元数据 JSON
+          for f in feeds_meta.json crawl_status.json; do
+            [ -f "$f" ] && cp "$f" _site/
+          done
+          # 公开文件
+          if [ -d "public" ]; then
             mkdir -p _site/public
-            cp public/alipay-redpacket.jpg _site/public/
+            cp -r public/* _site/public/ 2>/dev/null || true
           fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
