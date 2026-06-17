@@ -61,11 +61,44 @@ def _to_iso8601(time_str: str) -> str:
         return datetime.now(timezone(timedelta(hours=8))).isoformat()
 
 
+def _interval_to_update_period(interval_min: int) -> str:
+    """Convert interval (minutes) to sy:updatePeriod string for RSS readers."""
+    if interval_min <= 15:
+        return 'hourly'
+    elif interval_min <= 60:
+        return 'hourly'
+    elif interval_min <= 360:
+        return 'daily'
+    else:
+        return 'daily'
+
+
+def _interval_to_update_frequency(interval_min: int) -> int:
+    """Convert interval (minutes) to sy:updateFrequency (times per period)."""
+    if interval_min <= 15:
+        return 4  # 4 times per hour
+    elif interval_min <= 30:
+        return 2  # 2 times per hour
+    elif interval_min <= 60:
+        return 1  # once per hour
+    elif interval_min <= 360:
+        return 24 * 60 // interval_min  # N times per day
+    else:
+        return 1  # once per day
+
+
 def _build_atom_feed(items: List[Dict], title: str, feed_url: str,
-                     description: str = "", updated_at: str = "") -> ET.Element:
-    """构建 Atom feed 根元素（不写文件）。"""
+                      description: str = "", updated_at: str = "",
+                      interval_min: Optional[int] = None) -> ET.Element:
+    """构建 Atom feed 根元素（不写文件）。
+    
+    Args:
+        interval_min: 站点抓取间隔（分钟），用于设置 sy:updatePeriod
+    """
     NS = 'http://www.w3.org/2005/Atom'
+    SY_NS = 'http://purl.org/syndication/1.0'
     ET.register_namespace('', NS)
+    ET.register_namespace('sy', SY_NS)
 
     root = ET.Element(f'{{{NS}}}feed')
 
@@ -77,6 +110,12 @@ def _build_atom_feed(items: List[Dict], title: str, feed_url: str,
     ET.SubElement(root, f'{{{NS}}}id').text = feed_url
     ET.SubElement(root, f'{{{NS}}}updated').text = _to_iso8601(updated_at)
     ET.SubElement(root, f'{{{NS}}}generator', uri='https://github.com/gitfox-enter/site-update-monitor').text = 'site-update-monitor'
+
+    # sy:updatePeriod — 让 RSS 阅读器知道更新频率
+    if interval_min is not None:
+        ET.SubElement(root, f'{{{SY_NS}}}updatePeriod').text = _interval_to_update_period(interval_min)
+        ET.SubElement(root, f'{{{SY_NS}}}updateFrequency').text = str(_interval_to_update_frequency(interval_min))
+        ET.SubElement(root, f'{{{SY_NS}}}updateBase').text = '2000-01-01T00:00:00+08:00'
 
     author = ET.SubElement(root, f'{{{NS}}}author')
     ET.SubElement(author, f'{{{NS}}}name').text = '线报聚合'
@@ -142,6 +181,19 @@ def generate_all_feeds() -> Dict[str, int]:
     Returns:
         dict: {'total': N, 'per_site': {name: count}, 'feeds_generated': M}
     """
+    # 加载站点 interval 配置
+    try:
+        from crawler.config import SOURCE_NAME_MAP
+        from crawler.smart_scheduler import load_site_intervals
+        site_intervals = load_site_intervals()
+        # 构建 name → interval 映射
+        _name_intervals: Dict[str, int] = {}
+        for url, name in SOURCE_NAME_MAP.items():
+            interval = site_intervals.get(url, 30)
+            _name_intervals[name] = min(_name_intervals.get(name, 9999), interval)
+    except Exception:
+        _name_intervals = {}
+
     db = load_items_db()
     items = db.get('items', [])
     updated_at = db.get('updated_at', '')
@@ -152,9 +204,10 @@ def generate_all_feeds() -> Dict[str, int]:
 
     stats = {'total': len(items), 'per_site': {}, 'feeds_generated': 0}
 
-    # 1. 全量聚合 feed
+    # 1. 全量聚合 feed（用最短 interval 15min 表示更新频繁）
     all_feed_url = SITE_URL + "feed.xml"
-    root = _build_atom_feed(items, FEED_TITLE, all_feed_url, FEED_DESCRIPTION, updated_at)
+    root = _build_atom_feed(items, FEED_TITLE, all_feed_url, FEED_DESCRIPTION, updated_at,
+                            interval_min=15)
     if _write_feed(root, "feed.xml"):
         stats['feeds_generated'] += 1
         print(f"全量 feed: {len(items)} 条")
@@ -175,11 +228,47 @@ def generate_all_feeds() -> Dict[str, int]:
         feed_url = SITE_URL + filename
         title = f"{source} - 线报聚合"
         desc = f"来自 {source} 的线报更新"
+        interval = _name_intervals.get(source, 30)
 
-        root = _build_atom_feed(source_items, title, feed_url, desc, updated_at)
+        root = _build_atom_feed(source_items, title, feed_url, desc, updated_at,
+                                interval_min=interval)
         if _write_feed(root, filename):
             stats['feeds_generated'] += 1
             stats['per_site'][source] = len(source_items)
+
+    # 3. 生成 feeds_meta.json（前端展示更新频率用）
+    meta = {}
+    for source, count in stats['per_site'].items():
+        interval = _name_intervals.get(source, 30)
+        if interval <= 15:
+            freq_label = "每15分钟"
+        elif interval <= 30:
+            freq_label = f"每{interval}分钟"
+        elif interval <= 60:
+            freq_label = "每小时"
+        elif interval <= 120:
+            freq_label = "每2小时"
+        elif interval <= 240:
+            freq_label = "每4小时"
+        elif interval <= 360:
+            freq_label = "每6小时"
+        elif interval <= 480:
+            freq_label = "每8小时"
+        else:
+            freq_label = f"每{interval // 60}小时"
+        meta[source] = {
+            'interval': interval,
+            'freq_label': freq_label,
+            'count': count,
+            'feed_url': SITE_URL + FEEDS_DIR + '/' + _safe_filename(source) + '.xml',
+        }
+    try:
+        tmp_path = 'feeds_meta.json.tmp'
+        with open(tmp_path, 'w', encoding='utf-8') as f:
+            json.dump(meta, f, ensure_ascii=False, indent=2)
+        os.replace(tmp_path, 'feeds_meta.json')
+    except Exception as e:
+        print(f"写入 feeds_meta.json 失败: {e}")
 
     print(f"按来源生成 {len(by_source)} 个独立 feed")
     return stats

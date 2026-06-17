@@ -1,41 +1,30 @@
 # -*- coding: utf-8 -*-
-"""Smart scheduler: adaptive crawl frequency based on recent activity.
+"""Per-site smart scheduler: adaptive crawl frequency based on site interval config.
 
-Decides whether a scheduled crawl/fast_check run should execute or skip,
-based on the number of new items found in recent runs and current time.
+Instead of a global "should we run?" decision, each site independently decides
+whether it should be crawled based on:
+  1. Its configured `interval` in sites.yaml (minutes)
+  2. Time since its last successful crawl
+  3. Night-time weight (22:00-08:00 Beijing: interval × 2)
 
-Algorithm:
-  1. Read recent run_log entries (last N runs)
-  2. Calculate average new_items per run
-  3. Apply time-of-day weight (night = lower priority)
-  4. Map activity level to minimum interval
-  5. If time since last run < minimum interval → skip
+This design is inspired by RSSHub's per-route cache TTL:
+  - High-activity sites (线报酷 etc.) crawl every 15 min
+  - Medium sites (购物比价 etc.) crawl every 60-120 min
+  - Low-activity sites (软件站 etc.) crawl every 240-480 min
 
-Thresholds (for crawl):
-  | avg new_items | min interval | label    |
-  |---------------|-------------|----------|
-  | >= 10         | 30 min      | active   |
-  | 3-9           | 60 min      | normal   |
-  | 1-2           | 120 min     | low      |
-  | 0             | 240 min     | idle     |
-
-Time weights:
-  - 08:00-22:00 Beijing: full thresholds (daytime, more activity)
-  - 22:00-08:00 Beijing: double the interval (night, less activity)
-
-For fast_check, thresholds are more aggressive (lighter job):
-  | avg new_items | min interval |
-  |---------------|-------------|
-  | >= 3          | 30 min      |
-  | 1-2           | 60 min      |
-  | 0             | 120 min     |
+Usage:
+  from crawler.smart_scheduler import get_sites_to_crawl, record_site_run
+  sites = get_sites_to_crawl(all_urls)       # returns list of URLs that need crawling
+  ...  # crawl those sites
+  for url in crawled_urls:
+      record_site_run(url)                     # record each site's crawl time
 """
 
 import json
 import logging
 import os
 from datetime import datetime, timezone, timedelta
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from common import get_beijing_time
 
@@ -44,101 +33,66 @@ logger = logging.getLogger('scheduler')
 # Beijing timezone
 _BJ_TZ = timezone(timedelta(hours=8))
 
-# ============================================================
-# Configuration
-# ============================================================
-
-# Crawl thresholds: (min_new_items, min_interval_minutes)
-CRAWL_THRESHOLDS: List[Tuple[int, int]] = [
-    (10, 30),   # active: >= 10 new items → 30 min
-    (3, 60),    # normal: 3-9 new items → 60 min
-    (1, 120),   # low: 1-2 new items → 120 min
-    (0, 240),   # idle: 0 new items → 240 min
-]
-
-# Fast check thresholds: more aggressive (lighter job)
-FAST_CHECK_THRESHOLDS: List[Tuple[int, int]] = [
-    (3, 30),    # active
-    (1, 60),    # normal
-    (0, 120),   # idle
-]
-
-# Number of recent runs to average
-AVERAGE_WINDOW = 3
-
 # Night hours (Beijing time): double the interval
 NIGHT_START = 22  # 22:00
 NIGHT_END = 8     # 08:00
 
-# Log file paths
-RUN_LOG_FILE = "run_log.jsonl"
-FAST_LOG_FILE = "fast_log.jsonl"
-
-# State file: records last actual run timestamps
+# State file: records per-site last crawl timestamps
 _SCHEDULER_STATE_FILE = "scheduler_state.json"
 
+# Default interval when not specified in sites.yaml (minutes)
+DEFAULT_INTERVAL = 30
+
 
 # ============================================================
-# Core logic
+# sites.yaml interval loader
 # ============================================================
 
-def _load_log_entries(log_file: str, count: int = AVERAGE_WINDOW) -> List[Dict[str, Any]]:
-    """Load the most recent N entries from a JSONL log file."""
-    entries: List[Dict[str, Any]] = []
-    if not os.path.exists(log_file):
-        return entries
+_SITE_INTERVALS: Dict[str, int] = {}  # {url: interval_minutes}
+
+
+def load_site_intervals() -> Dict[str, int]:
+    """Load per-site interval config from sites.yaml."""
+    global _SITE_INTERVALS
+    if _SITE_INTERVALS:
+        return _SITE_INTERVALS
     try:
-        with open(log_file, 'r', encoding='utf-8') as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    try:
-                        entries.append(json.loads(line))
-                    except json.JSONDecodeError:
-                        continue
-    except Exception:
-        pass
-    return entries[-count:]
+        import yaml
+        yaml_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "sites.yaml"
+        )
+        with open(yaml_path, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f) or {}
+        for site in data.get('sites', []):
+            url = site.get('url', '')
+            interval = site.get('interval', DEFAULT_INTERVAL)
+            if url:
+                _SITE_INTERVALS[url] = interval
+    except Exception as e:
+        logger.warning("加载 sites.yaml interval 失败: %s", e)
+    return _SITE_INTERVALS
 
 
-def _calc_avg_new_items(entries: List[Dict[str, Any]]) -> float:
-    """Calculate average new_items from recent log entries."""
-    if not entries:
-        return 0.0
-    total = sum(e.get('new_items', 0) for e in entries)
-    return total / len(entries)
+def get_site_interval(url: str) -> int:
+    """Get the configured interval (minutes) for a site. Falls back to DEFAULT_INTERVAL."""
+    intervals = load_site_intervals()
+    return intervals.get(url, DEFAULT_INTERVAL)
 
 
-def _is_night(now: Optional[datetime] = None) -> bool:
-    """Check if current Beijing time is in night hours."""
-    if now is None:
-        now = get_beijing_time()
-    hour = now.hour
-    return hour >= NIGHT_START or hour < NIGHT_END
-
-
-def _get_min_interval(avg_new: float, thresholds: List[Tuple[int, int]],
-                      is_night: bool = False) -> int:
-    """Get minimum interval in minutes based on activity level."""
-    interval = thresholds[-1][1]  # default: lowest activity
-    for min_items, min_interval in thresholds:
-        if avg_new >= min_items:
-            interval = min_interval
-            break
-    if is_night:
-        interval *= 2
-    return interval
-
+# ============================================================
+# State persistence
+# ============================================================
 
 def _load_state() -> Dict[str, Any]:
-    """Load scheduler state (last run timestamps)."""
+    """Load scheduler state (per-site last crawl timestamps)."""
     if not os.path.exists(_SCHEDULER_STATE_FILE):
-        return {}
+        return {'sites': {}}
     try:
         with open(_SCHEDULER_STATE_FILE, 'r', encoding='utf-8') as f:
             return json.load(f)
     except Exception:
-        return {}
+        return {'sites': {}}
 
 
 def _save_state(state: Dict[str, Any]) -> None:
@@ -154,97 +108,208 @@ def _save_state(state: Dict[str, Any]) -> None:
             os.remove(tmp)
 
 
-def _parse_time(time_str: str) -> Optional[datetime]:
-    """Parse a time string from run log into a datetime."""
-    if not time_str:
-        return None
-    for fmt in ('%Y-%m-%d %H:%M:%S', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M:%S%z'):
-        try:
-            return datetime.strptime(time_str, fmt)
-        except ValueError:
-            continue
-    return None
+# ============================================================
+# Core per-site scheduling logic
+# ============================================================
+
+def _is_night(now: Optional[datetime] = None) -> bool:
+    """Check if current Beijing time is in night hours (22:00-08:00)."""
+    if now is None:
+        now = get_beijing_time()
+    hour = now.hour
+    return hour >= NIGHT_START or hour < NIGHT_END
 
 
-def _minutes_since_last_run(state: Dict[str, Any], key: str) -> Optional[int]:
-    """Calculate minutes since last run for a given key ('crawl' or 'fast_check')."""
-    last_str = state.get(key, {}).get('last_run')
+def _get_effective_interval(url: str, is_night: bool = False) -> int:
+    """Get effective interval in minutes, considering night weight."""
+    base_interval = get_site_interval(url)
+    if is_night:
+        return base_interval * 2
+    return base_interval
+
+
+def _minutes_since_last_crawl(state: Dict[str, Any], url: str) -> Optional[int]:
+    """Calculate minutes since last crawl for a specific site."""
+    last_str = state.get('sites', {}).get(url, {}).get('last_crawl')
     if not last_str:
         return None
-    last_dt = _parse_time(last_str)
-    if last_dt is None:
+    try:
+        last_dt = datetime.strptime(last_str, '%Y-%m-%d %H:%M:%S')
+        if last_dt.tzinfo is None:
+            last_dt = last_dt.replace(tzinfo=_BJ_TZ)
+        now = get_beijing_time()
+        delta = now - last_dt
+        return int(delta.total_seconds() / 60)
+    except (ValueError, TypeError):
         return None
-    # Make both timezone-aware in Beijing
-    now = get_beijing_time()
-    if last_dt.tzinfo is None:
-        last_dt = last_dt.replace(tzinfo=_BJ_TZ)
-    delta = now - last_dt
-    return int(delta.total_seconds() / 60)
 
 
-def should_run(mode: str = 'crawl') -> Tuple[bool, str]:
-    """
-    Decide whether to run the crawl or fast_check now.
+def get_sites_to_crawl(
+    all_urls: List[str],
+    mode: str = 'crawl',
+) -> Tuple[List[str], List[str]]:
+    """Determine which sites need crawling based on per-site intervals.
 
     Args:
-        mode: 'crawl' or 'fast_check'
+        all_urls: All candidate URLs to consider
+        mode: 'crawl' or 'fast_check' (fast_check ignores intervals, always crawl)
 
     Returns:
-        (should_run: bool, reason: str)
+        (sites_to_crawl: List[str], skipped_sites: List[str])
     """
     now = get_beijing_time()
     is_night = _is_night(now)
     state = _load_state()
+    load_site_intervals()  # Ensure intervals are loaded
 
-    # Choose thresholds
     if mode == 'fast_check':
-        thresholds = FAST_CHECK_THRESHOLDS
-        log_file = FAST_LOG_FILE
-        state_key = 'fast_check'
+        # Fast check: always run all sites (they are pre-filtered by fast_check flag)
+        return all_urls, []
+
+    to_crawl: List[str] = []
+    skipped: List[str] = []
+
+    for url in all_urls:
+        effective_interval = _get_effective_interval(url, is_night)
+        minutes_since = _minutes_since_last_crawl(state, url)
+
+        if minutes_since is None:
+            # Never crawled before → must crawl
+            to_crawl.append(url)
+            continue
+
+        if minutes_since >= effective_interval:
+            to_crawl.append(url)
+        else:
+            skipped.append(url)
+
+    if skipped:
+        logger.info(
+            "[智能调度] 跳过 %d 个站点（间隔未到），抓取 %d 个站点 (%s)",
+            len(skipped), len(to_crawl),
+            '夜间' if is_night else '白天'
+        )
     else:
-        thresholds = CRAWL_THRESHOLDS
-        log_file = RUN_LOG_FILE
-        state_key = 'crawl'
+        logger.info(
+            "[智能调度] 全部 %d 个站点需要抓取 (%s)",
+            len(to_crawl), '夜间' if is_night else '白天'
+        )
 
-    # Load recent log entries and calculate activity
-    entries = _load_log_entries(log_file)
-    avg_new = _calc_avg_new_items(entries)
+    return to_crawl, skipped
 
-    # Get minimum interval based on activity
-    min_interval = _get_min_interval(avg_new, thresholds, is_night)
 
-    # Check time since last run
-    minutes_since = _minutes_since_last_run(state, state_key)
+def record_site_run(url: str) -> None:
+    """Record that a site has been successfully crawled. Call after each site's crawl."""
+    now = get_beijing_time()
+    state = _load_state()
+    if 'sites' not in state:
+        state['sites'] = {}
+    state['sites'][url] = {
+        'last_crawl': now.strftime('%Y-%m-%d %H:%M:%S'),
+    }
+    _save_state(state)
 
-    # No previous run → always run
+
+def record_bulk_run(urls: List[str]) -> None:
+    """Record multiple sites as crawled at the current time."""
+    now = get_beijing_time()
+    state = _load_state()
+    if 'sites' not in state:
+        state['sites'] = {}
+    now_str = now.strftime('%Y-%m-%d %H:%M:%S')
+    for url in urls:
+        state['sites'][url] = {
+            'last_crawl': now_str,
+        }
+    _save_state(state)
+
+
+def get_site_next_crawl(url: str) -> Optional[str]:
+    """Get the estimated next crawl time for a site (for display in RSS/UI).
+
+    Returns:
+        Human-readable string like "约15分钟后" or "约2小时后", or None if never crawled.
+    """
+    state = _load_state()
+    is_night = _is_night()
+    effective_interval = _get_effective_interval(url, is_night)
+    minutes_since = _minutes_since_last_crawl(state, url)
+
     if minutes_since is None:
-        reason = (f"首次运行或无历史记录，立即执行 "
-                  f"(avg_new={avg_new:.1f}, min_interval={min_interval}min, "
-                  f"{'夜间' if is_night else '白天'})")
-        logger.info("[智能调度] %s: %s", mode, reason)
-        return True, reason
+        return "即将抓取"
 
-    # Enough time has passed → run
-    if minutes_since >= min_interval:
-        reason = (f"距上次运行 {minutes_since}min >= 间隔 {min_interval}min，执行 "
-                  f"(avg_new={avg_new:.1f}, {'夜间' if is_night else '白天'})")
-        logger.info("[智能调度] %s: %s", mode, reason)
-        return True, reason
+    remaining = effective_interval - minutes_since
+    if remaining <= 0:
+        return "即将抓取"
 
-    # Not enough time → skip
-    reason = (f"距上次运行 {minutes_since}min < 间隔 {min_interval}min，跳过 "
-              f"(avg_new={avg_new:.1f}, {'夜间' if is_night else '白天'})")
-    logger.info("[智能调度] %s: %s", mode, reason)
-    return False, reason
+    if remaining < 60:
+        return f"约{remaining}分钟后"
+    elif remaining < 1440:
+        hours = remaining // 60
+        mins = remaining % 60
+        if mins:
+            return f"约{hours}小时{mins}分钟后"
+        return f"约{hours}小时后"
+    else:
+        days = remaining // 1440
+        return f"约{days}天后"
+
+
+def get_site_next_crawl_minutes(url: str) -> Optional[int]:
+    """Get minutes until next crawl for a site (for programmatic use).
+
+    Returns:
+        Minutes until next crawl, 0 if due now, or None if never crawled.
+    """
+    state = _load_state()
+    is_night = _is_night()
+    effective_interval = _get_effective_interval(url, is_night)
+    minutes_since = _minutes_since_last_crawl(state, url)
+
+    if minutes_since is None:
+        return 0
+    remaining = effective_interval - minutes_since
+    return max(0, remaining)
+
+
+# ============================================================
+# Legacy API compatibility (global should_run / record_run)
+# These still work for fast_check's global decision
+# ============================================================
+
+def should_run(mode: str = 'crawl') -> Tuple[bool, str]:
+    """Legacy API: global should_run decision.
+
+    For 'fast_check': always returns True (per-site intervals handle crawl timing).
+    For 'crawl': checks if ANY site needs crawling.
+    """
+    if mode == 'fast_check':
+        # Fast check always runs; per-site filtering is done at the site list level
+        return True, "快速检查始终执行（站点级调度）"
+
+    # For full crawl: check if at least some sites need crawling
+    # Load the full site list
+    try:
+        from crawler.config import MONITOR_SITES
+        all_urls = MONITOR_SITES
+    except ImportError:
+        all_urls = list(load_site_intervals().keys())
+
+    to_crawl, skipped = get_sites_to_crawl(all_urls, mode='crawl')
+    if to_crawl:
+        return True, f"有 {len(to_crawl)} 个站点需要抓取（跳过 {len(skipped)} 个）"
+    return False, f"所有 {len(all_urls)} 个站点间隔未到，跳过本轮"
 
 
 def record_run(mode: str = 'crawl') -> None:
-    """Record that a run has been executed. Call after a successful run."""
+    """Legacy API: record that a run has completed.
+
+    For per-site scheduling, use record_site_run() or record_bulk_run() instead.
+    This is kept for backward compatibility with fast_check.py.
+    """
     now = get_beijing_time()
     state = _load_state()
-    if mode not in state:
-        state[mode] = {}
-    state[mode]['last_run'] = now.strftime('%Y-%m-%d %H:%M:%S')
+    state[f'{mode}_last_run'] = now.strftime('%Y-%m-%d %H:%M:%S')
     _save_state(state)
-    logger.info("[智能调度] %s: 记录运行时间 %s", mode,
+    logger.info("[智能调度] %s: 记录全局运行时间 %s", mode,
                 now.strftime('%Y-%m-%d %H:%M:%S'))

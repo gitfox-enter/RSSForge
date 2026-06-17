@@ -59,8 +59,8 @@ jobs:
           git add scheduler_state.json fast_log.jsonl 2>/dev/null || true
           # 数据和状态文件
           git add hash_record.txt notified_items.json adaptive_tiers.json feed.xml 2>/dev/null || true
-          # Per-site feeds 和 OPML
-          git add feeds/ opml.xml opml-*.xml 2>/dev/null || true
+          # Per-site feeds, OPML, and meta
+          git add feeds/ opml.xml opml-*.xml feeds_meta.json 2>/dev/null || true
 
           git status
           if git diff --staged --quiet 2>/dev/null; then

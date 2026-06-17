@@ -98,6 +98,21 @@ SITE_TIERS: Dict[str, str] = _load_site_tiers()
 
 
 # ============================================================
+# 站点抓取间隔（从 sites.yaml interval 字段加载）
+# ============================================================
+
+def _load_site_intervals() -> Dict[str, int]:
+    """Load per-site crawl interval from sites.yaml. Returns {url: interval_minutes}."""
+    sites = _get_sites_list()
+    if not sites:
+        return {}
+    return {s["url"]: s.get("interval", 30) for s in sites}
+
+
+SITE_INTERVALS: Dict[str, int] = _load_site_intervals()
+
+
+# ============================================================
 # 站点名称（从 sites.yaml 加载，替代 SOURCE_NAME_MAP）
 # ============================================================
 

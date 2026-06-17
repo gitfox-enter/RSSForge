@@ -330,13 +330,9 @@ async def main() -> None:
     logger.info("[快速检查] 开始 %s", get_beijing_time().strftime("%Y-%m-%d %H:%M:%S"))
     logger.info("=" * 50)
 
-    # 智能调度：判断本轮是否需要执行
-    from crawler.smart_scheduler import should_run, record_run
-    should, reason = should_run(mode='fast_check')
-    if not should:
-        logger.info("[智能调度] 跳过本轮快速检查: %s", reason)
-        return
-    logger.info("[智能调度] 执行本轮快速检查: %s", reason)
+    # 智能调度：fast_check 始终执行，但记录每站运行时间
+    from crawler.smart_scheduler import record_site_run
+    logger.info("[智能调度] 快速检查始终执行（站点级调度）")
 
     # 初始化代理池（从环境变量 / 配置文件加载，无可用代理则直连）
     _proxy_pool = create_proxy_pool()
@@ -475,8 +471,10 @@ async def main() -> None:
         except Exception as e:
             logger.error("[Git] 提交失败: %s", e)
 
-    # 记录本次运行时间（智能调度用）
-    record_run(mode='fast_check')
+    # 记录每站抓取时间（智能调度用）
+    for name, url, items, error in results:
+        if not error:
+            record_site_run(url)
 
     logger.info("=" * 50)
 

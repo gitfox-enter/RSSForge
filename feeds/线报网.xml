@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/syndication/1.0">
   <title>线报网 - 线报聚合</title>
   <subtitle>来自 线报网 的线报更新</subtitle>
   <link href="https://gitfox-enter.github.io/site-update-monitor/" rel="alternate" />
@@ -7,6 +7,9 @@
   <id>https://gitfox-enter.github.io/site-update-monitor/feeds/线报网.xml</id>
   <updated>2026-06-17T08:08:14+08:00</updated>
   <generator uri="https://github.com/gitfox-enter/site-update-monitor">site-update-monitor</generator>
+  <sy:updatePeriod>hourly</sy:updatePeriod>
+  <sy:updateFrequency>2</sy:updateFrequency>
+  <sy:updateBase>2000-01-01T00:00:00+08:00</sy:updateBase>
   <author>
     <name>线报聚合</name>
   </author>

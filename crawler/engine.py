@@ -882,8 +882,8 @@ async def main_async() -> None:
     global _proxy_pool
     logger.info("GitHub Actions 多站点更新监控系统 v3.0 (async)")
 
-    # 智能调度：判断本轮是否需要执行
-    from crawler.smart_scheduler import should_run, record_run
+    # 智能调度：每站独立判断是否需要抓取
+    from crawler.smart_scheduler import get_sites_to_crawl, record_site_run
     should, reason = should_run(mode='crawl')
     if not should:
         logger.info("[智能调度] 跳过本轮全量爬取: %s", reason)
@@ -921,24 +921,19 @@ async def main_async() -> None:
     # 实际监控列表
     active_sites = [upgrade_to_https(url) for url in monitor_sites]
     
-    # === 分级爬取：根据轮次决定本次爬取哪些站点 ===
-    # high: 每轮都爬, medium: 每2轮爬一次, low: 每4轮爬一次, dead: 不爬
-    _TIER_FREQ = {'high': 1, 'medium': 2, 'low': 4, 'dead': 0}
-    prev_count = len(active_sites)
-    # First filter dead tier sites (never crawl)
-    dead_tier_count = sum(1 for url in active_sites if get_site_tier(url) == 'dead')
+    # === 智能调度过滤：根据每站 interval 决定本轮是否抓取 ===
+    _all_before_filter = len(active_sites)
+    # 先过滤 dead tier 站点
     active_sites = [url for url in active_sites if get_site_tier(url) != 'dead']
-    # Then filter by round frequency
-    _round_filtered = [
-        url for url in active_sites
-        if round_num % _TIER_FREQ.get(get_site_tier(url), 1) == 0
-    ]
-    skipped = prev_count - len(_round_filtered) - dead_tier_count
-    active_sites = _round_filtered
+    dead_tier_count = _all_before_filter - len(active_sites)
+    # 再用智能调度器过滤（每站独立 interval）
+    _sites_to_crawl, _sites_skipped = get_sites_to_crawl(active_sites, mode='crawl')
+    active_sites = _sites_to_crawl
+    
     if dead_tier_count:
         logger.info("dead tier 跳过 %d 个站点（自动降级）", dead_tier_count)
-    if skipped:
-        logger.info("分级过滤跳过 %d 个站点 (medium/low 本轮不爬)", skipped)
+    if _sites_skipped:
+        logger.info("智能调度跳过 %d 个站点（间隔未到）", len(_sites_skipped))
     
     logger.info("监控站点数: %d (活跃) + %d (黑名单)",
                 len(active_sites), len(blacklist_domains))
@@ -1146,8 +1141,10 @@ async def main_async() -> None:
 
     # Close SQLite connection
 
-    # 记录本次运行时间（智能调度用）
-    record_run(mode='crawl')
+    # 记录每站抓取时间（智能调度用）
+    for r in all_site_results:
+        if r.get('status') not in ('dead', 'robots_denied', 'error'):
+            record_site_run(r.get('url', ''))
 
     logger.info("本轮巡检结束")
 
