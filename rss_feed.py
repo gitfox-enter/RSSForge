@@ -83,6 +83,59 @@ def _extract_item_image(item, site_url: str = '') -> str:
 
 
 # 来源名 → 安全文件名映射
+def _get_feed_parent(feed_key: str) -> str:
+    """Get parent site name for a feed key. Returns '' for non-category feeds."""
+    if any('\u4e00' <= c <= '\u9fff' for c in feed_key) or (
+            '-' in feed_key and '://' not in feed_key):
+        # This is a category feed key
+        try:
+            from crawler.config import SITE_CATEGORIES, get_source_name
+            for parent_url, cats in SITE_CATEGORIES.items():
+                parent_name = get_source_name(parent_url) or ''
+                for cat in cats:
+                    if f"{parent_name}-{cat['name']}" == feed_key:
+                        return parent_name
+        except Exception:
+            pass
+    return ''
+
+
+def _get_feed_category(feed_key: str) -> str:
+    """Get category name for a feed key. Returns '' for non-category feeds."""
+    if '-' in feed_key and '://' not in feed_key:
+        # Check if it's a category key
+        try:
+            from crawler.config import SITE_CATEGORIES, get_source_name
+            for parent_url, cats in SITE_CATEGORIES.items():
+                parent_name = get_source_name(parent_url) or ''
+                for cat in cats:
+                    if f"{parent_name}-{cat['name']}" == feed_key:
+                        return cat['name']
+        except Exception:
+            pass
+    return ''
+
+
+def _feed_key_to_source(feed_key: str) -> str:
+    """Reverse lookup: feed_key (e.g. '423Down-安卓软件') -> source URL.
+    
+    Uses get_category_feed_key in reverse by iterating SITE_CATEGORIES.
+    """
+    try:
+        from crawler.config import SITE_CATEGORIES, get_source_name
+        from urllib.parse import urljoin
+        for parent_url, cats in SITE_CATEGORIES.items():
+            parent_name = get_source_name(parent_url) or ''
+            for cat in cats:
+                expected_key = f"{parent_name}-{cat['name']}"
+                if expected_key == feed_key:
+                    cat_path = cat['path'].lstrip('/')
+                    return urljoin(parent_url.rstrip('/') + '/', cat_path)
+    except Exception:
+        pass
+    return feed_key  # fallback: treat key as source URL
+
+
 def _safe_filename(name: str) -> str:
     """将来源名称转为安全的文件名。"""
     return re.sub(r'[^\w\u4e00-\u9fff]', '', name)
@@ -240,7 +293,7 @@ def generate_all_feeds() -> Dict[str, int]:
     """
     # 加载站点 interval 配置
     try:
-        from crawler.config import SOURCE_NAME_MAP
+        from crawler.config import SOURCE_NAME_MAP, get_category_feed_key
         from crawler.smart_scheduler import load_site_intervals
         site_intervals = load_site_intervals()
         # 构建 name → interval 映射
@@ -272,23 +325,41 @@ def generate_all_feeds() -> Dict[str, int]:
         by_source[source].append(item)
 
     for source, source_items in by_source.items():
-        safe_name = _safe_filename(source)
+        # 多分类站点：用 get_category_feed_key 生成带分类名的文件名
+        feed_key = get_category_feed_key(source)
+        if feed_key:
+            safe_name = _safe_filename(feed_key)
+        else:
+            safe_name = _safe_filename(source)
         filename = f"{FEEDS_DIR}/{safe_name}.xml"
         feed_url = SITE_URL + filename
-        title = f"{source} - RSSForge"
-        desc = f"{source} 的 RSS 订阅源（由 RSSForge 生成）"
+        # Feed 标题：区分主 feed 和分类 feed
+        if feed_key and '-' in feed_key:
+            parent, cat = feed_key.rsplit('-', 1)
+            title = f"{parent} - {cat} - RSSForge"
+            desc = f"{parent} {cat} 的 RSS 订阅源（由 RSSForge 生成）"
+        else:
+            title = f"{source} - RSSForge"
+            desc = f"{source} 的 RSS 订阅源（由 RSSForge 生成）"
         interval = _name_intervals.get(source, 30)
 
         root = _build_atom_feed(source_items, title, feed_url, desc, updated_at,
                                 interval_min=interval)
         if _write_feed(root, filename):
             stats['feeds_generated'] += 1
-            stats['per_site'][source] = len(source_items)
+            # 使用 feed_key（带分类名）作为统计 key
+            _meta_key = feed_key if feed_key else source
+            stats['per_site'][_meta_key] = len(source_items)
 
     # 3. 生成 feeds_meta.json（前端展示更新频率用）
+    # by_source key = actual crawled URL (e.g. https://www.423down.com/apk)
+    # stats['per_site'] key = feed_key (e.g. 423Down-安卓软件) or source URL
     meta = {}
-    for source, count in stats['per_site'].items():
-        interval = _name_intervals.get(source, 30)
+    for meta_key, count in stats['per_site'].items():
+        # meta_key is feed_key (like "423Down-安卓软件") for categories,
+        # or source URL (like "https://news.ixbk.fun/") for regular sites
+        _feed_filename = _safe_filename(meta_key)
+        interval = _name_intervals.get(meta_key, 30)
         if interval <= 15:
             freq_label = "每15分钟"
         elif interval <= 30:
@@ -305,15 +376,24 @@ def generate_all_feeds() -> Dict[str, int]:
             freq_label = "每8小时"
         else:
             freq_label = f"每{interval // 60}小时"
-        # 提取第一个条目的 URL 用于获取 favicon
-        su_items = by_source.get(source, [])
+        # 用 meta_key 查找 by_source（by_source key = actual crawled URL）
+        # 如果 meta_key 看起来像 feed_key（包含中文或 -），从 SITE_CATEGORIES 反查 URL
+        source_url = meta_key
+        if any('\u4e00' <= c <= '\u9fff' for c in meta_key) or (
+                '-' in meta_key and '://' not in meta_key):
+            # 这是一个 feed_key，需要反查到 source URL
+            source_url = _feed_key_to_source(meta_key)
+        su_items = by_source.get(source_url, [])
         _su = su_items[0].get('url', '') if su_items else ''
-        meta[source] = {
+        meta[meta_key] = {
             'interval': interval,
             'freq_label': freq_label,
             'count': count,
-            'feed_url': SITE_URL + FEEDS_DIR + '/' + _safe_filename(source) + '.xml',
+            'feed_url': SITE_URL + FEEDS_DIR + '/' + _feed_filename + '.xml',
             'icon': _extract_favicon_url(_su) if _su else _extract_favicon_url(SITE_URL),
+            # 多分类分组信息
+            'parent': _get_feed_parent(meta_key),
+            'category': _get_feed_category(meta_key),
         }
     try:
         tmp_path = 'feeds_meta.json.tmp'
