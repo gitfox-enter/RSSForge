@@ -300,6 +300,8 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
             # 添加自动分类
             if not item.get('category'):
                 item['category'] = auto_categorize(item.get('text', ''))
+            # 记录首次入库时间，保护历史内容不受 7 天窗口影响
+            item['first_seen_at'] = check_time
             fresh_items.append(item)
             existing_urls.add(url)
             if fuzzy_key:
@@ -310,12 +312,18 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
     if fresh_items:
         db['items'] = fresh_items + db['items']
 
-    # 保留最近 7 天的数据（按 time 字段）
-    cutoff = (get_beijing_time() - timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
+    # 保留最近 7 天的数据
+    # 清理规则（满足任一即保留）：
+    #   1. 条目的 time 字段（发布时间）在 7 天内
+    #   2. 条目的 first_seen_at（首次入库时间）在 3 天内
+    #      → 目的是保护首次添加站点时的历史内容不受 7 天窗口影响
+    cutoff_time = (get_beijing_time() - timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
+    cutoff_first_seen = (get_beijing_time() - timedelta(days=3)).strftime("%Y-%m-%d %H:%M:%S")
     original_count = len(db['items'])
     db['items'] = [
         item for item in db['items']
-        if not item.get('time', '') or item['time'] >= cutoff
+        if (item.get('time', '') >= cutoff_time)
+           or (item.get('first_seen_at', '') >= cutoff_first_seen)
     ]
     retained_count = len(db['items'])
     if original_count != retained_count:
