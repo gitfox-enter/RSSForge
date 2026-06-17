@@ -1146,7 +1146,7 @@ async def main_async() -> None:
     logger.info("GitHub Actions 多站点更新监控系统 v3.0 (async)")
 
     # 智能调度：每站独立判断是否需要抓取
-    from crawler.smart_scheduler import get_sites_to_crawl, record_site_run
+    from crawler.smart_scheduler import get_sites_to_crawl, record_site_run, should_run
     should, reason = should_run(mode='crawl')
     if not should:
         logger.info("[智能调度] 跳过本轮全量爬取: %s", reason)
