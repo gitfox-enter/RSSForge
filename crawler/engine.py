@@ -26,7 +26,7 @@ from common import (
     sanitize_text, is_junk, ITEMS_DB_FILE, BLACKLIST_FILE, CRAWL_STATUS_FILE, MAX_ITEMS_DB,
     ProxyPool, create_proxy_pool,
 )
-from crawler.config import JS_RENDER_SITES, MAX_RETRIES, REQUEST_TIMEOUT, RETRY_BASE_DELAY, RUN_LOG_FILE, MONITOR_SITES, is_dead_site, get_source_name, get_site_tier, init_adaptive_tiers, update_adaptive_tier, save_adaptive_tiers, get_all_adaptive_tiers, RSS_FIRST_SITES
+from crawler.config import JS_RENDER_SITES, MAX_RETRIES, REQUEST_TIMEOUT, RETRY_BASE_DELAY, RUN_LOG_FILE, MONITOR_SITES, is_dead_site, get_source_name, get_site_tier, init_adaptive_tiers, update_adaptive_tier, save_adaptive_tiers, get_all_adaptive_tiers, RSS_FIRST_SITES, SITE_MAX_PAGES
 from crawler.storage import get_current_round, load_notified_items, save_notified_items, filter_new_items, merge_items_into_db, load_hash_records, save_hash_records, export_items_latest_json, get_random_delay, get_random_profile, get_referer
 from crawler.network import MetricsTracker, metrics, get_conditional_headers, rate_limiter, is_allowed_by_robots, update_conditional_cache
 from crawler.parsers import _match_parser, extract_article_items, parse_rss_feed, parse_ghxi_items, fetch_page_content, fetch_ghxi_items_async, fetch_rss_feed_async
@@ -239,7 +239,9 @@ def _parse_response_html(
     summary = text[:300] + '...' if len(text) > 300 else text
     return True, {
         'text': text, 'title': title, 'summary': summary,
-        'items': article_items, 'response_time': round(elapsed, 3),
+        'items': article_items,
+        'html': content,  # 保存原始 HTML，支持分页检测
+        'response_time': round(elapsed, 3),
     }
 
 
@@ -268,6 +270,261 @@ def _compute_hash_diff(
     return False, new_hash, "无更新"
 
 
+
+async def _fetch_paginated(
+    url: str,
+    session: aiohttp.ClientSession,
+    old_records: Dict[str, str],
+    max_pages: int,
+) -> Tuple[bool, Any]:
+    """Fetch multiple pages and accumulate all items.
+
+    Stops when max_pages is reached or parser signals no next page.
+    """
+    import re as _re
+    all_items = []
+    page_url = url
+    total_elapsed = 0.0
+    title = None
+    summary = ''
+    seen_ids: Set[str] = set()
+
+    for page_num in range(1, max_pages + 1):
+        # Rate limit per request
+        parsed = urlparse(page_url)
+        domain = parsed.hostname or parsed.netloc
+        await rate_limiter.async_wait(domain)
+
+        profile = get_random_profile()
+        headers = {
+            'User-Agent': profile['user_agent'],
+            'Accept-Language': profile['accept_language'],
+            'Referer': get_referer(page_url),
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Encoding': 'gzip, deflate',
+        }
+        headers.update(profile.get('fingerprint', {}))
+        headers.update(get_conditional_headers(page_url))
+
+        site_tier = get_site_tier(page_url)
+        timeout_seconds = REQUEST_TIMEOUT if site_tier == 'high' else REQUEST_TIMEOUT + 15
+
+        logger.info("分页[%d/%d] 爬取 %s", page_num, max_pages, page_url,
+                    extra={'site': page_url, 'event': 'page_crawl', 'page': page_num})
+
+        start_time = time.time()
+        response = None
+        active_proxy = _proxy_pool.get_proxy() if _proxy_pool else None
+
+        for attempt in range(MAX_RETRIES):
+            try:
+                async with session.get(
+                    page_url,
+                    headers=headers,
+                    timeout=aiohttp.ClientTimeout(total=timeout_seconds),
+                    allow_redirects=True,
+                    proxy=active_proxy,
+                ) as resp:
+                    elapsed_page = time.time() - start_time
+                    total_elapsed += elapsed_page
+
+                    if resp.status == 200:
+                        if active_proxy and _proxy_pool:
+                            _proxy_pool.report_success(active_proxy)
+                        content_bytes = await resp.read()
+                        update_conditional_cache(page_url, resp)
+                        metrics.record_success(domain, elapsed_page)
+
+                        # Parse this page
+                        ok, parse_result = _parse_response_html(
+                            content_bytes, resp.get_encoding() or 'utf-8', page_url, elapsed_page,
+                        )
+                        if not ok:
+                            # On parse error of first page, fail entirely
+                            if page_num == 1:
+                                return False, f"分页解析失败[{page_num}]: {parse_result[:80]}"
+                            # On parse error of subsequent page, stop pagination
+                            logger.warning("分页[%d] 解析失败，停止翻页: %s", page_num, parse_result[:60])
+                            break
+
+                        # Extract items and next_page_url
+                        items, next_page_url = _parse_items_and_next_page(parse_result)
+                        if page_num == 1:
+                            title = parse_result.get('title', get_source_name(url) or domain)
+                            summary = parse_result.get('summary', '')
+
+                        # Deduplicate by URL across pages
+                        for item in items:
+                            item_url = item.get('url', '')
+                            if item_url and item_url not in seen_ids:
+                                seen_ids.add(item_url)
+                                all_items.append(item)
+
+                        logger.info("分页[%d/%d] 获取 %d 条（去重后累计 %d）",
+                                    page_num, max_pages, len(items), len(all_items),
+                                    extra={'site': page_url, 'event': 'page_done', 'items': len(items)})
+
+                        # Stop if no next page signal, or no items (likely end)
+                        if not next_page_url or not items:
+                            logger.info("分页结束（无下一页或空内容）", extra={'event': 'pagination_end'})
+                            page_url = None
+                            break
+
+                        # Build absolute next page URL
+                        if next_page_url.startswith('http'):
+                            page_url = next_page_url
+                        else:
+                            from urllib.parse import urljoin
+                            page_url = urljoin(page_url, next_page_url)
+                        break
+
+                    elif resp.status in (403, 500, 502, 503, 504):
+                        if active_proxy and _proxy_pool:
+                            _proxy_pool.report_failure(active_proxy)
+                        if attempt < MAX_RETRIES - 1:
+                            delay = RETRY_BASE_DELAY * (2 ** attempt) + random.uniform(0, 0.5)
+                            await asyncio.sleep(delay)
+                            active_proxy = _proxy_pool.get_proxy() if _proxy_pool else None
+                            continue
+                        content_bytes = await resp.read()
+                        response = SimpleNamespace(status=resp.status, content=content_bytes)
+                        break
+                    else:
+                        content_bytes = await resp.read()
+                        response = SimpleNamespace(status=resp.status, content=content_bytes)
+                        break
+
+            except asyncio.TimeoutError:
+                if attempt < MAX_RETRIES - 1:
+                    delay = RETRY_BASE_DELAY * (2 ** attempt) + random.uniform(0, 0.5)
+                    await asyncio.sleep(delay)
+                    active_proxy = _proxy_pool.get_proxy() if _proxy_pool else None
+                    continue
+                if page_num == 1:
+                    return False, f"分页[{page_num}] 请求超时"
+                logger.warning("分页[%d] 超时，停止翻页", page_num)
+                break
+            except aiohttp.ClientError as e:
+                if attempt < MAX_RETRIES - 1:
+                    delay = RETRY_BASE_DELAY * (2 ** attempt) + random.uniform(0, 0.5)
+                    await asyncio.sleep(delay)
+                    active_proxy = _proxy_pool.get_proxy() if _proxy_pool else None
+                    continue
+                if page_num == 1:
+                    return False, f"分页[{page_num}] 连接失败: {str(e)[:50]}"
+                logger.warning("分页[%d] 连接失败，停止翻页: %s", page_num, str(e)[:50])
+                break
+
+        if page_url is None or page_num >= max_pages:
+            break
+
+        # Brief delay between pages to be polite
+        if page_num < max_pages:
+            await asyncio.sleep(1.0)
+
+    if not all_items:
+        return False, "所有分页均无内容"
+
+    # Compute hash from all accumulated item texts
+    text = '\n'.join(item.get('text', '') for item in all_items)
+    new_hash = calculate_md5(text)
+    is_updated, _, msg = _check_update(url, new_hash, old_records)
+
+    logger.info("分页抓取完成：%d 页 → %d 条（is_updated=%s）",
+                page_num, len(all_items), is_updated,
+                extra={'site': url, 'event': 'pagination_done', 'total_items': len(all_items)})
+
+    return True, {
+        'url': url,
+        'title': title or get_source_name(url) or domain,
+        'summary': summary,
+        'items': all_items,
+        'status': 'updated' if is_updated else 'no_update',
+        'is_updated': is_updated,
+        'new_hash': new_hash,
+        'message': msg,
+        'response_time': total_elapsed,
+    }
+
+
+
+def _parse_items_and_next_page(parse_result: Dict[str, Any]) -> Tuple[List[Dict[str, str]], Optional[str]]:
+    """Extract items list and next-page URL from a parsed page result.
+
+    Next page detection looks for common pagination patterns in the HTML:
+    - <a> 含「下一页」「下页」「next」「older」「»」等文字
+    - rel="next" 或 aria-label 含 next
+    - .pagination .next / .pager .next 等 class 模式
+    Returns (items, next_page_url_or_None).
+    """
+    from bs4 import BeautifulSoup
+    from urllib.parse import urljoin
+
+    items: List[Dict[str, str]] = parse_result.get('items', [])
+    html_content = parse_result.get('html', '')
+    page_url = parse_result.get('url', '')
+
+    if not html_content:
+        return items, None
+
+    try:
+        soup = BeautifulSoup(html_content, 'html.parser')
+    except Exception:
+        return items, None
+
+    next_url: Optional[str] = None
+
+    # Pattern 1: explicit "下一页" / "下页" / "next page" / "older" / "»" links
+    next_texts = ['下一页', '下页', '下一页页', 'next page', 'next', 'older', '»', '›', '→', '＞', 'later']
+    for tag in soup.find_all('a'):
+        text = tag.get_text(strip=True).lower()
+        href = tag.get('href', '')
+        title = (tag.get('title') or '').lower()
+        rel = (tag.get('rel') or [])
+        rel_str = ' '.join(rel).lower()
+
+        # Skip rel="nofollow" or rel="prev" (we want forward/older direction)
+        if 'nofollow' in rel_str and 'canonical' not in rel_str:
+            continue
+        if 'prev' in rel_str or 'previous' in rel_str:
+            continue
+
+        if any(t in text or t in title for t in next_texts) and href:
+            next_url = urljoin(page_url, href)
+            break
+
+    # Pattern 2: rel="next" attribute
+    if not next_url:
+        for tag in soup.find_all(attrs={'rel': lambda v: v and 'next' in str(v).lower()}):
+            href = tag.get('href', '')
+            if href:
+                next_url = urljoin(page_url, href)
+                break
+
+    # Pattern 3: common pagination CSS classes
+    if not next_url:
+        for selector in [
+            '.pagination .next a', '.pagination .next-page a',
+            '.pager .next a', '.pager .next-page a',
+            '.page-nav .next a', '.page-number .next a',
+            '#pagination .next a', '.pagination li.next a',
+            '.pagination li:last-child a',
+            '.page-links .forward a', '.pages .next a',
+            '.list-pagination .next a',
+        ]:
+            try:
+                tag = soup.select_one(selector)
+                if tag:
+                    href = tag.get('href', '')
+                    if href:
+                        next_url = urljoin(page_url, href)
+                        break
+            except Exception:
+                pass
+
+    return items, next_url
+
+
 async def fetch_page_content_async(
     url: str,
     session: aiohttp.ClientSession,
@@ -290,6 +547,12 @@ async def fetch_page_content_async(
 
     # Per-domain rate limiting (async to avoid blocking the event loop)
     await rate_limiter.async_wait(domain)
+
+    # === 分页抓取：站点配置了 max_pages > 1 时，循环抓取多页 ===
+    from crawler.config import SITE_MAX_PAGES
+    max_pages = SITE_MAX_PAGES.get(url, 1)
+    if max_pages > 1 and not _needs_playwright(url) and 'ghxi.com' not in url and not any(d in url for d in RSS_FIRST_SITES):
+        return await _fetch_paginated(url, session, old_records, max_pages)
 
     # === Playwright 路径：JS 渲染站点 ===
     if _needs_playwright(url):
