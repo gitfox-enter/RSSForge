@@ -303,7 +303,7 @@ def _build_atom_feed(
         summary = item.get('summary', '')
         html_content = f'<p><a href="{html_escape(url)}">查看原文 →</a></p>' if url else ''
         if summary:
-            html_content = f'<p>{html_escape(summary)}</p}' + html_content
+            html_content = '<p>' + html_escape(summary) + '</p>' + html_content
 
         content_el = ET.SubElement(entry, f'{{{NS}}}content')
         content_el.text = _sanitize_xml(html_content)
