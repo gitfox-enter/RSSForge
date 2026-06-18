@@ -11,6 +11,7 @@ RSS/Atom Feed 生成器 — 为每个订阅站点生成独立 feed。
 import json
 import os
 import re
+from urllib.parse import urlparse
 try:
     import httpx
 except ImportError:
@@ -22,6 +23,8 @@ from typing import Any, Dict, List, Optional
 from common import (
     get_beijing_time,
     load_items_db,
+    fetch_site_favicon,
+    fetch_article_summary,
     ITEMS_DB_FILE,
 )
 
@@ -40,24 +43,32 @@ FEED_TITLE = "RSSForge"
 FEED_DESCRIPTION = "基于 GitHub Actions 的免费 RSS 订阅源生成器"
 
 # ============================================================
-# 图标检测（自动为每个 feed 提取对应网站图标）
+# 图标检测（直接从网站获取真实 favicon，不使用 Google 服务）
 # ============================================================
 
 _IMG_EXT_RE = __import__('re').compile(r'\.(jpg|jpeg|png|gif|webp|bmp|svg)\b', __import__('re').IGNORECASE)
 
+# source name → site URL 映射，用于 favicon 获取
+_source_url_map: Dict[str, str] = {}
 
-def _extract_favicon_url(url: str) -> str:
-    """根据 URL 返回网站 favicon。
 
-    原理：使用 Google Favicon Proxy 服务
-    https://www.google.com/s2/favicons?domain={domain}&sz=64
-    - 自动处理 HTTPS/HTTP 混合
-    - 自动处理 www/non-www
-    - 返回 PNG 格式，大多数 RSS 阅读器都支持
+def _extract_favicon_url(url: str, site_name: str = '') -> str:
+    """根据 URL 获取网站真实 favicon。
+
+    使用 fetch_site_favicon 从网站 HTML 中解析 <link rel="icon">，
+    缓存到 public/icons/ 目录，通过 GitHub Pages 提供服务。
+    备选方案：DuckDuckGo / Icon.horse / SVG 占位图。
+    不再依赖 Google s2/favicons（国内不可用）。
     """
-    from urllib.parse import urlparse
-    domain = urlparse(url).hostname or ''
-    return f"https://www.google.com/s2/favicons?domain={domain}&sz=64"
+    if site_name:
+        return fetch_site_favicon(url, site_name)
+    # Fallback: 如果没传 site_name，从 _source_url_map 反查
+    for name, surl in _source_url_map.items():
+        if surl == url or urlparse(url).hostname == urlparse(surl).hostname:
+            return fetch_site_favicon(url, name)
+    # 最终兜底：用域名作为 site_name
+    domain = urlparse(url).hostname or 'site'
+    return fetch_site_favicon(url, domain)
 
 
 def _extract_item_image(item, site_url: str = '') -> str:
@@ -188,12 +199,17 @@ def _interval_to_update_frequency(interval_min: int) -> int:
 
 def _build_atom_feed(items: List[Dict], title: str, feed_url: str,
                       description: str = "", updated_at: str = "",
-                      interval_min: Optional[int] = None) -> ET.Element:
+                      interval_min: Optional[int] = None,
+                      site_name: str = '', site_url: str = '') -> ET.Element:
     """构建 Atom feed 根元素（不写文件）。
-    
+
     Args:
         interval_min: 站点抓取间隔（分钟），用于设置 sy:updatePeriod
+        site_name: 站点显示名，用于获取真实 favicon
+        site_url: 站点 URL，用于获取 favicon 和文章摘要
     """
+    from html import escape as html_escape
+
     NS = 'http://www.w3.org/2005/Atom'
     SY_NS = 'http://purl.org/syndication/1.0'
     MEDIA_NS = 'http://search.yahoo.com/mrss/'
@@ -221,9 +237,14 @@ def _build_atom_feed(items: List[Dict], title: str, feed_url: str,
     author = ET.SubElement(root, f'{{{NS}}}author')
     ET.SubElement(author, f'{{{NS}}}name').text = 'RSSForge'
 
-    # Feed 级别 icon（Google Favicon Proxy）
-    icon_url = _extract_favicon_url(feed_url)
+    # Feed 级别 icon（真实网站 favicon，非 Google 服务）
+    icon_url = _extract_favicon_url(site_url or feed_url, site_name)
     ET.SubElement(root, f'{{{NS}}}icon').text = icon_url
+
+    # 为每个条目提取文章摘要（最多处理前 50 条，避免 API 限流）
+    _summary_cache: Dict[str, Dict] = {}
+    _fetch_count = 0
+    _max_fetch = 50
 
     for item in items:
         entry = ET.SubElement(root, f'{{{NS}}}entry')
@@ -243,20 +264,44 @@ def _build_atom_feed(items: List[Dict], title: str, feed_url: str,
 
         source = _sanitize_xml(item.get('source', ''))
         category = _sanitize_xml(item.get('category', ''))
-        content_parts = []
+
+        # --- HTML 内容（包含摘要 + 来源 + 链接） ---
+        html_parts = []
+        # 尝试获取文章摘要
+        summary_text = item.get('summary', '')
+        item_image = item.get('image', '')
+        if not summary_text and url and _fetch_count < _max_fetch:
+            if url not in _summary_cache:
+                _summary_cache[url] = fetch_article_summary(url)
+                _fetch_count += 1
+            art = _summary_cache[url]
+            summary_text = art.get('summary', '')
+            if not item_image:
+                item_image = art.get('image', '')
+
+        # 构建 HTML content
+        if item_image:
+            html_parts.append(f'<p><img src="{html_escape(item_image)}" alt="" style="max-width:100%;height:auto;border-radius:8px;margin-bottom:8px" /></p>')
+        if summary_text:
+            html_parts.append(f'<p>{html_escape(summary_text)}</p>')
+        meta_parts = []
         if source:
-            content_parts.append(f"来源: {source}")
+            meta_parts.append(f'来源: {html_escape(source)}')
         if category:
-            content_parts.append(f"分类: {category}")
-        content_parts.append(f"链接: {url}")
-        content_text = ' | '.join(content_parts)
+            meta_parts.append(f'分类: {html_escape(category)}')
+        if url:
+            meta_parts.append(f'<a href="{html_escape(url)}">查看原文 →</a>')
+        if meta_parts:
+            html_parts.append(f'<p style="color:#888;font-size:13px">{" · ".join(meta_parts)}</p>')
+
+        html_content = '\n'.join(html_parts) if html_parts else f'<p><a href="{html_escape(url)}">查看原文 →</a></p>'
 
         content_el = ET.SubElement(entry, f'{{{NS}}}content')
-        content_el.text = _sanitize_xml(content_text)
-        content_el.set('type', 'text')
+        content_el.text = _sanitize_xml(html_content)
+        content_el.set('type', 'html')
 
         # 自动提取条目图片（缩略图）
-        thumb = _extract_item_image(item, feed_url)
+        thumb = item_image or _extract_item_image(item, feed_url)
         if thumb:
             ET.SubElement(entry, f'{{{MEDIA_NS}}}thumbnail', url=thumb, width='300')
 
@@ -301,8 +346,12 @@ def generate_all_feeds() -> Dict[str, int]:
         for url, name in SOURCE_NAME_MAP.items():
             interval = site_intervals.get(url, 30)
             _name_intervals[name] = min(_name_intervals.get(name, 9999), interval)
+        # 构建 name → URL 映射（供 favicon 获取使用）
+        global _source_url_map
+        _source_url_map = {name: url for url, name in SOURCE_NAME_MAP.items()}
     except Exception:
         _name_intervals = {}
+        _source_url_map = {}
 
     db = load_items_db()
     items = db.get('items', [])
@@ -343,8 +392,13 @@ def generate_all_feeds() -> Dict[str, int]:
             desc = f"{source} 的 RSS 订阅源（由 RSSForge 生成）"
         interval = _name_intervals.get(source, 30)
 
+        # 获取站点的 URL 和显示名（用于 favicon 和摘要）
+        site_url = _source_url_map.get(source, source)
+        site_name = source  # source 已经是显示名
+
         root = _build_atom_feed(source_items, title, feed_url, desc, updated_at,
-                                interval_min=interval)
+                                interval_min=interval,
+                                site_name=site_name, site_url=site_url)
         if _write_feed(root, filename):
             stats['feeds_generated'] += 1
             # 使用 feed_key（带分类名）作为统计 key
@@ -352,12 +406,8 @@ def generate_all_feeds() -> Dict[str, int]:
             stats['per_site'][_meta_key] = len(source_items)
 
     # 3. 生成 feeds_meta.json（前端展示更新频率用）
-    # by_source key = actual crawled URL (e.g. https://www.423down.com/apk)
-    # stats['per_site'] key = feed_key (e.g. 423Down-安卓软件) or source URL
     meta = {}
     for meta_key, count in stats['per_site'].items():
-        # meta_key is feed_key (like "423Down-安卓软件") for categories,
-        # or source URL (like "https://news.ixbk.fun/") for regular sites
         _feed_filename = _safe_filename(meta_key)
         interval = _name_intervals.get(meta_key, 30)
         if interval <= 15:
@@ -377,20 +427,24 @@ def generate_all_feeds() -> Dict[str, int]:
         else:
             freq_label = f"每{interval // 60}小时"
         # 用 meta_key 查找 by_source（by_source key = actual crawled URL）
-        # 如果 meta_key 看起来像 feed_key（包含中文或 -），从 SITE_CATEGORIES 反查 URL
         source_url = meta_key
         if any('\u4e00' <= c <= '\u9fff' for c in meta_key) or (
                 '-' in meta_key and '://' not in meta_key):
-            # 这是一个 feed_key，需要反查到 source URL
             source_url = _feed_key_to_source(meta_key)
         su_items = by_source.get(source_url, [])
         _su = su_items[0].get('url', '') if su_items else ''
+        # 使用真实 favicon（非 Google 服务）
+        if _su:
+            _site_name = meta_key.split('-')[0] if '-' in meta_key else meta_key
+            favicon = _extract_favicon_url(_su, _site_name)
+        else:
+            favicon = _extract_favicon_url(SITE_URL, 'RSSForge')
         meta[meta_key] = {
             'interval': interval,
             'freq_label': freq_label,
             'count': count,
             'feed_url': SITE_URL + FEEDS_DIR + '/' + _feed_filename + '.xml',
-            'icon': _extract_favicon_url(_su) if _su else _extract_favicon_url(SITE_URL),
+            'icon': favicon,
             # 多分类分组信息
             'parent': _get_feed_parent(meta_key),
             'category': _get_feed_category(meta_key),
