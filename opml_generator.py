@@ -1,147 +1,98 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-OPML 生成器 — 从 sites.yaml 生成 OPML 订阅列表。
+OPML 生成器 — 从 feeds 目录生成统一的 OPML 订阅列表。
 
-输出:
-  opml.xml          — 全量 OPML
-  opml-线报站.xml    — 按分类拆分
-  opml-软件站.xml
-  opml-论坛.xml
+功能:
+  - 扫描 feeds/ 目录中的所有 XML 文件
+  - 生成扁平结构的 OPML（所有 outline 直接在 body 下）
+  - 不生成任何分类子文件夹（兼容所有 RSS 阅读器）
 """
 
-import json
 import os
 import re
+import json
 import xml.etree.ElementTree as ET
-from typing import Any, Dict, List, Optional
+from typing import List, Dict
 
-SITE_URL = "https://gitfox-enter.github.io/site-update-monitor/"
 FEEDS_DIR = "feeds"
-
-# sites.yaml 中的分类注释 → 分类名
-CATEGORY_MAP = {
-    '综合线报站': '线报站',
-    '购物比价': '购物比价',
-    '软件资源': '软件站',
-    '社区论坛': '论坛',
-    '其他': '其他',
-}
+SITE_URL = "https://gitfox-enter.github.io/RSSForge/"
 
 
 def _safe_filename(name: str) -> str:
+    """清理文件名，只保留中文、字母、数字、下划线."""
     return re.sub(r'[^\w\u4e00-\u9fff]', '', name)
 
 
-def _load_sites_config() -> Dict[str, List[Dict]]:
-    """从 sites.yaml 加载站点配置，按分类分组。"""
-    try:
-        import yaml
-        yaml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sites.yaml")
-        with open(yaml_path, 'r', encoding='utf-8') as f:
-            data = yaml.safe_load(f) or {}
-    except Exception as e:
-        print(f"sites.yaml 加载失败: {e}")
-        return {}
-
-    sites = data.get('sites', [])
-    # 按分类分组 — 需要从注释推断分类
-    # 因为 YAML 不保留注释，我们用 tier + url 特征来分组
-    categorized: Dict[str, List[Dict]] = {
-        '线报站': [],
-        '购物比价': [],
-        '软件站': [],
-        '论坛': [],
-        '其他': [],
-    }
-
-    # 软件/资源站 URL 特征
-    software_urls = {
-        'ghxi.com', '423down.com', 'appinn.com', 'lsapk.com',
-        'thosefree.com', 'foxirj.com', 'ddooo.com', 'onlinedown.net',
-        'apprcn.com', 'iplaysoft.com',
-    }
-    # 购物比价站
-    shop_urls = {
-        'manmanbuy.com', 'baicaio.com', 'bacaoo.com', 'yxssp.com',
-    }
-    # 论坛站
-    forum_urls = {
-        'douban.com', 'kxdao.net', '51kanong.com', 'ithome.com',
-    }
-
-    for site in sites:
-        url = site.get('url', '')
-        name = site.get('name', '')
-        domain = ''
-        try:
-            from urllib.parse import urlparse
-            domain = urlparse(url).hostname or ''
-        except Exception:
-            pass
-
-        # 分类判断
-        if any(s in domain for s in software_urls):
-            cat = '软件站'
-        elif any(s in domain for s in shop_urls):
-            cat = '购物比价'
-        elif any(s in domain for s in forum_urls):
-            cat = '论坛'
-        elif '10000yun.com' in domain:
-            cat = '其他'
-        else:
-            cat = '线报站'
-
-        entry = {
-            'name': name,
-            'url': url,
-            'feed_url': SITE_URL + f"{FEEDS_DIR}/{_safe_filename(name)}.xml",
-        }
-        categorized[cat].append(entry)
-
-    # 去掉空分类
-    return {k: v for k, v in categorized.items() if v}
+def _load_feeds_from_directory() -> List[Dict]:
+    """从 feeds 目录加载所有 XML 文件."""
+    feeds = []
+    
+    if not os.path.exists(FEEDS_DIR):
+        print(f"警告: {FEEDS_DIR} 目录不存在")
+        return feeds
+    
+    for filename in os.listdir(FEEDS_DIR):
+        if filename.endswith('.xml'):
+            feed_name = os.path.splitext(filename)[0]
+            feed_url = f"{SITE_URL}{FEEDS_DIR}/{filename}"
+            
+            # 尝试从 feeds_meta.json 获取更多信息
+            html_url = ""
+            icon_url = ""
+            try:
+                if os.path.exists('feeds_meta.json'):
+                    with open('feeds_meta.json', 'r', encoding='utf-8') as f:
+                        meta = json.load(f)
+                    if feed_name in meta:
+                        html_url = meta[feed_name].get('site_url', '')
+                        icon_url = meta[feed_name].get('icon', '')
+            except Exception:
+                pass
+            
+            feeds.append({
+                'name': feed_name,
+                'feed_url': feed_url,
+                'html_url': html_url,
+                'icon': icon_url,
+            })
+    
+    # 按名称排序
+    feeds.sort(key=lambda x: x['name'])
+    return feeds
 
 
-def _build_opml(outlines: List[Dict], title: str) -> ET.Element:
-    """构建 OPML 根元素。"""
+def _build_opml(feeds: List[Dict], title: str) -> ET.Element:
+    """构建 OPML 根元素（扁平结构）."""
     root = ET.Element('opml')
     root.set('version', '2.0')
 
     head = ET.SubElement(root, 'head')
     ET.SubElement(head, 'title').text = title
-    ET.SubElement(head, 'ownerName').text = '线报聚合'
-    ET.SubElement(head, 'ownerId').text = SITE_URL
+    ET.SubElement(head, 'ownerName').text = 'RSSForge'
+    ET.SubElement(head, 'ownerEmail').text = 'noreply@gitfox-enter.github.io'
+    ET.SubElement(head, 'dateCreated').text = '2026-06-18'
 
     body = ET.SubElement(root, 'body')
 
-    for outline in outlines:
-        if 'children' in outline:
-            # 分类文件夹
-            folder = ET.SubElement(body, 'outline')
-            folder.set('text', outline['text'])
-            folder.set('title', outline['text'])
-            for child in outline['children']:
-                o = ET.SubElement(folder, 'outline')
-                o.set('type', 'rss')
-                o.set('text', child['name'])
-                o.set('title', child['name'])
-                o.set('xmlUrl', child['feed_url'])
-                o.set('htmlUrl', child.get('url', ''))
-        else:
-            # 单个订阅
-            o = ET.SubElement(body, 'outline')
-            o.set('type', 'rss')
-            o.set('text', outline['name'])
-            o.set('title', outline['name'])
-            o.set('xmlUrl', outline['feed_url'])
-            o.set('htmlUrl', outline.get('url', ''))
+    # 扁平结构: 所有订阅直接放在 body 下
+    for feed in feeds:
+        outline = ET.SubElement(body, 'outline')
+        outline.set('type', 'rss')
+        outline.set('text', feed['name'])
+        outline.set('title', feed['name'])
+        outline.set('xmlUrl', feed['feed_url'])
+        if feed['html_url']:
+            outline.set('htmlUrl', feed['html_url'])
+        # 某些阅读器支持 icon
+        if feed.get('icon'):
+            outline.set('iconUrl', feed['icon'])
 
     return root
 
 
 def _write_opml(root: ET.Element, output_path: str) -> bool:
-    """写入 OPML 文件。"""
+    """写入 OPML 文件（原子写入）."""
     tmp_path = output_path + '.tmp'
     try:
         os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else '.', exist_ok=True)
@@ -159,42 +110,35 @@ def _write_opml(root: ET.Element, output_path: str) -> bool:
         return False
 
 
-def generate_all_opml() -> Dict[str, int]:
-    """生成全量 OPML + 按分类 OPML。"""
-    categorized = _load_sites_config()
-    if not categorized:
-        print("无站点配置")
-        return {'opml_generated': 0}
+def generate_opml() -> Dict[str, int]:
+    """生成统一 OPML 文件.
+    
+    Returns:
+        dict: {'feeds_count': N, 'opml_generated': 0/1}
+    """
+    feeds = _load_feeds_from_directory()
+    
+    if not feeds:
+        print("警告: 未找到任何 feed")
+        return {'feeds_count': 0, 'opml_generated': 0}
 
-    stats = {'opml_generated': 0}
-    all_sites: List[Dict] = []
+    stats = {
+        'feeds_count': len(feeds),
+        'opml_generated': 0,
+    }
 
-    # 1. 全量 OPML（带分类文件夹）
-    folder_outlines = []
-    for cat, sites in categorized.items():
-        folder_outlines.append({
-            'text': cat,
-            'children': sites,
-        })
-        all_sites.extend(sites)
-
-    root = _build_opml(folder_outlines, "线报聚合 - 全部订阅")
+    # 生成扁平结构的统一 OPML
+    root = _build_opml(feeds, "RSSForge - 订阅源")
+    
     if _write_opml(root, "opml.xml"):
-        stats['opml_generated'] += 1
-        print(f"全量 OPML: {len(all_sites)} 个源")
-
-    # 2. 按分类 OPML
-    for cat, sites in categorized.items():
-        safe_cat = _safe_filename(cat)
-        root = _build_opml(sites, f"线报聚合 - {cat}")
-        filename = f"opml-{safe_cat}.xml"
-        if _write_opml(root, filename):
-            stats['opml_generated'] += 1
-            print(f"分类 OPML {cat}: {len(sites)} 个源")
+        stats['opml_generated'] = 1
+        print(f"✓ OPML 生成成功: {len(feeds)} 个订阅源")
+        for feed in feeds:
+            print(f"  - {feed['name']}: {feed['feed_url']}")
 
     return stats
 
 
 if __name__ == '__main__':
-    result = generate_all_opml()
-    print(f"完成: {result['opml_generated']} 个 OPML 文件")
+    result = generate_opml()
+    print(f"\n完成: {result}")
