@@ -39,6 +39,18 @@ https://github.com/cooderl/wewe-rss
 3. **Customize sites.yaml** — Add the sites you want to monitor
 4. **Subscribe** — Copy `feed.xml` link and add it to any RSS reader (Reeder, FeedMe, inoreader, etc.)
 
+## 支持项目
+
+如果这个项目对你有帮助，欢迎 [Star ⭐](https://github.com/gitfox-enter/RSSForge) 支持一下！
+
+<p align="center">
+  <a href="https://gitfox-enter.github.io/RSSForge/alipay-redpacket.html">
+    <img src="public/alipay-redpacket.jpg" alt="支付宝扫码领红包" width="260" />
+  </a>
+</p>
+
+<p align="center">🧧 支付宝扫码领红包 · 每天可领一次 · 消费直接抵扣</p>
+
 ## License
 
 MIT
