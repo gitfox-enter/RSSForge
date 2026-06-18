@@ -59,7 +59,7 @@ Software recommendations, freeware, portable apps, and tools.
 | <img src="https://gitfox-enter.github.io/RSSForge/icons/423Down.png" alt="" width="20"> **423Down** | Every 6 hours | [Subscribe](https://gitfox-enter.github.io/RSSForge/feeds/423Down.xml) |
 | <img src="https://gitfox-enter.github.io/RSSForge/icons/LSapk.png" alt="" width="20"> **LSapk** | Every 6 hours | [Subscribe](https://gitfox-enter.github.io/RSSForge/feeds/LSapk.xml) |
 | <img src="https://gitfox-enter.github.io/RSSForge/icons/多多软件.png" alt="" width="20"> **多多软件** | Every 6 hours | [Subscribe](https://gitfox-enter.github.io/RSSForge/feeds/多多软件.xml) |
-| <img src="https://gitfox-enter.github.io/RSSForge/icons/华军软件.png" alt="" width="20"> **华军软件** | Every 8 hours | [Subscribe](https://gitfox-enter.github.io/RSSForge/feeds/华军软件.xml) |
+| <img src="https://gitfox-enter.github.io/RSSForge/icons/华军软件.png" alt="" width="20"> **华��软件** | Every 8 hours | [Subscribe](https://gitfox-enter.github.io/RSSForge/feeds/华军软件.xml) |
 | <img src="https://gitfox-enter.github.io/RSSForge/icons/异次元RSS.png" alt="" width="20"> **异次元软件** | Every 8 hours | [Subscribe](https://gitfox-enter.github.io/RSSForge/feeds/异次元RSS.xml) |
 
 ## Community Forums
@@ -86,10 +86,6 @@ Don't want to add feeds one by one? Download an OPML file to import all sites at
 | File | Includes |
 |------|----------|
 | [opml.xml](https://gitfox-enter.github.io/RSSForge/opml.xml) | All sites |
-| [opml-线报站.xml](https://gitfox-enter.github.io/RSSForge/opml-线报站.xml) | Deal alert sites |
-| [opml-购物比价.xml](https://gitfox-enter.github.io/RSSForge/opml-购物比价.xml) | Shopping & price comparison |
-| [opml-软件站.xml](https://gitfox-enter.github.io/RSSForge/opml-软件站.xml) | Software resources |
-| [opml-论坛.xml](https://gitfox-enter.github.io/RSSForge/opml-论坛.xml) | Forums |
 
 ::: tip How to Import OPML
 Most RSS readers support OPML import. Download the file above, then choose "Import OPML" in your reader. See [OPML Bulk Subscribe](/en/feeds/opml) for details.
