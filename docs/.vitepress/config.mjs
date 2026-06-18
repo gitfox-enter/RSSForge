@@ -25,6 +25,11 @@ export default defineConfig({
     css: {
       preprocessorOptions: {},
     },
+    build: {
+      rollupOptions: {
+        external: (id) => id.startsWith('/RSSForge/icons/'),
+      },
+    },
   },
   themeConfig: {
     logo: { src: 'https://gitfox-enter.github.io/RSSForge/favicon.svg', width: 24, height: 24 },
