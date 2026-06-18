@@ -2,45 +2,41 @@
 
 OPML is the standard format for exporting RSS feed subscriptions in bulk, allowing you to import multiple feeds into any RSS reader at once.
 
-## OPML Files Provided by RSSForge
+## Unified OPML File
 
-After deployment, RSSForge automatically generates the following OPML files:
-
-| File | Contents |
-|------|----------|
-| `opml.xml` | All sites |
-| `opml-线报站.xml` | Deal alert sites (XianBao) |
-| `opml-购物比价.xml` | Shopping & price comparison sites |
-| `opml-软件站.xml` | Software resource sites |
-| `opml-论坛.xml` | Forum sites |
-| `opml-其他.xml` | Uncategorized sites |
-
-OPML file URLs:
+RSSForge provides a single unified OPML file containing all feed sources:
 
 ```
-https://USERNAME.github.io/RSSForge/opml.xml
-https://USERNAME.github.io/RSSForge/opml-线报站.xml
+https://gitfox-enter.github.io/RSSForge/opml.xml
 ```
+
+> **Tip**: After forking, replace `gitfox-enter` with your GitHub username.
 
 ## How to Import OPML
 
 ### Reeder (Mac/iOS)
 
-1. Open Reeder -> **File** -> **Add Feed...**
+1. Open Reeder → **File** → **Add Feed...**
 2. Select **Add OPML File...**
-3. Paste the OPML file URL or choose a local file
+3. Paste the OPML URL: `https://your-username.github.io/RSSForge/opml.xml`
 4. Click **Import**
 
 ### Inoreader
 
 1. Log in to inoreader.com
-2. Left sidebar menu -> **Subscriptions** -> **Manage Subscriptions** (top-right)
-3. **Import OPML** -> Select a file or paste the URL
+2. Left sidebar menu → **Subscriptions** → **Manage Subscriptions** (top-right)
+3. **Import OPML** → Paste the URL or select a local file
 
 ### NetNewsWire (Mac/iOS)
 
-1. **File** -> **Import Subscriptions...**
+1. **File** → **Import Subscriptions...**
 2. Select the OPML file
+
+### FeedMe (Android)
+
+1. Long press the **+** button at the bottom
+2. Select **Import from OPML**
+3. Paste the OPML URL
 
 ### Miniflux (Self-hosted)
 
@@ -57,35 +53,26 @@ curl -X POST https://your-miniflux.io/feed/import \
 <?xml version="1.0" encoding="UTF-8"?>
 <opml version="2.0">
   <head>
-    <title>RSSForge Feed Sources</title>
-    <dateCreated>Wed, 17 Jun 2026 12:00:00 +0800</dateCreated>
+    <title>RSSForge - Feed Sources</title>
+    <ownerName>RSSForge</ownerName>
+    <ownerEmail>noreply@gitfox-enter.github.io</ownerEmail>
+    <dateCreated>2026-06-18</dateCreated>
   </head>
   <body>
-    <outline text="线报酷"
+    <outline type="rss" text="线报酷"
              title="线报酷"
-             type="atom"
-             xmlUrl="https://USERNAME.github.io/RSSForge/feeds/线报酷.xml"
+             xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/线报酷.xml"
              htmlUrl="https://news.ixbk.fun/"/>
-    <outline text="423down"
-             title="423down"
-             type="atom"
-             xmlUrl="https://USERNAME.github.io/RSSForge/feeds/423down.xml"
+    <outline type="rss" text="423Down"
+             title="423Down"
+             xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/423Down.xml"
              htmlUrl="https://www.423down.com/"/>
   </body>
 </opml>
 ```
 
-## Subscribe by Category
-
-If you only want to subscribe to a specific category of sites, simply import the corresponding category OPML file:
-
-```
-opml-线报站.xml   -> Deal alert sites only
-opml-软件站.xml   -> Software sites only
-```
-
 ## Periodic OPML Updates
 
-After each GitHub Actions run, the OPML files are automatically updated to reflect the latest site list.
+After each GitHub Actions run, the OPML file is automatically updated to reflect the latest site list.
 
-> It is recommended to re-import the OPML periodically to ensure your reader has the most up-to-date links.
+> **Recommendation**: Periodically re-import the OPML to ensure your reader has the most up-to-date subscription links.
