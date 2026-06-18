@@ -2,7 +2,7 @@
   "线报酷": {
     "interval": 15,
     "freq_label": "每15分钟",
-    "count": 988,
+    "count": 1010,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/线报酷.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/public/icons/线报酷.png",
     "site_url": "http://news.ixbk.net/"
@@ -106,7 +106,7 @@
   "爱Q生活": {
     "interval": 30,
     "freq_label": "每30分钟",
-    "count": 0,
+    "count": 64,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/爱Q生活.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/public/icons/爱Q生活.png",
     "site_url": "https://axutongxue.net/"
@@ -154,7 +154,7 @@
   "资源厅": {
     "interval": 60,
     "freq_label": "每小时",
-    "count": 0,
+    "count": 58,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/资源厅.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/public/icons/资源厅.png",
     "site_url": "https://www.ziyuanting.com/"
@@ -178,7 +178,7 @@
   "慢慢买": {
     "interval": 120,
     "freq_label": "每2小时",
-    "count": 99,
+    "count": 128,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/慢慢买.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/public/icons/慢慢买.png",
     "site_url": "https://www.manmanbuy.com/"
@@ -274,7 +274,7 @@
   "反斗限免": {
     "interval": 240,
     "freq_label": "每4小时",
-    "count": 13,
+    "count": 23,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/反斗限免.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/public/icons/反斗限免.png",
     "site_url": "https://free.apprcn.com/"
