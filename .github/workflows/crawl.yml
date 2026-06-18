@@ -47,6 +47,16 @@ jobs:
       - name: 生成 OPML
         run: python opml_generator.py
 
+      - name: 删除主 RSS 聚合文件
+        run: |
+          # 删除主 feed.xml（不再需要聚合所有站点的 RSS）
+          if [ -f feed.xml ]; then
+            rm -f feed.xml
+            echo "已删除 feed.xml"
+          fi
+          # 删除旧的分类 OPML（如有）
+          rm -f opml-*.xml
+
       - name: 提交变更
         run: |
           set +e
@@ -57,10 +67,10 @@ jobs:
           git add crawl_status.json 2>/dev/null || true
           # 调度器状态和日志（智能调度需要）
           git add scheduler_state.json run_log.jsonl 2>/dev/null || true
-          # 数据和状态文件
-          git add hash_record.txt notified_items.json adaptive_tiers.json feed.xml 2>/dev/null || true
-          # Per-site feeds, OPML, and meta
-          git add feeds/ opml.xml opml-*.xml feeds_meta.json 2>/dev/null || true
+          # 数据和状态文件（不包含 feed.xml）
+          git add hash_record.txt notified_items.json adaptive_tiers.json 2>/dev/null || true
+          # Per-site feeds, 统一 OPML, 和 meta
+          git add feeds/ opml.xml feeds_meta.json public/icons/ 2>/dev/null || true
 
           git status
           if git diff --staged --quiet 2>/dev/null; then
@@ -69,13 +79,29 @@ jobs:
           fi
 
           # 检查是否有新内容
-          if git diff --staged --name-only | grep -q "feed.xml"; then
-            COMMIT_MSG="自动更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
+          HAS_NEW_CONTENT=false
+          if git diff --staged --name-only | grep -q "feeds/"; then
+            HAS_NEW_CONTENT=true
+            FEED_COUNT=$(git diff --staged --name-only | grep -c "feeds/" || echo "0")
+            COMMIT_MSG="自动更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S') | 新增 ${FEED_COUNT} 个 feed"
+          elif git diff --staged --name-only | grep -q "feeds_meta.json"; then
+            HAS_NEW_CONTENT=true
+            COMMIT_MSG="状态更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
+          elif git diff --staged --name-only | grep -q "opml.xml"; then
+            HAS_NEW_CONTENT=true
+            COMMIT_MSG="OPML 更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
           elif git diff --staged --name-only | grep -q "adaptive_tiers.json"; then
+            HAS_NEW_CONTENT=true
             COMMIT_MSG="状态更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
           fi
-
-          git commit -m "$COMMIT_MSG"
+          
+          if [ "$HAS_NEW_CONTENT" = "true" ]; then
+            git commit -m "$COMMIT_MSG"
+          else
+            echo "No significant changes to commit"
+            exit 0
+          fi
+          
           push_success=false
           for i in 1 2 3 4 5; do
             echo "=== Push attempt $i ==="
@@ -84,10 +110,9 @@ jobs:
             git pull --rebase --strategy-option=theirs origin main
             rebase_rc=$?
             if [ $rebase_rc -ne 0 ]; then
-              echo "Rebase had conflicts, resolving with our changes (--theirs in rebase context = our commit)..."
+              echo "Rebase had conflicts, resolving with our changes..."
               git diff --name-only --diff-filter=U | while read conflict_file; do
                 echo "Resolving conflict in $conflict_file using our version"
-                # In rebase: --theirs = our commit (the one being rebased), --ours = upstream
                 git checkout --theirs "$conflict_file"
                 git add "$conflict_file"
               done
