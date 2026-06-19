@@ -55,7 +55,7 @@ FEEDS_DIR = "feeds"
 FEED_TITLE = "RSSForge"
 FEED_DESCRIPTION = "基于 GitHub Actions 的免费 RSS 订阅源生成器"
 ICONS_DIR = "public/icons"
-MAX_ENTRIES_PER_FEED = 50  # 单 feed 最大条目数 (fix #6: RFC 5005 建议)
+
 
 # ============================================================
 # Favicon 获取（强制本地存储）
@@ -479,12 +479,8 @@ def generate_all_feeds() -> Dict[str, int]:
         title = f"{site_name} - RSSForge"
         desc = f"{site_name} 的 RSS 订阅源（由 RSSForge 生成）"
         
-        # 按时间排序并限制条目数 (fix #6)
+        # 按时间排序
         site_items = sorted(site_items, key=lambda x: x.get('time', ''), reverse=True)
-        total_count = len(site_items)
-        if total_count > MAX_ENTRIES_PER_FEED:
-            site_items = site_items[:MAX_ENTRIES_PER_FEED]
-            print(f"  ⚠ {site_name}: 截断 {total_count} → {MAX_ENTRIES_PER_FEED} 条")
         stats['sites_with_items'] += 1
         
         root = _build_atom_feed(
@@ -543,7 +539,7 @@ def _generate_feeds_meta(stats: Dict, by_source: Dict[str, List[Dict]]) -> None:
         meta[name] = {
             'interval': interval,
             'freq_label': freq_label,
-            'count': min(items_count, MAX_ENTRIES_PER_FEED),
+            'count': items_count,
             'feed_url': f"{SITE_URL}{FEEDS_DIR}/{safe_name}.xml",
             'icon': icon_url,  # 强制使用本地图标
             'site_url': url,
