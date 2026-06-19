@@ -788,7 +788,7 @@ async def fetch_page_content_async(
     if not ok:
         return False, parse_result
 
-    logger.info("爬取成功", extra={
+    logger.info("爬取���功", extra={
         'site': url, 'event': 'crawl_success',
         'response_time': parse_result['response_time'],
     })
@@ -904,7 +904,7 @@ def git_commit_if_changed() -> bool:
 
 
 # ============================================================
-# 运行日志管理
+# 运行日志��理
 # ============================================================
 
 def load_run_log() -> List[Dict[str, Any]]:
@@ -1331,7 +1331,7 @@ async def main_async() -> None:
         if r['status'] in ('dead', 'robots_denied'):
             continue
         is_fail = r['status'] == 'error'
-        has_items = r['status'] in ('updated', 'first')
+        has_items = r['status'] in ('updated', 'first', 'no_update')
         old_tier = get_site_tier(url)
         new_tier = update_adaptive_tier(
             url,
@@ -1369,7 +1369,7 @@ async def main_async() -> None:
     # 构建完整条目字典（包含更新和首次爬取的站点）
     new_item_list: List[Dict[str, str]] = []
     for r in all_site_results:
-        if r['status'] in ('updated', 'first'):
+        if r['status'] in ('updated', 'first', 'no_update'):
             for item in r.get('items', []):
                 item_url = item['url'] if isinstance(item, dict) else item
                 item_text = item['text'] if isinstance(item, dict) else str(item)
