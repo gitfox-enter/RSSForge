@@ -68,6 +68,7 @@ PARSER_REGISTRY: Dict[str, Tuple[Any, Optional[Any]]] = {
     '51kanong.com':      (parse_51kanong_items,       None),
     'ymxianbao.cn':     (parse_ymxianbao_items,      None),
     'linejia.com':      (parse_linejia_items,        None),
+    '10000yun.com':      (parse_10000yun_items,      None),
 }
 
 
@@ -95,7 +96,7 @@ def fetch_page_content(url: str) -> Tuple[bool, Any]:
     返回：(成功标志, 内容/错误信息)
     内容包含：(text, title, summary, response_time)
 
-    增强特性：
+    增强特性��
     - 指数退避重试（最多 3 次）
     - 每域名 Session 连接池复用
     - Referer 头部增强反爬抗性
@@ -163,7 +164,7 @@ def fetch_page_content(url: str) -> Tuple[bool, Any]:
             # 304 Not Modified：页面未变更，使用缓存
             if response.status_code == 304:
                 logger.info("HTTP 304 Not Modified", extra={'site': url, 'event': 'not_modified'})
-                # 304 时仍视为成功（页面未变更），返回特殊标记
+                # 304 时仍视为成功（页面未变更）��返回特殊标记
                 return False, "304 页面未变更"
 
             # 403 或 5xx：指数退避重试
