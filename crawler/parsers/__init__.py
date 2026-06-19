@@ -49,6 +49,7 @@ from crawler.parsers.deal_sites import (
     parse_51kanong_items,
     parse_ymxianbao_items,
     parse_linejia_items,
+    parse_10000yun_items,
 )
 
 # --- Software site parsers ---
