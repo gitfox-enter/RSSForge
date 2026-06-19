@@ -24,8 +24,24 @@ def _safe_filename(name: str) -> str:
     return re.sub(r'[^\w\u4e00-\u9fff]', '', name)
 
 
+def _feed_has_entries(filepath: str) -> bool:
+    """检查 feed 文件是否包含至少一个 <entry>。"""
+    try:
+        tree = ET.parse(filepath)
+        root = tree.getroot()
+        # 处理 Atom namespace
+        ns = {'atom': 'http://www.w3.org/2005/Atom'}
+        entries = root.findall('atom:entry', ns)
+        if not entries:
+            # 尝试无 namespace
+            entries = root.findall('entry')
+        return len(entries) > 0
+    except Exception:
+        return False
+
+
 def _load_feeds_from_directory() -> List[Dict]:
-    """从 feeds 目录加载所有 XML 文件."""
+    """从 feeds 目录加载所有非空 XML feed."""
     feeds = []
     
     if not os.path.exists(FEEDS_DIR):
@@ -34,6 +50,12 @@ def _load_feeds_from_directory() -> List[Dict]:
     
     for filename in os.listdir(FEEDS_DIR):
         if filename.endswith('.xml'):
+            filepath = os.path.join(FEEDS_DIR, filename)
+            
+            # 跳过空 feed (fix #1)
+            if not _feed_has_entries(filepath):
+                continue
+            
             feed_name = os.path.splitext(filename)[0]
             feed_url = f"{SITE_URL}{FEEDS_DIR}/{filename}"
             

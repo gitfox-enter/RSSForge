@@ -55,6 +55,7 @@ FEEDS_DIR = "feeds"
 FEED_TITLE = "RSSForge"
 FEED_DESCRIPTION = "基于 GitHub Actions 的免费 RSS 订阅源生成器"
 ICONS_DIR = "public/icons"
+MAX_ENTRIES_PER_FEED = 50  # 单 feed 最大条目数 (fix #6: RFC 5005 建议)
 
 # ============================================================
 # Favicon 获取（强制本地存储）
@@ -258,11 +259,17 @@ def _build_atom_feed(
     ET.SubElement(root, f'{{{NS}}}title').text = _sanitize_xml(title)
     if description:
         ET.SubElement(root, f'{{{NS}}}subtitle').text = _sanitize_xml(description)
-    ET.SubElement(root, f'{{{NS}}}link', href=SITE_URL, rel='alternate')
+
+    # rel='alternate' 应指向原始网站而非项目首页 (fix #4)
+    alternate_url = site_url or SITE_URL
+    ET.SubElement(root, f'{{{NS}}}link', href=alternate_url, rel='alternate')
     ET.SubElement(root, f'{{{NS}}}link', href=feed_url, rel='self', type='application/atom+xml')
     ET.SubElement(root, f'{{{NS}}}id').text = feed_url
     ET.SubElement(root, f'{{{NS}}}updated').text = _to_iso8601(updated_at)
     ET.SubElement(root, f'{{{NS}}}generator', uri='https://github.com/gitfox-enter/RSSForge').text = 'RSSForge'
+
+    # 版权声明 (fix #7)
+    ET.SubElement(root, f'{{{NS}}}rights').text = '内容版权归原作者所有，RSSForge 仅提供聚合索引'
 
     # 更新频率
     if interval_min is not None:
@@ -272,13 +279,14 @@ def _build_atom_feed(
 
     author = ET.SubElement(root, f'{{{NS}}}author')
     ET.SubElement(author, f'{{{NS}}}name').text = 'RSSForge'
+    ET.SubElement(author, f'{{{NS}}}uri').text = 'https://github.com/gitfox-enter/RSSForge'
 
     # Feed 图标 - 强制使用真实网站 favicon
     icon_url = fetch_site_favicon(site_url or feed_url, site_name or title)
     ET.SubElement(root, f'{{{NS}}}icon').text = icon_url
 
     # 条目
-    for item in items:
+    for idx, item in enumerate(items):
         entry = ET.SubElement(root, f'{{{NS}}}entry')
 
         title_text = _sanitize_xml(item.get('text', item.get('title', '无标题')))
@@ -289,21 +297,63 @@ def _build_atom_feed(
         url = _sanitize_xml(item.get('url', ''))
         if url:
             ET.SubElement(entry, f'{{{NS}}}link', href=url, rel='alternate')
-            ET.SubElement(entry, f'{{{NS}}}id').text = url
+            # 使用 tag URI 格式保证 id 永久唯一 (fix #7)
+            parsed = urlparse(url)
+            domain = parsed.hostname or 'unknown'
+            path_short = parsed.path.rstrip('/').split('/')[-1] or 'item'
+            ET.SubElement(entry, f'{{{NS}}}id').text = f"tag:{domain},{updated_at[:10]}:{path_short}"
         else:
             ET.SubElement(entry, f'{{{NS}}}id').text = f"tag:gitfox-enter,{updated_at[:10]}:{hash(title_text)}"
 
-        time_str = item.get('time', updated_at)
-        ET.SubElement(entry, f'{{{NS}}}updated').text = _to_iso8601(time_str)
-        ET.SubElement(entry, f'{{{NS}}}published').text = _to_iso8601(time_str)
+        # 时间戳处理 (fix #3):
+        # - <published> 使用 item 的真实发布时间
+        # - <updated> 使用 item 时间或 feed 更新时间（取较新者）
+        item_time = item.get('time', '')
+        if item_time:
+            published_time = _to_iso8601(item_time)
+            updated_time = published_time  # 无独立 updated 字段时与 published 相同
+        else:
+            # 无真实时间时，使用索引偏移避免批量相同时间戳
+            from datetime import timedelta as _td
+            base_dt = datetime.now(timezone(timedelta(hours=8)))
+            offset_dt = base_dt - _td(seconds=idx)
+            published_time = offset_dt.isoformat()
+            updated_time = published_time
+
+        ET.SubElement(entry, f'{{{NS}}}updated').text = updated_time
+        ET.SubElement(entry, f'{{{NS}}}published').text = published_time
 
         category = _sanitize_xml(item.get('category', ''))
-        
-        # 内容摘要
+
+        # 条目级 author：标注来源站点 (fix #7)
+        if site_name:
+            entry_author = ET.SubElement(entry, f'{{{NS}}}author')
+            ET.SubElement(entry_author, f'{{{NS}}}name').text = site_name
+
+        # 内容摘要 (fix #2 + #5)
         summary = item.get('summary', '')
-        html_content = f'<p><a href="{html_escape(url)}">查看原文 →</a></p>' if url else ''
+
+        # 构建 <summary>：优先用 item.summary，其次用 title 截断
+        summary_text = summary or (title_text[:200] if title_text else '')
+        if summary_text:
+            summary_el = ET.SubElement(entry, f'{{{NS}}}summary')
+            summary_el.text = _sanitize_xml(summary_text)
+            summary_el.set('type', 'text')
+
+        # 构建 <content>：始终包含有意义的文本
         if summary:
-            html_content = '<p>' + html_escape(summary) + '</p>' + html_content
+            html_content = '<p>' + html_escape(summary) + '</p>'
+            if url:
+                html_content += f'<p><a href="{html_escape(url)}">查看原文 →</a></p>'
+        elif title_text:
+            # 没有 summary 时，用标题作为 content 正文
+            html_content = '<p>' + html_escape(title_text) + '</p>'
+            if url:
+                html_content += f'<p><a href="{html_escape(url)}">查看原文 →</a></p>'
+        elif url:
+            html_content = f'<p><a href="{html_escape(url)}">查看原文 →</a></p>'
+        else:
+            html_content = '<p>暂无内容</p>'
 
         content_el = ET.SubElement(entry, f'{{{NS}}}content')
         content_el.text = _sanitize_xml(html_content)
@@ -354,6 +404,7 @@ def generate_all_feeds() -> Dict[str, int]:
     stats = {
         'feeds_generated': 0,
         'feeds_skipped': 0,
+        'feeds_empty_skipped': 0,
         'total_sites': 0,
         'sites_with_items': 0,
     }
@@ -413,14 +464,28 @@ def generate_all_feeds() -> Dict[str, int]:
         # 获取该站点的数据
         site_items = by_source.get(site_name, [])
         
+        # 跳过空 feed：不生成无数据的 feed 文件 (fix #1)
+        if not site_items:
+            stats['feeds_empty_skipped'] += 1
+            # 如果之前存在旧的空 feed 文件，删除它
+            if os.path.exists(filename):
+                os.remove(filename)
+                print(f"  ✗ {site_name}: 移除旧的空 feed")
+            else:
+                print(f"  ○ {site_name}: 暂无数据，跳过")
+            continue
+        
         # 构建 feed
         title = f"{site_name} - RSSForge"
         desc = f"{site_name} 的 RSS 订阅源（由 RSSForge 生成）"
         
-        # 如果有数据，按时间排序
-        if site_items:
-            site_items = sorted(site_items, key=lambda x: x.get('time', ''), reverse=True)
-            stats['sites_with_items'] += 1
+        # 按时间排序并限制条目数 (fix #6)
+        site_items = sorted(site_items, key=lambda x: x.get('time', ''), reverse=True)
+        total_count = len(site_items)
+        if total_count > MAX_ENTRIES_PER_FEED:
+            site_items = site_items[:MAX_ENTRIES_PER_FEED]
+            print(f"  ⚠ {site_name}: 截断 {total_count} → {MAX_ENTRIES_PER_FEED} 条")
+        stats['sites_with_items'] += 1
         
         root = _build_atom_feed(
             site_items, title, feed_url, desc, updated_at,
@@ -431,30 +496,34 @@ def generate_all_feeds() -> Dict[str, int]:
         
         if _write_feed(root, filename):
             stats['feeds_generated'] += 1
-            if site_items:
-                print(f"  ✓ {site_name}: {len(site_items)} 条")
-            else:
-                print(f"  ○ {site_name}: 暂无数据")
+            print(f"  ✓ {site_name}: {len(site_items)} 条")
         else:
             stats['feeds_skipped'] += 1
 
     # 生成 feeds_meta.json
     _generate_feeds_meta(stats, by_source)
 
-    print(f"\n完成: {stats['feeds_generated']} 个 feed 生成, {stats['sites_with_items']} 个站点有数据")
+    print(f"\n完成: {stats['feeds_generated']} 个 feed 生成, {stats['sites_with_items']} 个站点有数据, {stats['feeds_empty_skipped']} 个空 feed 跳过")
     return stats
 
 
 def _generate_feeds_meta(stats: Dict, by_source: Dict[str, List[Dict]]) -> None:
-    """生成 feeds_meta.json 用于前端展示."""
+    """生成 feeds_meta.json 用于前端展示.
+    
+    仅包含有数据的站点，空 feed 不写入 meta (fix #1)。
+    """
     meta = {}
     
     from crawler.config import SOURCE_NAME_MAP, SITE_INTERVALS
     
     for url, name in SOURCE_NAME_MAP.items():
+        # 跳过无数据的站点
+        items_count = len(by_source.get(name, []))
+        if items_count == 0:
+            continue
+
         safe_name = _safe_filename(name)
         interval = SITE_INTERVALS.get(url, 30)
-        items_count = len(by_source.get(name, []))
         
         # 强制获取本地 favicon
         icon_url = fetch_site_favicon(url, name)
@@ -474,7 +543,7 @@ def _generate_feeds_meta(stats: Dict, by_source: Dict[str, List[Dict]]) -> None:
         meta[name] = {
             'interval': interval,
             'freq_label': freq_label,
-            'count': items_count,
+            'count': min(items_count, MAX_ENTRIES_PER_FEED),
             'feed_url': f"{SITE_URL}{FEEDS_DIR}/{safe_name}.xml",
             'icon': icon_url,  # 强制使用本地图标
             'site_url': url,
