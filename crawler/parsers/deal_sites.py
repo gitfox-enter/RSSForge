@@ -231,7 +231,7 @@ def parse_h6room_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
 
     # Navigation / junk texts to skip
     skip_texts = _make_skip_set(
-        '安卓应用', '实用工具', '系统办公', '拍照修图', '影视影音',
+        '安卓应用', '实用工具', '系统办公', '拍照修���', '影视影音',
         '办公学习', '小说阅读', '电影动漫', '社交聊天', '资源下载',
         '音乐铃声', '天气生活', '美化壁纸', '生活服务', 'TV盒子',
         'PC软件', '技巧教程', '会员专区', '更新', '普通会员', '黄金会员')
@@ -765,7 +765,7 @@ def parse_haodanku_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
         '招商入驻', '开放平台', '商家合作', 'CMS中心',
         '帮助中心', '退出登录')
 
-    # 策略1：提取服务端渲染的导航链接
+    # 策略1：提取���务端渲染的导航链接
     for a in soup.find_all('a', href=True):
         href = a.get('href', '').strip()
         text = a.get_text(strip=True)
@@ -855,32 +855,35 @@ def parse_haodanku_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
 
 
 def parse_hybase_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
-    """好赚网 (hybase.com) - 提取软件/资源文章条目。
+    """好赚网 (m.hybase.com) - 提取软件/资源文章条目。
 
     站点为自定义 CMS，文章链接格式为 /{分类}/{id}.html。
-    提取轮播推荐、文章卡片、快讯等多个区域的内容链接。
+    移动版(m.hybase.com)使用简洁列表，桌面版使用卡片布局。
     """
     items: List[Dict[str, str]] = []
     seen: Set[str] = set()
 
-    # Strategy 1: Targeted selectors for article title links
+    # Strategy 1: Targeted selectors (both mobile and desktop)
     selectors = [
-        '.top-entry a.top-entry-img-wrapper',   # carousel featured items (use title attr)
-        '.li-type-card-title a',                 # main article card titles
-        '.home-buzz .title a',                   # buzz/quick news links
-        '.axdswiper .swiper-slide a',            # recommended sidebar items (use title attr)
+        '.top-entry a.top-entry-img-wrapper',
+        '.li-type-card-title a',
+        '.home-buzz .title a',
+        '.axdswiper .swiper-slide a',
+        '.article-list a',
+        '.list-item a',
+        'h3 a',
+        '.post-title a',
+        '.entry-title a',
     ]
     for sel in selectors:
         for a in soup.select(sel):
             href = a.get('href', '').strip()
-            # Prefer 'title' attribute (full text), fall back to inner text
             text = (a.get('title', '') or a.get_text(strip=True)).strip()
-            if not _is_valid_text(text):
+            if not _is_valid_text(text, min_len=3):
                 continue
             if text in seen:
                 continue
-            # Must be an article link (contains .html and a numeric segment)
-            if not re.search(r'/\d+\.html', href):
+            if not re.search(r'/\w+/\d+\.html', href):
                 continue
             _add_item(items, seen, text, href, base_url)
 
@@ -888,20 +891,17 @@ def parse_hybase_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
     if len(items) < 5:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
-            text = a.get_text(strip=True)
+            text = (a.get('title', '') or a.get_text(strip=True)).strip()
             if not _is_valid_text(text, min_len=5):
                 continue
-            if not re.search(r'/\d+\.html', href):
+            if not re.search(r'/\w+/\d+\.html', href):
                 continue
-            # Filter out navigation keywords
             skip_words = _make_skip_set(
                 '导航', '站点地图', '联系', '精选软件', '精选博客',
-                '最新软件', '最新博客')
+                '最新软件', '最新博客', '首页', '分类')
             if text in skip_words:
                 continue
             if text in seen:
-                continue
-            if not _has_chinese(text) and len(text) < 15:
                 continue
             _add_item(items, seen, text, href, base_url)
 
@@ -926,28 +926,35 @@ def parse_hybase_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
 def parse_huodong5_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """活动5 (huodong5.com) - 提取有奖活动文章条目。
 
-    WordPress 站点，文章链接格式为 /{id}.html。
-    提取"最新更新活动"列表、轮播推荐、侧栏推荐等区域。
+    WordPress 站点，文章链接格式为 huodong5.com/{id}.html。
+    主列表使用 .article-list .item-title a 或 .feature-post .title a。
     """
     items: List[Dict[str, str]] = []
     seen: Set[str] = set()
 
-    # Strategy 1: Primary article list (.feature-post .title a)
-    for a in soup.select('.feature-post .title a, h3.slide-title a, .slider-ad li a'):
-        href = a.get('href', '').strip()
-        text = a.get_text(strip=True)
-        if not _is_valid_text(text, min_len=5):
-            continue
-        if text in seen:
-            continue
-        # Must be an article URL (domain + numeric id + .html)
-        if not re.search(r'huodong5\.com/\d+\.html', href):
-            continue
-        # Filter ad/recommendation prefixes
-        text = re.sub(r'^【推荐】', '', text).strip()
-        if len(text) < 5:
-            continue
-        _add_item(items, seen, text, href, base_url)
+    # Strategy 1: Multiple selector patterns (site may have updated theme)
+    for selector in [
+        '.article-list .item-title a',
+        '.article-list h2 a',
+        '.feature-post .title a',
+        'h3.slide-title a',
+        '.slider-ad li a',
+        '.item-title a',
+        'article h2 a',
+    ]:
+        for a in soup.select(selector):
+            href = a.get('href', '').strip()
+            text = a.get_text(strip=True)
+            if not _is_valid_text(text, min_len=5):
+                continue
+            if text in seen:
+                continue
+            if not re.search(r'huodong5\.com/\d+\.html', href):
+                continue
+            text = re.sub(r'^【推荐】', '', text).strip()
+            if len(text) < 5:
+                continue
+            _add_item(items, seen, text, href, base_url)
 
     # Strategy 2: Broader fallback - any link matching article URL pattern
     if len(items) < 5:
@@ -963,7 +970,7 @@ def parse_huodong5_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
             text = re.sub(r'^【推荐】', '', text).strip()
             if len(text) < 5:
                 continue
-            _add_item(items, seen, text, href)
+            _add_item(items, seen, text, href, base_url)
 
     return items[:30]
 
@@ -1108,32 +1115,30 @@ def parse_xianbaomi_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, 
 def parse_yangmao_wang_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """羊毛王 (yangmao.wang) - 提取羊毛活动文章条目。
 
-    Z-Blog 站点，文章链接格式为 yangmao.wang/{分类}/{id}.html。
-    主要提取最新更新列表和各分类板块的文章链接。
+    Z-Blog 站点，最新更新使用 <ul id="gengxin"> 列表。
+    文章链接格式为 yangmao.wang/{分类}/{id}.html。
     """
     items: List[Dict[str, str]] = []
     seen: Set[str] = set()
 
-    # Strategy 1: Extract from list-a (main article lists)
-    for a in soup.select('ul.list-a li a'):
+    # Strategy 1: gengxin update list (most reliable)
+    for a in soup.select('#gengxin li a, ul#gengxin li a'):
         href = a.get('href', '').strip()
-        # Prefer title attribute for full text
         text = (a.get('title', '') or a.get_text(strip=True)).strip()
-        if not _is_valid_text(text):
+        if not _is_valid_text(text, min_len=3):
             continue
         if text in seen:
             continue
-        # Must match article URL pattern
         if not re.search(r'yangmao\.wang/\w+/\d+\.html', href):
             continue
         _add_item(items, seen, text, href, base_url)
 
-    # Strategy 2: Broader fallback
+    # Strategy 2: All article links with broader selectors
     if len(items) < 3:
         for a in soup.find_all('a', href=True):
             href = a.get('href', '').strip()
             text = (a.get('title', '') or a.get_text(strip=True)).strip()
-            if not _is_valid_text(text):
+            if not _is_valid_text(text, min_len=3):
                 continue
             if text in seen:
                 continue
@@ -1141,7 +1146,7 @@ def parse_yangmao_wang_items(soup: BeautifulSoup, base_url: str) -> List[Dict[st
                 continue
             skip_words = _make_skip_set(
                 '羊毛活动', '赚钱软件', '打折优惠', '赚钱攻略',
-                '关于本站', '网站地图')
+                '关于本站', '网站地图', '首页')
             if text in skip_words:
                 continue
             _add_item(items, seen, text, href, base_url)
@@ -1241,7 +1246,7 @@ def parse_iqnew_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
 
 
 def parse_51kanong_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
-    """51卡农 (51kanong.com) - 提取论坛帖子/文章条目。
+    """51卡农 (51kanong.com) - 提取论坛帖子/文章条目���
 
     Discuz X3.4 论坛门户页面，帖子链接格式为 xyk-{tid}-{page}.htm。
     提取最新文章列表、今日头条、精选导读、轮播推荐等区域。
@@ -1425,5 +1430,68 @@ def parse_linejia_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, st
 # text_parser:  (soup) -> str  或  None（此时 text 由 items 拼接得到）
 
 
+# ---------------------------------------------------------------------------
+# 万云积分 (10000yun.com) - 软件资源站
+# ---------------------------------------------------------------------------
+# HTML structure: Custom CMS
+#   Articles use ### headings with links: <h3><a href="/{id}.html">title</a></h3>
+#   Also: <a href="https://10000yun.com/{id}.html">title</a>
+# URL pattern: 10000yun.com/{id}.html
+# ---------------------------------------------------------------------------
 
+
+def parse_10000yun_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """万云积分 (10000yun.com) - 提取软件/资源文章条目。
+
+    自定义 CMS 站点，文章链接格式为 10000yun.com/{id}.html。
+    首页使用 h3 标题包裹文章链接，也有直接的 a 标签列表。
+    """
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
+    seen_ids: Set[str] = set()
+
+    # Strategy 1: h3 > a (main article headings)
+    for a in soup.select('h3 a, h2 a, .post-title a, .entry-title a'):
+        href = a.get('href', '').strip()
+        text = a.get_text(strip=True)
+        if not _is_valid_text(text, min_len=3):
+            continue
+        if text in seen:
+            continue
+        if not re.search(r'10000yun\.com/\d+\.html', href) and not re.search(r'^/\d+\.html$', href):
+            continue
+        # Dedup by article ID
+        id_match = re.search(r'/(\d+)\.html', href)
+        if id_match:
+            aid = id_match.group(1)
+            if aid in seen_ids:
+                continue
+            seen_ids.add(aid)
+        _add_item(items, seen, text, href, base_url)
+
+    # Strategy 2: Fallback - scan all <a> tags
+    if len(items) < 3:
+        for a in soup.find_all('a', href=True):
+            href = a.get('href', '').strip()
+            text = a.get_text(strip=True)
+            if not _is_valid_text(text, min_len=5):
+                continue
+            if not re.search(r'10000yun\.com/\d+\.html', href) and not re.search(r'^/\d+\.html$', href):
+                continue
+            if text in seen:
+                continue
+            id_match = re.search(r'/(\d+)\.html', href)
+            if id_match:
+                aid = id_match.group(1)
+                if aid in seen_ids:
+                    continue
+                seen_ids.add(aid)
+            skip_words = _make_skip_set(
+                '首页', '软件', '电影', '游戏', '专题', '关于', '联系',
+                '网站地图', '最新软件', '热门软件')
+            if text in skip_words:
+                continue
+            _add_item(items, seen, text, href, base_url)
+
+    return items[:30]
 
