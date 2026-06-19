@@ -579,7 +579,7 @@ MAX_RETRIES = 3
 RETRY_BASE_DELAY = 1.0
 
 # robots.txt 合规配置
-RESPECT_ROBOTS_TXT: bool = False
+RESPECT_ROBOTS_TXT: bool = True  # fix #18: 默认遵守 robots.txt
 
 # 代理池
 _proxy_pool: Optional[ProxyPool] = None

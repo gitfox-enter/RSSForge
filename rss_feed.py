@@ -26,6 +26,7 @@ from common import (
     load_items_db,
     ITEMS_DB_FILE,
     slugify,
+    SITE_URL_BASE,
 )
 
 # 导入站点配置
@@ -51,7 +52,7 @@ _INVALID_XML_RE = re.compile(
 # 配置
 # ============================================================
 
-SITE_URL = "https://gitfox-enter.github.io/RSSForge/"
+SITE_URL = SITE_URL_BASE  # fix #17: 统一从 common.py 获取
 FEEDS_DIR = "feeds"
 FEED_TITLE = "RSSForge"
 FEED_DESCRIPTION = "基于 GitHub Actions 的免费 RSS 订阅源生成器"

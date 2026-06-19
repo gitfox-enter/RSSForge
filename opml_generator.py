@@ -14,10 +14,10 @@ import re
 import json
 import xml.etree.ElementTree as ET
 from typing import List, Dict
-from common import slugify
+from common import slugify, SITE_URL_BASE
 
 FEEDS_DIR = "feeds"
-SITE_URL = "https://gitfox-enter.github.io/RSSForge/"
+SITE_URL = SITE_URL_BASE  # fix #17: 统一从 common.py 获取
 
 
 def _safe_filename(name: str) -> str:

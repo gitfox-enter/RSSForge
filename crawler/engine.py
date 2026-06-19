@@ -662,10 +662,17 @@ async def fetch_page_content_async(
             ) as resp:
                 elapsed = time.time() - start_time
 
-                # SSRF protection: check final URL after redirects
+                # SSRF protection: check final URL after redirects (fix #14: 使用 ipaddress 模块)
+                import ipaddress as _ipaddress
                 final_host = urlparse(str(resp.url)).hostname or ''
-                if final_host.startswith(('127.', '10.', '172.16.', '192.168.', '169.254.', '0.', '::1', 'localhost')):
-                    return False, f"SSRF blocked: {final_host}"
+                try:
+                    final_ip = _ipaddress.ip_address(final_host)
+                    if final_ip.is_private or final_ip.is_loopback or final_ip.is_link_local or final_ip.is_reserved:
+                        return False, f"SSRF blocked: {final_host}"
+                except ValueError:
+                    # 非 IP 地址（域名），检查已知危险主机名
+                    if final_host.lower() in ('localhost', 'metadata.google.internal'):
+                        return False, f"SSRF blocked: {final_host}"
 
                 if resp.status == 200:
                     # Read response body while context manager is open
@@ -1254,12 +1261,17 @@ async def main_async() -> None:
     old_records = load_hash_records()
     logger.info("已加载哈希记录 (SQLite): %d 条", len(old_records))
 
-    # Create aiohttp session with connection pooling (ssl=False: 全局跳过SSL验证，不惜代价抓内容)
+    # Create aiohttp session with connection pooling
+    # 使用宽松但非完全禁用的 SSL 上下文 (fix #11)
+    import ssl as _ssl
+    ssl_ctx = _ssl.create_default_context()
+    ssl_ctx.check_hostname = False
+    ssl_ctx.verify_mode = _ssl.CERT_NONE  # 部分目标站证书无效，但仍走 TLS 加密
     connector = aiohttp.TCPConnector(
         limit=10,
         limit_per_host=2,
         ttl_dns_cache=300,
-        ssl=False,
+        ssl=ssl_ctx,
     )
     async with aiohttp.ClientSession(connector=connector) as session:
         # Concurrent crawling with semaphore

@@ -411,18 +411,20 @@ class DomainRateLimiter:
 
     def wait(self, domain: str) -> None:
         """Block until at least *min_gap* seconds have elapsed since the last request to *domain*."""
-        sleep_time = 0.0
         with self._lock:
             now = time.time()
             last = self._last_request.get(domain, 0)
             elapsed = now - last
             if elapsed < self._min_gap:
                 sleep_time = self._min_gap - elapsed
+                # 在锁内预留时间，防止并发竞态 (fix #20)
+                self._last_request[domain] = now + sleep_time
+            else:
+                sleep_time = 0.0
+                self._last_request[domain] = now
         # Sleep outside the lock so other domains are not blocked
         if sleep_time > 0:
             time.sleep(sleep_time)
-        with self._lock:
-            self._last_request[domain] = time.time()
 
     async def async_wait(self, domain: str) -> None:
         """Async-compatible rate limiter: uses asyncio.sleep to avoid blocking the event loop."""

@@ -216,9 +216,11 @@ a{color:inherit;text-decoration:none}
     document.body.removeChild(ta);
   }
 
-  // Navigate to target
+  // Navigate to target (fix #12: validate URL scheme)
   window.goToUrl = function() {
-    window.open(targetUrl, '_blank', 'noopener,noreferrer');
+    if (/^https?:\/\//i.test(targetUrl)) {
+      window.open(targetUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
   // Toast
@@ -237,9 +239,12 @@ a{color:inherit;text-decoration:none}
     }
   });
 
-  // Update page title
+  // Update page title (fix #12: sanitize title)
   if (itemTitle) {
-    document.title = '正在离开线报聚合 → ' + itemTitle.substring(0, 40);
+    var safe = itemTitle.replace(/[<>&"']/g, function(c) {
+      return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c];
+    });
+    document.title = '正在离开线报聚合 → ' + safe.substring(0, 40);
   }
 
 })();

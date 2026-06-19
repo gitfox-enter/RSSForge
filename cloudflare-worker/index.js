@@ -43,6 +43,19 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
+    // Authentication check (fix #13)
+    const authHeader = request.headers.get('X-Auth-Token');
+    if (!env.TRIGGER_SECRET || authHeader !== env.TRIGGER_SECRET) {
+      // Allow requests without secret if no secret is configured (dev mode)
+      // But block requests with wrong secret
+      if (env.TRIGGER_SECRET && authHeader !== env.TRIGGER_SECRET) {
+        return new Response(JSON.stringify({ error: 'Forbidden' }), {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
     if (url.pathname === '/trigger/crawl' && request.method === 'POST') {
       const result = await triggerWorkflow(env.GITHUB_TOKEN, 'crawl.yml');
       return new Response(JSON.stringify({ workflow: 'crawl.yml', ok: result.ok, status: result.status }), {

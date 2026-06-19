@@ -253,10 +253,16 @@ async def fetch_and_extract_async(
 
         resp, body = result
 
-        # SSRF Protection - block private/internal IP addresses
+        # SSRF Protection - block private/internal IP addresses (fix #14: 使用 ipaddress 模块)
+        import ipaddress as _ipaddress
         final_host = urlparse(str(resp.url)).hostname or ''
-        if final_host.startswith(('127.', '10.', '172.16.', '192.168.', '169.254.', '0.')):
-            return name, url, [], f"SSRF blocked: {final_host}"
+        try:
+            final_ip = _ipaddress.ip_address(final_host)
+            if final_ip.is_private or final_ip.is_loopback or final_ip.is_link_local or final_ip.is_reserved:
+                return name, url, [], f"SSRF blocked: {final_host}"
+        except ValueError:
+            if final_host.lower() in ('localhost', 'metadata.google.internal'):
+                return name, url, [], f"SSRF blocked: {final_host}"
 
         if resp.status != 200:
             return name, url, [], f"HTTP {resp.status}"

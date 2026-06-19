@@ -108,7 +108,7 @@ def fetch_page_content(url: str) -> Tuple[bool, Any]:
         is_allowed_by_robots, get_session,
         get_conditional_headers, update_conditional_cache, metrics,
     )
-    from crawler.config import MAX_RETRIES, RETRY_BASE_DELAY
+    from crawler.config import MAX_RETRIES, RETRY_BASE_DELAY, REQUEST_TIMEOUT
     from crawler.storage import get_referer, get_random_profile
 
     # URL scheme validation: only allow http/https
@@ -198,12 +198,18 @@ def fetch_page_content(url: str) -> Tuple[bool, Any]:
         # 请求成功
         metrics.record_success(domain, elapsed)
 
-        # SSRF protection: validate final URL is not internal (after redirects)
+        # SSRF protection: validate final URL is not internal (fix #14: 使用 ipaddress)
+        import ipaddress as _ipaddress
         final_url = response.url
         parsed_final = urlparse(final_url)
         hostname = parsed_final.hostname or ''
-        if hostname.startswith(('127.', '10.', '172.16.', '192.168.', '169.254.', '0.', '::1', 'localhost')):
-            return False, f"SSRF blocked: redirect to internal address {hostname}"
+        try:
+            final_ip = _ipaddress.ip_address(hostname)
+            if final_ip.is_private or final_ip.is_loopback or final_ip.is_link_local or final_ip.is_reserved:
+                return False, f"SSRF blocked: redirect to internal address {hostname}"
+        except ValueError:
+            if hostname.lower() in ('localhost', 'metadata.google.internal'):
+                return False, f"SSRF blocked: redirect to internal address {hostname}"
 
         # Response size limit (10MB)
         MAX_RESPONSE_SIZE = 10 * 1024 * 1024  # 10MB
