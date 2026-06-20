@@ -24,10 +24,6 @@ Contents:
   - Async-safe proxy pool with health tracking
 """
 
-# ============================================================
-# Imports
-# ============================================================
-
 import os
 import sys
 import re
@@ -40,6 +36,8 @@ import threading
 from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional, Set, Tuple
 from urllib.parse import urlparse
+
+logger = logging.getLogger('common')
 
 # ============================================================
 # Constants

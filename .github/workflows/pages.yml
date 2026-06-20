@@ -4,10 +4,17 @@ on:
   push:
     branches:
       - main
-  workflow_run:
-    workflows: ["站点更新监控"]
-    types:
-      - completed
+    paths:
+      - 'index.html'
+      - 'redirect.html'
+      - 'status.html'
+      - 'offline.html'
+      - 'public/**'
+      - 'feeds/**'
+      - 'opml.xml'
+      - 'feed.xml'
+      - 'feeds_meta.json'
+      - 'sw.js'
 
 permissions:
   contents: read
