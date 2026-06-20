@@ -16,7 +16,7 @@ sites:
 
   - url: "http://news.ixbk.net/"           # 线报酷镜像
     max_pages: 3
-    name: 线报酷
+    name: 线报酷(net)
     tier: high
     interval: 15
     fast_check: true
@@ -48,11 +48,7 @@ sites:
     interval: 20
     fast_check: true
 
-  - url: "https://xzba.cc/"                # 新赚吧
-    max_pages: 3
-    name: 新赚吧
-    tier: high
-    interval: 30
+  # [DEAD] 已移至 dead_sites: 新赚吧 (https://xzba.cc/)
 
   - url: "https://www.h6room.com/"         # H6线报
     max_pages: 3
@@ -105,17 +101,9 @@ sites:
     tier: high
     interval: 30
 
-  - url: "https://www.007ymd.com/"         # 007羊毛党
-    max_pages: 3
-    name: 007羊毛党
-    tier: high
-    interval: 30
+  # [DEAD] 已移至 dead_sites: 007羊毛党 (https://www.007ymd.com/)
 
-  - url: "https://www.12345pro.com/"       # 12345线报
-    max_pages: 3
-    name: 12345线报
-    tier: high
-    interval: 30
+  # [DEAD] 已移至 dead_sites: 12345线报 (https://www.12345pro.com/)
 
   - url: "https://m.hybase.com/"           # 好赚网
     max_pages: 3
@@ -225,44 +213,17 @@ sites:
       - path: /hardware
         name: 硬件相关
 
-  - url: "https://www.appinn.com/"         # 小众软件
-    max_pages: 5
-    name: 小众软件
-    tier: low
-    interval: 240
-    rss_feed: "https://www.appinn.com/feed/"
+  # [DEAD] 已移至 dead_sites: 小众软件 (https://www.appinn.com/)
 
-  - url: "https://www.lsapk.com/"          # LSapk
-    max_pages: 5
-    name: LSapk
-    tier: low
-    interval: 360
+  # [DEAD] 已移至 dead_sites: LSapk (https://www.lsapk.com/)
 
-  - url: "https://www.thosefree.com/"      # 免费族
-    max_pages: 5
-    name: 免费族
-    tier: low
-    interval: 240
-    rss_feed: "https://www.thosefree.com/feed/"
+  # [DEAD] 已移至 dead_sites: 免费族 (https://www.thosefree.com/)
 
-  - url: "https://www.foxirj.com/"         # 佛系软件
-    max_pages: 5
-    name: 佛系软件
-    tier: low
-    interval: 240
-    rss_feed: "https://www.foxirj.com/feed/"
+  # [DEAD] 已移至 dead_sites: 佛系软件 (https://www.foxirj.com/)
 
-  - url: "https://www.ddooo.com/"          # 多多软件
-    max_pages: 5
-    name: 多多软件
-    tier: low
-    interval: 360
+  # [DEAD] 已移至 dead_sites: 多多软件 (https://www.ddooo.com/)
 
-  - url: "https://www.onlinedown.net/"     # 华军软件
-    max_pages: 5
-    name: 华军软件
-    tier: low
-    interval: 480
+  # [DEAD] 已移至 dead_sites: 华军软件 (https://www.onlinedown.net/)
 
   - url: "https://free.apprcn.com/"        # 反斗限免
     max_pages: 5
@@ -286,20 +247,9 @@ sites:
     tier: medium
     interval: 120
 
-  - url: "https://www.kxdao.net/forum-42-1.html" # 开心赚
-    max_pages: 10
-    name: 开心赚
-    tier: medium
-    interval: 120
-    js_render: true           # Discuz 论坛需要 JS 渲染
+  # [DEAD] 已移至 dead_sites: 开心赚 (https://www.kxdao.net/forum-42-1.html)
 
-  - url: "https://www.51kanong.com/"       # 51卡农
-    max_pages: 5
-    name: 51卡农
-    tier: medium
-    interval: 60
-    js_render: true           # 反爬虫 JS 重定向
-    fast_check: true
+  # [DEAD] 已移至 dead_sites: 51卡农 (https://www.51kanong.com/)
 
   - url: "https://www.ithome.com/zt/xijiayi"  # IT之家
     max_pages: 5
@@ -348,3 +298,48 @@ dead_sites:
     reason: "连接失败(Connection refused)"
     confirmed_at: "2026-06-12"
     test_result: "Connection refused"
+  # --- adaptive_tiers.json dead sites (added 2026-06-20) ---
+  "https://www.007ymd.com/":
+    reason: "adaptive_tiers 标记为 dead"
+    confirmed_at: "2026-06-20"
+    test_result: "tier=dead"
+  "https://www.12345pro.com/":
+    reason: "adaptive_tiers 标记为 dead"
+    confirmed_at: "2026-06-20"
+    test_result: "tier=dead"
+  "https://xzba.cc/":
+    reason: "adaptive_tiers 标记为 dead"
+    confirmed_at: "2026-06-20"
+    test_result: "tier=dead"
+  "https://www.51kanong.com/":
+    reason: "adaptive_tiers 标记为 dead"
+    confirmed_at: "2026-06-20"
+    test_result: "tier=dead"
+  "https://www.appinn.com/":
+    reason: "adaptive_tiers 标记为 dead"
+    confirmed_at: "2026-06-20"
+    test_result: "tier=dead"
+  "https://www.ddooo.com/":
+    reason: "adaptive_tiers 标记为 dead"
+    confirmed_at: "2026-06-20"
+    test_result: "tier=dead"
+  "https://www.foxirj.com/":
+    reason: "adaptive_tiers 标记为 dead"
+    confirmed_at: "2026-06-20"
+    test_result: "tier=dead"
+  "https://www.kxdao.net/forum-42-1.html":
+    reason: "adaptive_tiers 标记为 dead"
+    confirmed_at: "2026-06-20"
+    test_result: "tier=dead"
+  "https://www.lsapk.com/":
+    reason: "adaptive_tiers 标记为 dead"
+    confirmed_at: "2026-06-20"
+    test_result: "tier=dead"
+  "https://www.onlinedown.net/":
+    reason: "adaptive_tiers 标记为 dead"
+    confirmed_at: "2026-06-20"
+    test_result: "tier=dead"
+  "https://www.thosefree.com/":
+    reason: "adaptive_tiers 标记为 dead"
+    confirmed_at: "2026-06-20"
+    test_result: "tier=dead"
