@@ -297,6 +297,51 @@ hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
 /* ==================== 可订阅的 Feed 列表 ==================== */
 .feeds-section { margin: 32px 0; }
 .feeds-section > h2 { font-size: 18px; font-weight: 700; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+.feed-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.feed-search {
+  flex: 1;
+  min-width: 180px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  background: var(--bg2);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.feed-search:focus { border-color: var(--pink); }
+.feed-search::placeholder { color: var(--text2); }
+.feed-filter-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  font-size: 12px;
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.feed-filter-btn:hover, .feed-filter-btn.active {
+  background: var(--pink);
+  color: white;
+  border-color: var(--pink);
+}
+.feed-count-info {
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 8px;
+}
+.feed-card.hidden { display: none !important; }
+.feed-parent-section.hidden { display: none !important; }
+.feed-parent-children .feed-card.hidden ~ .feed-card.hidden + .feed-card { }
 .feeds-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -421,7 +466,52 @@ footer p { font-size: 12px; color: var(--text3); }
   .container { padding: 0 16px; }
   .logo-tagline { display: none; }
   .features { grid-template-columns: 1fr; }
-  .feeds-grid { grid-template-columns: 1fr; }
+  
+.feed-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.feed-search {
+  flex: 1;
+  min-width: 180px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  background: var(--bg2);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.feed-search:focus { border-color: var(--pink); }
+.feed-search::placeholder { color: var(--text2); }
+.feed-filter-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  font-size: 12px;
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.feed-filter-btn:hover, .feed-filter-btn.active {
+  background: var(--pink);
+  color: white;
+  border-color: var(--pink);
+}
+.feed-count-info {
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 8px;
+}
+.feed-card.hidden { display: none !important; }
+.feed-parent-section.hidden { display: none !important; }
+.feed-parent-children .feed-card.hidden ~ .feed-card.hidden + .feed-card { }
+.feeds-grid { grid-template-columns: 1fr; }
   .hero-title { font-size: 28px; }
   .modal-box { padding: 24px 16px; }
   .modal-qr img { width: 180px; height: 180px; }
@@ -469,6 +559,7 @@ footer p { font-size: 12px; color: var(--text3); }
     <nav class="nav-links">
       <a class="nav-link" href="opml.xml" download>📥 OPML</a>
       <a class="nav-link" href="https://github.com/gitfox-enter/RSSForge" target="_blank">📂 GitHub</a>
+      <a class="nav-link" href="health.html">📡 监控</a>
       <a class="nav-link pink" href="https://github.com/gitfox-enter/RSSForge/fork" target="_blank">Fork 自建</a>
     </nav>
   </div>
@@ -528,6 +619,14 @@ footer p { font-size: 12px; color: var(--text3); }
     <p style="font-size:13px;color:var(--text2);margin-bottom:14px">
       点击「订阅」获取该站点的 RSS 链接，复制到 RSS 阅读器中添加。
     </p>
+    <div class="feed-toolbar">
+      <input class="feed-search" type="text" id="feed-search" placeholder="🔍 搜索站点名称...">
+      <button class="feed-filter-btn active" data-filter="all" onclick="filterFeeds('all', this)">全部</button>
+      <button class="feed-filter-btn" data-filter="high" onclick="filterFeeds('high', this)">高频</button>
+      <button class="feed-filter-btn" data-filter="medium" onclick="filterFeeds('medium', this)">中频</button>
+      <button class="feed-filter-btn" data-filter="low" onclick="filterFeeds('low', this)">低频</button>
+    </div>
+    <div class="feed-count-info" id="feed-count-info"></div>
     <div class="feeds-grid" id="feeds-grid">
       <!-- 由 JS 动态渲染 -->
     </div>
@@ -678,7 +777,7 @@ function copyFeedLink(feedUrl, ev) {
     var freq = m.freq_label || '定期更新';
     var count = m.count || 0;
     var feedFile = m.feed_url ? 'feeds/' + m.feed_url.split('/').pop() : 'feeds/' + encodeURIComponent(name) + '.xml';
-    return '<div class="feed-card">'
+    return '<div class="feed-card" data-tier="' + (m.tier || '') + '">'
       + '<div class="feed-icon-wrap">'
       +   '<img class="feed-icon" src="' + escapeHtml(m.icon || '') + '" alt="' + escapeHtml(name) + '" onerror="this.style.display=\'none\';">'
       + '</div>'
@@ -743,6 +842,56 @@ function copyFeedLink(feedUrl, ev) {
       document.getElementById('feeds-grid').innerHTML =
         '<p style="color:var(--text2);font-size:13px">暂无数据，请等待 GitHub Actions 首次运行</p>';
     });
+
+  // Search & Filter
+  window._allFeedMeta = meta;
+  window.filterFeeds = function(tier, btn) {
+    document.querySelectorAll('.feed-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    applyFilters(tier, document.getElementById('feed-search').value);
+  };
+  function applyFilters(tier, query) {
+    var grid = document.getElementById('feeds-grid');
+    var cards = grid.querySelectorAll('.feed-card');
+    var sections = grid.querySelectorAll('.feed-parent-section');
+    var q = query.trim().toLowerCase();
+    var visible = 0;
+    // Filter standalone cards
+    cards.forEach(function(card) {
+      var nameEl = card.querySelector('.feed-name');
+      var name = nameEl ? nameEl.textContent.toLowerCase() : '';
+      var matchName = !q || name.indexOf(q) !== -1;
+      var matchTier = tier === 'all' || (card.dataset.tier || card.closest('[data-tier]') || {}).tier === tier;
+      // Check data-tier on card itself or parent section
+      if (!card.dataset.tier && card.closest('.feed-parent-section')) {
+        matchTier = tier === 'all';
+      }
+      if (matchName) {
+        card.classList.remove('hidden');
+        visible++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+    // Filter parent sections (hide if all children hidden)
+    sections.forEach(function(section) {
+      var children = section.querySelectorAll('.feed-parent-children .feed-card');
+      var anyVisible = false;
+      children.forEach(function(c) { if (!c.classList.contains('hidden')) anyVisible = true; });
+      section.classList.toggle('hidden', !anyVisible);
+    });
+    // Update count
+    var info = document.getElementById('feed-count-info');
+    if (info) {
+      var total = cards.length;
+      info.textContent = q ? '找到 ' + visible + ' / ' + total + ' 个站点' : '共 ' + total + ' 个站点';
+    }
+  }
+  document.getElementById('feed-search').addEventListener('input', function() {
+    var activeBtn = document.querySelector('.feed-filter-btn.active');
+    var tier = activeBtn ? activeBtn.dataset.filter : 'all';
+    applyFilters(tier, this.value);
+  });
 })();
 </script>
 </body>

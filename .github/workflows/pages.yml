@@ -15,6 +15,7 @@ on:
       - 'feed.xml'
       - 'feeds_meta.json'
       - 'sw.js'
+      - 'health.html'
 
 permissions:
   contents: read
