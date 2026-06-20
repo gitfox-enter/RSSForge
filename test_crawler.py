@@ -527,6 +527,12 @@ class TestMergeItemsIntoDb(unittest.TestCase):
         self._tmpdir = tempfile.mkdtemp()
         self._orig_cwd = os.getcwd()
         os.chdir(self._tmpdir)
+        # 使用动态时间，避免超过 7 天保留窗口导致测试失败
+        from datetime import datetime, timedelta, timezone
+        _now = datetime.now(timezone(timedelta(hours=8)))
+        self.check_time = _now.strftime("%Y-%m-%d %H:%M:%S")
+        self.recent_time = (_now - timedelta(hours=2)).strftime("%Y-%m-%d %H:%M:%S")
+        self.old_time = (_now - timedelta(days=3)).strftime("%Y-%m-%d %H:%M:%S")
 
     def tearDown(self):
         os.chdir(self._orig_cwd)
@@ -539,28 +545,28 @@ class TestMergeItemsIntoDb(unittest.TestCase):
 
     def test_merge_into_empty_db(self):
         new_items = [
-            {"url": "https://a.com/1", "text": "Item 1"},
-            {"url": "https://b.com/2", "text": "Item 2"},
+            {"url": "https://a.com/1", "text": "Item 1", "time": self.recent_time},
+            {"url": "https://b.com/2", "text": "Item 2", "time": self.recent_time},
         ]
-        added = crawl.merge_items_into_db(new_items, "2026-06-08 10:00:00")
+        added = crawl.merge_items_into_db(new_items, self.check_time)
         self.assertEqual(added, 2)
 
         db = crawl.load_items_db()
         self.assertEqual(len(db["items"]), 2)
-        self.assertEqual(db["updated_at"], "2026-06-08 10:00:00")
+        self.assertEqual(db["updated_at"], self.check_time)
 
     def test_deduplication(self):
         # Pre-populate DB
         crawl.save_items_db({
-            "items": [{"url": "https://a.com/1", "text": "Existing"}],
+            "items": [{"url": "https://a.com/1", "text": "Existing", "time": self.recent_time, "first_seen_at": self.check_time}],
             "updated_at": "old",
         })
 
         new_items = [
             {"url": "https://a.com/1", "text": "Duplicate"},  # should be skipped
-            {"url": "https://c.com/3", "text": "Brand new"},
+            {"url": "https://c.com/3", "text": "Brand new", "time": self.recent_time},
         ]
-        added = crawl.merge_items_into_db(new_items, "2026-06-08 11:00:00")
+        added = crawl.merge_items_into_db(new_items, self.check_time)
         self.assertEqual(added, 1)
 
         db = crawl.load_items_db()
@@ -571,11 +577,11 @@ class TestMergeItemsIntoDb(unittest.TestCase):
 
     def test_new_items_prepended(self):
         crawl.save_items_db({
-            "items": [{"url": "https://old.com/1", "text": "Old"}],
+            "items": [{"url": "https://old.com/1", "text": "Old", "time": self.recent_time, "first_seen_at": self.check_time}],
             "updated_at": "old",
         })
-        new_items = [{"url": "https://new.com/1", "text": "New"}]
-        crawl.merge_items_into_db(new_items, "2026-06-08 12:00:00")
+        new_items = [{"url": "https://new.com/1", "text": "New", "time": self.recent_time}]
+        crawl.merge_items_into_db(new_items, self.check_time)
 
         db = crawl.load_items_db()
         self.assertEqual(db["items"][0]["url"], "https://new.com/1")
@@ -593,17 +599,17 @@ class TestMergeItemsIntoDb(unittest.TestCase):
         try:
             # Pre-populate with 8 items (all with recent time to pass 7-day filter)
             existing = [
-                {"url": f"https://old.com/{i}", "text": f"Old {i}", "time": "2026-06-13 12:00:00"}
+                {"url": f"https://old.com/{i}", "text": f"Old {i}", "time": self.recent_time, "first_seen_at": self.check_time}
                 for i in range(8)
             ]
             crawl.save_items_db({"items": existing, "updated_at": "old"})
 
             # Add 5 new items -> total 13, should NOT trim to 10 (count cap removed)
             new_items = [
-                {"url": f"https://new.com/{i}", "text": f"New {i}", "time": "2026-06-13 13:00:00"}
+                {"url": f"https://new.com/{i}", "text": f"New {i}", "time": self.recent_time}
                 for i in range(5)
             ]
-            added = crawl.merge_items_into_db(new_items, "2026-06-13 12:00:00")
+            added = crawl.merge_items_into_db(new_items, self.check_time)
             self.assertEqual(added, 5)
 
             db = crawl.load_items_db()
@@ -617,18 +623,18 @@ class TestMergeItemsIntoDb(unittest.TestCase):
 
     def test_auto_categorize_applied(self):
         new_items = [
-            {"url": "https://a.com/1", "text": "京东优惠券大促销"},
+            {"url": "https://a.com/1", "text": "京东优惠券大促销", "time": self.recent_time},
         ]
-        crawl.merge_items_into_db(new_items, "2026-06-08 12:00:00")
+        crawl.merge_items_into_db(new_items, self.check_time)
 
         db = crawl.load_items_db()
         self.assertEqual(db["items"][0]["category"], "京东")
 
     def test_existing_category_preserved(self):
         new_items = [
-            {"url": "https://a.com/1", "text": "京东优惠券", "category": "自定义"},
+            {"url": "https://a.com/1", "text": "京东优惠券", "category": "自定义", "time": self.recent_time},
         ]
-        crawl.merge_items_into_db(new_items, "2026-06-08 12:00:00")
+        crawl.merge_items_into_db(new_items, self.check_time)
 
         db = crawl.load_items_db()
         self.assertEqual(db["items"][0]["category"], "自定义")
@@ -636,9 +642,9 @@ class TestMergeItemsIntoDb(unittest.TestCase):
     def test_empty_url_items_skipped(self):
         new_items = [
             {"url": "", "text": "No URL"},
-            {"url": "https://valid.com/", "text": "Valid"},
+            {"url": "https://valid.com/", "text": "Valid", "time": self.recent_time},
         ]
-        added = crawl.merge_items_into_db(new_items, "2026-06-08 12:00:00")
+        added = crawl.merge_items_into_db(new_items, self.check_time)
         self.assertEqual(added, 1)
 
 
