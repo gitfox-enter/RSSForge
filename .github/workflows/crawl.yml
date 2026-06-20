@@ -70,7 +70,8 @@ jobs:
           # 数据和状态文件（不包含 feed.xml）
           git add hash_record.txt notified_items.json adaptive_tiers.json 2>/dev/null || true
           # Per-site feeds, 统一 OPML, 和 meta
-          git add feeds/ opml.xml feeds_meta.json public/icons/ 2>/dev/null || true
+          git add -A feeds/ opml.xml feeds_meta.json public/icons/ 2>/dev/null || true
+          git add -u opml-*.xml 2>/dev/null || true
 
           git status
           if git diff --staged --quiet 2>/dev/null; then
