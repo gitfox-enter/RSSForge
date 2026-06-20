@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """RSS/Atom feed parsers and special content extractors."""
 
+import asyncio
 import logging
 import re
 import time
@@ -87,11 +88,6 @@ def parse_rss_feed(content_bytes: bytes, base_url: str) -> List[Dict[str, str]]:
     return items[:30]
 
 
-
-
-
-
-
 def _ghxi_fetch_sync() -> List[Dict[str, str]]:
     """果核剥壳 WP API 同步请求（供 sync 路径使用）。"""
     api_url = "https://www.ghxi.com/wp-json/wp/v2/posts?per_page=30"
@@ -118,10 +114,8 @@ def _ghxi_fetch_sync() -> List[Dict[str, str]]:
     return items
 
 
-
-
 async def fetch_ghxi_items_async(session) -> List[Dict[str, str]]:
-    """果核剥壳 WP API 异步请求（供 async 路径使用，避免阻塞事件循环）。"""
+    """果核剥壳 WP API 异步请求（带重试和 RSS 兜底）。"""
     api_url = "https://www.ghxi.com/wp-json/wp/v2/posts?per_page=30"
     headers = {
         'User-Agent': get_random_ua(),
@@ -129,27 +123,66 @@ async def fetch_ghxi_items_async(session) -> List[Dict[str, str]]:
         'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
     }
     items: List[Dict[str, str]] = []
-    try:
-        async with session.get(
-            api_url,
-            headers=headers,
-            timeout=aiohttp.ClientTimeout(total=30),
-        ) as resp:
-            if resp.status == 200:
-                posts = await resp.json()
-                for post in posts:
-                    title = html_mod.unescape(post.get('title', {}).get('rendered', ''))
-                    link = post.get('link', '')
-                    if title and len(title) > 3 and link:
-                        items.append({'text': title, 'url': link})
-                logger.info("果核剥壳 WP API (async) 获取到 %d 篇文章", len(items))
-            else:
-                logger.info("果核剥壳 WP API (async) 返回 HTTP %d", resp.status)
-    except Exception as e:
-        logger.info("果核剥壳 WP API (async) 请求失败: %s", e)
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            async with session.get(
+                api_url,
+                headers=headers,
+                timeout=aiohttp.ClientTimeout(total=60),
+                ssl=False,
+            ) as resp:
+                if resp.status == 200:
+                    posts = await resp.json()
+                    for post in posts:
+                        title = html_mod.unescape(post.get('title', {}).get('rendered', ''))
+                        link = post.get('link', '')
+                        if title and len(title) > 3 and link:
+                            items.append({'text': title, 'url': link})
+                    logger.info("果核剥壳 WP API (async) 获取到 %d 篇文章", len(items))
+                    return items
+                else:
+                    logger.info("果核剥壳 WP API (async) 返回 HTTP %d (尝试 %d/%d)", resp.status, attempt + 1, max_retries)
+        except asyncio.TimeoutError:
+            logger.info("果核剥壳 WP API (async) 超时 (尝试 %d/%d)", attempt + 1, max_retries)
+        except Exception as e:
+            logger.info("果核剥壳 WP API (async) 请求失败 [%s]: %s (尝试 %d/%d)", type(e).__name__, e, attempt + 1, max_retries)
+        if attempt < max_retries - 1:
+            await asyncio.sleep(2 ** (attempt + 1))
+    # WP API 全部失败，尝试 RSS feed 兜底
+    if not items:
+        logger.info("果核剥壳 WP API 全部失败，尝试 RSS feed 兜底")
+        items = await _fetch_ghxi_rss_fallback(session)
     return items
 
 
+async def _fetch_ghxi_rss_fallback(session) -> List[Dict[str, str]]:
+    """果核剥壳 RSS feed 兜底请求。"""
+    feed_url = "https://www.ghxi.com/feed/"
+    headers = {
+        'User-Agent': get_random_ua(),
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*;q=0.8',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    }
+    try:
+        async with session.get(
+            feed_url,
+            headers=headers,
+            timeout=aiohttp.ClientTimeout(total=60),
+            ssl=False,
+        ) as resp:
+            if resp.status == 200:
+                content = await resp.read()
+                items = parse_rss_feed(content, feed_url)
+                logger.info("果核剥壳 RSS 兜底获取到 %d 条", len(items))
+                return items
+            else:
+                logger.info("果核剥壳 RSS 兜底返回 HTTP %d", resp.status)
+    except asyncio.TimeoutError:
+        logger.info("果核剥壳 RSS 兜底超时")
+    except Exception as e:
+        logger.info("果核剥壳 RSS 兜底失败 [%s]: %s", type(e).__name__, e)
+    return []
 
 
 async def fetch_rss_feed_async(session, feed_url: str, timeout_seconds: int = 25) -> List[Dict[str, str]]:
@@ -189,16 +222,12 @@ async def fetch_rss_feed_async(session, feed_url: str, timeout_seconds: int = 25
     return []
 
 
-
-
 def parse_ghxi_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """果核剥壳 - 通过 WordPress REST API 获取文章（站点为 Vue SPA，HTML 无法直接解析）
 
     注意：此函数仅用于同步路径。异步路径应使用 fetch_ghxi_items_async。
     """
     return _ghxi_fetch_sync()
-
-
 
 
 def extract_article_items(soup: BeautifulSoup, base_url: str = '') -> List[Dict[str, str]]:
@@ -263,5 +292,3 @@ def extract_article_items(soup: BeautifulSoup, base_url: str = '') -> List[Dict[
 # ---------------------------------------------------------------------------
 # 1. 12345pro.com  (12345线报)
 # ---------------------------------------------------------------------------
-
-
