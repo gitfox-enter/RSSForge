@@ -190,5 +190,53 @@
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/wan-yun-ji-fen.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/public/icons/wan-yun-ji-fen.png",
     "site_url": "https://10000yun.com/"
+  },
+  "12345线报": {
+    "interval": 30,
+    "freq_label": "每30分钟",
+    "count": 30,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/12345%E7%BA%BF%E6%8A%A5.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/public/icons/12345%E7%BA%BF%E6%8A%A5.svg",
+    "site_url": "https://www.12345pro.com/"
+  },
+  "活动5": {
+    "interval": 60,
+    "freq_label": "每小时",
+    "count": 30,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/%E6%B4%BB%E5%8A%A85.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/public/icons/%E6%B4%BB%E5%8A%A85.png",
+    "site_url": "https://www.huodong5.com/"
+  },
+  "网赚": {
+    "interval": 30,
+    "freq_label": "每30分钟",
+    "count": 30,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/%E7%BD%91%E8%B5%9A.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/public/icons/%E7%BD%91%E8%B5%9A.png",
+    "site_url": "https://www.wycad.com/"
+  },
+  "慢慢买": {
+    "interval": 120,
+    "freq_label": "每2小时",
+    "count": 30,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/%E6%85%A2%E6%85%A2%E4%B9%B0.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/public/icons/%E6%85%A2%E6%85%A2%E4%B9%B0.png",
+    "site_url": "https://www.manmanbuy.com/"
+  },
+  "果核剥壳": {
+    "interval": 480,
+    "freq_label": "每8小时",
+    "count": 30,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/%E6%9E%9C%E6%A0%B8%E5%89%A5%E5%A3%B3.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/public/icons/%E6%9E%9C%E6%A0%B8%E5%89%A5%E5%A3%B3.png",
+    "site_url": "https://www.ghxi.com/"
+  },
+  "白菜哦": {
+    "interval": 120,
+    "freq_label": "每2小时",
+    "count": 30,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/%E7%99%BD%E8%8F%9C%E5%93%A6.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/public/icons/%E7%99%BD%E8%8F%9C%E5%93%A6.png",
+    "site_url": "https://www.baicaio.com/"
   }
 }
