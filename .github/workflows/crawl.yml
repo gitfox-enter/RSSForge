@@ -64,7 +64,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
 
           # 总是添加 crawl_status.json，确保网页显示最后爬取时间
-          git add crawl_status.json 2>/dev/null || true
+          git add crawl_status.json items.json items_latest.json 2>/dev/null || true
           # 调度器状态和日志（智能调度需要）
           git add scheduler_state.json run_log.jsonl 2>/dev/null || true
           # 数据和状态文件（不包含 feed.xml）
