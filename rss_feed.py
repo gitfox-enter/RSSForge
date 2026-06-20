@@ -12,6 +12,7 @@ RSS/Atom Feed 生成器 — 为每个订阅站点生成独立 feed。
 import json
 import os
 import re
+import hashlib
 from urllib.parse import urlparse
 try:
     import httpx
@@ -233,6 +234,38 @@ def _interval_to_update_frequency(interval_min: int) -> int:
     return 1
 
 
+def _compute_items_hash(items: List[Dict]) -> str:
+    """计算站点条目列表的哈希值，用于增量生成判断 (#36).
+
+    基于条目的 URL + time + text 生成 MD5，任何字段变化都会导致哈希变化。
+    """
+    h = hashlib.md5()
+    for item in sorted(items, key=lambda x: x.get('url', '')):
+        h.update(item.get('url', '').encode('utf-8'))
+        h.update(b'|')
+        h.update(item.get('time', '').encode('utf-8'))
+        h.update(b'|')
+        h.update(item.get('text', '').encode('utf-8'))
+        h.update(b'\n')
+    return h.hexdigest()
+
+
+def _load_previous_hashes() -> Dict[str, str]:
+    """从 feeds_meta.json 加载上次生成的 items_hash (#36)."""
+    try:
+        if os.path.exists('feeds_meta.json'):
+            with open('feeds_meta.json', 'r', encoding='utf-8') as f:
+                meta = json.load(f)
+            return {
+                name: info.get('items_hash', '')
+                for name, info in meta.items()
+                if isinstance(info, dict)
+            }
+    except Exception:
+        pass
+    return {}
+
+
 # ============================================================
 # Feed 生成
 # ============================================================
@@ -408,9 +441,13 @@ def generate_all_feeds() -> Dict[str, int]:
         'feeds_generated': 0,
         'feeds_skipped': 0,
         'feeds_empty_skipped': 0,
+        'feeds_unchanged': 0,
         'total_sites': 0,
         'sites_with_items': 0,
     }
+
+    # 加载上次生成的 items 哈希，用于增量生成 (#36)
+    prev_hashes = _load_previous_hashes()
 
     # 按来源分组已有数据
     by_source: Dict[str, List[Dict]] = {}
@@ -485,7 +522,14 @@ def generate_all_feeds() -> Dict[str, int]:
         # 按时间排序
         site_items = sorted(site_items, key=lambda x: x.get('time', ''), reverse=True)
         stats['sites_with_items'] += 1
-        
+
+        # ---- 增量生成：比对 items 哈希 (#36) ----
+        current_hash = _compute_items_hash(site_items)
+        prev_hash = prev_hashes.get(site_name, '')
+        if prev_hash and prev_hash == current_hash and os.path.exists(filename):
+            stats['feeds_unchanged'] += 1
+            continue  # 数据无变化且 feed 文件存在，跳过生成
+
         root = _build_atom_feed(
             site_items, title, feed_url, desc, updated_at,
             interval_min=interval,
@@ -528,7 +572,8 @@ def generate_all_feeds() -> Dict[str, int]:
     # 生成 feeds_meta.json
     _generate_feeds_meta(stats, by_source)
 
-    print(f"\n完成: {stats['feeds_generated']} 个 feed 生成, {stats['sites_with_items']} 个站点有数据, {stats['feeds_empty_skipped']} 个空 feed 跳过")
+    print(f"\n完成: {stats['feeds_generated']} 个 feed 生成, {stats['feeds_unchanged']} 个未变化跳过, "
+          f"{stats['sites_with_items']} 个站点有数据, {stats['feeds_empty_skipped']} 个空 feed 跳过")
     return stats
 
 
@@ -536,6 +581,7 @@ def _generate_feeds_meta(stats: Dict, by_source: Dict[str, List[Dict]]) -> None:
     """生成 feeds_meta.json 用于前端展示.
     
     仅包含有数据的站点，空 feed 不写入 meta (fix #1)。
+    同时记录每个站点的 items_hash 用于增量生成 (#36)。
     """
     meta = {}
     
@@ -543,8 +589,8 @@ def _generate_feeds_meta(stats: Dict, by_source: Dict[str, List[Dict]]) -> None:
     
     for url, name in SOURCE_NAME_MAP.items():
         # 跳过无数据的站点
-        items_count = len(by_source.get(name, []))
-        # Include all sites regardless of item count
+        site_items = by_source.get(name, [])
+        items_count = len(site_items)
 
         safe_name = _safe_filename(name)
         interval = SITE_INTERVALS.get(url, 30)
@@ -569,8 +615,9 @@ def _generate_feeds_meta(stats: Dict, by_source: Dict[str, List[Dict]]) -> None:
             'freq_label': freq_label,
             'count': items_count,
             'feed_url': f"{SITE_URL}{FEEDS_DIR}/{safe_name}.xml",
-            'icon': icon_url,  # 强制使用本地图标
+            'icon': icon_url,
             'site_url': url,
+            'items_hash': _compute_items_hash(site_items) if site_items else '',  # (#36)
         }
     
     try:
