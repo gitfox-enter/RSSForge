@@ -57,6 +57,7 @@ FEEDS_DIR = "feeds"
 FEED_TITLE = "RSSForge"
 FEED_DESCRIPTION = "基于 GitHub Actions 的免费 RSS 订阅源生成器"
 ICONS_DIR = "public/icons"
+ICONS_URL_PATH = "icons"  # 部署后 URL 路径（public/ 被 GitHub Pages 剥离）
 
 
 # ============================================================
@@ -147,7 +148,7 @@ def fetch_site_favicon(site_url: str, site_name: str) -> str:
     os.makedirs(ICONS_DIR, exist_ok=True)
     safe_name = slugify(site_name)
     filepath = os.path.join(ICONS_DIR, f"{safe_name}.png")
-    icon_url = f"{SITE_URL}{ICONS_DIR}/{safe_name}.png"
+    icon_url = f"{SITE_URL}{ICONS_URL_PATH}/{safe_name}.png"
 
     # 1) 本地已缓存
     if os.path.exists(filepath) and os.path.getsize(filepath) > 50:
@@ -179,7 +180,7 @@ def fetch_site_favicon(site_url: str, site_name: str) -> str:
     with open(svg_path, "w", encoding="utf-8") as f:
         f.write(svg_content)
     
-    fallback_url = f"{SITE_URL}{ICONS_DIR}/{safe_name}.svg"
+    fallback_url = f"{SITE_URL}{ICONS_URL_PATH}/{safe_name}.svg"
     _favicon_cache[site_name] = fallback_url
     return fallback_url
 
@@ -497,6 +498,32 @@ def generate_all_feeds() -> Dict[str, int]:
             print(f"  ✓ {site_name}: {len(site_items)} 条")
         else:
             stats['feeds_skipped'] += 1
+
+    # ---- 清理旧的 feed 和 icon 文件 ----
+    # 收集本次生成的有效 feed 文件名
+    generated_feed_files = set()
+    generated_icon_names = set()
+    for site_url_key, name in url_to_name.items():
+        sn = _safe_filename(name)
+        generated_feed_files.add(sn + '.xml')
+        generated_icon_names.add(sn)
+
+    # 删除 feeds/ 中不属于本次生成结果的 .xml 文件
+    if os.path.isdir(FEEDS_DIR):
+        for f in os.listdir(FEEDS_DIR):
+            if f.endswith('.xml') and f not in generated_feed_files:
+                old_path = os.path.join(FEEDS_DIR, f)
+                os.remove(old_path)
+                print(f"  🗑 清理旧 feed: {f}")
+
+    # 删除 public/icons/ 中含中文的旧图标文件
+    if os.path.isdir(ICONS_DIR):
+        _chinese_re = re.compile(r'[\u4e00-\u9fff]')
+        for f in os.listdir(ICONS_DIR):
+            if _chinese_re.search(f):
+                old_path = os.path.join(ICONS_DIR, f)
+                os.remove(old_path)
+                print(f"  🗑 清理旧 icon: {f}")
 
     # 生成 feeds_meta.json
     _generate_feeds_meta(stats, by_source)
