@@ -15,7 +15,7 @@ from common import (
     load_items_db, save_items_db, load_blacklist, is_blacklisted,
     build_source_name_index, get_source_name as _get_source_name_by_index,
     calculate_md5, upgrade_to_https, get_beijing_time, auto_categorize,
-    ProxyPool, create_proxy_pool,
+    ProxyPool, create_proxy_pool, fetch_article_summary,
 )
 from crawler.config import NOTIFIED_ITEMS_FILE, HASH_RECORD_FILE, REQUEST_DELAY_MIN, REQUEST_DELAY_MAX, BROWSER_PROFILES
 
@@ -307,6 +307,14 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
             # 添加自动分类
             if not item.get('category'):
                 item['category'] = auto_categorize(item.get('text', ''))
+            # 填充文章摘要 (issue #34)
+            if not item.get('summary') and url:
+                try:
+                    summary_data = fetch_article_summary(url, timeout=5)
+                    if summary_data.get('summary'):
+                        item['summary'] = summary_data['summary']
+                except Exception:
+                    pass  # 摘要提取失败不影响主流程
             # 记录首次入库时间，保护历史内容不受 7 天窗口影响
             item['first_seen_at'] = check_time
             fresh_items.append(item)

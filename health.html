@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSSForge - Feed 健康监控</title>
+<style>
+:root { --bg:#fff; --bg2:#f7f8fa; --text:#1a1a2e; --text2:#666; --pink:#e91e8e; --green:#22c55e; --yellow:#f59e0b; --red:#ef4444; --blue:#3b82f6; --border:#e5e7eb; }
+@media (prefers-color-scheme:dark) { :root { --bg:#0d1117; --bg2:#161b22; --text:#e6edf3; --text2:#8b949e; --border:#30363d; } }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:var(--bg); color:var(--text); padding:20px; max-width:960px; margin:0 auto; }
+h1 { font-size:20px; margin-bottom:4px; }
+.subtitle { font-size:13px; color:var(--text2); margin-bottom:20px; }
+.summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:20px; }
+.summary-card { background:var(--bg2); border-radius:10px; padding:14px; text-align:center; border:1px solid var(--border); }
+.summary-card .num { font-size:28px; font-weight:700; }
+.summary-card .label { font-size:12px; color:var(--text2); margin-top:2px; }
+.summary-card.green .num { color:var(--green); }
+.summary-card.red .num { color:var(--red); }
+.summary-card.yellow .num { color:var(--yellow); }
+.summary-card.blue .num { color:var(--blue); }
+.status-filter { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+.filter-btn { padding:5px 12px; border:1px solid var(--border); border-radius:16px; font-size:12px; background:var(--bg2); color:var(--text2); cursor:pointer; transition:all 0.2s; }
+.filter-btn:hover,.filter-btn.active { background:var(--pink); color:#fff; border-color:var(--pink); }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+thead th { text-align:left; padding:10px 12px; font-size:12px; color:var(--text2); border-bottom:2px solid var(--border); font-weight:600; }
+tbody td { padding:10px 12px; border-bottom:1px solid var(--border); }
+tbody tr:hover { background:var(--bg2); }
+.badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; }
+.badge.ok { background:#dcfce7; color:#166534; }
+.badge.warn { background:#fef3c7; color:#92400e; }
+.badge.error { background:#fee2e2; color:#991b1b; }
+.badge.skip { background:#f3f4f6; color:#6b7280; }
+.badge.unknown { background:#f3f4f6; color:#9ca3af; }
+@media (prefers-color-scheme:dark) {
+  .badge.ok { background:#052e16; color:#4ade80; }
+  .badge.warn { background:#451a03; color:#fbbf24; }
+  .badge.error { background:#450a0a; color:#fca5a5; }
+  .badge.skip { background:#21262d; color:#8b949e; }
+  .badge.unknown { background:#21262d; color:#8b949e; }
+}
+.site-name { font-weight:500; }
+.tier { font-size:11px; color:var(--text2); }
+.count { font-variant-numeric:tabular-nums; }
+.refresh-info { font-size:11px; color:var(--text2); margin-top:12px; }
+a.back { font-size:13px; color:var(--pink); text-decoration:none; }
+</style>
+</head>
+<body>
+<a class="back" href="./">← 返回首页</a>
+<h1>📡 Feed 健康监控</h1>
+<p class="subtitle">实时查看所有 RSS 源的运行状态</p>
+<div class="summary" id="summary"></div>
+<div class="status-filter">
+  <button class="filter-btn active" onclick="filterStatus('all',this)">全部</button>
+  <button class="filter-btn" onclick="filterStatus('ok',this)">✅ 正常</button>
+  <button class="filter-btn" onclick="filterStatus('warn',this)">⚠️ 异常</button>
+  <button class="filter-btn" onclick="filterStatus('error',this)">❌ 失败</button>
+  <button class="filter-btn" onclick="filterStatus('skip',this)">⏭ 跳过</button>
+</div>
+<table>
+  <thead><tr><th>站点</th><th>状态</th><th>层级</th><th>条目数</th><th>抓取间隔</th><th>错误信息</th></tr></thead>
+  <tbody id="tbody"></tbody>
+</table>
+<p class="refresh-info" id="refresh-info">加载中...</p>
+<script>
+(function() {
+  var tbody = document.getElementById('tbody');
+  var summaryEl = document.getElementById('summary');
+  var refreshInfo = document.getElementById('refresh-info');
+  var allRows = [];
+
+  function badgeClass(status) {
+    return {ok:'ok', success:'ok', warn:'warn', skip:'skip', error:'error', fail:'error', '':'unknown'}[status] || 'unknown';
+  }
+  function statusText(status) {
+    return {ok:'正常', success:'正常', warn:'异常', skip:'跳过', error:'失败', fail:'失败', '':'未知'}[status] || status;
+  }
+
+  function render(data) {
+    var meta = data.meta || {};
+    var status = data.status || {};
+    var lastRun = status.last_run || {};
+    var sites = status.sites || [];
+
+    // Build a status lookup
+    var statusMap = {};
+    sites.forEach(function(s) { statusMap[s.url] = s; });
+    // Also by name
+    sites.forEach(function(s) { statusMap[s.name] = s; });
+
+    var counts = {ok:0, warn:0, error:0, skip:0, unknown:0, total:0};
+    allRows = [];
+
+    Object.keys(meta).sort().forEach(function(name) {
+      var m = meta[name];
+      var url = m.site_url || '';
+      var s = statusMap[url] || statusMap[name] || {};
+      var siteStatus = s.status || '';
+      var isError = s.error || '';
+      var tier = m.tier || m.freq_label || '';
+
+      // Determine health
+      var health = 'unknown';
+      if (isError && isError.indexOf('robots.txt') !== -1) health = 'skip';
+      else if (siteStatus === 'skip') health = 'skip';
+      else if (siteStatus === 'fail' || siteStatus === 'error') health = 'error';
+      else if (m.count > 0) health = 'ok';
+      else if (siteStatus === 'success' || siteStatus === 'ok') health = 'ok';
+      else if (m.count === 0 && !isError) health = 'warn';
+      else health = 'unknown';
+
+      counts[health] = (counts[health] || 0) + 1;
+      counts.total++;
+
+      var tr = document.createElement('tr');
+      tr.dataset.health = health;
+      tr.innerHTML =
+        '<td class="site-name">' + esc(name) + '</td>' +
+        '<td><span class="badge ' + badgeClass(health) + '">' + statusText(health) + '</span></td>' +
+        '<td class="tier">' + esc(tier) + '</td>' +
+        '<td class="count">' + (m.count || 0) + '</td>' +
+        '<td>' + esc(m.freq_label || '-') + '</td>' +
+        '<td style="color:var(--red);font-size:12px">' + esc(isError || '-') + '</td>';
+      allRows.push(tr);
+      tbody.appendChild(tr);
+    });
+
+    // Summary cards
+    summaryEl.innerHTML =
+      '<div class="summary-card blue"><div class="num">' + counts.total + '</div><div class="label">总站点</div></div>' +
+      '<div class="summary-card green"><div class="num">' + counts.ok + '</div><div class="label">正常</div></div>' +
+      '<div class="summary-card yellow"><div class="num">' + counts.warn + '</div><div class="label">零条目</div></div>' +
+      '<div class="summary-card red"><div class="num">' + counts.error + '</div><div class="label">失败</div></div>' +
+      '<div class="summary-card"><div class="num" style="color:var(--text2)">' + counts.skip + '</div><div class="label">跳过</div></div>';
+
+    var checkTime = lastRun.check_time || '';
+    refreshInfo.textContent = checkTime ? '最近检查: ' + checkTime : '数据加载完成';
+  }
+
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  window.filterStatus = function(health, btn) {
+    document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    allRows.forEach(function(tr) {
+      tr.style.display = (health === 'all' || tr.dataset.health === health) ? '' : 'none';
+    });
+  };
+
+  Promise.all([
+    fetch('feeds_meta.json').then(function(r){return r.json();}),
+    fetch('crawl_status.json').then(function(r){return r.json();}).catch(function(){return {};})
+  ]).then(function(results) {
+    render({meta: results[0], status: results[1]});
+  }).catch(function() {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text2)">数据加载失败</td></tr>';
+  });
+})();
+</script>
+</body>
+</html>

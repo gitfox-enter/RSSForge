@@ -5,7 +5,8 @@ const ASSETS = [
   BASE + '/public/favicon.svg',
   BASE + '/offline.html',
   BASE + '/redirect.html',
-  BASE + '/status.html',
+  BASE + '/status.html'
+  BASE + '/health.html',
   BASE + '/alipay-redpacket.html'
 ];
 
