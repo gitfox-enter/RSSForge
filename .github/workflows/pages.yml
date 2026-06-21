@@ -10,12 +10,15 @@ on:
       - 'status.html'
       - 'offline.html'
       - 'public/**'
+      - 'docs/**'
+      - 'package.json'
       - 'feeds/**'
       - 'opml.xml'
       - 'feed.xml'
       - 'feeds_meta.json'
       - 'sw.js'
       - 'health.html'
+      - '.github/workflows/pages.yml'
 
 permissions:
   contents: read
