@@ -7,7 +7,7 @@ export default defineConfig({
   lang: 'zh-CN',
   head: [
     ['link', { rel: 'icon', href: 'https://gitfox-enter.github.io/RSSForge/favicon.svg' }],
-    ['meta', { name: 'theme-color', content: '#e91e8e' }],
+    ['meta', { name: 'theme-color', content: '#659EB9' }],
   ],
   locales: {
     root: {
