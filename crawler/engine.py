@@ -153,44 +153,25 @@ def _parse_response_html(
     Shared by both Playwright and aiohttp fetch paths.
     Returns (True, result_dict) on success, (False, error_msg) on failure.
 
-    Args:
-        ghxi_items: Optional pre-fetched items from ghxi.com WP API
-                     (avoids blocking event loop with sync requests.get in async path).
+    Fixes #57: avoid double-decode and handle Chinese pages correctly by trying
+    encoding hint first, then GBK as fallback, without reparsing the same HTML twice.
     """
-    soup = BeautifulSoup(content, 'html.parser')
+    # Try the passed encoding hint first (fix #57: avoids double-parse)
+    enc = (encoding or 'utf-8').lower()
+    if enc in ('gb2312', 'gb18030'):
+        enc = 'gbk'
 
-    # Encoding fallback: BS4 may misdetect Chinese pages as ISO-8859-1 / Windows-1252
-    # when the HTML lacks a <meta charset> tag. Re-decode if:
-    #   1. BS4 detected no encoding at all, OR
-    #   2. BS4 detected a Western/latin encoding but the page is likely Chinese
-    detected_enc = (soup.original_encoding or '').lower()
-    western_encodings = ('iso-8859-1', 'iso-8859-2', 'windows-1252', 'latin-1', 'latin1', 'ascii')
-    needs_redecode = not detected_enc or detected_enc in western_encodings
-    if needs_redecode:
-        # Use the passed encoding hint, or try to detect from content
-        enc = encoding or 'utf-8'
-        if enc.lower() in ('gb2312', 'gbk', 'gb18030'):
-            enc = 'gbk'
-        # Heuristic: if a significant fraction of bytes are > 127, it's likely multi-byte
-        if detected_enc in western_encodings and enc == 'utf-8':
-            try:
-                high_bytes = sum(1 for b in content[:4096] if b > 127)
-                if high_bytes > len(content[:4096]) * 0.1:
-                    # Try GBK first for Chinese sites, fall back to utf-8
-                    try:
-                        decoded = content.decode('gbk', errors='strict')
-                        soup = BeautifulSoup(decoded, 'html.parser')
-                    except (UnicodeDecodeError, LookupError):
-                        decoded = content.decode('utf-8', errors='replace')
-                        soup = BeautifulSoup(decoded, 'html.parser')
-                else:
-                    decoded = content.decode(enc, errors='replace')
-                    soup = BeautifulSoup(decoded, 'html.parser')
-            except Exception:
-                decoded = content.decode(enc, errors='replace')
-                soup = BeautifulSoup(decoded, 'html.parser')
-        else:
-            decoded = content.decode(enc, errors='replace')
+    try:
+        decoded = content.decode(enc, errors='strict')
+        soup = BeautifulSoup(decoded, 'html.parser')
+    except (UnicodeDecodeError, LookupError):
+        # Fallback: try GBK for Chinese sites, then utf-8 with replacement
+        try:
+            decoded = content.decode('gbk', errors='strict')
+            soup = BeautifulSoup(decoded, 'html.parser')
+        except (UnicodeDecodeError, LookupError):
+            # Last resort: replace bad sequences, utf-8
+            decoded = content.decode('utf-8', errors='replace')
             soup = BeautifulSoup(decoded, 'html.parser')
 
     title_tag = soup.find('title')
