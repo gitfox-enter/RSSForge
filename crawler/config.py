@@ -55,7 +55,7 @@ def _load_sites_from_yaml() -> List[str]:
         return [s["url"] for s in sites]
     # Fallback
     return [
-        "https://axutongxue.net/", "http://news.ixbk.net/",
+        "http://news.ixbk.net/",
         "https://b1.ymxianbao.cn/", "https://cjx8.com/",
         "https://m.hybase.com/", "https://news.ixbk.fun/",
         "https://www.007ymd.com/", "https://www.12345pro.com/",
@@ -132,7 +132,6 @@ def _load_source_names() -> Dict[str, str]:
 
 # Legacy source name map (fallback only)
 _LEGACY_SOURCE_NAME_MAP: Dict[str, str] = {
-    "https://axutongxue.net/": "爱Q生活",
     "http://news.ixbk.net/": "线报酷",
     "https://news.ixbk.fun/": "线报酷",
     "https://xianbao.icu/": "线报ICU",
