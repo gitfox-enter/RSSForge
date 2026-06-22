@@ -124,57 +124,10 @@ def _load_source_names() -> Dict[str, str]:
         for s in sites:
             if "name" in s:
                 names[s["url"]] = s["name"]
-    # Fallback to legacy SOURCE_NAME_MAP if YAML is empty
-    if not names:
-        names = _LEGACY_SOURCE_NAME_MAP
     return names
 
 
-# Legacy source name map (fallback only)
-_LEGACY_SOURCE_NAME_MAP: Dict[str, str] = {
-    "https://axutongxue.net/": "爱Q生活",
-    "http://news.ixbk.net/": "线报酷",
-    "https://news.ixbk.fun/": "线报酷",
-    "https://xianbao.icu/": "线报ICU",
-    "https://www.zhuanyes.com/xianbao/": "专业线报",
-    "https://xianbaomi.com/": "线报迷",
-    "https://v1.xianbao.net/": "线报网",
-    "https://xzba.cc/": "新赚吧",
-    "https://www.h6room.com/": "H6线报",
-    "https://yangmao.wang/": "羊毛王",
-    "https://www.yangmaodang.club/": "羊毛党",
-    "https://b1.ymxianbao.cn/": "羊毛线报",
-    "https://cjx8.com/": "超级线报",
-    "https://www.huifabu.cn/": "汇发部",
-    "https://www.iqnew.com/": "爱Q社区",
-    "https://www.007ymd.com/": "007羊毛党",
-    "https://www.12345pro.com/": "12345线报",
-    "https://m.hybase.com/": "好赚网",
-    "https://www.huodong5.com/": "活动5",
-    "https://www.daydayzhuan.com/": "天天赚",
-    "https://www.ziyuanting.com/": "资源厅",
-    "https://www.wycad.com/": "网赚",
-    "https://www.wobangzhao.com/": "我不找",
-    "https://www.manmanbuy.com/": "慢慢买",
-    "https://www.baicaio.com/": "白菜哦",
-    "https://www.bacaoo.com/": "拔草哦",
-    "https://www.yxssp.com/": "优惠线报",
-    "https://www.ghxi.com/": "果核剥壳",
-    "https://www.423down.com/": "423Down",
-    "https://www.appinn.com/": "小众软件",
-    "https://www.lsapk.com/": "LSapk",
-    "https://www.thosefree.com/": "免费族",
-    "https://www.foxirj.com/": "佛系软件",
-    "https://www.ddooo.com/": "多多软件",
-    "https://www.onlinedown.net/": "华军软件",
-    "https://free.apprcn.com/": "反斗限免",
-    "https://feed.iplaysoft.com/": "异次元RSS",
-    "https://www.douban.com/group/711811/": "豆瓣小组",
-    "https://www.kxdao.net/forum-42-1.html": "开心赚",
-    "https://www.51kanong.com/": "51卡农",
-    "https://www.ithome.com/zt/xijiayi": "IT之家",
-    "https://10000yun.com/": "万云积分",
-}
+# _LEGACY_SOURCE_NAME_MAP removed — sites.yaml is the single source of truth (fix #62)
 
 SOURCE_NAME_MAP: Dict[str, str] = _load_source_names()
 

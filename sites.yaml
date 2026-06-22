@@ -14,7 +14,7 @@ sites:
     interval: 15
     fast_check: true
 
-  - url: "http://news.ixbk.net/"           # 线报酷镜像
+  - url: "https://news.ixbk.net/"          # 线报酷镜像 (fix #61: 升级为 HTTPS)
     max_pages: 3
     name: 线报酷
     tier: high
