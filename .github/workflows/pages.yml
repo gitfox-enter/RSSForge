@@ -49,7 +49,7 @@ jobs:
       - name: Prepare site
         run: |
           mkdir -p _site
-          # VitePress 文档构建产物
+          # VitePress 文档构建产物（已含 index.html 首页）
           if [ -d "docs/.vitepress/dist" ]; then
             cp -r docs/.vitepress/dist/* _site/
           fi
@@ -58,23 +58,23 @@ jobs:
             mkdir -p _site/feeds
             cp feeds/*.xml _site/feeds/ 2>/dev/null || true
           fi
-          # 根级 HTML 文件
-          for f in index.html redirect.html health.html offline.html status.html; do
+          # 根级工具页面（注意：不复制 index.html，VitePress 已生成首页）
+          for f in redirect.html status.html offline.html alipay-redpacket.html; do
             [ -f "$f" ] && cp "$f" _site/ 2>/dev/null || true
           done
-          # 根级 JS/CSS/manifest/PWA
-          for f in sw.js manifest.json opml.xml opml-*.xml; do
+          # 根级 JS/manifest/PWA
+          for f in sw.js manifest.json; do
             [ -f "$f" ] && cp "$f" _site/ 2>/dev/null || true
           done
           # OPML 文件
           for f in opml.xml opml-*.xml; do
-            [ -f "$f" ] && cp "$f" _site/
+            [ -f "$f" ] && cp "$f" _site/ 2>/dev/null || true
           done
           # 元数据 JSON
           for f in feeds_meta.json crawl_status.json; do
-            [ -f "$f" ] && cp "$f" _site/
+            [ -f "$f" ] && cp "$f" _site/ 2>/dev/null || true
           done
-          # 公开文件（favicon.svg 等静态资源直接放到站点根目录）
+          # 公开文件（favicon.svg 等静态资源）
           if [ -d "public" ]; then
             cp -r public/* _site/ 2>/dev/null || true
           fi
