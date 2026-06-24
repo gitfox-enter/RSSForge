@@ -62,3 +62,6 @@ def __getattr__(name):
 
 if __name__ == '__main__':
     main()
+
+# Make crawl.requests accessible for tests that do @patch("crawl.requests.get")
+import requests  # noqa: F401

@@ -1364,7 +1364,8 @@ class TestIsJunk(unittest.TestCase):
     def test_junk_with_spaces(self):
         """Spaces are stripped before matching junk patterns."""
         self.assertTrue(fast_check.is_junk(" 首页 "))
-        self.assertTrue(fast_check.is_junk("安卓软件 "))
+        # "安卓软件" removed from JUNK_PATTERNS (fix #121)
+        self.assertTrue(fast_check.is_junk(" 注册 "))
 
     def test_normal_text_not_junk(self):
         self.assertFalse(fast_check.is_junk("京东优惠券免费领取"))

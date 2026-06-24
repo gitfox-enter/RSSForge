@@ -34,6 +34,7 @@ from crawler.parsers.deal_sites import (
     parse_yangmaodang_items, parse_xianbaomi_items, parse_yangmao_wang_items,
     parse_iqnew_items, parse_51kanong_items, parse_ymxianbao_items,
     parse_linejia_items, parse_10000yun_items,
+    parse_manmanbuy_items, parse_ym2cc_items,
 )
 from crawler.parsers.software_sites import (
     parse_yxssp_items, parse_foxirj_items, parse_ddooo_items,

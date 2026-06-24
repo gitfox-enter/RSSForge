@@ -389,10 +389,10 @@ def is_junk(text: str) -> bool:
         return True
     if text.isdigit():
         return True
-    # Use set lookup + substring match for O(1) junk pattern checking
+    # Use set lookup for O(1) junk pattern checking (exact match)
     clean = text.replace(" ", "")
     for junk_word in JUNK_PATTERNS:
-        if junk_word in clean:
+        if clean == junk_word:
             return True
     return False
 

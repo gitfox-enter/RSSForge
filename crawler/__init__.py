@@ -56,12 +56,48 @@ from crawler.storage import (
 
 # --- Parsers ---
 from crawler.parsers import (
-    PARSER_REGISTRY,
     parse_423down_items,
     parse_discuz_items,
     parse_rss_feed,
     extract_article_items,
     parse_baicaio_items_v2,
+    # --- deal_sites ---
+    parse_ziyuanting_items,
+    parse_wycad_items,
+    parse_h6room_items,
+    parse_xzba_items,
+    parse_apprcn_items,
+    parse_daydayzhuan_items,
+    parse_007ymd_items,
+    parse_12345pro_items,
+    parse_wobangzhao_items,
+    parse_haodanku_items,
+    parse_hybase_items,
+    parse_huodong5_items,
+    parse_yangmaodang_items,
+    parse_xianbaomi_items,
+    parse_yangmao_wang_items,
+    parse_iqnew_items,
+    parse_51kanong_items,
+    parse_ymxianbao_items,
+    parse_linejia_items,
+    parse_10000yun_items,
+    parse_manmanbuy_items,
+    parse_ym2cc_items,
+    # --- software_sites ---
+    parse_yxssp_items,
+    parse_foxirj_items,
+    parse_ddooo_items,
+    parse_onlinedown_items,
+    parse_appinn_items,
+    parse_lsapk_items,
+    parse_thosefree_items,
+    parse_ithome_xijiayi_items,
+    # --- forum_sites ---
+    parse_douban_group_items,
+    # --- rss_parsers ---
+    fetch_rss_feed_async,
+    fetch_ghxi_items_async,
 )
 
 # --- Common re-exports ---
