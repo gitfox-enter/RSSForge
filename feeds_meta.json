@@ -2,29 +2,29 @@
   "线报酷": {
     "interval": 15,
     "freq_label": "每15分钟",
-    "count": 2686,
+    "count": 2784,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ku.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/xian-bao-ku.png",
     "site_url": "https://news.ixbk.net/",
-    "items_hash": "263ddb216e13bf19e58e8b9f38bf5b94"
+    "items_hash": "c53f4a5360f508d8f07823ae6f8d3f03"
   },
   "线报ICU": {
     "interval": 15,
     "freq_label": "每15分钟",
-    "count": 446,
+    "count": 462,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ICU.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/xian-bao-ICU.png",
     "site_url": "https://xianbao.icu/",
-    "items_hash": "ec110917da93ff3eb16da41972d7b512"
+    "items_hash": "793ec2dc52afdcc68ac94c0d6954400f"
   },
   "专业线报": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 474,
+    "count": 505,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/zhuan-ye-xian-bao.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/zhuan-ye-xian-bao.png",
     "site_url": "https://www.zhuanyes.com/xianbao/",
-    "items_hash": "9f1b7cf97de63c45d1c8c14ad984c0a1"
+    "items_hash": "753cc53bca9f52df85494126a26f41f3"
   },
   "线报迷": {
     "interval": 30,
@@ -92,29 +92,29 @@
   "超级线报": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 134,
+    "count": 136,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/chao-ji-xian-bao.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/chao-ji-xian-bao.png",
     "site_url": "https://cjx8.com/",
-    "items_hash": "a840aac8b5099a2dd181e42ad9f2fba7"
+    "items_hash": "7d8d84757923b73e03a18923c2d5d0b5"
   },
   "汇发部": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 1772,
+    "count": 1872,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/hui-fa-bu.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/hui-fa-bu.png",
     "site_url": "https://www.huifabu.cn/",
-    "items_hash": "88f6df00b3608fb4599244bce6672f9f"
+    "items_hash": "2fed9de74e55c0944ffacf38965c5723"
   },
   "爱Q社区": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 226,
+    "count": 231,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/ai-Q-she-qu.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/ai-Q-she-qu.png",
     "site_url": "https://www.iqnew.com/",
-    "items_hash": "b70fc6d4b8679a15de32104abd9e78c2"
+    "items_hash": "59253dc587edf267088f3783fb648296"
   },
   "007羊毛党": {
     "interval": 30,
