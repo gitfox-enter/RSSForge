@@ -9,7 +9,7 @@ Hardcoded fallbacks exist only for when YAML is unavailable.
 import json
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Set
 from urllib.parse import urlparse
 from common import build_source_name_index, ProxyPool
