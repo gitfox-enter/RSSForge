@@ -1345,9 +1345,12 @@ async def main_async() -> None:
         # Handle exceptions from gather
         if isinstance(result, Exception):
             error_count += 1
+            _exc_msg = str(result)[:120]
+            logger.info("[%d/%d] 异常: %s - %s", idx, len(active_sites), url, _exc_msg,
+                        extra={'site': url, 'event': 'exception'})
             all_site_results.append({
                 'url': url, 'title': url, 'summary': '',
-                'status': 'error', 'message': str(result)[:80],
+                'status': 'error', 'message': _exc_msg,
             })
             continue
 

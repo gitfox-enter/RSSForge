@@ -37,6 +37,7 @@ import random
 import hashlib
 import logging
 import threading
+import asyncio
 from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional, Set, Tuple
 from urllib.parse import urlparse, unquote
@@ -425,7 +426,8 @@ class DomainRateLimiter:
     """Thread-safe per-domain rate limiter enforcing a minimum gap between requests."""
 
     def __init__(self, min_gap: float = 2.0) -> None:
-        self._lock = threading.Lock()
+        # Use asyncio.Lock so async_wait can use async with (Bug #85 fixed method but not lock type)
+        self._lock: asyncio.Lock = asyncio.Lock()
         self._last_request: Dict[str, float] = {}
         self._min_gap = min_gap
 
@@ -452,7 +454,6 @@ class DomainRateLimiter:
         Uses an asyncio.Lock to protect shared state, preventing race conditions
         where multiple coroutines could simultaneously bypass the rate limit.
         """
-        import asyncio as _asyncio
         async with self._lock:
             now = time.time()
             last = self._last_request.get(domain, 0)
@@ -465,7 +466,7 @@ class DomainRateLimiter:
                 sleep_time = 0.0
                 self._last_request[domain] = now
         if sleep_time > 0:
-            await _asyncio.sleep(sleep_time)
+            await asyncio.sleep(sleep_time)
 
 
 # ============================================================
