@@ -18,12 +18,13 @@ jobs:
       TZ: Asia/Shanghai
     permissions:
       contents: write
+      issues: write
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 1
+          fetch-depth: 5
 
       - name: 设置 Python 3.11
         uses: actions/setup-python@v5
@@ -80,17 +81,12 @@ jobs:
           push_success=false
           for i in 1 2 3 4 5; do
             echo "=== Push attempt $i ==="
-            # Abort any existing rebase first
             git rebase --abort 2>/dev/null || true
-            # Use --no-commit to avoid auto-committing merge; let conflicts be resolved manually
-            # Fix #58: --strategy-option=theirs can discard incoming crawled data
             git pull --no-commit origin main
             rebase_rc=$?
             if [ $rebase_rc -ne 0 ]; then
               echo "Rebase had conflicts, attempting auto-resolution..."
-              # Stage all resolved files (Git marks conflicts in index)
               git diff --name-only --diff-filter=U | while read conflict_file; do
-                # Prefer local (our crawler) version for data files, else accept theirs
                 case "$conflict_file" in
                   items.json|items_latest.json|run_log.jsonl|feeds/|feeds_meta.json)
                     echo "Data conflict: keeping our fast_check version of $conflict_file"
@@ -103,7 +99,6 @@ jobs:
                 esac
                 git add "$conflict_file"
               done
-              # Abort rebase and do a merge commit instead (preserves both sides)
               git rebase --abort 2>/dev/null || true
               git merge origin/main --no-edit
             fi
@@ -120,3 +115,11 @@ jobs:
             echo "All push attempts failed"
             exit 1
           fi
+
+      - name: 停滞报警
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          python3 .github/scripts/stale_alert.py
