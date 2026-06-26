@@ -1,747 +1,224 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RSSForge · 万物皆可 RSS</title>
-<meta name="description" content="⚡ 基于 GitHub Actions 的免费 RSS 订阅源生成器，给任何网站生成 RSS，无服务器、零成本、可持续更新。">
-<meta name="theme-color" content="#e91e8e">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23e91e8e'/><path d='M50 20 L50 50 L70 35' stroke='white' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>">
-<style>
-:root {
-  --pink:        #e91e8e;
-  --pink-light:  #fce4f1;
-  --pink-dark:   #c4177a;
-  --bg:          #ffffff;
-  --text:        #1a1a1a;
-  --text2:       #555;
-  --text3:       #999;
-  --border:      #eee;
-  --code-bg:     #f5f5f5;
-  --code-border: #e0e0e0;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg:          #1a1a1a;
-    --text:        #e8e8e8;
-    --text2:       #aaa;
-    --text3:       #777;
-    --border:      #333;
-    --code-bg:     #252525;
-    --code-border: #3a3a3a;
-  }
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-html, body {
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
-  font-size: 16px;
-  line-height: 1.8;
-  -webkit-font-smoothing: antialiased;
-}
-
-a {
-  color: var(--pink);
-  text-decoration: none;
-  transition: color 0.15s;
-}
-a:hover { color: var(--pink-dark); text-decoration: underline; }
-
-/* ==================== 支付宝弹窗 ==================== */
-#alipay-modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(3px);
-}
-#alipay-modal.show { display: flex; }
-.modal-box {
-  background: var(--bg);
-  border-radius: 20px;
-  padding: 36px 32px 28px;
-  max-width: 360px;
-  width: 90%;
-  text-align: center;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  animation: pop-in 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-@keyframes pop-in {
-  from { transform: scale(0.7); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
-}
-.modal-badge {
-  display: inline-block;
-  background: linear-gradient(135deg, #ff6b6b, #e91e8e);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 12px;
-  margin-bottom: 14px;
-}
-.modal-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
-.modal-sub { font-size: 14px; color: var(--text2); margin-bottom: 20px; }
-.modal-qr {
-  background: #fff;
-  border-radius: 16px;
-  padding: 12px;
-  display: inline-block;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 20px rgba(233,30,142,0.15);
-}
-.modal-qr img { width: 220px; height: 220px; border-radius: 8px; display: block; }
-.modal-qr-msg { font-size: 12px; color: #bbb; margin-top: 8px; }
-.modal-tip {
-  font-size: 13px;
-  color: var(--text2);
-  margin-bottom: 18px;
-  background: var(--pink-light);
-  padding: 10px 14px;
-  border-radius: 10px;
-  line-height: 1.6;
-}
-.modal-close {
-  background: var(--text);
-  color: var(--bg);
-  border: none;
-  padding: 10px 32px;
-  border-radius: 24px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.modal-close:hover { opacity: 0.8; }
-
-/* ==================== 主内容 ==================== */
-.container {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* Header nav */
-header {
-  padding: 24px 0;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-header .container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: var(--text);
-}
-.logo:hover { text-decoration: none; color: var(--text); }
-.logo-icon {
-  width: 40px;
-  height: 40px;
-  background: var(--pink);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.logo-icon svg { width: 24px; height: 24px; }
-.logo-name { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
-.logo-name span { color: var(--pink); }
-.logo-tagline { font-size: 12px; color: var(--text2); }
-
-.nav-links { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.nav-link {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-  border: 1.5px solid var(--border);
-  color: var(--text2);
-  text-decoration: none;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-.nav-link:hover { border-color: var(--pink); color: var(--pink); text-decoration: none; }
-.nav-link.pink {
-  background: var(--pink);
-  border-color: var(--pink);
-  color: #fff;
-}
-.nav-link.pink:hover { background: var(--pink-dark); border-color: var(--pink-dark); color: #fff; }
-
-/* Main content */
-main { padding: 80px 0; }
-@media (max-width: 600px) { main { padding: 48px 0; } }
-
-/* ==================== RSSHub 风格：居中标题区 ==================== */
-.hero { text-align: center; margin-bottom: 60px; }
-.hero-emoji {
-  font-size: 56px;
-  line-height: 1;
-  margin-bottom: 20px;
-  display: block;
-}
-.hero-title {
-  font-size: clamp(28px, 6vw, 44px);
-  font-weight: 800;
-  letter-spacing: -1.5px;
-  line-height: 1.2;
-  margin-bottom: 16px;
-  color: var(--text);
-}
-.hero-title .pink { color: var(--pink); }
-
-.hero-desc {
-  font-size: 16px;
-  color: var(--text2);
-  max-width: 560px;
-  margin: 0 auto 28px;
-  line-height: 1.8;
-}
-
-/* ==================== RSSHub 风格：链接列表区 ==================== */
-.section { margin-bottom: 48px; }
-.section-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-}
-.section-title.indent { padding-left: 0; }
-
-.link-list { list-style: none; }
-.link-list li { padding: 4px 0; }
-.link-list li a {
-  color: var(--text);
-  font-size: 15px;
-  word-break: break-all;
-}
-.link-list li a:hover { color: var(--pink); }
-
-/* ==================== 特色功能卡片 ==================== */
-.features { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin: 48px 0; }
-.feature-card {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px;
-  background: var(--bg);
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.feature-card:hover { border-color: var(--pink); box-shadow: 0 4px 20px rgba(233,30,142,0.08); }
-.feature-icon { font-size: 28px; margin-bottom: 10px; }
-.feature-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-.feature-card p { font-size: 13px; color: var(--text2); line-height: 1.6; }
-
-/* ==================== 使用步骤 ==================== */
-.steps-box {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 24px;
-  margin: 32px 0;
-}
-.steps-box h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-.step {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-}
-.step:last-child { border-bottom: none; }
-.step-num {
-  width: 26px;
-  height: 26px;
-  background: var(--pink);
-  color: #fff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-.step-content h4 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
-.step-content p { font-size: 13px; color: var(--text2); }
-.step-content code {
-  background: var(--pink-light);
-  color: var(--pink);
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-family: monospace;
-}
-
-/* ==================== Divider ==================== */
-hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
-
-/* ==================== 可订阅的 Feed 列表 ==================== */
-.feeds-section { margin: 32px 0; }
-.feeds-section > h2 { font-size: 18px; font-weight: 700; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-.feeds-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 10px;
-}
-
-/* 多分类父站点 */
-.feed-parent-section {
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 10px;
-}
-.feed-parent-header {
-  display: flex;
-  align-items: center;
-  padding: 12px 14px;
-  cursor: pointer;
-  background: var(--card-bg);
-  transition: background 0.15s;
-}
-.feed-parent-header:hover { background: rgba(233,30,142,0.05); }
-.feed-parent-header .feed-icon-wrap { width: 32px; height: 32px; flex-shrink: 0; margin-right: 10px; }
-.feed-parent-header .feed-icon-wrap img { width: 32px; height: 32px; border-radius: 6px; object-fit: contain; }
-.feed-parent-info { flex: 1; min-width: 0; }
-.feed-parent-name { font-weight: 600; font-size: 14px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.feed-parent-meta { font-size: 11px; color: var(--text2); margin-top: 1px; }
-.feed-parent-arrow { color: var(--text2); font-size: 12px; transition: transform 0.2s; flex-shrink: 0; margin-left: 8px; }
-.feed-parent-arrow.open { transform: rotate(180deg); }
-.feed-parent-children {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1px;
-  background: var(--border);
-  border-top: 1px solid var(--border);
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-}
-.feed-parent-children.open { max-height: 2000px; }
-.feed-parent-children .feed-card {
-  border: none;
-  border-radius: 0;
-  background: var(--card-bg);
-}
-.feed-card {
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.feed-card:hover { border-color: var(--pink); box-shadow: 0 2px 12px rgba(233,30,142,0.08); }
-.feed-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  object-fit: contain;
-  flex-shrink: 0;
-  background: #fff;
-  padding: 2px;
-}
-.feed-icon-wrap { flex-shrink: 0; }
-.feed-info { flex: 1; min-width: 0; }
-.feed-name { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.feed-freq { font-size: 11px; color: var(--text3); margin-top: 2px; }
-.feed-actions { display: flex; gap: 4px; flex-shrink: 0; }
-.feed-btn {
-  padding: 3px 8px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 500;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--text2);
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-.feed-btn:hover { border-color: var(--pink); color: var(--pink); text-decoration: none; }
-.feed-btn.rss {
-  background: var(--pink);
-  border-color: var(--pink);
-  color: #fff;
-}
-.feed-btn.rss:hover { background: var(--pink-dark); border-color: var(--pink-dark); color: #fff; }
-
-/* ==================== 贡献区 ==================== */
-.contribute {
-  background: var(--pink-light);
-  border: 1px solid rgba(233,30,142,0.2);
-  border-radius: 14px;
-  padding: 28px;
-  margin: 32px 0;
-  text-align: center;
-}
-@media (prefers-color-scheme: dark) {
-  .contribute { background: #1a0a14; border-color: rgba(233,30,142,0.3); }
-}
-.contribute h2 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-.contribute p { font-size: 14px; color: var(--text2); margin-bottom: 16px; line-height: 1.6; }
-.contribute-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-
-/* ==================== Footer ==================== */
-footer {
-  border-top: 1px solid var(--border);
-  padding: 24px 0;
-  margin-top: 40px;
-}
-footer .container { text-align: center; }
-.footer-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 10px; }
-.footer-links a { font-size: 13px; color: var(--text2); }
-.footer-links a:hover { color: var(--pink); }
-footer p { font-size: 12px; color: var(--text3); }
-
-/* ==================== 响应式 ==================== */
-@media (max-width: 600px) {
-  .container { padding: 0 16px; }
-  .logo-tagline { display: none; }
-  .features { grid-template-columns: 1fr; }
-  .feeds-grid { grid-template-columns: 1fr; }
-  .hero-title { font-size: 28px; }
-  .modal-box { padding: 24px 16px; }
-  .modal-qr img { width: 180px; height: 180px; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSSForge - RSS 订阅源</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .section {
+            margin: 30px 0;
+        }
+        h2 {
+            color: #34495e;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        .opml-download {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 0;
+            transition: background 0.3s;
+        }
+        .opml-download:hover {
+            background: #2980b9;
+        }
+        .feed-list {
+            list-style: none;
+        }
+        .feed-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-left: 3px solid #3498db;
+            border-radius: 4px;
+        }
+        .feed-item a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .feed-item a:hover {
+            color: #3498db;
+        }
+        .feed-url {
+            display: block;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 5px;
+            word-break: break-all;
+        }
+        .tutorial {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .tutorial ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        .tutorial li {
+            margin: 8px 0;
+        }
+        code {
+            background: #34495e;
+            color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        .loading {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>📡 RSSForge</h1>
+        <p class="subtitle">免费 RSS 订阅源生成器 — 给任何网站生成 RSS</p>
 
-<!-- ==================== 支付宝弹窗 ==================== -->
-<div id="alipay-modal">
-  <div class="modal-box">
-    <div class="modal-badge">🧧 红包赞助</div>
-    <div class="modal-title">支付宝扫码领红包</div>
-    <div class="modal-sub">每天可领一次，消费直接抵扣</div>
-    <div class="modal-qr">
-      <img src="public/alipay-redpacket.jpg" alt="支付宝红包码"
-        onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 200\'><rect width=\'200\' height=\'200\' fill=\'%23f5f5f5\'/><text x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' font-size=\'14\' fill=\'%23999\'>请替换为真实二维码</text></svg>'">
-      <div class="modal-qr-msg">截图保存 → 打开支付宝扫一扫</div>
+        <div class="section">
+            <h2>📥 一键订阅（推荐）</h2>
+            <p>下载 OPML 文件，导入到你的 RSS 阅读器，即可订阅所有站点：</p>
+            <br>
+            <a href="opml.xml" class="opml-download" download>⬇️ 下载 OPML 文件</a>
+            <p style="margin-top: 10px; color: #7f8c8d; font-size: 0.9em;">
+                OPML 文件包含了所有订阅源的链接，支持 Feedly、Inoreader、RSSHub Radar 等所有主流阅读器
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>📋 订阅源列表</h2>
+            <p>你也可以手动复制单个订阅源链接：</p>
+            <br>
+            <div id="feed-list" class="loading">正在加载订阅源列表...</div>
+        </div>
+
+        <div class="section">
+            <h2>📖 使用教程</h2>
+            
+            <div class="tutorial">
+                <h3>方法 1：OPML 批量导入（推荐）</h3>
+                <ol>
+                    <li>点击上方「下载 OPML 文件」按钮，保存 <code>opml.xml</code> 到本地</li>
+                    <li>打开你的 RSS 阅读器（如 Feedly、Inoreader、RSSHub Radar）</li>
+                    <li>找到「导入 OPML」功能（通常在设置或订阅管理页面）</li>
+                    <li>选择下载的 <code>opml.xml</code> 文件，导入即可</li>
+                </ol>
+            </div>
+
+            <div class="tutorial">
+                <h3>方法 2：手动添加单个订阅源</h3>
+                <ol>
+                    <li>从上方「订阅源列表」中复制你想要订阅的 RSS 链接</li>
+                    <li>打开你的 RSS 阅读器</li>
+                    <li>点击「添加订阅」或「+」按钮</li>
+                    <li>粘贴 RSS 链接，确认添加</li>
+                </ol>
+            </div>
+
+            <div class="tutorial">
+                <h3>推荐 RSS 阅读器</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>Feedly</strong>：https://feedly.com （网页版、iOS、Android）</li>
+                    <li><strong>Inoreader</strong>：https://inoreader.com （网页版、iOS、Android）</li>
+                    <li><strong>RSSHub Radar</strong>：Chrome/Firefox 浏览器插件，自动发现 RSS 订阅源</li>
+                    <li><strong>Miniflux</strong>：开源自托管 RSS 阅读器</li>
+                    <li><strong>Follow</strong>：https://follow.is （新一代 RSS 阅读器）</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>⚡ 基于 GitHub Actions 自动更新 | 
+               <a href="https://github.com/gitfox-enter/RSSForge" style="color: #3498db;">GitHub 仓库</a> | 
+               MIT License</p>
+            <p style="margin-top: 10px;">💡 提示：OPML 文件会自动更新，建议定期重新下载以获取新增的订阅源</p>
+        </div>
     </div>
-    <div class="modal-tip">
-      💡 这个项目完全免费，无服务器费用。<br>
-      如果对你有帮助，欢迎领个红包支持一下 ❤️
-    </div>
-    <button class="modal-close" onclick="closeAlipay()">知道了</button>
-  </div>
-</div>
 
-<!-- ==================== Header ==================== -->
-<header>
-  <div class="container">
-    <a class="logo" href="./">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-          <circle cx="6"  cy="12" r="3"/>
-          <circle cx="18" cy="6"  r="3"/>
-          <circle cx="18" cy="18" r="3"/>
-          <path d="M8.5 12h7M13.5 8.5l3.5-1.5M13.5 15.5l3.5 1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div>
-        <div class="logo-name">RSS<span>Forge</span></div>
-        <div class="logo-tagline">万物皆可 RSS</div>
-      </div>
-    </a>
-    <nav class="nav-links">
-      <a class="nav-link" href="opml.xml" download>📥 OPML</a>
-      <a class="nav-link" href="https://github.com/gitfox-enter/RSSForge" target="_blank">📂 GitHub</a>
-      <a class="nav-link pink" href="https://github.com/gitfox-enter/RSSForge/fork" target="_blank">Fork 自建</a>
-    </nav>
-  </div>
-</header>
-
-<!-- ==================== Main ==================== -->
-<main>
-<div class="container">
-
-  <!-- Hero：完全复制 RSSHub 的居中风格 -->
-  <div class="hero">
-    <span class="hero-emoji">💗</span>
-    <h1 class="hero-title">Everything is <span class="pink">RSSible</span></h1>
-    <p class="hero-desc">
-      基于 GitHub Actions 的免费 RSS 订阅源生成器。<br>
-      给任何没有 RSS 的网站生成订阅源，无需服务器、零成本、可持续更新。
-    </p>
-  </div>
-
-  <!-- 核心链接（完全复制 RSSHub 的链接列表格式） -->
-  <div class="section">
-    <ul class="link-list">
-      <li><a href="https://github.com/gitfox-enter/RSSForge">https://github.com/gitfox-enter/RSSForge</a></li>
-      <li><a href="https://github.com/gitfox-enter/RSSForge/actions">https://github.com/gitfox-enter/RSSForge/actions</a></li>
-    </ul>
-  </div>
-
-  <!-- 功能特色 -->
-  <div class="features">
-    <div class="feature-card">
-      <div class="feature-icon">🔧</div>
-      <h3>零服务器成本</h3>
-      <p>直接利用 GitHub Actions 免费计算资源，24 小时自动运行，完全零成本。</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📡</div>
-      <h3>RSS / OPML 输出</h3>
-      <p>每站独立 feed + OPML 分类订阅包，导入任意 RSS 阅读器。</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">⚡</div>
-      <h3>智能调度</h3>
-      <p>每站独立更新间隔（15 分钟 ~ 8 小时），夜间自动降频，避免无效请求。</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🔄</div>
-      <h3>自动去重</h3>
-      <p>MD5 指纹 + URL 去重 + 模糊标题合并，7 天滚动保留，订阅不重复。</p>
-    </div>
-  </div>
-
-  <hr>
-
-  <!-- 可订阅 Feed 列表 -->
-  <div class="feeds-section">
-    <h2>📡 可订阅的订阅源</h2>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">
-      点击「订阅」获取该站点的 RSS 链接，复制到 RSS 阅读器中添加。
-    </p>
-    <div class="feeds-grid" id="feeds-grid">
-      <!-- 由 JS 动态渲染 -->
-    </div>
-  </div>
-
-  <hr>
-
-  <!-- 使用步骤 -->
-  <div class="steps-box">
-    <h2>🚀 如何使用</h2>
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-content">
-        <h4>Fork 本项目</h4>
-        <p>点击右上角 <code>Fork</code> 按钮，一键复制到你的 GitHub 账号。</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-content">
-        <h4>启用 GitHub Pages</h4>
-        <p>Settings → Pages → Source 选 <code>Deploy from a branch</code>，分支选 <code>gh-pages</code>。</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-content">
-        <h4>修改 sites.yaml</h4>
-        <p>编辑 <code>sites.yaml</code>，添加你想监控的网站 URL 和抓取规则。</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-content">
-        <h4>订阅 RSS</h4>
-        <p>下载 <a href="opml.xml" download>opml.xml</a>，粘贴到任意 RSS 阅读器（Reeder / FeedMe / inoreader 等）。</p>
-      </div>
-    </div>
-  </div>
-
-  <hr>
-
-  <!-- Special Thanks（完全复制 RSSHub 格式） -->
-  <div class="section">
-    <h2 class="section-title">Special Thanks</h2>
-    <ul class="link-list">
-      <li><a href="https://github.com/DIYgod/RSSHub">RSSHub</a> — 万物皆 RSS 的灵感来源</li>
-      <li><a href="https://github.com/RSS-Bridge/rss-bridge">RSS-Bridge</a> — PHP 版 RSS 生成器参考</li>
-      <li><a href="https://github.com/cooderl/wewe-rss">wewe-rss</a> — 微信公众号 RSS 参考</li>
-    </ul>
-  </div>
-
-  <hr>
-
-  <!-- Related Projects（复制 RSSHub 格式） -->
-  <div class="section">
-    <h2 class="section-title">Related Projects</h2>
-    <ul class="link-list">
-      <li>
-        <a href="https://github.com/DIYgod/RSSHub-Radar" target="_blank">RSSHub Radar</a>
-        — 浏览器扩展，帮助快速发现和订阅当前网站的 RSS 与 RSSHub 路由
-      </li>
-      <li>
-        <a href="https://github.com/DIYgod/RSSBud" target="_blank">RSSBud</a>
-        — iOS 版 RSSHub Radar，专为移动端生态优化
-      </li>
-      <li>
-        <a href="https://github.com/LeetaoGoooo/RSSAid" target="_blank">RSSAid</a>
-        — Android 版 RSSHub Radar，使用 Flutter 构建
-      </li>
-    </ul>
-  </div>
-
-  <hr>
-
-  <!-- 贡献区 -->
-  <div class="contribute">
-    <h2>🤝 贡献规则 · 一起做大做强</h2>
-    <p>
-      发现了好站点？提交 PR 即可贡献抓取规则，审核通过后合并到主仓库，所有 fork 用户自动受益。<br>
-      也可以去 GitHub 点个 ⭐，让更多人看到这个项目。
-    </p>
-    <div class="contribute-actions">
-      <a class="nav-link pink" href="https://github.com/gitfox-enter/RSSForge" target="_blank">⭐ Star 项目</a>
-      <a class="nav-link" href="https://github.com/gitfox-enter/RSSForge/pulls" target="_blank">提交 PR</a>
-      <a class="nav-link" href="https://github.com/gitfox-enter/RSSForge/issues" target="_blank">反馈问题</a>
-    </div>
-  </div>
-
-  <!-- Backers -->
-  <div class="section">
-    <h2 class="section-title">Backers</h2>
-    <p style="font-size:13px;color:var(--text2)">
-      🧧 <a href="javascript:void(0)" onclick="document.getElementById('alipay-modal').classList.add('show')">扫码领支付宝红包</a>，你的支持是我们最大的动力
-    </p>
-  </div>
-
-</div>
-</main>
-
-<!-- ==================== Footer ==================== -->
-<footer>
-  <div class="container">
-    <div class="footer-links">
-      <a href="opml.xml" download>📥 OPML</a>
-      <a href="https://github.com/gitfox-enter/RSSForge" target="_blank">📂 GitHub</a>
-      <a href="https://github.com/gitfox-enter/RSSForge/issues" target="_blank">反馈</a>
-    </div>
-    <p>RSSForge · 基于 GitHub Actions 的免费 RSS 生成器 · 0 服务器费用</p>
-  </div>
-</footer>
-
-<!-- ==================== Scripts ==================== -->
-<script>
-/* ========== 弹窗 ========== */
-function closeAlipay() {
-  document.getElementById('alipay-modal').classList.remove('show');
-}
-if (!sessionStorage.getItem('rssforge_alipay_shown')) {
-  window.addEventListener('load', function() {
-    document.getElementById('alipay-modal').classList.add('show');
-    sessionStorage.setItem('rssforge_alipay_shown', '1');
-  });
-}
-
-/* ========== 复制链接 ========== */
-function copyFeedLink(feedUrl, event) {
-  var full = location.origin + location.pathname.replace(/[^/]*$/, '') + feedUrl;
-  var btn = event.target;
-  navigator.clipboard.writeText(full).then(function() {
-    var orig = btn.textContent;
-    btn.textContent = '已复制 ✓';
-    btn.style.color = 'var(--pink)';
-    setTimeout(function() { btn.textContent = orig; btn.style.color = ''; }, 1500);
-  }).catch(function() {
-    prompt('复制链接:', full);
-  });
-}
-
-/* ========== 渲染 Feed 列表（支持多分类分组） ========== */
-(function() {
-  function escapeHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-  function renderCard(name, m) {
-    var freq = m.freq_label || '定期更新';
-    var count = m.count || 0;
-    var feedFile = 'feeds/' + encodeURIComponent(name) + '.xml';
-    return '<div class="feed-card">'
-      + '<div class="feed-icon-wrap">'
-      +   '<img class="feed-icon" src="' + escapeHtml(m.icon || '') + '" alt="' + escapeHtml(name) + '" onerror="this.style.display=\'none\';">'
-      + '</div>'
-      + '<div class="feed-info">'
-      +   '<div class="feed-name">' + escapeHtml(name) + '</div>'
-      +   '<div class="feed-freq">' + freq + ' · ' + count + ' 条</div>'
-      + '</div>'
-      + '<div class="feed-actions">'
-      +   '<a class="feed-btn rss" href="' + feedFile + '" target="_blank">订阅</a>'
-      +   '<button class="feed-btn" onclick="copyFeedLink(\'' + feedFile + '\', event)">复制</button>'
-      + '</div>'
-      + '</div>';
-  }
-  fetch('feeds_meta.json')
-    .then(function(r) { return r.json(); })
-    .then(function(meta) {
-      var grid = document.getElementById('feeds-grid');
-      var html = '';
-      var parents = {};   // parent_name -> [child_names]
-      var standalone = []; // feeds without parent
-      Object.keys(meta).forEach(function(name) {
-        var m = meta[name];
-        var parent = m.parent || '';
-        if (parent) {
-          if (!parents[parent]) parents[parent] = [];
-          parents[parent].push(name);
-        } else {
-          standalone.push(name);
+    <script>
+        // 从 opml.xml 加载订阅源列表
+        async function loadFeeds() {
+            try {
+                const response = await fetch('opml.xml');
+                const text = await response.text();
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(text, 'text/xml');
+                const outlines = xml.querySelectorAll('outline[type="rss"]');
+                
+                const feedList = document.getElementById('feed-list');
+                const list = document.createElement('ul');
+                list.className = 'feed-list';
+                
+                outlines.forEach(outline => {
+                    const text = outline.getAttribute('text') || outline.getAttribute('title');
+                    const xmlUrl = outline.getAttribute('xmlUrl');
+                    const htmlUrl = outline.getAttribute('htmlUrl');
+                    
+                    const li = document.createElement('li');
+                    li.className = 'feed-item';
+                    li.innerHTML = `
+                        <a href="${xmlUrl}" target="_blank">${text}</a>
+                        <span class="feed-url">${xmlUrl}</span>
+                    `;
+                    list.appendChild(li);
+                });
+                
+                feedList.classList.remove('loading');
+                feedList.innerHTML = '';
+                feedList.appendChild(list);
+                
+            } catch (error) {
+                document.getElementById('feed-list').innerHTML = 
+                    '<span style="color: #e74c3c;">加载订阅源列表失败，请刷新页面重试</span>';
+                console.error('Error loading OPML:', error);
+            }
         }
-      });
-      // Render standalone feeds (grid)
-      standalone.forEach(function(name) {
-        html += renderCard(name, meta[name]);
-      });
-      // Render parent sections with children
-      Object.keys(parents).sort().forEach(function(parent) {
-        var children = parents[parent];
-        var parentMeta = meta[children[0]] || {}; // use first child's icon
-        var totalCount = children.reduce(function(s, n) { return s + (meta[n] && meta[n].count || 0); }, 0);
-        var parentIcon = parentMeta.icon || '';
-        html += '<div class="feed-parent-section">';
-        html +=   '<div class="feed-parent-header" onclick="var c=this.nextElementSibling;c.classList.toggle(\'open\');this.querySelector(\'.feed-parent-arrow\').classList.toggle(\'open\');">';
-        html +=     '<div class="feed-icon-wrap">';
-        html +=       '<img class="feed-icon" src="' + escapeHtml(parentIcon) + '" alt="' + escapeHtml(parent) + '" onerror="this.style.display=\'none\';">';
-        html +=     '</div>';
-        html +=     '<div class="feed-parent-info">';
-        html +=       '<div class="feed-parent-name">' + escapeHtml(parent) + ' <span style="color:var(--text2);font-weight:400">(' + children.length + ' 个分类)</span></div>';
-        html +=       '<div class="feed-parent-meta">' + totalCount + ' 条内容 · 点击展开分类</div>';
-        html +=     '</div>';
-        html +=     '<div class="feed-parent-arrow">▼</div>';
-        html +=   '</div>';
-        html +=   '<div class="feed-parent-children">';
-        children.forEach(function(childName) {
-          html += renderCard(childName, meta[childName]);
-        });
-        html +=   '</div>';
-        html += '</div>';
-      });
-      grid.innerHTML = html || '<p style="color:var(--text2);font-size:13px">暂无数据，请等待 GitHub Actions 首次运行</p>';
-    })
-    .catch(function() {
-      document.getElementById('feeds-grid').innerHTML =
-        '<p style="color:var(--text2);font-size:13px">暂无数据，请等待 GitHub Actions 首次运行</p>';
-    });
-})();
-</script>
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', loadFeeds);
+    </script>
 </body>
 </html>

@@ -1,15 +1,8 @@
-name: Deploy to GitHub Pages
+name: Deploy Simple Static Site
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - 'feeds/**'
-      - 'feeds_meta.json'
-      - 'opml.xml'
-      - 'docs/**'
-      - 'public/**'
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -18,69 +11,37 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: false
 
 jobs:
   deploy:
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: package.json
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build VitePress documentation
-        run: npm run docs:build
-
-      - name: Prepare site
+      - name: Prepare static files
         run: |
+          # 使用极简 index.html 替换默认的 index.html
+          cp index-minimal.html index.html
+          
+          # 准备部署目录
           mkdir -p _site
-          # VitePress 文档构建产物（已含 index.html 首页）
-          if [ -d "docs/.vitepress/dist" ]; then
-            cp -r docs/.vitepress/dist/* _site/
-          fi
-          # 订阅源（feeds）
-          if [ -d "feeds" ]; then
-            mkdir -p _site/feeds
-            cp feeds/*.xml _site/feeds/ 2>/dev/null || true
-          fi
-          # 根级工具页面（注意：不复制 index.html，VitePress 已生成首页）
-          for f in redirect.html status.html offline.html alipay-redpacket.html; do
-            [ -f "$f" ] && cp "$f" _site/ 2>/dev/null || true
-          done
-          # 根级 JS/manifest/PWA
-          for f in sw.js manifest.json; do
-            [ -f "$f" ] && cp "$f" _site/ 2>/dev/null || true
-          done
-          # OPML 文件
-          for f in opml.xml opml-*.xml; do
-            [ -f "$f" ] && cp "$f" _site/ 2>/dev/null || true
-          done
-          # 元数据 JSON
-          for f in feeds_meta.json crawl_status.json; do
-            [ -f "$f" ] && cp "$f" _site/ 2>/dev/null || true
-          done
-          # 公开文件（favicon.svg 等静态资源）
-          if [ -d "public" ]; then
-            cp -r public/* _site/ 2>/dev/null || true
-          fi
+          cp index.html _site/
+          cp opml.xml _site/
+          cp -r feeds _site/ || true
+          cp -r icons _site/ || true
+          cp -r public/* _site/ || true
+          
+          echo "部署文件列表："
+          find _site -type f | head -20
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -90,4 +51,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
