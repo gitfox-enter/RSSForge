@@ -28,7 +28,6 @@ var SOURCE_MAP = {
 
 /* Source badge colors */
 var SRC_COLORS = {
-  '爱Q生活':   '#43a047',
   '赚客吧':   '#e53935',
   '线报酷':   '#1e88e5',
   '好赚网':   '#8e24aa',
