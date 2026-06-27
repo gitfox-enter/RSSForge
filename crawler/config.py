@@ -405,7 +405,9 @@ def load_adaptive_tiers() -> Dict[str, dict]:
     if os.path.exists(ADAPTIVE_TIERS_FILE):
         try:
             with open(ADAPTIVE_TIERS_FILE, 'r', encoding='utf-8') as f:
-                return json.load(f)
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return data
         except Exception:
             pass
     return {}
@@ -427,12 +429,16 @@ def save_adaptive_tiers(tiers: Dict[str, dict]) -> None:
 def init_adaptive_tiers() -> None:
     """初始化自适应 tier，从文件加载。应在爬取开始前调用。"""
     global _ADAPTIVE_TIERS
-    _ADAPTIVE_TIERS = load_adaptive_tiers()
+    loaded = load_adaptive_tiers()
+    _ADAPTIVE_TIERS = loaded if isinstance(loaded, dict) else {}
 
 
 def get_adaptive_tier(url: str) -> Optional[str]:
     """获取站点的自适应 tier，未找到返回 None。"""
-    return _ADAPTIVE_TIERS.get(url, {}).get('tier')
+    tiers = _ADAPTIVE_TIERS
+    if not isinstance(tiers, dict):
+        return None
+    return tiers.get(url, {}).get('tier')
 
 
 def get_all_adaptive_tiers() -> Dict[str, dict]:
