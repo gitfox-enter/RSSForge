@@ -92,7 +92,8 @@ def _load_state() -> Dict[str, Any]:
         return {'sites': {}}
     try:
         with open(_SCHEDULER_STATE_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            state = json.load(f)
+            return state if state is not None else {'sites': {}}
     except Exception:
         return {'sites': {}}
 
@@ -132,7 +133,7 @@ def _get_effective_interval(url: str, is_night: bool = False) -> int:
 
 def _minutes_since_last_crawl(state: Dict[str, Any], url: str) -> Optional[int]:
     """Calculate minutes since last crawl for a specific site."""
-    sites = state.get('sites') or {}
+    sites = (state or {}).get('sites') or {}
     last_str = sites.get(url, {}).get('last_crawl')
     if not last_str:
         return None
@@ -205,6 +206,8 @@ def record_site_run(url: str) -> None:
     """Record that a site has been successfully crawled. Call after each site's crawl."""
     now = get_beijing_time()
     state = _load_state()
+    if state is None:
+        state = {}
     if not state.get('sites'):
         state['sites'] = {}
     state['sites'][url] = {
@@ -217,7 +220,9 @@ def record_bulk_run(urls: List[str]) -> None:
     """Record multiple sites as crawled at the current time."""
     now = get_beijing_time()
     state = _load_state()
-        if not state.get('sites'):
+    if state is None:
+        state = {}
+    if not state.get('sites'):
         state['sites'] = {}
     now_str = now.strftime('%Y-%m-%d %H:%M:%S')
     for url in urls:
