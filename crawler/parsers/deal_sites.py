@@ -1469,3 +1469,113 @@ def parse_10000yun_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
 
     return items[:30]
 
+
+
+# ---------------------------------------------------------------------------
+# yangmao.19970709.xyz - 小角落 (Vue SPA + API)
+# ---------------------------------------------------------------------------
+# This is a Vue 3 SPA with a JSON API backend.
+# API endpoint: POST /api/coupon/tipOff/queryListByPage
+# Request body: {"pageNumber":1,"size":20,"title":"","type":1}
+# Response: {"records":[{"id":xxx,"title":"...","content":"..."}]}
+# Article URL: https://yangmao.19970709.xyz/detail/{id}
+# ---------------------------------------------------------------------------
+
+def parse_yangmao_19970709_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """小角落 (yangmao.19970709.xyz) - 提取线报条目。
+
+    由于是 Vue SPA，传统 HTML 解析可能无效，
+    此函数尝试从页面中提取已渲染的内容作为兜底。
+    """
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
+
+    # 尝试从页面中提取已渲染的内容（如果有的话）
+    for a in soup.find_all('a', href=True):
+        href = a.get('href', '').strip()
+        text = a.get_text(strip=True)
+        if not _is_valid_text(text, min_len=3):
+            continue
+        # 匹配详情页链接
+        if 'yangmao.19970709.xyz/detail/' in href:
+            if text not in seen:
+                _add_item(items, seen, text, href, base_url)
+
+    return items[:30]
+
+
+def fetch_yangmao_19970709_api(page: int = 1, page_size: int = 20) -> List[Dict[str, str]]:
+    """小角落 API 请求 - 获取线报列表。
+
+    直接调用 Vue SPA 后端 API 获取 JSON 数据。
+    返回格式化的条目列表。
+    """
+    import requests
+    from crawler.config import REQUEST_TIMEOUT
+    from crawler.storage import get_random_ua
+
+    api_url = "https://yangmao.19970709.xyz/api/coupon/tipOff/queryListByPage"
+    headers = {
+        'User-Agent': get_random_ua(),
+        'Accept': 'application/json, */*;q=0.8',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+        'Content-Type': 'application/json',
+        'Origin': 'https://yangmao.19970709.xyz',
+        'Referer': 'https://yangmao.19970709.xyz/',
+    }
+    payload = {
+        "pageNumber": page,
+        "size": page_size,
+        "title": "",
+        "type": 1
+    }
+
+    items: List[Dict[str, str]] = []
+
+    try:
+        resp = requests.post(
+            api_url,
+            json=payload,
+            headers=headers,
+            timeout=REQUEST_TIMEOUT
+        )
+        if resp.status_code != 200:
+            logger.warning(f"小角落 API 请求失败: HTTP {resp.status_code}")
+            return items
+
+        data = resp.json()
+        records = data.get('records', [])
+
+        for record in records:
+            item_id = record.get('id', '')
+            title = record.get('title', '')
+            content = record.get('content', '')
+            manufacturer = record.get('manufacturer', '')
+            cate_name = record.get('cateName', '')
+            create_time = record.get('createTime', '')
+
+            if not title:
+                continue
+
+            # 构建详情页 URL
+            detail_url = f"https://yangmao.19970709.xyz/detail/{item_id}"
+
+            # 组合格标题和来源
+            source_tag = f"[{manufacturer}]" if manufacturer else ""
+            full_title = f"{source_tag} {title}".strip()
+
+            items.append({
+                'text': full_title,
+                'url': detail_url,
+                'source': '小角落',
+                'id': str(item_id),
+                'content': content,
+                'manufacturer': manufacturer,
+                'category': cate_name,
+                'pub_date': create_time,
+            })
+
+    except Exception as e:
+        logger.warning(f"小角落 API 请求异常: {e}")
+
+    return items

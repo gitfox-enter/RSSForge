@@ -199,6 +199,19 @@ def _parse_response_html(
             text = ' '.join(text.split())
         else:
             text = '\n'.join(item['text'] for item in article_items)
+    elif parser_strategy == 'yangmao19970709' or 'yangmao.19970709.xyz' in url:
+        # 小角落特殊处理：Vue SPA + API
+        from crawler.parsers.deal_sites import fetch_yangmao_19970709_api
+        article_items = parse_yangmao_19970709_items(soup, url)
+        if not article_items:
+            article_items = fetch_yangmao_19970709_api(page=1, page_size=30)
+        if article_items:
+            text = '\n'.join(item['text'] for item in article_items)
+        else:
+            article_items = extract_article_items(soup, url)
+            body = soup.find('body')
+            text = body.get_text(separator=' ', strip=True) if body else ''
+            text = ' '.join(text.split())
     elif parser_pair is not None:
         items_parser, text_parser = parser_pair
         article_items = items_parser(soup, url)

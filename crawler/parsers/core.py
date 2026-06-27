@@ -33,7 +33,7 @@ from crawler.parsers.deal_sites import (
     parse_haodanku_items, parse_hybase_items, parse_huodong5_items,
     parse_yangmaodang_items, parse_xianbaomi_items, parse_yangmao_wang_items,
     parse_iqnew_items, parse_51kanong_items, parse_ymxianbao_items,
-    parse_linejia_items, parse_10000yun_items,
+    parse_linejia_items, parse_10000yun_items, parse_yangmao_19970709_items,
     parse_manmanbuy_items, parse_ym2cc_items,
 )
 from crawler.parsers.software_sites import (
@@ -86,6 +86,7 @@ PARSER_REGISTRY: Dict[str, Tuple[Any, Optional[Any]]] = {
     'ymxianbao.cn':     (parse_ymxianbao_items,      None),
     'linejia.com':      (parse_linejia_items,        None),
     '10000yun.com':      (parse_10000yun_items,      None),
+    'yangmao.19970709.xyz': (parse_yangmao_19970709_items, None),
 }
 
 
@@ -277,6 +278,22 @@ def fetch_page_content(url: str) -> Tuple[bool, Any]:
                 text = '\n'.join(item['text'] for item in article_items)
             else:
                 # API 失败时回退到通用解析（SPA 可能拿不到内容）
+                article_items = extract_article_items(soup, url)
+                body = soup.find('body')
+                text = body.get_text(separator=' ', strip=True) if body else ''
+                text = ' '.join(text.split())
+        elif parser_strategy == 'yangmao19970709':
+            # 小角落特殊处理：Vue SPA + API
+            # 尝试从页面提取已有内容（SPA 可能已渲染部分内容）
+            article_items = parse_yangmao_19970709_items(soup, url)
+            if not article_items:
+                # 兜底：直接调用 API 获取条目
+                from crawler.parsers.deal_sites import fetch_yangmao_19970709_api
+                article_items = fetch_yangmao_19970709_api(page=1, page_size=30)
+            if article_items:
+                text = '\n'.join(item['text'] for item in article_items)
+            else:
+                # API 失败时回退到通用解析
                 article_items = extract_article_items(soup, url)
                 body = soup.find('body')
                 text = body.get_text(separator=' ', strip=True) if body else ''

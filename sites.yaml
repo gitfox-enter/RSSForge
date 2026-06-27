@@ -48,6 +48,13 @@ sites:
     interval: 20
     fast_check: true
 
+  - url: "https://yangmao.19970709.xyz/"   # 小角落
+    max_pages: 3
+    name: 小角落
+    tier: high
+    interval: 20
+    parser: yangmao19970709
+
   - url: "https://xzba.cc/"                # 新赚吧
     max_pages: 3
     name: 新赚吧
