@@ -132,7 +132,8 @@ def _get_effective_interval(url: str, is_night: bool = False) -> int:
 
 def _minutes_since_last_crawl(state: Dict[str, Any], url: str) -> Optional[int]:
     """Calculate minutes since last crawl for a specific site."""
-    last_str = state.get('sites', {}).get(url, {}).get('last_crawl')
+    sites = state.get('sites') or {}
+    last_str = sites.get(url, {}).get('last_crawl')
     if not last_str:
         return None
     try:
@@ -204,7 +205,7 @@ def record_site_run(url: str) -> None:
     """Record that a site has been successfully crawled. Call after each site's crawl."""
     now = get_beijing_time()
     state = _load_state()
-    if 'sites' not in state:
+    if not state.get('sites'):
         state['sites'] = {}
     state['sites'][url] = {
         'last_crawl': now.strftime('%Y-%m-%d %H:%M:%S'),
@@ -216,7 +217,7 @@ def record_bulk_run(urls: List[str]) -> None:
     """Record multiple sites as crawled at the current time."""
     now = get_beijing_time()
     state = _load_state()
-    if 'sites' not in state:
+        if not state.get('sites'):
         state['sites'] = {}
     now_str = now.strftime('%Y-%m-%d %H:%M:%S')
     for url in urls:
