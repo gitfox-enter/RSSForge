@@ -117,6 +117,77 @@ from common import (
     upgrade_to_https,
 )
 
+# --- Blacklist guardrail: fail fast if sites.yaml contains blacklisted domains ---
+def _validate_sites_against_blacklist() -> None:
+    """Validate that no site in sites.yaml is in blacklist.json.
+
+    This runs at import time to prevent blacklisted sites from being
+    added to the monitoring pipeline by mistake.
+    """
+    import json, os, re, sys
+    from pathlib import Path
+
+    base_dir = Path(__file__).parent.parent
+    blacklist_path = base_dir / "blacklist.json"
+    sites_yaml_path = base_dir / "sites.yaml"
+
+    if not blacklist_path.exists() or not sites_yaml_path.exists():
+        return  # Skip in bare/minimal environments
+
+    try:
+        with open(blacklist_path, "r", encoding="utf-8") as f:
+            blacklist = json.load(f)
+        blocked = {item["domain"].lower() for item in blacklist["blacklist"]}
+    except Exception:
+        return  # Don't block on malformed json
+
+    try:
+        import yaml
+        with open(sites_yaml_path, "r", encoding="utf-8") as f:
+            sites = yaml.safe_load(f)
+    except Exception:
+        return  # Don't block on malformed yaml
+
+    url_pattern = re.compile(r"https?://([^/]+)/?")
+    violations = []
+
+    def extract_domains(entry):
+        if isinstance(entry, str):
+            m = url_pattern.match(entry)
+            yield m.group(1).lower() if m else None
+        elif isinstance(entry, dict):
+            for key in ("url", "site_url", "feed_url"):
+                if key in entry:
+                    m = url_pattern.match(entry[key])
+                    if m:
+                        yield m.group(1).lower()
+
+    for group in sites.get("monitoring_groups", []):
+        for entry in group.get("sites", []):
+            for domain in extract_domains(entry):
+                if domain and domain in blocked:
+                    name = entry.get("name", domain) if isinstance(entry, dict) else domain
+                    reason = next(
+                        b["reason"] for b in blacklist["blacklist"]
+                        if b["domain"].lower() == domain
+                    )
+                    violations.append(f"  {domain} (as '{name}'): {reason}")
+
+    if violations:
+        print("\n" + "=" * 60, file=sys.stderr)
+        print("ERROR: The following sites in sites.yaml are BLACKLISTED:", file=sys.stderr)
+        for v in violations:
+            print(v, file=sys.stderr)
+        print("=" * 60, file=sys.stderr)
+        print("Remove these sites from sites.yaml before running.", file=sys.stderr)
+        print("If you believe this is a mistake, update blacklist.json.", file=sys.stderr)
+        sys.exit(1)
+
+
+_validate_sites_against_blacklist()
+del _validate_sites_against_blacklist
+
+
 # --- Engine (lazy) ---
 def __getattr__(name):
     _engine_names = {

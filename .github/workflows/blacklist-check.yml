@@ -1,0 +1,64 @@
+name: Blacklist Check
+
+on:
+  push:
+    paths:
+      - 'sites.yaml'
+      - 'blacklist.json'
+  pull_request:
+    paths:
+      - 'sites.yaml'
+      - 'blacklist.json'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check sites.yaml against blacklist
+        run: |
+          python3 - <<'EOF'
+          import json, yaml, re, sys
+
+          # Load blacklist
+          with open("blacklist.json", "r", encoding="utf-8") as f:
+              blacklist = json.load(f)
+          blocked = {item["domain"].lower() for item in blacklist["blacklist"]}
+
+          # Load sites.yaml
+          with open("sites.yaml", "r", encoding="utf-8") as f:
+              sites = yaml.safe_load(f)
+
+          # Extract all domains from sites.yaml
+          url_pattern = re.compile(r'https?://([^/]+)/?')
+          violations = []
+
+          def extract_domain(entry):
+              if isinstance(entry, str):
+                  m = url_pattern.match(entry)
+                  return m.group(1).lower() if m else None
+              elif isinstance(entry, dict) and "url" in entry:
+                  m = url_pattern.match(entry["url"])
+                  return m.group(1).lower() if m else None
+              return None
+
+          seen = set()
+          for group in sites.get("monitoring_groups", []):
+              for entry in group.get("sites", []):
+                  domain = extract_domain(entry)
+                  if not domain:
+                      continue
+                  if domain in blocked:
+                      name = entry["name"] if isinstance(entry, dict) else domain
+                      violations.append(f"  - {domain} (in sites.yaml as '{name}') — BLOCKED: {next(b['reason'] for b in blacklist['blacklist'] if b['domain'].lower() == domain)}")
+
+          if violations:
+              print("ERROR: The following sites in sites.yaml are in the blacklist:", file=sys.stderr)
+              for v in violations:
+                  print(v, file=sys.stderr)
+              print("\nRemove these sites before committing.", file=sys.stderr)
+              sys.exit(1)
+          else:
+              print("OK: No sites.yaml violations found.")
+          EOF
