@@ -1176,37 +1176,12 @@ class TestNewSiteParsers(unittest.TestCase):
         self.assertEqual(len(items), 1)
         self.assertTrue(items[0]['url'].startswith('https://'))
 
-    def test_parse_ddooo_items_basic(self):
-        html = """<html><body>
-        <a href="/softdown/12345.htm">微信下载</a>
-        <a href="/softdown/12346.htm">QQ浏览器下载</a>
-        <a href="/softdown/12347.htm">首页</a>
-        </body></html>"""
-        soup = make_soup(html)
-        items = crawl.parse_ddooo_items(soup, "https://www.ddooo.com/")
-        self.assertEqual(len(items), 2)
-        self.assertIn('/softdown/', items[0]['url'])
-
-    def test_parse_ddooo_items_relative_url(self):
-        html = '<html><body><a href="/softdown/99.htm">好用工具下载最新版</a></body></html>'
-        soup = make_soup(html)
-        items = crawl.parse_ddooo_items(soup, "https://www.ddooo.com/")
-        self.assertEqual(len(items), 1)
-        self.assertTrue(items[0]['url'].startswith('https://www.ddooo.com'))
-
-    def test_parser_registry_has_new_entries(self):
-        """Verify all new parsers are registered."""
-        new_domains = ['ym2.cc', 'wobangzhao.com', 'foxirj.com', 'ddooo.com']
-        for domain in new_domains:
-            self.assertIn(domain, crawl.PARSER_REGISTRY, f"{domain} not in PARSER_REGISTRY")
-
     def test_match_parser_new_sites(self):
         """Verify _match_parser correctly resolves new site parsers."""
         test_cases = [
             ("https://www.ym2.cc/ymxb/123.html", 'parse_ym2cc_items'),
             ("https://www.wobangzhao.com/thread-1-1-1.html", 'parse_wobangzhao_items'),
             ("https://www.foxirj.com/test.html", 'parse_foxirj_items'),
-            ("https://www.ddooo.com/softdown/1.htm", 'parse_ddooo_items'),
         ]
         for url, expected_func_name in test_cases:
             pair = crawl._match_parser(url)

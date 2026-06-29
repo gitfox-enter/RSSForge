@@ -253,10 +253,6 @@ sites:
     interval: 240
     rss_feed: "https://www.foxirj.com/feed/"
 
-  - url: "https://www.ddooo.com/"          # 多多软件
-    max_pages: 5
-    name: 多多软件
-    tier: low
     interval: 360
 
 

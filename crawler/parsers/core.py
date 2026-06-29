@@ -37,7 +37,7 @@ from crawler.parsers.deal_sites import (
     parse_manmanbuy_items, parse_ym2cc_items,
 )
 from crawler.parsers.software_sites import (
-    parse_yxssp_items, parse_foxirj_items, parse_ddooo_items,
+    parse_yxssp_items, parse_foxirj_items,
     parse_appinn_items, parse_lsapk_items,
     parse_thosefree_items, parse_ithome_xijiayi_items,
 )
@@ -66,7 +66,6 @@ PARSER_REGISTRY: Dict[str, Tuple[Any, Optional[Any]]] = {
     'ym2.cc':            (parse_ym2cc_items,          None),
     'wobangzhao.com':    (parse_wobangzhao_items,     None),
     'foxirj.com':        (parse_foxirj_items,         None),
-    'ddooo.com':         (parse_ddooo_items,          None),
     # === New parsers ===
     '12345pro.com':      (parse_12345pro_items,       None),
     'appinn.com':        (parse_appinn_items,         None),

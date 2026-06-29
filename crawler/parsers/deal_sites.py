@@ -686,30 +686,6 @@ def parse_wobangzhao_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str,
     return items[:30]
 
 
-# ---------------------------------------------------------------------------
-# 6. 多多软件  (ddooo.com)
-# ---------------------------------------------------------------------------
-# HTML structure: Custom CMS (not WordPress).
-#   Software entries use /softdown/{id}.htm links:
-#     <a href="https://www.ddooo.com/softdown/210347.htm">
-#       <p>雷电模拟器最新版</p></a>
-#   The homepage has multiple sections:
-#     - Top recommendation carousel: .app-list li > a
-#     - Category sections with inline links:
-#       <dd><a class="seahotid" href="/softdown/{id}.htm">name</a></dd>
-#     - Sidebar "精品推荐" with softdown links
-#     - "最新更新" and "最新下载" lists
-#
-# The old parser used 'a[href*="/softdown/"]' which is correct, but
-# the skip_words filter included '下载' which may have been too broad,
-# filtering out legitimate software names containing that word.
-# Fix: relax the skip filter and also extract from the update list
-# section which has the freshest content.
-# ---------------------------------------------------------------------------
-
-
-
-
 
 
 def parse_haodanku_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:

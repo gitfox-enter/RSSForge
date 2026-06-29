@@ -112,50 +112,6 @@ def parse_foxirj_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
 
 
 
-def parse_ddooo_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
-    """多多软件站 (ddooo.com) - extract software entries.
-
-    Looks for /softdown/{id}.htm links across the page, with improved
-    filtering to avoid removing legitimate software names.
-    """
-    items: List[Dict[str, str]] = []
-    seen: Set[str] = set()
-
-    # Only skip exact navigation words (not substrings of software names)
-    skip_exact = {'首页', '最新更新', '软件分类', '论坛转贴', '收藏本站',
-                  '电脑软件', '安卓下载', '苹果下载', '电脑游戏', 'MAC下载',
-                  'TV市场', '专题合集', '排行榜', '手机版'}
-
-    # Primary: all /softdown/ links with meaningful text
-    for a in soup.find_all('a', href=True):
-        href = a.get('href', '').strip()
-        text = a.get_text(strip=True)
-        if not _is_valid_text(text, min_len=2):
-            continue
-        if '/softdown/' not in href:
-            continue
-        if text in skip_exact:
-            continue
-        if text in seen:
-            continue
-        _add_item(items, seen, text, href, base_url)
-
-    # Secondary: latest update list items (often in a dedicated section)
-    for li in soup.select('.update-list li, .new-list li, .CRCSList li'):
-        a_tag = li.select_one('a[href*="/softdown/"]')
-        if not a_tag:
-            continue
-        text = a_tag.get_text(strip=True)
-        href = a_tag.get('href', '').strip()
-        if not _is_valid_text(text, min_len=2, max_len=999) or text in seen:
-            continue
-        _add_item(items, seen, text, href, base_url)
-
-    return items[:30]
-
-
-
-
 
 def parse_appinn_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """小众软件 - WordPress 站点，提取文章条目。
