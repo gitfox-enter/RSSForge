@@ -364,25 +364,6 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
 # items_latest.json 导出（用于首页快速加载）
 # ============================================================
 
-_STICKY_ITEM: Dict[str, Any] = {
-    "url": "./alipay-redpacket.html",
-    "text": "支付宝每日扫码领红包，大量支付红包等你来拿！",
-    "source": "支付宝",
-    "category": "置顶",
-    "sticky": True,
-    # 使用固定时间而非爬取时间，保证哈希每轮一致（Bug #91）
-    "time": "2024-01-01 00:00:00",
-}
-
-
-def _ensure_sticky_in_items(items: List[Dict[str, str]]) -> List[Dict[str, str]]:
-    """Return a new list with the Alipay sticky item pinned to the top."""
-    # Drop the exact sticky item if already present, to avoid duplication
-    sticky_url = _STICKY_ITEM["url"]
-    filtered = [it for it in items if it.get("url") != sticky_url]
-    return [_STICKY_ITEM] + filtered
-
-
 def export_items_latest_json(json_path: str = ITEMS_LATEST_FILE) -> bool:
     """Export items to items_latest.json for fast first-page load.
     
@@ -390,7 +371,6 @@ def export_items_latest_json(json_path: str = ITEMS_LATEST_FILE) -> bool:
     """
     db = load_items_db()
     items = db['items']
-    items = _ensure_sticky_in_items(items)
     updated_at = db.get('updated_at', get_beijing_time().strftime("%Y-%m-%d %H:%M:%S"))
     total_count = len(items)
     output = {"items": items, "updated_at": updated_at, "total_items": total_count}
