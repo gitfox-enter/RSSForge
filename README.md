@@ -2,28 +2,32 @@
 
 💗 Everything is RSSible
 
-https://github.com/gitfox-enter/RSSForge
-https://gitfox-enter.github.io/RSSForge/opml.xml
-https://github.com/gitfox-enter/RSSForge/actions
-https://gitfox-enter.github.io/RSSForge/
+RSSForge is an open source, easy to use, and extensible RSS feed aggregator built on GitHub Actions, capable of generating RSS feeds from pretty much everything.
 
-RSSForge is an open source, easy to use, and extensible RSS feed aggregator built on GitHub Actions, it's capable of generating RSS feeds from pretty much everything.
+**Unlike RSSHub**, RSSForge provides **pre-built, ready-to-subscribe feeds** for all monitored sites. Fork the project, enable GitHub Pages, and you have your own RSS service instantly.
 
-RSSForge delivers millions of contents aggregated from all kinds of sources, with pre-configured routes ready to use — no server required, 100% free.
+## RSS Feeds
 
-**Unlike RSSHub**, RSSForge provides **pre-built, ready-to-subscribe feeds** for all monitored sites. Fork the project, enable GitHub Pages, and you have your own RSS service instantly. You can also contribute new site rules via PR.
+Each monitored site has its own RSS feed at:
 
-## Special Thanks
+```
+https://{username}.github.io/RSSForge/feeds/[站点名称].xml
+```
 
-https://github.com/DIYgod/RSSHub
-https://github.com/RSS-Bridge/rss-bridge
-https://github.com/cooderl/wewe-rss
+## OPML Subscription
 
-## Related Projects
+Import the unified OPML file to subscribe all feeds at once:
 
-- [RSSHub](https://github.com/DIYgod/RSSHub) | Open source RSS feed aggregator, the inspiration for RSSForge
-- [RSS-Bridge](https://github.com/RSS-Bridge/rss-bridge) | PHP-based RSS generator, another great reference
-- [RSSHub Radar](https://github.com/DIYgod/RSSHub-Radar) | Browser extension to discover and subscribe to RSS feeds
+```
+https://{username}.github.io/RSSForge/opml.xml
+```
+
+## Quick Start
+
+1. **Fork** this repository
+2. **Enable GitHub Pages** — Settings → Pages → Deploy from branch → `gh-pages`
+3. **Customize sites.yaml** — Add the sites you want to monitor
+4. **Subscribe** — Import `opml.xml` into any RSS reader
 
 ## Features
 
@@ -34,54 +38,11 @@ https://github.com/cooderl/wewe-rss
 - ⚡ **Smart scheduling** — Per-site intervals (15 min ~ 8 hrs), auto night-mode throttle
 - 🔄 **Auto deduplication** — MD5 + URL + fuzzy title dedup, 7-day rolling window
 
-## Quick Start
+## Related Projects
 
-1. **Fork** this repository
-2. **Enable GitHub Pages** — Settings → Pages → Deploy from branch → `gh-pages`
-3. **Customize sites.yaml** — Add the sites you want to monitor
-4. **Subscribe** — Import `opml.xml` into any RSS reader
-
-## RSS Feeds
-
-Each monitored site has its own RSS feed at:
-
-```
-https://gitfox-enter.github.io/RSSForge/feeds/[站点名称].xml
-```
-
-## OPML Subscription
-
-Import the unified OPML file to subscribe all feeds at once:
-
-```
-https://gitfox-enter.github.io/RSSForge/opml.xml
-```
-
-### Supported Readers
-
-- **Reeder** (Mac/iOS) — File → Add Feed → Add OPML File
-- **Inoreader** — Subscriptions → Manage → Import OPML
-- **NetNewsWire** (Mac/iOS) — File → Import Subscriptions
-- **FeedMe** (Android) — Add feed → Import from OPML
-- **Miniflux** (自建):
-  ```bash
-  curl -X POST https://your-miniflux.io/feed/import \
-    -H "Content-Type: application/xml" \
-    -u "user:api-key" \
-    --data-binary @opml.xml
-  ```
-
-## 支持项目
-
-如果这个项目对你有帮助，欢迎 [Star ⭐](https://github.com/gitfox-enter/RSSForge) 支持一下！
-
-<p align="center">
-  <a href="https://gitfox-enter.github.io/RSSForge/alipay-redpacket.html">
-    <img src="public/alipay-redpacket.jpg" alt="支付宝扫码领红包" width="260" />
-  </a>
-</p>
-
-<p align="center">🧧 支付宝扫码领红包 · 每天可领一次 · 消费直接抵扣</p>
+- [RSSHub](https://github.com/DIYgod/RSSHub) | Open source RSS feed aggregator, the inspiration for RSSForge
+- [RSS-Bridge](https://github.com/RSS-Bridge/rss-bridge) | PHP-based RSS generator
+- [RSSHub Radar](https://github.com/DIYgod/RSSHub-Radar) | Browser extension to discover and subscribe to RSS feeds
 
 ## License
 
