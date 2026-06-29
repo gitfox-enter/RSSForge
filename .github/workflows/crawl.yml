@@ -2,8 +2,10 @@ name: 站点更新监控
 
 on:
   schedule:
-    # 每 30 分钟唤醒，由 smart_scheduler 决定是否执行
+    # 每 30 分钟常规轮询，由 smart_scheduler 决定是否执行
     - cron: '0,30 * * * *'
+    # 固定时刻保底触发（防 GitHub 高峰期漏触发）
+    - cron: '0 7,12,18,22 * * *'
   workflow_dispatch:
 
 concurrency:
