@@ -16,6 +16,7 @@ except ImportError:
 
 from crawler.parsers._utils import (
     _has_chinese, _is_valid_text, _add_item, _make_skip_set, COMMON_SKIP_WORDS,
+    _mmdd_to_date,
 )
 
 logger = logging.getLogger('crawl')
@@ -25,19 +26,26 @@ def parse_423down_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, st
 
     Looks for <h2> links inside ul.excerpt > li, falling back to any
     anchor whose href matches /{digits}.html on the domain.
+    Extracts pub_date from <span class="time">MM-DD</span> when available.
     """
     items: List[Dict[str, str]] = []
     seen: Set[str] = set()
 
     # Primary: structured excerpt blocks (most reliable)
-    for a in soup.select('ul.excerpt li h2 a, .excerpt h2 a'):
+    for li in soup.select('ul.excerpt li, .excerpt li'):
+        a = li.select_one('h2 a')
+        if not a:
+            continue
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
         if not _is_valid_text(text, min_len=3, max_len=999):
             continue
         if text in seen:
             continue
-        _add_item(items, seen, text, href, base_url)
+        # Extract publish date from <span class="time"> inside the same <li>
+        time_el = li.select_one('span.time')
+        pub_date = _mmdd_to_date(time_el.get_text(strip=True)) if time_el else ''
+        _add_item(items, seen, text, href, base_url, pub_date=pub_date)
 
     # Fallback: any link matching the article URL pattern
     if len(items) < 3:

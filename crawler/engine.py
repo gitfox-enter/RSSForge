@@ -1452,11 +1452,13 @@ async def main_async() -> None:
                 item_text = item['text'] if isinstance(item, dict) else str(item)
                 if item_url and not item_url.startswith('javascript:'):
                     src_name = get_source_name(r.get('url', '')) or r.get('title', r['url'])
+                    # 优先使用 parser 提取的发布时间，否则用爬取时间
+                    item_time = (item.get('pub_date') or check_time) if isinstance(item, dict) else check_time
                     new_item_list.append({
                         'url': item_url,
                         'text': item_text,
                         'source': src_name,
-                        'time': check_time,
+                        'time': item_time,
                     })
     # Insert new items to SQLite (also adds 'category' field to items in-place)
     added = 0
