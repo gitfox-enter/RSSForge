@@ -26,7 +26,7 @@ from crawler.parsers._utils import (
     _has_chinese, _is_valid_text, _add_item, _make_skip_set, COMMON_SKIP_WORDS,
 )
 from crawler.parsers.deal_sites import (
-    parse_423down_items, parse_ziyuanting_items, parse_wycad_items,
+    parse_423down_items, parse_wycad_items,
     parse_baicaio_items_v2, parse_h6room_items, parse_xzba_items,
     parse_apprcn_items, parse_daydayzhuan_items, parse_007ymd_items,
     parse_12345pro_items, parse_wobangzhao_items,
@@ -52,7 +52,6 @@ logger = logging.getLogger('crawl')
 
 PARSER_REGISTRY: Dict[str, Tuple[Any, Optional[Any]]] = {
     '423down.com':       (parse_423down_items,      None),
-    'ziyuanting.com':    (parse_ziyuanting_items,    None),
     'wycad.com':         (parse_wycad_items,         None),
     'baicaio.com':       (parse_baicaio_items_v2,    None),
     'h6room.com':        (parse_h6room_items,        None),

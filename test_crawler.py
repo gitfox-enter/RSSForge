@@ -1989,59 +1989,6 @@ class TestAsyncIntegration(unittest.TestCase):
 # 10. TESTS FOR ALL REMAINING PARSER_REGISTRY PARSERS
 # ===================================================================
 
-class TestParseZiyuantingItems(unittest.TestCase):
-    """Tests for crawl.parse_ziyuanting_items()."""
-
-    MOCK_HTML = """
-    <html><body>
-    <article class="posts-item sites-item">
-        <a href="https://www.ziyuanting.com/sites/123.html" class="sites-body">
-            <h3 class="item-title"><b>某资源网站推荐</b></h3>
-        </a>
-    </article>
-    <article class="posts-item sites-item">
-        <a href="https://www.ziyuanting.com/sites/456.html" class="sites-body">
-            <h3 class="item-title"><b>在线工具合集分享</b></h3>
-        </a>
-    </article>
-    <article class="posts-item app-item">
-        <a href="https://www.ziyuanting.com/app/789.html">
-            <span class="item-title">实用软件工具 v2.0</span>
-        </a>
-    </article>
-    <a href="https://www.ziyuanting.com/bulletin/100.html">最新站点公告通知</a>
-    <a href="https://www.ziyuanting.com/">首页</a>
-    </body></html>
-    """
-
-    def test_extracts_items(self):
-        soup = make_soup(self.MOCK_HTML)
-        items = crawl.parse_ziyuanting_items(soup, "https://www.ziyuanting.com/")
-        texts = [item["text"] for item in items]
-        self.assertIn("某资源网站推荐", texts)
-        self.assertIn("在线工具合集分享", texts)
-        self.assertGreaterEqual(len(items), 2)
-
-    def test_dedup(self):
-        html = """<html><body>
-        <article class="posts-item sites-item">
-            <a href="/sites/1.html" class="sites-body"><h3 class="item-title"><b>重复资源标题</b></h3></a>
-        </article>
-        <article class="posts-item sites-item">
-            <a href="/sites/2.html" class="sites-body"><h3 class="item-title"><b>重复资源标题</b></h3></a>
-        </article>
-        </body></html>"""
-        soup = make_soup(html)
-        items = crawl.parse_ziyuanting_items(soup, "https://www.ziyuanting.com/")
-        self.assertEqual(len(items), 1)
-
-    def test_filters_junk(self):
-        soup = make_soup(self.MOCK_HTML)
-        items = crawl.parse_ziyuanting_items(soup, "https://www.ziyuanting.com/")
-        texts = [item["text"] for item in items]
-        self.assertNotIn("首页", texts)
-
-
 class TestParseWycadItems(unittest.TestCase):
     """Tests for crawl.parse_wycad_items()."""
 

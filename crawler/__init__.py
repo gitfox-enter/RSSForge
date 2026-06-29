@@ -62,7 +62,6 @@ from crawler.parsers import (
     extract_article_items,
     parse_baicaio_items_v2,
     # --- deal_sites ---
-    parse_ziyuanting_items,
     parse_wycad_items,
     parse_h6room_items,
     parse_xzba_items,

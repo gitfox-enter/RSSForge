@@ -136,10 +136,6 @@ sites:
     tier: high
     interval: 30
 
-  - url: "https://www.ziyuanting.com/"     # 资源厅
-    max_pages: 3
-    name: 资源厅
-    tier: medium
     interval: 60
 
   - url: "https://www.wycad.com/"          # 网赚

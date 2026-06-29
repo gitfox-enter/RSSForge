@@ -68,6 +68,12 @@
       "reason": "纯工具页，无内容列表可监控",
       "category": "not_content",
       "added": "2026-06-04"
+    },
+    {
+      "domain": "ziyuanting.com",
+      "reason": "网站导航/资源目录，非内容站点，无法抓取实时资源内容",
+      "category": "not_content",
+      "added": "2026-06-29"
     }
   ]
 }

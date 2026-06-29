@@ -67,7 +67,7 @@ def _load_sites_from_yaml() -> List[str]:
         "https://www.lsapk.com/", "https://www.manmanbuy.com/",
         "https://www.thosefree.com/", "https://www.wycad.com/",
         "https://www.yangmaodang.club/", "https://www.yxssp.com/",
-        "https://www.zhuanyes.com/xianbao/", "https://www.ziyuanting.com/",
+        "https://www.zhuanyes.com/xianbao/",
         "https://xianbao.icu/", "https://xianbaomi.com/", "https://xzba.cc/",
         "https://yangmao.wang/", "https://www.ghxi.com/", "https://www.iqnew.com/",
         "https://www.51kanong.com/", "https://v1.xianbao.net/",

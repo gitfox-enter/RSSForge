@@ -26,7 +26,6 @@ from crawler.parsers._utils import (
 # --- Deal/Coupon site parsers ---
 from crawler.parsers.deal_sites import (
     parse_423down_items,
-    parse_ziyuanting_items,
     parse_wycad_items,
     parse_h6room_items,
     parse_xzba_items,

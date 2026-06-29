@@ -72,69 +72,6 @@ def parse_423down_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, st
 
 
 
-def parse_ziyuanting_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
-    """晓晓资源网 (ziyuanting.com) - extract site entries and announcements.
-
-    This is a navigation/directory site using the OneNav theme.
-    Main content items use /sites/{id}.html and /app/{id}.html URLs.
-    Announcements use /bulletin/{id}.html.
-    """
-    items: List[Dict[str, str]] = []
-    seen: Set[str] = set()
-
-    # Primary: site directory entries (the main content of the page)
-    for article in soup.select('article.sites-item, article.posts-item.sites-item'):
-        a_tag = article.select_one('a.sites-body, a[href*="/sites/"]')
-        if not a_tag:
-            continue
-        # Extract title from <b> inside .item-title, or from title attr
-        title_el = article.select_one('.item-title b, .item-title')
-        text = title_el.get_text(strip=True) if title_el else a_tag.get('title', '').strip()
-        href = a_tag.get('href', '').strip()
-        if not _is_valid_text(text, min_len=2, max_len=999):
-            continue
-        if text in seen:
-            continue
-        _add_item(items, seen, text, href, base_url)
-
-    # Secondary: app/software download entries
-    for article in soup.select('article.app-item, article.posts-item.app-item'):
-        a_tag = article.select_one('a[href*="/app/"]')
-        if not a_tag:
-            continue
-        title_el = article.select_one('.item-title a, .item-title')
-        text = title_el.get_text(strip=True) if title_el else a_tag.get_text(strip=True)
-        # Clean version suffix like " - 1.0.1"
-        text = re.sub(r'\s*-\s*[\d.]+$', '', text).strip()
-        href = a_tag.get('href', '').strip()
-        if not _is_valid_text(text, min_len=2, max_len=999) or text in seen:
-            continue
-        _add_item(items, seen, text, href, base_url)
-
-    # Tertiary: bulletin/announcement links
-    for a in soup.select('a[href*="/bulletin/"]'):
-        text = a.get_text(strip=True)
-        href = a.get('href', '').strip()
-        if not _is_valid_text(text, max_len=999) or text in seen:
-            continue
-        _add_item(items, seen, text, href, base_url)
-
-    # Fallback: broad pattern for any content links
-    if len(items) < 5:
-        for a in soup.find_all('a', href=True):
-            href = a.get('href', '').strip()
-            text = a.get_text(strip=True)
-            if not _is_valid_text(text, min_len=3):
-                continue
-            if not re.search(r'ziyuanting\.com/(sites|app|bulletin)/\d+\.html', href):
-                continue
-            if text in seen:
-                continue
-            _add_item(items, seen, text, href, base_url)
-
-    return items[:50]
-
-
 # ---------------------------------------------------------------------------
 # 4. 新赚吧 / 游戏下载吧  (xzba.cc)
 # ---------------------------------------------------------------------------
