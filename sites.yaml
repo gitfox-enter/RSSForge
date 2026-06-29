@@ -259,11 +259,6 @@ sites:
     tier: low
     interval: 360
 
-  - url: "https://www.onlinedown.net/"     # 华军软件
-    max_pages: 5
-    name: 华军软件
-    tier: low
-    interval: 480
 
   - url: "https://free.apprcn.com/"        # 反斗限免
     max_pages: 5

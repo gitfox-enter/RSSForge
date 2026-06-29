@@ -74,7 +74,7 @@ def _load_sites_from_yaml() -> List[str]:
         "https://www.douban.com/group/711811/",
         "https://www.wobangzhao.com/", "https://free.apprcn.com/",
         "https://www.foxirj.com/", "https://www.ddooo.com/",
-        "https://www.onlinedown.net/", "https://feed.iplaysoft.com/",
+        "https://feed.iplaysoft.com/",
         "https://10000yun.com/",
     ]
 

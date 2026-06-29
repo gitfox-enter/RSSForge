@@ -1194,33 +1194,9 @@ class TestNewSiteParsers(unittest.TestCase):
         self.assertEqual(len(items), 1)
         self.assertTrue(items[0]['url'].startswith('https://www.ddooo.com'))
 
-    def test_parse_onlinedown_items_basic(self):
-        html = """<html><body>
-        <a href="/soft/12345.htm">360安全卫士最新版</a>
-        <a href="/soft/12346.htm">WPS Office 办公软件</a>
-        <a href="/article/12347.htm">如何清理电脑垃圾</a>
-        <a href="/soft/12348.htm">首页</a>
-        </body></html>"""
-        soup = make_soup(html)
-        items = crawl.parse_onlinedown_items(soup, "https://www.onlinedown.net/")
-        urls = [item['url'] for item in items]
-        # Should extract /soft/ links and /article/ links (excluding "首页")
-        self.assertGreaterEqual(len(items), 2)
-        self.assertTrue(any('/soft/' in u for u in urls))
-
-    def test_parse_onlinedown_items_max_limit(self):
-        links = "".join(
-            f'<a href="/soft/{i}.htm">软件标题内容测试编号 {i} 足够长度版</a>'
-            for i in range(50)
-        )
-        html = f"<html><body>{links}</body></html>"
-        soup = make_soup(html)
-        items = crawl.parse_onlinedown_items(soup, "https://www.onlinedown.net/")
-        self.assertLessEqual(len(items), 30)
-
     def test_parser_registry_has_new_entries(self):
         """Verify all new parsers are registered."""
-        new_domains = ['ym2.cc', 'wobangzhao.com', 'foxirj.com', 'ddooo.com', 'onlinedown.net']
+        new_domains = ['ym2.cc', 'wobangzhao.com', 'foxirj.com', 'ddooo.com']
         for domain in new_domains:
             self.assertIn(domain, crawl.PARSER_REGISTRY, f"{domain} not in PARSER_REGISTRY")
 
@@ -1231,7 +1207,6 @@ class TestNewSiteParsers(unittest.TestCase):
             ("https://www.wobangzhao.com/thread-1-1-1.html", 'parse_wobangzhao_items'),
             ("https://www.foxirj.com/test.html", 'parse_foxirj_items'),
             ("https://www.ddooo.com/softdown/1.htm", 'parse_ddooo_items'),
-            ("https://www.onlinedown.net/article/1.htm", 'parse_onlinedown_items'),
         ]
         for url, expected_func_name in test_cases:
             pair = crawl._match_parser(url)

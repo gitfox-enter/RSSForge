@@ -156,69 +156,6 @@ def parse_ddooo_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
 
 
 
-def parse_onlinedown_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
-    """华军软件园 (onlinedown.net) - extract software and article entries.
-
-    Primary: /soft/{id}.htm links (software download pages).
-    Secondary: /article/{id}.htm links (tutorials/guides).
-    """
-    items: List[Dict[str, str]] = []
-    seen: Set[str] = set()
-
-    # Skip exact navigation words
-    skip_exact = {'首页', '电脑软件', '安卓软件', '苹果软件', '移动电脑版',
-                  '系统软件', '软件专题', '教程攻略', '装机必备', '下载排行',
-                  '最近更新', '更多', '搜索', '软件发布', 'AI产品榜'}
-
-    # Primary: software download links (/soft/{id}.htm)
-    for a in soup.find_all('a', href=True):
-        href = a.get('href', '').strip()
-        text = a.get_text(strip=True)
-        if not _is_valid_text(text, min_len=2):
-            continue
-
-        is_content = False
-        if re.search(r'onlinedown\.net/soft/\d+\.htm', href):
-            is_content = True
-        elif re.search(r'/soft/\d+\.htm', href):
-            is_content = True
-
-        if not is_content:
-            continue
-        if text in skip_exact:
-            continue
-        if text in seen:
-            continue
-        seen.add(text)
-        if href.startswith('//'):
-            href = 'https:' + href
-        elif href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
-
-    # Secondary: article/tutorial links
-    for a in soup.find_all('a', href=True):
-        href = a.get('href', '').strip()
-        text = a.get_text(strip=True)
-        if not _is_valid_text(text):
-            continue
-        if not re.search(r'(onlinedown\.net)?/article/\d+\.htm', href):
-            continue
-        if text in seen:
-            continue
-        seen.add(text)
-        if href.startswith('//'):
-            href = 'https:' + href
-        elif href.startswith('/'):
-            href = urljoin(base_url, href)
-        items.append({'text': text, 'url': href})
-
-    return items[:30]
-
-
-
-
-
 
 def parse_appinn_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
     """小众软件 - WordPress 站点，提取文章条目。

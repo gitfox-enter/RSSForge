@@ -88,7 +88,6 @@ from crawler.parsers import (
     parse_yxssp_items,
     parse_foxirj_items,
     parse_ddooo_items,
-    parse_onlinedown_items,
     parse_appinn_items,
     parse_lsapk_items,
     parse_thosefree_items,
