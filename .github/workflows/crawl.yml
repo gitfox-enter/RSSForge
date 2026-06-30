@@ -114,7 +114,8 @@ jobs:
             git rebase --abort 2>/dev/null || true
             # Use --no-commit to avoid auto-committing merge; let conflicts be resolved manually
             # Fix #58: --strategy-option=theirs can discard incoming crawled data
-            git pull --no-commit origin main
+            # Use --no-rebase to force merge strategy (avoids "divergent branches" error)
+            git pull --no-commit --no-rebase origin main
             rebase_rc=$?
             if [ $rebase_rc -ne 0 ]; then
               echo "Rebase had conflicts, attempting auto-resolution..."
