@@ -2,20 +2,20 @@
   "线报酷": {
     "interval": 15,
     "freq_label": "每15分钟",
-    "count": 3558,
+    "count": 3562,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ku.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/xian-bao-ku.png",
     "site_url": "https://news.ixbk.net/",
-    "items_hash": "ffe3e8734cae164fb663c8df9047614c"
+    "items_hash": "1563266424b390825533a0a069e27a19"
   },
   "线报ICU": {
     "interval": 15,
     "freq_label": "每15分钟",
-    "count": 492,
+    "count": 494,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ICU.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/xian-bao-ICU.png",
     "site_url": "https://xianbao.icu/",
-    "items_hash": "66949730932747bbf059151b05178276"
+    "items_hash": "91d5d0d9deda08843a6caad09fe85f04"
   },
   "专业线报": {
     "interval": 20,
@@ -101,11 +101,11 @@
   "超级线报": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 90,
+    "count": 91,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/chao-ji-xian-bao.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/chao-ji-xian-bao.png",
     "site_url": "https://cjx8.com/",
-    "items_hash": "fb3705de29487e8af0a63905e0c963cb"
+    "items_hash": "5c5850c90b30a4945c54b39715b3672d"
   },
   "汇发部": {
     "interval": 20,
