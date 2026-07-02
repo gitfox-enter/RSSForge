@@ -114,6 +114,9 @@ Any PR that adds a blacklisted site will be automatically rejected by CI.
 - 📋 **Unified OPML** — One OPML file to import all feeds into any RSS reader
 - ⚡ **Smart scheduling** — Per-site intervals (15 min ~ 8 hrs), auto night-mode throttle
 - 🔄 **Auto deduplication** — MD5 + URL + fuzzy title dedup, 7-day rolling window
+- 📖 **Full article content** — Smart content extraction for selected sites
+- 🗂️ **Public feed directory** — Browse all feeds at `/feeds/index.html`
+- 👤 **Custom sources** — Add your own feeds via `custom_sources.yaml` (no code changes needed)
 
 ## Related Projects
 

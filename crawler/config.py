@@ -641,3 +641,89 @@ BROWSER_PROFILES: List[Dict[str, Any]] = [
         'accept_language': 'zh-CN,zh;q=0.9,en;q=0.8',
     },
 ]
+
+
+# ============================================================
+# 用户自定义订阅源（从 custom_sources.yaml 加载）
+# ============================================================
+
+_CUSTOM_SOURCES_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "custom_sources.yaml")
+_CUSTOM_SOURCES_DATA: Optional[Dict[str, Any]] = None
+
+
+def _load_custom_sources() -> Dict[str, Any]:
+    """Load custom_sources.yaml configuration.
+    
+    This file is maintained by users to add their own feed sources
+    without modifying sites.yaml or other code.
+    """
+    global _CUSTOM_SOURCES_DATA
+    if _CUSTOM_SOURCES_DATA is not None:
+        return _CUSTOM_SOURCES_DATA
+    
+    if not os.path.exists(_CUSTOM_SOURCES_PATH):
+        _CUSTOM_SOURCES_DATA = {}
+        return _CUSTOM_SOURCES_DATA
+    
+    try:
+        import yaml
+        with open(_CUSTOM_SOURCES_PATH, "r", encoding="utf-8") as f:
+            _CUSTOM_SOURCES_DATA = yaml.safe_load(f) or {}
+    except Exception as e:
+        logger.warning("custom_sources.yaml 加载失败: %s", e)
+        _CUSTOM_SOURCES_DATA = {}
+    
+    return _CUSTOM_SOURCES_DATA
+
+
+def is_custom_sources_enabled() -> bool:
+    """Check if custom sources feature is enabled."""
+    data = _load_custom_sources()
+    return data.get("enabled", True)
+
+
+def get_custom_feeds() -> List[Dict[str, Any]]:
+    """Get list of custom feed configurations.
+    
+    Returns list of dicts with keys: url, name, content, interval, tier, enabled
+    """
+    if not is_custom_sources_enabled():
+        return []
+    
+    data = _load_custom_sources()
+    custom_feeds = data.get("custom_feeds", [])
+    
+    # Filter out disabled feeds and add defaults
+    result = []
+    for feed in custom_feeds:
+        if not feed.get("enabled", True):
+            continue
+        if not feed.get("url"):
+            continue
+        
+        # Apply defaults
+        feed.setdefault("name", feed["url"])
+        feed.setdefault("interval", 60)
+        feed.setdefault("tier", "medium")
+        result.append(feed)
+    
+    return result
+
+
+def get_custom_feed_config(url: str) -> Optional[Dict[str, Any]]:
+    """Get custom feed configuration for a specific URL.
+    
+    Returns the matching feed config dict or None if not found.
+    """
+    feeds = get_custom_feeds()
+    for feed in feeds:
+        if feed.get("url") == url:
+            return feed
+    return None
+
+
+def get_all_custom_urls() -> Set[str]:
+    """Get set of all custom feed URLs."""
+    feeds = get_custom_feeds()
+    return {feed["url"] for feed in feeds if feed.get("url")}
+
