@@ -110,11 +110,14 @@ jobs:
           push_success=false
           for i in 1 2 3 4 5; do
             echo "=== Push attempt $i ==="
-            # Abort any existing rebase first
+            # Abort any existing rebase or merge first (fixes stale MERGE_HEAD)
             git rebase --abort 2>/dev/null || true
+            git merge --abort 2>/dev/null || true
+            # Force merge strategy to avoid "divergent branches" error
+            git config pull.rebase false
+            git config merge.conflictstyle diff3
             # Use --no-commit to avoid auto-committing merge; let conflicts be resolved manually
             # Fix #58: --strategy-option=theirs can discard incoming crawled data
-            # Use --no-rebase to force merge strategy (avoids "divergent branches" error)
             git pull --no-commit --no-rebase origin main
             rebase_rc=$?
             if [ $rebase_rc -ne 0 ]; then
@@ -134,9 +137,29 @@ jobs:
                 esac
                 git add "$conflict_file"
               done
-              # Abort rebase and do a merge commit instead (preserves both sides)
-              git rebase --abort 2>/dev/null || true
-              git merge origin/main --no-edit
+              # Abort any pending merge before continuing (fixes stale MERGE_HEAD)
+              git merge --abort 2>/dev/null || true
+              # Retry pull with guaranteed merge strategy
+              git pull --no-commit --no-rebase origin main || true
+              # If still has conflicts, stage ours for data files, theirs for others
+              if [ -f .git/MERGE_HEAD ]; then
+                git diff --name-only --diff-filter=U | while read conflict_file; do
+                  case "$conflict_file" in
+                    items.json|items_latest.json|run_log.jsonl|feeds/|feeds_meta.json)
+                      echo "Data conflict: keeping our crawler version of $conflict_file"
+                      git checkout --ours "$conflict_file" 2>/dev/null || git checkout --theirs "$conflict_file"
+                      ;;
+                    *)
+                      echo "Conflict in $conflict_file: accepting remote version"
+                      git checkout --theirs "$conflict_file"
+                      ;;
+                  esac
+                  git add "$conflict_file"
+                done
+                git commit -m "Merge origin/main (auto-resolved)" || true
+              fi
+              # Use force-with-lease for final push to handle non-fast-forward cases
+              git push origin main --force-with-lease || git push origin main
             fi
             if git push origin main; then
               push_success=true
