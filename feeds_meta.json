@@ -2,11 +2,11 @@
   "线报酷": {
     "interval": 15,
     "freq_label": "每15分钟",
-    "count": 5025,
+    "count": 5077,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ku.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/xian-bao-ku.png",
     "site_url": "https://news.ixbk.net/",
-    "items_hash": "fc5e0e75d1fbc026e5b9acd6e01bc729"
+    "items_hash": "c0e43ac60987b94de04472823de2f5e4"
   },
   "线报ICU": {
     "interval": 15,
@@ -38,11 +38,11 @@
   "线报网": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 82,
+    "count": 83,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wang.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/xian-bao-wang.png",
     "site_url": "https://v1.xianbao.net/",
-    "items_hash": "a609f2c1e35275692d2eac0e44c0cbec"
+    "items_hash": "a31ef03b5757bedfdfa191b8f8ce60ca"
   },
   "小角落": {
     "interval": 20,
@@ -58,7 +58,7 @@
     "freq_label": "每30分钟",
     "count": 0,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xin-zhuan-ba.xml",
-    "icon": "https://gitfox-enter.github.io/RSSForge/icons/xin-zhuan-ba.png",
+    "icon": "https://gitfox-enter.github.io/RSSForge/icons/xin-zhuan-ba.svg",
     "site_url": "https://xzba.cc/",
     "items_hash": ""
   },
@@ -101,20 +101,20 @@
   "超级线报": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 125,
+    "count": 127,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/chao-ji-xian-bao.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/chao-ji-xian-bao.png",
     "site_url": "https://cjx8.com/",
-    "items_hash": "be423a73ffb0bf02a8a582e00dd5b6f2"
+    "items_hash": "34d7a93babb76aea21ce8e8160e7f7c5"
   },
   "汇发部": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 3843,
+    "count": 3897,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/hui-fa-bu.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/hui-fa-bu.png",
     "site_url": "https://www.huifabu.cn/",
-    "items_hash": "c9ca26e7b6ae31c59ef49daf381f8df3"
+    "items_hash": "005c3ff58f2bb02ced74949154308dda"
   },
   "爱Q社区": {
     "interval": 20,
