@@ -210,6 +210,8 @@ jobs:
         if: success()
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          token_duration: 3600
 
       - name: 停滞检测
         if: success()
