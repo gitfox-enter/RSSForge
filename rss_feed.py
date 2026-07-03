@@ -347,19 +347,26 @@ def _build_atom_feed(
             title_hash = hashlib.md5(title_text.encode('utf-8')).hexdigest()[:16]
             ET.SubElement(entry, f'{{{NS}}}id').text = f"tag:gitfox-enter,2024-01-01:{title_hash}"
 
-        # 时间戳处理 (fix #3):
-        # - <published> 使用 item 的真实发布时间
-        # - <updated> 使用 item 时间或 feed 更新时间（取较新者）
+        # 时间戳处理 (fix #3 + fix #duplicate-timestamp):
+        # - <published> 优先用 item 的真实发布时间
+        # - <updated> 用 item 时间或 feed 更新时间（取较新者）
+        # - 无真实时间时，使用 URL 哈希生成稳定时间戳（避免每次重新生成 feed
+        #   时老 item 时间变化，导致 RSS 阅读器判定为新条目 → 重复显示）
         item_time = item.get('time', '')
         if item_time:
             published_time = _to_iso8601(item_time)
             updated_time = published_time  # 无独立 updated 字段时与 published 相同
         else:
-            # 无真实时间时，使用索引偏移避免批量相同时间戳
-            from datetime import timedelta as _td
-            base_dt = datetime.now(timezone(timedelta(hours=8)))
-            offset_dt = base_dt - _td(seconds=idx)
-            published_time = offset_dt.isoformat()
+            # 无真实时间时，用 URL 哈希生成稳定时间戳
+            # 同一个 URL 永远对应同一时间，跨多次 feed 生成保持一致
+            stable_url = item.get('url', '') or item.get('text', '') or f"idx-{idx}"
+            url_hash_int = int(hashlib.md5(stable_url.encode('utf-8')).hexdigest(), 16)
+            # 基准时间: 2024-01-01 00:00:00 UTC+8
+            # 时间偏移: 0 ~ ~68年（hash 取模 2^31 秒 ≈ 68年）
+            base_epoch = int(datetime(2024, 1, 1, 0, 0, 0, tzinfo=timezone(timedelta(hours=8))).timestamp())
+            stable_offset = url_hash_int % (2**31)  # 最多 68 年
+            stable_dt = datetime.fromtimestamp(base_epoch + stable_offset, tz=timezone(timedelta(hours=8)))
+            published_time = stable_dt.isoformat()
             updated_time = published_time
 
         ET.SubElement(entry, f'{{{NS}}}updated').text = updated_time
