@@ -5,7 +5,7 @@
   <link href="https://v1.xianbao.net/" rel="alternate" />
   <link href="https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wang.xml" rel="self" type="application/atom+xml" />
   <id>https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wang.xml</id>
-  <updated>2026-07-03T21:18:55+08:00</updated>
+  <updated>2026-07-04T16:20:23+08:00</updated>
   <generator uri="https://github.com/gitfox-enter/RSSForge">RSSForge</generator>
   <rights>内容版权归原作者所有，RSSForge 仅提供聚合索引</rights>
   <sy:updatePeriod>hourly</sy:updatePeriod>
@@ -17,11 +17,23 @@
   </author>
   <icon>https://gitfox-enter.github.io/RSSForge/icons/xian-bao-wang.png</icon>
   <entry>
+    <title type="text">立即注册</title>
+    <link href="https://v1.xianbao.net/member.php?mod=register" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:7689e550b2ac841a</id>
+    <updated>2026-07-04T16:20:23+08:00</updated>
+    <published>2026-07-04T16:20:23+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">立即注册</summary>
+    <content type="html">&lt;p&gt;立即注册&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/member.php?mod=register"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
     <title type="text">找回密码</title>
     <link href="https://v1.xianbao.net/app.php?p=account&amp;action=security&amp;op=resetpassword" rel="alternate" />
     <id>tag:v1.xianbao.net,2024-01-01:77ba001b95fa9307</id>
-    <updated>2026-07-03T21:18:55+08:00</updated>
-    <published>2026-07-03T21:18:55+08:00</published>
+    <updated>2026-07-04T16:20:23+08:00</updated>
+    <published>2026-07-04T16:20:23+08:00</published>
     <author>
       <name>线报网</name>
     </author>
@@ -32,8 +44,8 @@
     <title type="text">每日签到</title>
     <link href="https://v1.xianbao.net/plugin.php?id=dsu_paulsign:sign" rel="alternate" />
     <id>tag:v1.xianbao.net,2024-01-01:325e37a06f15be88</id>
-    <updated>2026-07-03T21:18:55+08:00</updated>
-    <published>2026-07-03T21:18:55+08:00</published>
+    <updated>2026-07-04T16:20:23+08:00</updated>
+    <published>2026-07-04T16:20:23+08:00</published>
     <author>
       <name>线报网</name>
     </author>
@@ -44,8 +56,8 @@
     <title type="text">赚品交换</title>
     <link href="https://v1.xianbao.net/forum-36-1.html" rel="alternate" />
     <id>tag:v1.xianbao.net,2024-01-01:a042a81ca273b14c</id>
-    <updated>2026-07-03T21:18:55+08:00</updated>
-    <published>2026-07-03T21:18:55+08:00</published>
+    <updated>2026-07-04T16:20:23+08:00</updated>
+    <published>2026-07-04T16:20:23+08:00</published>
     <author>
       <name>线报网</name>
     </author>
@@ -56,8 +68,8 @@
     <title type="text">邀请专区</title>
     <link href="https://v1.xianbao.net/forum-37-1.html" rel="alternate" />
     <id>tag:v1.xianbao.net,2024-01-01:b3eeb4b2775795c8</id>
-    <updated>2026-07-03T21:18:55+08:00</updated>
-    <published>2026-07-03T21:18:55+08:00</published>
+    <updated>2026-07-04T16:20:23+08:00</updated>
+    <published>2026-07-04T16:20:23+08:00</published>
     <author>
       <name>线报网</name>
     </author>
@@ -68,8 +80,8 @@
     <title type="text">天天线报</title>
     <link href="https://v1.xianbao.net/app.php?p=threadday" rel="alternate" />
     <id>tag:v1.xianbao.net,2024-01-01:1483d3759847ef84</id>
-    <updated>2026-07-03T21:18:55+08:00</updated>
-    <published>2026-07-03T21:18:55+08:00</published>
+    <updated>2026-07-04T16:20:23+08:00</updated>
+    <published>2026-07-04T16:20:23+08:00</published>
     <author>
       <name>线报网</name>
     </author>
@@ -81,8 +93,8 @@
     <title type="text">抢楼奖励</title>
     <link href="https://v1.xianbao.net/app.php?p=threadrush" rel="alternate" />
     <id>tag:v1.xianbao.net,2024-01-01:50d1b47d0225153d</id>
-    <updated>2026-07-03T21:18:55+08:00</updated>
-    <published>2026-07-03T21:18:55+08:00</published>
+    <updated>2026-07-04T16:20:23+08:00</updated>
+    <published>2026-07-04T16:20:23+08:00</published>
     <author>
       <name>线报网</name>
     </author>
@@ -90,47 +102,11 @@
     <content type="html">&lt;p&gt;抢楼奖励&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/app.php?p=threadrush"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
   </entry>
   <entry>
-    <title type="text">多肉薯片</title>
-    <link href="https://v1.xianbao.net/space-username-%E5%A4%9A%E8%82%89%E8%96%AF%E7%89%87.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:c837680c905d4dd8</id>
-    <updated>2026-07-03T21:18:55+08:00</updated>
-    <published>2026-07-03T21:18:55+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">多肉薯片</summary>
-    <content type="html">&lt;p&gt;多肉薯片&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-%E5%A4%9A%E8%82%89%E8%96%AF%E7%89%87.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">金融监管总局决定对众邦银行实施 ...</title>
-    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=310906&amp;goto=lastpost#lastpost" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:f963c12b36510851</id>
-    <updated>2026-07-03T21:18:55+08:00</updated>
-    <published>2026-07-03T21:18:55+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">金融监管总局决定对众邦银行实施 ...</summary>
-    <content type="html">&lt;p&gt;金融监管总局决定对众邦银行实施 ...&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=310906&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">kokpk</title>
-    <link href="https://v1.xianbao.net/space-username-kokpk.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:57656925af2c2731</id>
-    <updated>2026-07-03T21:18:55+08:00</updated>
-    <published>2026-07-03T21:18:55+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">kokpk</summary>
-    <content type="html">&lt;p&gt;kokpk&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-kokpk.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
     <title type="text">悬赏问问</title>
     <link href="https://v1.xianbao.net/forum-39-1.html" rel="alternate" />
     <id>tag:v1.xianbao.net,2024-01-01:a6eef90a9120f092</id>
-    <updated>2026-07-03T21:18:55+08:00</updated>
-    <published>2026-07-03T21:18:55+08:00</published>
+    <updated>2026-07-04T16:20:23+08:00</updated>
+    <published>2026-07-04T16:20:23+08:00</published>
     <author>
       <name>线报网</name>
     </author>
@@ -141,13 +117,499 @@
     <title type="text">押果交易</title>
     <link href="https://v1.xianbao.net/forum-57-1.html" rel="alternate" />
     <id>tag:v1.xianbao.net,2024-01-01:0fc64c7cc23bcfa2</id>
-    <updated>2026-07-03T21:18:55+08:00</updated>
-    <published>2026-07-03T21:18:55+08:00</published>
+    <updated>2026-07-04T16:20:23+08:00</updated>
+    <published>2026-07-04T16:20:23+08:00</published>
     <author>
       <name>线报网</name>
     </author>
     <summary type="text">押果交易</summary>
     <content type="html">&lt;p&gt;押果交易&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-57-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">金融监管总局决定对众邦银行实施 ...</title>
+    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=310906&amp;goto=lastpost#lastpost" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:f963c12b36510851</id>
+    <updated>2026-07-04T16:14:05+08:00</updated>
+    <published>2026-07-04T16:14:05+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">金融监管总局决定对众邦银行实施 ...</summary>
+    <content type="html">&lt;p&gt;金融监管总局决定对众邦银行实施 ...&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=310906&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">mfkicfqb</title>
+    <link href="https://v1.xianbao.net/space-username-mfkicfqb.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:2326100e9d839581</id>
+    <updated>2026-07-04T16:14:05+08:00</updated>
+    <published>2026-07-04T16:14:05+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">mfkicfqb</summary>
+    <content type="html">&lt;p&gt;mfkicfqb&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-mfkicfqb.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">binglunqiao</title>
+    <link href="https://v1.xianbao.net/space-username-binglunqiao.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:5a447a19782378d3</id>
+    <updated>2026-07-04T13:28:37+08:00</updated>
+    <published>2026-07-04T13:28:37+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">binglunqiao</summary>
+    <content type="html">&lt;p&gt;binglunqiao&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-binglunqiao.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">联通的众邦保证金 你们提前支取 ...</title>
+    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=310919&amp;goto=lastpost#lastpost" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:caed5f57ad3b9492</id>
+    <updated>2026-07-04T09:18:12+08:00</updated>
+    <published>2026-07-04T09:18:12+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">联通的众邦保证金 你们提前支取 ...</summary>
+    <content type="html">&lt;p&gt;联通的众邦保证金 你们提前支取 ...&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=310919&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">ylang88</title>
+    <link href="https://v1.xianbao.net/space-username-ylang88.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:58325259abcf9a61</id>
+    <updated>2026-07-04T09:18:12+08:00</updated>
+    <published>2026-07-04T09:18:12+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">ylang88</summary>
+    <content type="html">&lt;p&gt;ylang88&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-ylang88.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">帮助Help</title>
+    <link href="https://v1.xianbao.net/misc.php?mod=faq" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:3b00aecce8f3aada</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">帮助Help</summary>
+    <content type="html">&lt;p&gt;帮助Help&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/misc.php?mod=faq"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">排行榜Ranklist</title>
+    <link href="https://v1.xianbao.net/misc.php?mod=ranklist" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:747513c20f910a98</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">排行榜Ranklist</summary>
+    <content type="html">&lt;p&gt;排行榜Ranklist&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/misc.php?mod=ranklist"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">Plus权益</title>
+    <link href="https://v1.xianbao.net/app.php?p=oldfriend&amp;action=plus" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:effd021a12658f00</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">Plus权益</summary>
+    <content type="html">&lt;p&gt;Plus权益&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/app.php?p=oldfriend&amp;amp;action=plus"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">智能自助服务导航</title>
+    <link href="https://v1.xianbao.net/oauth.php?action=freeinvitecode" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:061d00e45eb315ea</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">智能自助服务导航</summary>
+    <content type="html">&lt;p&gt;智能自助服务导航&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/oauth.php?action=freeinvitecode"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">果果换物 [新上线]</title>
+    <link href="https://v1.xianbao.net/forum-42-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:732c3389865ea27c</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">果果换物 [新上线]</summary>
+    <content type="html">&lt;p&gt;果果换物 [新上线]&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-42-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">邀请好友注册</title>
+    <link href="https://v1.xianbao.net/app.php?p=invite&amp;action=invitecode" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:abe049b3d354da9c</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">邀请好友注册</summary>
+    <content type="html">&lt;p&gt;邀请好友注册&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/app.php?p=invite&amp;amp;action=invitecode"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">新手入门指南</title>
+    <link href="https://v1.xianbao.net/thread-24783-1-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:faff2fc137760750</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">新手入门指南</summary>
+    <content type="html">&lt;p&gt;新手入门指南&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/thread-24783-1-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">做任务赚果果</title>
+    <link href="https://v1.xianbao.net/forum-41-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:cdf34c0da473f34e</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">做任务赚果果</summary>
+    <content type="html">&lt;p&gt;做任务赚果果&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-41-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">赚客大家谈</title>
+    <link href="https://v1.xianbao.net/forum-2-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:a97c14100868e530</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">赚客大家谈</summary>
+    <content type="html">&lt;p&gt;赚客大家谈&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-2-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">吧务/建议</title>
+    <link href="https://v1.xianbao.net/forum-38-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:ab8ad1e89430934b</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">吧务/建议</summary>
+    <content type="html">&lt;p&gt;吧务/建议&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-38-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">【最新主题】</title>
+    <link href="https://v1.xianbao.net/new.php" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:aabd158f0e3b4c1f</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">【最新主题】</summary>
+    <content type="html">&lt;p&gt;【最新主题】&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/new.php"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">【新版热帖】</title>
+    <link href="https://v1.xianbao.net/app.php?p=page&amp;action=hot" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:80a10d5c13054771</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">【新版热帖】</summary>
+    <content type="html">&lt;p&gt;【新版热帖】&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/app.php?p=page&amp;amp;action=hot"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">【老版热帖】</title>
+    <link href="https://v1.xianbao.net/re.php" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:fb5a5f3d01ceca13</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">【老版热帖】</summary>
+    <content type="html">&lt;p&gt;【老版热帖】&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/re.php"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">【天天线报】主题排名榜</title>
+    <link href="https://v1.xianbao.net/app.php?p=threadday&amp;action=thread" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:f79797dd58920d83</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">【天天线报】主题排名榜</summary>
+    <content type="html">&lt;p&gt;【天天线报】主题排名榜&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/app.php?p=threadday&amp;amp;action=thread"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">【排名榜】回复排名榜</title>
+    <link href="https://v1.xianbao.net/misc.php?mod=ranklist&amp;type=thread&amp;view=replies&amp;orderby=thisweek" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:e2ef16aab979913b</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">【排名榜】回复排名榜</summary>
+    <content type="html">&lt;p&gt;【排名榜】回复排名榜&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/misc.php?mod=ranklist&amp;amp;type=thread&amp;amp;view=replies&amp;amp;orderby=thisweek"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">【学习规则以及常见问题】</title>
+    <link href="https://v1.xianbao.net/thread-24300-1-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:70efc0d8ddd00f56</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">【学习规则以及常见问题】</summary>
+    <content type="html">&lt;p&gt;【学习规则以及常见问题】&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/thread-24300-1-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">【活动】天天线报</title>
+    <link href="https://v1.xianbao.net/thread-24934-1-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:88856e59a6d95e52</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">【活动】天天线报</summary>
+    <content type="html">&lt;p&gt;【活动】天天线报&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/thread-24934-1-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">【活动】周日抢楼</title>
+    <link href="https://v1.xianbao.net/forum-48-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:6412e2c1627e7b1e</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">【活动】周日抢楼</summary>
+    <content type="html">&lt;p&gt;【活动】周日抢楼&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-48-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">【活动】线报大赛</title>
+    <link href="https://v1.xianbao.net/thread-21073-1-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:dc3eab4b61ba1dc2</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">【活动】线报大赛</summary>
+    <content type="html">&lt;p&gt;【活动】线报大赛&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/thread-21073-1-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">👉 加入官方Q群 免费注册</title>
+    <link href="https://www.yuque.com/xiaoen-lfhtn/xianbao/ux20ikrol44i8ysz" rel="alternate" />
+    <id>tag:www.yuque.com,2024-01-01:397c72535d7a7d8e</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">👉 加入官方Q群 免费注册</summary>
+    <content type="html">&lt;p&gt;👉 加入官方Q群 免费注册&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.yuque.com/xiaoen-lfhtn/xianbao/ux20ikrol44i8ysz"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">线报酷YYDS</title>
+    <link href="https://v1.xianbao.net/thread-30634-1-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:8e4bab8be47d5dce</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">线报酷YYDS</summary>
+    <content type="html">&lt;p&gt;线报酷YYDS&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/thread-30634-1-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">7.4各大银行优惠活动分享，好用 ...</title>
+    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=310916&amp;goto=lastpost#lastpost" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:29a825b71b39f697</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">7.4各大银行优惠活动分享，好用 ...</summary>
+    <content type="html">&lt;p&gt;7.4各大银行优惠活动分享，好用 ...&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=310916&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">发现与探索</title>
+    <link href="https://v1.xianbao.net/forum-50-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:8f3c087638e7752e</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">发现与探索</summary>
+    <content type="html">&lt;p&gt;发现与探索&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-50-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">论坛规则学习</title>
+    <link href="https://v1.xianbao.net/forum-47-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:8ded35f48e6f00df</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">论坛规则学习</summary>
+    <content type="html">&lt;p&gt;论坛规则学习&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-47-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">APP测试主题</title>
+    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=70780&amp;goto=lastpost#lastpost" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:dd06df23d20ed3cf</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">APP测试主题</summary>
+    <content type="html">&lt;p&gt;APP测试主题&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=70780&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">lauyuhui</title>
+    <link href="https://v1.xianbao.net/space-username-lauyuhui.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:afba9bbb25415007</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">lauyuhui</summary>
+    <content type="html">&lt;p&gt;lauyuhui&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-lauyuhui.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">自助申请解封 (小黑屋)</title>
+    <link href="https://v1.xianbao.net/forum-52-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:d2bfc769d7cb7c57</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">自助申请解封 (小黑屋)</summary>
+    <content type="html">&lt;p&gt;自助申请解封 (小黑屋)&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-52-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">吧务申请专区</title>
+    <link href="https://v1.xianbao.net/forum-49-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:7569bb6730fdb85c</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">吧务申请专区</summary>
+    <content type="html">&lt;p&gt;吧务申请专区&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-49-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">老吧友认证区</title>
+    <link href="https://v1.xianbao.net/forum-46-1.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:e4de44a4f29161a0</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">老吧友认证区</summary>
+    <content type="html">&lt;p&gt;老吧友认证区&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-46-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">线报APP</title>
+    <link href="https://v1.xianbao.net/" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:6666cd76f9695646</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">线报APP</summary>
+    <content type="html">&lt;p&gt;线报APP&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">0818团</title>
+    <link href="http://www.0818tuan.com/" rel="alternate" />
+    <id>tag:www.0818tuan.com,2024-01-01:6666cd76f9695646</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">0818团</summary>
+    <content type="html">&lt;p&gt;0818团&lt;/p&gt;&lt;p&gt;&lt;a href="http://www.0818tuan.com/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">见闻鹿科技</title>
+    <link href="https://www.xianbao.net/" rel="alternate" />
+    <id>tag:www.xianbao.net,2024-01-01:6666cd76f9695646</id>
+    <updated>2026-07-04T01:03:30+08:00</updated>
+    <published>2026-07-04T01:03:30+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">见闻鹿科技</summary>
+    <content type="html">&lt;p&gt;见闻鹿科技&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.xianbao.net/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">工行-任务中心-浏览普惠版中了就 ...</title>
+    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=310894&amp;goto=lastpost#lastpost" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:bbead4fd3e4c53c4</id>
+    <updated>2026-07-03T23:36:35+08:00</updated>
+    <published>2026-07-03T23:36:35+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">工行-任务中心-浏览普惠版中了就 ...</summary>
+    <content type="html">&lt;p&gt;工行-任务中心-浏览普惠版中了就 ...&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=310894&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">zzzj136</title>
+    <link href="https://v1.xianbao.net/space-username-zzzj136.html" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:96a6783210f9b8e9</id>
+    <updated>2026-07-03T23:36:35+08:00</updated>
+    <published>2026-07-03T23:36:35+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">zzzj136</summary>
+    <content type="html">&lt;p&gt;zzzj136&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-zzzj136.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">农行 湖南月月刷</title>
+    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=310909&amp;goto=lastpost#lastpost" rel="alternate" />
+    <id>tag:v1.xianbao.net,2024-01-01:0c7234ce23227f97</id>
+    <updated>2026-07-03T21:23:32+08:00</updated>
+    <published>2026-07-03T21:23:32+08:00</published>
+    <author>
+      <name>线报网</name>
+    </author>
+    <summary type="text">农行 湖南月月刷</summary>
+    <content type="html">&lt;p&gt;农行 湖南月月刷&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=310909&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
   </entry>
   <entry>
     <title type="text">每天看广告100个，赚10元钱。 ...</title>
@@ -708,530 +1170,5 @@
     </author>
     <summary type="text">wd4748</summary>
     <content type="html">&lt;p&gt;wd4748&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-wd4748.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">才发现饿了么会员5元红包不能买 ...</title>
-    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=310677&amp;goto=lastpost#lastpost" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:d931a169ff121583</id>
-    <updated>2026-06-27T15:40:12+08:00</updated>
-    <published>2026-06-27T15:40:12+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">才发现饿了么会员5元红包不能买 ...</summary>
-    <content type="html">&lt;p&gt;才发现饿了么会员5元红包不能买 ...&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=310677&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-    <category term="外卖" />
-  </entry>
-  <entry>
-    <title type="text">兄弟们，山姆携程卖哪里？ ...</title>
-    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=310679&amp;goto=lastpost#lastpost" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:468a0a4aff0c0c20</id>
-    <updated>2026-06-27T12:15:51+08:00</updated>
-    <published>2026-06-27T12:15:51+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">兄弟们，山姆携程卖哪里？ ...</summary>
-    <content type="html">&lt;p&gt;兄弟们，山姆携程卖哪里？ ...&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=310679&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">gongyouzhen2</title>
-    <link href="https://v1.xianbao.net/space-username-gongyouzhen2.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:583105aceb8fdd1f</id>
-    <updated>2026-06-27T12:15:51+08:00</updated>
-    <published>2026-06-27T12:15:51+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">gongyouzhen2</summary>
-    <content type="html">&lt;p&gt;gongyouzhen2&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-gongyouzhen2.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">日日新体验,平均拿65元,每天可做 ...</title>
-    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=310638&amp;goto=lastpost#lastpost" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:40c8e05eec8bf11e</id>
-    <updated>2026-06-27T07:46:57+08:00</updated>
-    <published>2026-06-27T07:46:57+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">日日新体验,平均拿65元,每天可做 ...</summary>
-    <content type="html">&lt;p&gt;日日新体验,平均拿65元,每天可做 ...&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=310638&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">wmhflh</title>
-    <link href="https://v1.xianbao.net/space-username-wmhflh.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:d4d528d3ab6d7e8e</id>
-    <updated>2026-06-27T07:46:57+08:00</updated>
-    <published>2026-06-27T07:46:57+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">wmhflh</summary>
-    <content type="html">&lt;p&gt;wmhflh&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-wmhflh.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">淘宝加抵金 退货会延期吗 ...</title>
-    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=310662&amp;goto=lastpost#lastpost" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:eb29359ab0762432</id>
-    <updated>2026-06-27T06:35:55+08:00</updated>
-    <published>2026-06-27T06:35:55+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">淘宝加抵金 退货会延期吗 ...</summary>
-    <content type="html">&lt;p&gt;淘宝加抵金 退货会延期吗 ...&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=310662&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-    <category term="淘宝" />
-  </entry>
-  <entry>
-    <title type="text">xiujunyan1</title>
-    <link href="https://v1.xianbao.net/space-username-xiujunyan1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:d3635d5bb7c5693f</id>
-    <updated>2026-06-27T06:35:55+08:00</updated>
-    <published>2026-06-27T06:35:55+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">xiujunyan1</summary>
-    <content type="html">&lt;p&gt;xiujunyan1&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-xiujunyan1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">xuanmoyuehan</title>
-    <link href="https://v1.xianbao.net/space-username-xuanmoyuehan.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:d94e1a714e0c7e9c</id>
-    <updated>2026-06-27T05:09:21+08:00</updated>
-    <published>2026-06-27T05:09:21+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">xuanmoyuehan</summary>
-    <content type="html">&lt;p&gt;xuanmoyuehan&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-xuanmoyuehan.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">omgtnl</title>
-    <link href="https://v1.xianbao.net/space-username-omgtnl.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:104f68df19a0053a</id>
-    <updated>2026-06-27T03:22:36+08:00</updated>
-    <published>2026-06-27T03:22:36+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">omgtnl</summary>
-    <content type="html">&lt;p&gt;omgtnl&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-omgtnl.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">碰一碰红包不能和支付红包一样网 ...</title>
-    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=310672&amp;goto=lastpost#lastpost" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:35c5680d91003600</id>
-    <updated>2026-06-27T01:23:25+08:00</updated>
-    <published>2026-06-27T01:23:25+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">碰一碰红包不能和支付红包一样网 ...</summary>
-    <content type="html">&lt;p&gt;碰一碰红包不能和支付红包一样网 ...&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=310672&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-    <category term="红包" />
-  </entry>
-  <entry>
-    <title type="text">帮助Help</title>
-    <link href="https://v1.xianbao.net/misc.php?mod=faq" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:3b00aecce8f3aada</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">帮助Help</summary>
-    <content type="html">&lt;p&gt;帮助Help&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/misc.php?mod=faq"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">排行榜Ranklist</title>
-    <link href="https://v1.xianbao.net/misc.php?mod=ranklist" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:747513c20f910a98</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">排行榜Ranklist</summary>
-    <content type="html">&lt;p&gt;排行榜Ranklist&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/misc.php?mod=ranklist"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">Plus权益</title>
-    <link href="https://v1.xianbao.net/app.php?p=oldfriend&amp;action=plus" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:effd021a12658f00</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">Plus权益</summary>
-    <content type="html">&lt;p&gt;Plus权益&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/app.php?p=oldfriend&amp;amp;action=plus"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">智能自助服务导航</title>
-    <link href="https://v1.xianbao.net/oauth.php?action=freeinvitecode" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:061d00e45eb315ea</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">智能自助服务导航</summary>
-    <content type="html">&lt;p&gt;智能自助服务导航&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/oauth.php?action=freeinvitecode"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">果果换物 [新上线]</title>
-    <link href="https://v1.xianbao.net/forum-42-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:732c3389865ea27c</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">果果换物 [新上线]</summary>
-    <content type="html">&lt;p&gt;果果换物 [新上线]&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-42-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">邀请好友注册</title>
-    <link href="https://v1.xianbao.net/app.php?p=invite&amp;action=invitecode" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:abe049b3d354da9c</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">邀请好友注册</summary>
-    <content type="html">&lt;p&gt;邀请好友注册&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/app.php?p=invite&amp;amp;action=invitecode"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">新手入门指南</title>
-    <link href="https://v1.xianbao.net/thread-24783-1-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:faff2fc137760750</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">新手入门指南</summary>
-    <content type="html">&lt;p&gt;新手入门指南&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/thread-24783-1-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">做任务赚果果</title>
-    <link href="https://v1.xianbao.net/forum-41-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:cdf34c0da473f34e</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">做任务赚果果</summary>
-    <content type="html">&lt;p&gt;做任务赚果果&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-41-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">赚客大家谈</title>
-    <link href="https://v1.xianbao.net/forum-2-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:a97c14100868e530</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">赚客大家谈</summary>
-    <content type="html">&lt;p&gt;赚客大家谈&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-2-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">吧务/建议</title>
-    <link href="https://v1.xianbao.net/forum-38-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:ab8ad1e89430934b</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">吧务/建议</summary>
-    <content type="html">&lt;p&gt;吧务/建议&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-38-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">【最新主题】</title>
-    <link href="https://v1.xianbao.net/new.php" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:aabd158f0e3b4c1f</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">【最新主题】</summary>
-    <content type="html">&lt;p&gt;【最新主题】&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/new.php"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">【新版热帖】</title>
-    <link href="https://v1.xianbao.net/app.php?p=page&amp;action=hot" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:80a10d5c13054771</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">【新版热帖】</summary>
-    <content type="html">&lt;p&gt;【新版热帖】&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/app.php?p=page&amp;amp;action=hot"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">【老版热帖】</title>
-    <link href="https://v1.xianbao.net/re.php" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:fb5a5f3d01ceca13</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">【老版热帖】</summary>
-    <content type="html">&lt;p&gt;【老版热帖】&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/re.php"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">【天天线报】主题排名榜</title>
-    <link href="https://v1.xianbao.net/app.php?p=threadday&amp;action=thread" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:f79797dd58920d83</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">【天天线报】主题排名榜</summary>
-    <content type="html">&lt;p&gt;【天天线报】主题排名榜&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/app.php?p=threadday&amp;amp;action=thread"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-    <category term="生活" />
-  </entry>
-  <entry>
-    <title type="text">【排名榜】回复排名榜</title>
-    <link href="https://v1.xianbao.net/misc.php?mod=ranklist&amp;type=thread&amp;view=replies&amp;orderby=thisweek" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:e2ef16aab979913b</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">【排名榜】回复排名榜</summary>
-    <content type="html">&lt;p&gt;【排名榜】回复排名榜&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/misc.php?mod=ranklist&amp;amp;type=thread&amp;amp;view=replies&amp;amp;orderby=thisweek"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">【学习规则以及常见问题】</title>
-    <link href="https://v1.xianbao.net/thread-24300-1-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:70efc0d8ddd00f56</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">【学习规则以及常见问题】</summary>
-    <content type="html">&lt;p&gt;【学习规则以及常见问题】&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/thread-24300-1-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">【活动】天天线报</title>
-    <link href="https://v1.xianbao.net/thread-24934-1-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:88856e59a6d95e52</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">【活动】天天线报</summary>
-    <content type="html">&lt;p&gt;【活动】天天线报&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/thread-24934-1-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-    <category term="生活" />
-  </entry>
-  <entry>
-    <title type="text">【活动】周日抢楼</title>
-    <link href="https://v1.xianbao.net/forum-48-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:6412e2c1627e7b1e</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">【活动】周日抢楼</summary>
-    <content type="html">&lt;p&gt;【活动】周日抢楼&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-48-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">【活动】线报大赛</title>
-    <link href="https://v1.xianbao.net/thread-21073-1-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:dc3eab4b61ba1dc2</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">【活动】线报大赛</summary>
-    <content type="html">&lt;p&gt;【活动】线报大赛&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/thread-21073-1-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-    <category term="生活" />
-  </entry>
-  <entry>
-    <title type="text">👉 加入官方Q群 免费注册</title>
-    <link href="https://www.yuque.com/xiaoen-lfhtn/xianbao/ux20ikrol44i8ysz" rel="alternate" />
-    <id>tag:www.yuque.com,2024-01-01:397c72535d7a7d8e</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">👉 加入官方Q群 免费注册</summary>
-    <content type="html">&lt;p&gt;👉 加入官方Q群 免费注册&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.yuque.com/xiaoen-lfhtn/xianbao/ux20ikrol44i8ysz"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">线报酷YYDS</title>
-    <link href="https://v1.xianbao.net/thread-30634-1-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:8e4bab8be47d5dce</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">线报酷YYDS</summary>
-    <content type="html">&lt;p&gt;线报酷YYDS&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/thread-30634-1-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-    <category term="生活" />
-  </entry>
-  <entry>
-    <title type="text">M7754</title>
-    <link href="https://v1.xianbao.net/space-username-M7754.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:17cd6e698ff6f1b2</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">M7754</summary>
-    <content type="html">&lt;p&gt;M7754&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-M7754.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">有果果，xd们，建设的大额券怎么 ...</title>
-    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=310663&amp;goto=lastpost#lastpost" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:9e6068f8a2a0a0f7</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">有果果，xd们，建设的大额券怎么 ...</summary>
-    <content type="html">&lt;p&gt;有果果，xd们，建设的大额券怎么 ...&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=310663&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-    <category term="优惠券" />
-  </entry>
-  <entry>
-    <title type="text">发现与探索</title>
-    <link href="https://v1.xianbao.net/forum-50-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:8f3c087638e7752e</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">发现与探索</summary>
-    <content type="html">&lt;p&gt;发现与探索&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-50-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">论坛规则学习</title>
-    <link href="https://v1.xianbao.net/forum-47-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:8ded35f48e6f00df</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">论坛规则学习</summary>
-    <content type="html">&lt;p&gt;论坛规则学习&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-47-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">APP测试主题</title>
-    <link href="https://v1.xianbao.net/forum.php?mod=redirect&amp;tid=70780&amp;goto=lastpost#lastpost" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:dd06df23d20ed3cf</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">APP测试主题</summary>
-    <content type="html">&lt;p&gt;APP测试主题&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum.php?mod=redirect&amp;amp;tid=70780&amp;amp;goto=lastpost#lastpost"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">lauyuhui</title>
-    <link href="https://v1.xianbao.net/space-username-lauyuhui.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:afba9bbb25415007</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">lauyuhui</summary>
-    <content type="html">&lt;p&gt;lauyuhui&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/space-username-lauyuhui.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">自助申请解封 (小黑屋)</title>
-    <link href="https://v1.xianbao.net/forum-52-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:d2bfc769d7cb7c57</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">自助申请解封 (小黑屋)</summary>
-    <content type="html">&lt;p&gt;自助申请解封 (小黑屋)&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-52-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">吧务申请专区</title>
-    <link href="https://v1.xianbao.net/forum-49-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:7569bb6730fdb85c</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">吧务申请专区</summary>
-    <content type="html">&lt;p&gt;吧务申请专区&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-49-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">老吧友认证区</title>
-    <link href="https://v1.xianbao.net/forum-46-1.html" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:e4de44a4f29161a0</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">老吧友认证区</summary>
-    <content type="html">&lt;p&gt;老吧友认证区&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/forum-46-1.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">线报APP</title>
-    <link href="https://v1.xianbao.net/" rel="alternate" />
-    <id>tag:v1.xianbao.net,2024-01-01:6666cd76f9695646</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">线报APP</summary>
-    <content type="html">&lt;p&gt;线报APP&lt;/p&gt;&lt;p&gt;&lt;a href="https://v1.xianbao.net/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-    <category term="生活" />
-  </entry>
-  <entry>
-    <title type="text">0818团</title>
-    <link href="http://www.0818tuan.com/" rel="alternate" />
-    <id>tag:www.0818tuan.com,2024-01-01:6666cd76f9695646</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">0818团</summary>
-    <content type="html">&lt;p&gt;0818团&lt;/p&gt;&lt;p&gt;&lt;a href="http://www.0818tuan.com/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">见闻鹿科技</title>
-    <link href="https://www.xianbao.net/" rel="alternate" />
-    <id>tag:www.xianbao.net,2024-01-01:6666cd76f9695646</id>
-    <updated>2026-06-26T23:16:31+08:00</updated>
-    <published>2026-06-26T23:16:31+08:00</published>
-    <author>
-      <name>线报网</name>
-    </author>
-    <summary type="text">见闻鹿科技</summary>
-    <content type="html">&lt;p&gt;见闻鹿科技&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.xianbao.net/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
   </entry>
 </feed>
