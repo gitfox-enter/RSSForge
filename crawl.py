@@ -32,7 +32,7 @@ from crawler.storage import (
     save_hash_records, export_items_latest_json,
     get_random_delay, get_random_profile, get_referer,
     # Re-export constants for backward compat with tests
-    NOTIFIED_ITEMS_FILE, HASH_RECORD_FILE, ITEMS_DB_FILE, RUN_LOG_FILE,
+    NOTIFIED_ITEMS_FILE, HASH_RECORD_FILE, ITEMS_DB_FILE,
 )
 from crawler.parsers import (
     _match_parser, extract_article_items, parse_rss_feed,
