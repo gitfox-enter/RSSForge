@@ -18,13 +18,10 @@ jobs:
     timeout-minutes: 15
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     env:
       TZ: Asia/Shanghai
     permissions:
       contents: write
-      pages: write
-      id-token: write
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
@@ -185,47 +182,53 @@ jobs:
             exit 1
           fi
 
-      - name: 准备 Pages 制品
-        id: prepare-pages
+      - name: 部署到 GitHub Pages（直接提交 docs/）
         if: success()
         run: |
-          mkdir -p _site/feeds
-          # 复制 RSS 订阅源
-          cp feeds/*.xml _site/feeds/ 2>/dev/null || true
-          # 复制订阅源目录页面
-          cp feeds/index.html _site/ 2>/dev/null || true
-          # 复制 OPML
-          cp opml.xml _site/ 2>/dev/null || true
-          # 复制爬虫状态
-          cp crawl_status.json _site/ 2>/dev/null || true
-          # 复制 favicon 等公开资源
+          set -e
+          
+          # 复制站点内容到 docs/
+          rm -rf docs/
+          mkdir -p docs/feeds
+          cp feeds/*.xml docs/feeds/ 2>/dev/null || true
+          cp feeds/index.html docs/ 2>/dev/null || true
+          cp opml.xml docs/ 2>/dev/null || true
+          cp crawl_status.json docs/ 2>/dev/null || true
           if [ -d "public" ]; then
-            cp -r public/ _site/ 2>/dev/null || true
+            cp -r public/ docs/ 2>/dev/null || true
           fi
-          echo "Pages 制品已准备"
-          ls -la _site/
-          ls -la _site/feeds/ 2>/dev/null || echo "feeds/ 为空"
-
-      - name: 上传 Pages 制品
-        if: success() && hashFiles('_site/feeds/*.xml') != ''
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-
-      - name: 部署到 GitHub Pages
-        if: success()
-        id: deployment
-        uses: actions/deploy-pages@v4
-        with:
-          timeout: 600000
+          
+          # 检查是否有变化
+          git add docs/
+          git status docs/
+          
+          if git diff --staged --quiet docs/ 2>/dev/null; then
+            echo "docs/ 无变化，跳过提交"
+            exit 0
+          fi
+          
+          git commit -m "自动部署: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
+          
+          for i in 1 2 3; do
+            git pull --no-commit --no-rebase origin main 2>/dev/null || true
+            git merge --abort 2>/dev/null || true
+            if git push origin main; then
+              echo "部署成功"
+              exit 0
+            fi
+            echo "Push 失败，重试 $i/3..."
+            sleep 5
+          done
+          echo "部署失败"
+          exit 1
 
       - name: 停滞检测
         if: success()
         run: |
           # 检查本次 crawl 是否产出新内容
-          LAST_COMMIT_MSG=$(git log -1 --pretty=%s)
+          LAST_COMMIT_MSG=$(git log -1 --pretty=%s 2>/dev/null || echo "no commit")
           echo "最新提交: $LAST_COMMIT_MSG"
-          if echo "$LAST_COMMIT_MSG" | grep -qE "状态更新|No changes"; then
+          if echo "$LAST_COMMIT_MSG" | grep -qE "^(状态更新|自动部署)"; then
             echo "::warning title=停滞警告::本次未产出新 feed 内容，请查看 run_log.jsonl 检查各站点错误"
           else
             echo "有 feed 更新，状态正常"
