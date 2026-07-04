@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>RSSForge 项目更新</title>
+  <subtitle>项目开发进展、Bug修复与维护记录</subtitle>
+  <id>https://gitfox-enter.github.io/RSSForge/project-updates</id>
+  <updated>2026-07-04T09:04:14Z</updated>
+  <author>
+    <name>RSSForge</name>
+  </author>
+  <link href="https://gitfox-enter.github.io/RSSForge/"/>
+  <link rel="self"/>
+  <link href="https://gitfox-enter.github.io/RSSForge/feeds/project-updates.xml"/>
+  <entry>
+    <title>📡 爬取更新 x3 (2026-07-04)</title>
+    <id>tag:rssforge,4b8808612254e34e</id>
+    <updated>2026-07-04T01:13:16+08:00</updated>
+    <published>2026-07-04T01:13:16+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/73a93e853f2fa56ae224e1872aceb42f49e3bead"/>
+    <category term="爬取更新"/>
+    <content type="html">&lt;p&gt;当日爬取更新共 3 次提交。示例:
+  - 自动更新: 2026-07-04 03:07:23 | 新增 7 个 feed
+  - 自动更新: 2026-07-04 02:50:15 | 新增 6 个 feed
+  - 自动更新: 2026-07-04 01:13:16 | 新增 7 个 feed&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/73a93e853f2fa56ae224e1872aceb42f49e3bead&quot;&gt;73a93e85&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📊 状态同步 x2 (2026-07-04)</title>
+    <id>tag:rssforge,337319c06461b14c</id>
+    <updated>2026-07-04T01:04:00+08:00</updated>
+    <published>2026-07-04T01:04:00+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/cd0a901b0de9249ae20f8b35420c950d5f483950"/>
+    <category term="状态同步"/>
+    <content type="html">&lt;p&gt;当日状态同步共 2 次提交。示例:
+  - 状态更新: 2026-07-04 02:39:19
+  - 状态更新: 2026-07-04 01:04:00&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/cd0a901b0de9249ae20f8b35420c950d5f483950&quot;&gt;cd0a901b&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>⚡ 线报更新 x2 (2026-07-04)</title>
+    <id>tag:rssforge,c9e7e8935b2603d8</id>
+    <updated>2026-07-04T01:03:34+08:00</updated>
+    <published>2026-07-04T01:03:34+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/c738586f9f81cf86a46b188b4a91a09e5afbbc94"/>
+    <category term="线报更新"/>
+    <content type="html">&lt;p&gt;当日线报更新共 2 次提交。示例:
+  - 快速更新: 新增 209 条线报 (02:38)
+  - 快速更新: 新增 402 条线报 (01:03)&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/c738586f9f81cf86a46b188b4a91a09e5afbbc94&quot;&gt;c738586f&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🔧 actions/deploy-pages@v4 用 timeout 参数替代无效的 token_duration</title>
+    <id>tag:rssforge,0d8488b01913f710</id>
+    <updated>2026-07-03T19:24:35+08:00</updated>
+    <published>2026-07-03T19:24:35+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/22cb27bbace13901ef10b6ea3547dda091dc04be"/>
+    <category term="Bug修复"/>
+    <content type="html">&lt;p&gt;actions/deploy-pages@v4 用 timeout 参数替代无效的 token_duration&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/22cb27bbace13901ef10b6ea3547dda091dc04be&quot;&gt;22cb27bb&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🔧 修复 RSS feed 重复条目问题（无时间戳 item 用 URL 哈希生成稳定时间）</title>
+    <id>tag:rssforge,b8823f16ea99c342</id>
+    <updated>2026-07-03T18:42:13+08:00</updated>
+    <published>2026-07-03T18:42:13+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/cf9b6af71ddd32977d3a2b9f8791c35bf285f717"/>
+    <category term="Bug修复"/>
+    <content type="html">&lt;p&gt;修复 RSS feed 重复条目问题（无时间戳 item 用 URL 哈希生成稳定时间）&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/cf9b6af71ddd32977d3a2b9f8791c35bf285f717&quot;&gt;cf9b6af7&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>Merge origin/main (auto-resolved)</title>
+    <id>tag:rssforge,e81668e008593a8a</id>
+    <updated>2026-07-03T07:00:40+08:00</updated>
+    <published>2026-07-03T07:00:40+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/6cb2b7a0e4029d8dbc1109656ac462f43f509ef9"/>
+    <content type="html">&lt;p&gt;Merge origin/main (auto-resolved)&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/6cb2b7a0e4029d8dbc1109656ac462f43f509ef9&quot;&gt;6cb2b7a0&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📊 状态同步 x11 (2026-07-03)</title>
+    <id>tag:rssforge,2dcf02e09a7417a3</id>
+    <updated>2026-07-03T01:20:06+08:00</updated>
+    <published>2026-07-03T01:20:06+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/a5cf115e7b86d27f4734659a46048aef994e8ca9"/>
+    <category term="状态同步"/>
+    <content type="html">&lt;p&gt;当日状态同步共 11 次提交。示例:
+  - 状态更新: 2026-07-03 23:37:05
+  - 状态更新: 2026-07-03 21:24:23
+  - 状态更新: 2026-07-03 19:17:12&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/a5cf115e7b86d27f4734659a46048aef994e8ca9&quot;&gt;a5cf115e&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>⚡ 线报更新 x11 (2026-07-03)</title>
+    <id>tag:rssforge,a2bb08bbdee26248</id>
+    <updated>2026-07-03T01:19:32+08:00</updated>
+    <published>2026-07-03T01:19:32+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/8bebaa0122a084630ee285966e35b942312df16b"/>
+    <category term="线报更新"/>
+    <content type="html">&lt;p&gt;当日线报更新共 11 次提交。示例:
+  - 快速更新: 新增 206 条线报 (23:36)
+  - 快速更新: 新增 219 条线报 (21:23)
+  - 快速更新: 新增 230 条线报 (19:16)&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/8bebaa0122a084630ee285966e35b942312df16b&quot;&gt;8bebaa01&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📡 爬取更新 x18 (2026-07-03)</title>
+    <id>tag:rssforge,77b1c46dfef6194b</id>
+    <updated>2026-07-03T00:08:51+08:00</updated>
+    <published>2026-07-03T00:08:51+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/fc25b655a125d6ff2ed785a6bf955a09efea4030"/>
+    <category term="爬取更新"/>
+    <content type="html">&lt;p&gt;当日爬取更新共 18 次提交。示例:
+  - 自动更新: 2026-07-03 23:34:42 | 新增 8 个 feed
+  - 自动更新: 2026-07-03 21:48:37 | 新增 7 个 feed
+  - 自动更新: 2026-07-03 21:21:30 | 新增 8 个 feed&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/fc25b655a125d6ff2ed785a6bf955a09efea4030&quot;&gt;fc25b655&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🔧 增加 Pages 部署 token_duration 到 3600s，避免 deployment_queued 超时</title>
+    <id>tag:rssforge,9c8d9a1522d80738</id>
+    <updated>2026-07-03T00:03:21+08:00</updated>
+    <published>2026-07-03T00:03:21+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/7de9f2b00f20568367cf02e75beb6cbb38e3a94f"/>
+    <category term="Bug修复"/>
+    <content type="html">&lt;p&gt;增加 Pages 部署 token_duration 到 3600s，避免 deployment_queued 超时&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/7de9f2b00f20568367cf02e75beb6cbb38e3a94f&quot;&gt;7de9f2b0&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🎉 RSSForge 功能升级</title>
+    <id>tag:rssforge,22f1d888a295dea0</id>
+    <updated>2026-07-02T15:32:36+08:00</updated>
+    <published>2026-07-02T15:32:36+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/ee3e2e9f3ae9144a105b20bb8001f4eb620c3e18"/>
+    <category term="新功能"/>
+    <content type="html">&lt;p&gt;RSSForge 功能升级&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/ee3e2e9f3ae9144a105b20bb8001f4eb620c3e18&quot;&gt;ee3e2e9f&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📡 爬取更新 x9 (2026-07-02)</title>
+    <id>tag:rssforge,34cefb1172423b82</id>
+    <updated>2026-07-02T08:09:10+08:00</updated>
+    <published>2026-07-02T08:09:10+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/fcad37063f344745c64102f183dd8c7bf4aa2ae6"/>
+    <category term="爬取更新"/>
+    <content type="html">&lt;p&gt;当日爬取更新共 9 次提交。示例:
+  - 自动更新: 2026-07-02 23:40:24 | 新增 7 个 feed
+  - 自动更新: 2026-07-02 21:43:40 | 新增 7 个 feed
+  - 自动更新: 2026-07-02 21:19:01 | 新增 7 个 feed&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/fcad37063f344745c64102f183dd8c7bf4aa2ae6&quot;&gt;fcad3706&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🔧 use git merge --abort instead of rebase --abort after pull conflict</title>
+    <id>tag:rssforge,a2bf698bef22d50f</id>
+    <updated>2026-07-02T08:06:22+08:00</updated>
+    <published>2026-07-02T08:06:22+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/afbbd727afb92dabcc6611cf12186ed2eb95c4c4"/>
+    <category term="Bug修复"/>
+    <content type="html">&lt;p&gt;use git merge --abort instead of rebase --abort after pull conflict&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/afbbd727afb92dabcc6611cf12186ed2eb95c4c4&quot;&gt;afbbd727&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📊 状态同步 x6 (2026-07-02)</title>
+    <id>tag:rssforge,b916774b941f06ec</id>
+    <updated>2026-07-02T07:56:45+08:00</updated>
+    <published>2026-07-02T07:56:45+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/d15970d064d271ef48dcf7964ad2abe259828fea"/>
+    <category term="状态同步"/>
+    <content type="html">&lt;p&gt;当日状态同步共 6 次提交。示例:
+  - 状态更新: 2026-07-02 23:30:51
+  - 状态更新: 2026-07-02 21:06:56
+  - 状态更新: 2026-07-02 18:51:30&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/d15970d064d271ef48dcf7964ad2abe259828fea&quot;&gt;d15970d0&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>⚡ 线报更新 x6 (2026-07-02)</title>
+    <id>tag:rssforge,2d014c41bacb4031</id>
+    <updated>2026-07-02T07:56:13+08:00</updated>
+    <published>2026-07-02T07:56:13+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/9345c4bda0fe220d7733896f761b55d3c8ed11d3"/>
+    <category term="线报更新"/>
+    <content type="html">&lt;p&gt;当日线报更新共 6 次提交。示例:
+  - 快速更新: 新增 212 条线报 (23:30)
+  - 快速更新: 新增 222 条线报 (21:06)
+  - 快速更新: 新增 229 条线报 (18:51)&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/9345c4bda0fe220d7733896f761b55d3c8ed11d3&quot;&gt;9345c4bd&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>WIP on main: 459182b chore: workspace auto-sync 2026-06-30</title>
+    <id>tag:rssforge,4d4517d58a7ed828</id>
+    <updated>2026-06-30T20:02:34+08:00</updated>
+    <published>2026-06-30T20:02:34+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/3f808ce293b316143c97a5f0b5b8bed6b2bb122e"/>
+    <content type="html">&lt;p&gt;WIP on main: 459182b chore: workspace auto-sync 2026-06-30&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/3f808ce293b316143c97a5f0b5b8bed6b2bb122e&quot;&gt;3f808ce2&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>index on main: 459182b chore: workspace auto-sync 2026-06-30</title>
+    <id>tag:rssforge,b7fc3625cfe11067</id>
+    <updated>2026-06-30T20:02:34+08:00</updated>
+    <published>2026-06-30T20:02:34+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/13e593fc6f5c67b31c6a6d54c5a06ea629260366"/>
+    <content type="html">&lt;p&gt;index on main: 459182b chore: workspace auto-sync 2026-06-30&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/13e593fc6f5c67b31c6a6d54c5a06ea629260366&quot;&gt;13e593fc&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🧹 workspace auto-sync 2026-06-30</title>
+    <id>tag:rssforge,6e325f757713cb86</id>
+    <updated>2026-06-30T11:53:42+08:00</updated>
+    <published>2026-06-30T11:53:42+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/459182b613ae49a2b78869e5f1847d816b67795a"/>
+    <category term="维护清理"/>
+    <content type="html">&lt;p&gt;workspace auto-sync 2026-06-30&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/459182b613ae49a2b78869e5f1847d816b67795a&quot;&gt;459182b6&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📝 README 增加黑名单详细说明与站点评分标准</title>
+    <id>tag:rssforge,7d0b8689add6d65b</id>
+    <updated>2026-06-29T15:00:49+08:00</updated>
+    <published>2026-06-29T15:00:49+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/16de017cd7d2a93f0f55cd008a4922759759f17d"/>
+    <category term="文档"/>
+    <content type="html">&lt;p&gt;README 增加黑名单详细说明与站点评分标准&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/16de017cd7d2a93f0f55cd008a4922759759f17d&quot;&gt;16de017c&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🎉 强制黑名单校验（CI + 代码导入时断言）</title>
+    <id>tag:rssforge,fc99993e9372fac5</id>
+    <updated>2026-06-29T14:53:50+08:00</updated>
+    <published>2026-06-29T14:53:50+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/3e969481eab3351acbe40a51d26b91c087e51532"/>
+    <category term="新功能"/>
+    <content type="html">&lt;p&gt;强制黑名单校验（CI + 代码导入时断言）&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/3e969481eab3351acbe40a51d26b91c087e51532&quot;&gt;3e969481&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🧹 移除资源厅 (ziyuanting.com) 并加入黑名单</title>
+    <id>tag:rssforge,4600ddc6143c4f8e</id>
+    <updated>2026-06-29T14:48:20+08:00</updated>
+    <published>2026-06-29T14:48:20+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/bac708d1eb4c387e6de56cf23565324d864a4f89"/>
+    <category term="维护清理"/>
+    <content type="html">&lt;p&gt;移除资源厅 (ziyuanting.com) 并加入黑名单&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/bac708d1eb4c387e6de56cf23565324d864a4f89&quot;&gt;bac708d1&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🧹 移除多多软件 (ddooo.com) 相关所有功能</title>
+    <id>tag:rssforge,74f5067c6548db0d</id>
+    <updated>2026-06-29T14:45:04+08:00</updated>
+    <published>2026-06-29T14:45:04+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/d626fc0007d135f098ef6dee58709a77374ffb15"/>
+    <category term="维护清理"/>
+    <content type="html">&lt;p&gt;移除多多软件 (ddooo.com) 相关所有功能&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/d626fc0007d135f098ef6dee58709a77374ffb15&quot;&gt;d626fc00&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>Merge remote-tracking branch 'origin/main'</title>
+    <id>tag:rssforge,2305503dfdd5c5e6</id>
+    <updated>2026-06-29T14:09:46+08:00</updated>
+    <published>2026-06-29T14:09:46+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/0b8a76b9cc4408825972bf2cfca31d11995b75b2"/>
+    <content type="html">&lt;p&gt;Merge remote-tracking branch 'origin/main'&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/0b8a76b9cc4408825972bf2cfca31d11995b75b2&quot;&gt;0b8a76b9&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🧹 为站点更新监控增加固定时刻保底触发</title>
+    <id>tag:rssforge,6d26b88c438c0cb9</id>
+    <updated>2026-06-29T14:06:50+08:00</updated>
+    <published>2026-06-29T14:06:50+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/8e89e578d3e6138fa238fab3a10adbe591e7cbaf"/>
+    <category term="维护清理"/>
+    <content type="html">&lt;p&gt;为站点更新监控增加固定时刻保底触发&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/8e89e578d3e6138fa238fab3a10adbe591e7cbaf&quot;&gt;8e89e578&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🧹 移除华军软件园订阅及相关代码</title>
+    <id>tag:rssforge,c1da988218e423d5</id>
+    <updated>2026-06-29T13:49:58+08:00</updated>
+    <published>2026-06-29T13:49:58+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/f5808254ba4cfa3b4c671e635e360d552a16287f"/>
+    <category term="维护清理"/>
+    <content type="html">&lt;p&gt;移除华军软件园订阅及相关代码&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/f5808254ba4cfa3b4c671e635e360d552a16287f&quot;&gt;f5808254&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🔧 提取并使用原文发布时间而非爬取时间</title>
+    <id>tag:rssforge,73327b621c2d4827</id>
+    <updated>2026-06-29T13:33:03+08:00</updated>
+    <published>2026-06-29T13:33:03+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/3ece80f826e8353b34b0299b629e824796ecbd40"/>
+    <category term="Bug修复"/>
+    <content type="html">&lt;p&gt;提取并使用原文发布时间而非爬取时间&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/3ece80f826e8353b34b0299b629e824796ecbd40&quot;&gt;3ece80f8&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🧹 移除已废弃的支付宝红包置顶逻辑</title>
+    <id>tag:rssforge,b0415240689f5619</id>
+    <updated>2026-06-29T12:18:34+08:00</updated>
+    <published>2026-06-29T12:18:34+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/e832a5bc4a1c25b7bc4f691015e1286c22074e05"/>
+    <category term="维护清理"/>
+    <content type="html">&lt;p&gt;移除已废弃的支付宝红包置顶逻辑&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/e832a5bc4a1c25b7bc4f691015e1286c22074e05&quot;&gt;e832a5bc&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🧹 移除文档站，保留 feeds 和 OPML 订阅</title>
+    <id>tag:rssforge,c33382db028f059c</id>
+    <updated>2026-06-29T12:09:30+08:00</updated>
+    <published>2026-06-29T12:09:30+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/d47f0f8e74820bc4f9f73e426c89e0de826f8574"/>
+    <category term="维护清理"/>
+    <content type="html">&lt;p&gt;移除文档站，保留 feeds 和 OPML 订阅&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/d47f0f8e74820bc4f9f73e426c89e0de826f8574&quot;&gt;d47f0f8e&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📊 状态同步 x7 (2026-06-29)</title>
+    <id>tag:rssforge,1ce2997a4b67621f</id>
+    <updated>2026-06-29T00:49:45+08:00</updated>
+    <published>2026-06-29T00:49:45+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/93ad34652987c127b1df3518009286c760897246"/>
+    <category term="状态同步"/>
+    <content type="html">&lt;p&gt;当日状态同步共 7 次提交。示例:
+  - 状态更新: 2026-06-29 13:00:21
+  - 状态更新: 2026-06-29 07:48:41
+  - 状态更新: 2026-06-29 06:44:03&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/93ad34652987c127b1df3518009286c760897246&quot;&gt;93ad3465&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>⚡ 线报更新 x7 (2026-06-29)</title>
+    <id>tag:rssforge,b3e70ff925e6e6e4</id>
+    <updated>2026-06-29T00:49:20+08:00</updated>
+    <published>2026-06-29T00:49:20+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/ea6ea5d8d168cedaa87f6c162dfb7a95bba23608"/>
+    <category term="线报更新"/>
+    <content type="html">&lt;p&gt;当日线报更新共 7 次提交。示例:
+  - 快速更新: 新增 145 条线报 (12:59)
+  - 快速更新: 新增 148 条线报 (07:48)
+  - 快速更新: 新增 58 条线报 (06:43)&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/ea6ea5d8d168cedaa87f6c162dfb7a95bba23608&quot;&gt;ea6ea5d8&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📡 爬取更新 x9 (2026-06-29)</title>
+    <id>tag:rssforge,e0d6e3df7b4ed8f9</id>
+    <updated>2026-06-29T00:14:15+08:00</updated>
+    <published>2026-06-29T00:14:15+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/368a08d3fcfa9c5cfa7a1a132995fd919e861d53"/>
+    <category term="爬取更新"/>
+    <content type="html">&lt;p&gt;当日爬取更新共 9 次提交。示例:
+  - 自动更新: 2026-06-29 14:09:46 | 新增 5 个 feed
+  - 自动更新: 2026-06-29 11:38:13 | 新增 7 个 feed
+  - 自动更新: 2026-06-29 08:02:15 | 新增 6 个 feed&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/368a08d3fcfa9c5cfa7a1a132995fd919e861d53&quot;&gt;368a08d3&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🎉 add yangmao.19970709.xyz (小角落) parser</title>
+    <id>tag:rssforge,a4544c8272260e05</id>
+    <updated>2026-06-28T07:31:11+08:00</updated>
+    <published>2026-06-28T07:31:11+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/99654bbd35ac8168055572ae574e968e8e69d159"/>
+    <category term="新功能"/>
+    <content type="html">&lt;p&gt;add yangmao.19970709.xyz (小角落) parser&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/99654bbd35ac8168055572ae574e968e8e69d159&quot;&gt;99654bbd&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📡 爬取更新 x13 (2026-06-28)</title>
+    <id>tag:rssforge,d01c7c1f7d7c932b</id>
+    <updated>2026-06-28T00:56:46+08:00</updated>
+    <published>2026-06-28T00:56:46+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/9976ebadacb06967ea6626f6065619e4d046e20b"/>
+    <category term="爬取更新"/>
+    <content type="html">&lt;p&gt;当日爬取更新共 13 次提交。示例:
+  - 自动更新: 2026-06-28 23:05:16 | 新增 5 个 feed
+  - 自动更新: 2026-06-28 21:16:20 | 新增 5 个 feed
+  - 自动更新: 2026-06-28 19:33:36 | 新增 6 个 feed&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/9976ebadacb06967ea6626f6065619e4d046e20b&quot;&gt;9976ebad&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📊 状态同步 x12 (2026-06-28)</title>
+    <id>tag:rssforge,34b27974061d94ba</id>
+    <updated>2026-06-28T00:47:09+08:00</updated>
+    <published>2026-06-28T00:47:09+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/ea4d0ad3032a14b47cd0afd8d6e66d113e17c753"/>
+    <category term="状态同步"/>
+    <content type="html">&lt;p&gt;当日状态同步共 12 次提交。示例:
+  - 状态更新: 2026-06-28 23:43:37
+  - 状态更新: 2026-06-28 22:15:37
+  - 状态更新: 2026-06-28 19:59:15&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/ea4d0ad3032a14b47cd0afd8d6e66d113e17c753&quot;&gt;ea4d0ad3&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>⚡ 线报更新 x12 (2026-06-28)</title>
+    <id>tag:rssforge,19e3ffd3ff0e6980</id>
+    <updated>2026-06-28T00:46:45+08:00</updated>
+    <published>2026-06-28T00:46:45+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/9e7a60e854615ef66ea1d090c51caabd1b806865"/>
+    <category term="线报更新"/>
+    <content type="html">&lt;p&gt;当日线报更新共 12 次提交。示例:
+  - 快速更新: 新增 117 条线报 (23:43)
+  - 快速更新: 新增 220 条线报 (22:15)
+  - 快速更新: 新增 216 条线报 (19:58)&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/9e7a60e854615ef66ea1d090c51caabd1b806865&quot;&gt;9e7a60e8&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📊 状态同步 x2 (2026-06-27)</title>
+    <id>tag:rssforge,5600c3c96bb5c9db</id>
+    <updated>2026-06-27T22:06:30+08:00</updated>
+    <published>2026-06-27T22:06:30+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/178ba2187aa3a8421e0e4c810922bc1b9d7c5d2a"/>
+    <category term="状态同步"/>
+    <content type="html">&lt;p&gt;当日状态同步共 2 次提交。示例:
+  - 状态更新: 2026-06-27 23:39:21
+  - 状态更新: 2026-06-27 22:06:30&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/178ba2187aa3a8421e0e4c810922bc1b9d7c5d2a&quot;&gt;178ba218&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📡 爬取更新 x3 (2026-06-27)</title>
+    <id>tag:rssforge,3367e92bb11d5a3a</id>
+    <updated>2026-06-27T21:40:08+08:00</updated>
+    <published>2026-06-27T21:40:08+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/2543334792c158c81e0cfc01845c205863252316"/>
+    <category term="爬取更新"/>
+    <content type="html">&lt;p&gt;当日爬取更新共 3 次提交。示例:
+  - 自动更新: 2026-06-27 23:48:17 | 新增 6 个 feed
+  - 自动更新: 2026-06-27 22:25:34 | 新增 6 个 feed
+  - 自动更新: 2026-06-27 21:40:08 | 新增 25 个 feed&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/2543334792c158c81e0cfc01845c205863252316&quot;&gt;25433347&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🔧 修复 adaptive_tiers.json 为 null 时 load_adaptive_tiers 返回 None 的问题</title>
+    <id>tag:rssforge,6125ad3fd040f05d</id>
+    <updated>2026-06-27T21:36:28+08:00</updated>
+    <published>2026-06-27T21:36:28+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/ba9f5a4762c68d5cffefc893c1c997ea7b47b68c"/>
+    <category term="Bug修复"/>
+    <content type="html">&lt;p&gt;修复 adaptive_tiers.json 为 null 时 load_adaptive_tiers 返回 None 的问题&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/ba9f5a4762c68d5cffefc893c1c997ea7b47b68c&quot;&gt;ba9f5a47&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🔧 增强 _load_state/smart_scheduler 对 state 为 None 的防御</title>
+    <id>tag:rssforge,f37162912bc05b80</id>
+    <updated>2026-06-27T21:30:45+08:00</updated>
+    <published>2026-06-27T21:30:45+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/c26006dfdfdf408524866fcf59d5d6fe09e15e94"/>
+    <category term="Bug修复"/>
+    <content type="html">&lt;p&gt;增强 _load_state/smart_scheduler 对 state 为 None 的防御&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/c26006dfdfdf408524866fcf59d5d6fe09e15e94&quot;&gt;c26006df&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🔧 smart_scheduler NoneType error when sites is null in state json</title>
+    <id>tag:rssforge,41baad6d660049c5</id>
+    <updated>2026-06-27T20:56:08+08:00</updated>
+    <published>2026-06-27T20:56:08+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/7a48e0aa37c7d6faf0296b4081644c9f92c26cfa"/>
+    <category term="Bug修复"/>
+    <content type="html">&lt;p&gt;smart_scheduler NoneType error when sites is null in state json&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/7a48e0aa37c7d6faf0296b4081644c9f92c26cfa&quot;&gt;7a48e0aa&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>⚡ 线报更新 x11 (2026-06-27)</title>
+    <id>tag:rssforge,6e2b4342ba066ec8</id>
+    <updated>2026-06-27T01:23:31+08:00</updated>
+    <published>2026-06-27T01:23:31+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/b337c21f42233eb0972b119480eb40e05cb7210d"/>
+    <category term="线报更新"/>
+    <content type="html">&lt;p&gt;当日线报更新共 11 次提交。示例:
+  - 快速更新: 新增 226 条线报 (23:38)
+  - 快速更新: 新增 235 条线报 (22:06)
+  - 快速更新: 新增 229 条线报 (19:45)&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/b337c21f42233eb0972b119480eb40e05cb7210d&quot;&gt;b337c21f&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>♻️ 使用极简静态页面替换 VitePress</title>
+    <id>tag:rssforge,4cafeae67f75ac48</id>
+    <updated>2026-06-26T21:12:40+08:00</updated>
+    <published>2026-06-26T21:12:40+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/94a4d994a0c6ca823e1e66d3b8fe79265f842584"/>
+    <category term="重构"/>
+    <content type="html">&lt;p&gt;使用极简静态页面替换 VitePress&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/94a4d994a0c6ca823e1e66d3b8fe79265f842584&quot;&gt;94a4d994&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>彻底清理'爱Q生活'残留：xian-bao-ku.xml 和 app.js</title>
+    <id>tag:rssforge,5853b54046ef4b6d</id>
+    <updated>2026-06-26T20:59:07+08:00</updated>
+    <published>2026-06-26T20:59:07+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/36d52126d8b62327b3db51cd689cd90e711a2106"/>
+    <content type="html">&lt;p&gt;彻底清理'爱Q生活'残留：xian-bao-ku.xml 和 app.js&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/36d52126d8b62327b3db51cd689cd90e711a2106&quot;&gt;36d52126&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>移除'爱Q生活'(axutongxue.net)订阅</title>
+    <id>tag:rssforge,c117c0ba22abd6d3</id>
+    <updated>2026-06-26T20:58:36+08:00</updated>
+    <published>2026-06-26T20:58:36+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/aea92bff512d41faecde842fd2fc2641a902b292"/>
+    <content type="html">&lt;p&gt;移除'爱Q生活'(axutongxue.net)订阅&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/aea92bff512d41faecde842fd2fc2641a902b292&quot;&gt;aea92bff&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📡 爬取更新 x8 (2026-06-26)</title>
+    <id>tag:rssforge,e9877a01e28e7651</id>
+    <updated>2026-06-26T02:06:25+08:00</updated>
+    <published>2026-06-26T02:06:25+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/e06c45a57e0f276a97385a6d070d17a606e298dd"/>
+    <category term="爬取更新"/>
+    <content type="html">&lt;p&gt;当日爬取更新共 8 次提交。示例:
+  - 自动更新: 2026-06-26 20:01:16 | 新增 18 个 feed
+  - 自动更新: 2026-06-26 17:35:43 | 新增 16 个 feed
+  - 自动更新: 2026-06-26 14:02:09 | 新增 19 个 feed&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/e06c45a57e0f276a97385a6d070d17a606e298dd&quot;&gt;e06c45a5&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📊 状态同步 x9 (2026-06-26)</title>
+    <id>tag:rssforge,9cdfc3dcf5a5edb5</id>
+    <updated>2026-06-26T00:10:44+08:00</updated>
+    <published>2026-06-26T00:10:44+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/6246d753a77b104ed98c75bdbe46a18740355b07"/>
+    <category term="状态同步"/>
+    <content type="html">&lt;p&gt;当日状态同步共 9 次提交。示例:
+  - 状态更新: 2026-06-26 20:27:20
+  - 状态更新: 2026-06-26 18:02:07
+  - 状态更新: 2026-06-26 14:21:31&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/6246d753a77b104ed98c75bdbe46a18740355b07&quot;&gt;6246d753&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>⚡ 线报更新 x10 (2026-06-26)</title>
+    <id>tag:rssforge,405893b8353548b1</id>
+    <updated>2026-06-26T00:10:10+08:00</updated>
+    <published>2026-06-26T00:10:10+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/a91afb33fb1df2844288d42071a8b432a687dd7a"/>
+    <category term="线报更新"/>
+    <content type="html">&lt;p&gt;当日线报更新共 10 次提交。示例:
+  - 快速更新: 新增 414 条线报 (23:17)
+  - 快速更新: 新增 241 条线报 (20:26)
+  - 快速更新: 新增 248 条线报 (18:01)&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/a91afb33fb1df2844288d42071a8b432a687dd7a&quot;&gt;a91afb33&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>稳定性优化: Pages 自动部署 + pytest 集成 + 停滞报警</title>
+    <id>tag:rssforge,ebbcbba8958f5b53</id>
+    <updated>2026-06-25T23:46:25+08:00</updated>
+    <published>2026-06-25T23:46:25+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/019c1157ed6ff324699247ac37e1420eb98fcb98"/>
+    <content type="html">&lt;p&gt;稳定性优化: Pages 自动部署 + pytest 集成 + 停滞报警&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/019c1157ed6ff324699247ac37e1420eb98fcb98&quot;&gt;019c1157&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>📡 爬取更新 x2 (2026-06-25)</title>
+    <id>tag:rssforge,c0a277bffa07b141</id>
+    <updated>2026-06-25T23:23:49+08:00</updated>
+    <published>2026-06-25T23:23:49+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/65a64f9ba653e7f284424ce0051ff9f133bbcdd2"/>
+    <category term="爬取更新"/>
+    <content type="html">&lt;p&gt;当日爬取更新共 2 次提交。示例:
+  - 自动更新: 2026-06-25 23:41:35 | 新增 15 个 feed
+  - 自动更新: 2026-06-25 23:23:49 | 新增 19 个 feed&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/65a64f9ba653e7f284424ce0051ff9f133bbcdd2&quot;&gt;65a64f9b&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title>🔧 async_wait used threading.Lock instead of asyncio.Lock (TypeError bug)</title>
+    <id>tag:rssforge,93629fdf6bc80604</id>
+    <updated>2026-06-25T23:00:14+08:00</updated>
+    <published>2026-06-25T23:00:14+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/f696f144945dd7a03d662abfd5e1d92edbc59c0f"/>
+    <category term="Bug修复"/>
+    <content type="html">&lt;p&gt;async_wait used threading.Lock instead of asyncio.Lock (TypeError bug)&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/f696f144945dd7a03d662abfd5e1d92edbc59c0f&quot;&gt;f696f144&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+</feed>

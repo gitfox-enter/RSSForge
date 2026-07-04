@@ -125,6 +125,10 @@ def _load_feeds() -> List[Dict]:
         feed_name = os.path.splitext(filename)[0]
         filepath = os.path.join(FEEDS_DIR, filename)
 
+        # 跳过项目更新 feed（由 _load_project_feed 单独处理，置顶显示）
+        if feed_name == 'project-updates':
+            continue
+
         # 中文命名文件：检查是否存在 pinyin-slug 版本
         if _has_cjk(feed_name):
             expected_slug = slugify(feed_name)
@@ -261,6 +265,22 @@ def _cleanup_legacy_files() -> int:
     return removed
 
 
+def _load_project_feed() -> Optional[Dict]:
+    """加载项目更新 feed（如果存在）。"""
+    project_feed_path = os.path.join(FEEDS_DIR, 'project-updates.xml')
+    if not os.path.exists(project_feed_path):
+        return None
+    if not _feed_has_entries(project_feed_path):
+        return None
+    return {
+        'name': '📌 RSSForge 项目更新',
+        'slug': 'project-updates',
+        'feed_url': _encode_feed_url('project-updates.xml'),
+        'html_url': SITE_URL,
+        'icon': '',
+    }
+
+
 def generate_opml() -> Dict[str, int]:
     """生成统一 OPML 文件.
 
@@ -268,6 +288,11 @@ def generate_opml() -> Dict[str, int]:
         dict: {'feeds_count': N, 'opml_generated': 0/1, 'cleaned': N}
     """
     feeds = _load_feeds()
+
+    # 加入项目更新 feed（置顶）
+    project_feed = _load_project_feed()
+    if project_feed:
+        feeds.insert(0, project_feed)
 
     if not feeds:
         print("警告: 未找到任何 feed")
