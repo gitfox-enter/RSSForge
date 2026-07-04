@@ -3,13 +3,23 @@
   <title>RSSForge 项目更新</title>
   <subtitle>新增订阅源通告、项目开发进展与维护记录</subtitle>
   <id>https://gitfox-enter.github.io/RSSForge/project-updates</id>
-  <updated>2026-07-04T09:27:53Z</updated>
+  <updated>2026-07-04T09:32:07Z</updated>
   <author>
     <name>RSSForge</name>
   </author>
   <link href="https://gitfox-enter.github.io/RSSForge/"/>
   <link rel="self"/>
   <link href="https://gitfox-enter.github.io/RSSForge/feeds/project-updates.xml"/>
+  <entry>
+    <title>🔧 修复 generate_project_feed.py sites.yaml 解析和 slug 生成</title>
+    <id>tag:rssforge,340dc72ea30db780</id>
+    <updated>2026-07-04T17:28:37+08:00</updated>
+    <published>2026-07-04T17:28:37+08:00</published>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/32e8956d594ec10207b9ba5ed03fc22a4a8df0c0"/>
+    <category term="Bug修复"/>
+    <content type="html">&lt;p&gt;修复 generate_project_feed.py sites.yaml 解析和 slug 生成&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/32e8956d594ec10207b9ba5ed03fc22a4a8df0c0&quot;&gt;32e8956d&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
   <entry>
     <title>🔧 push loop 未提交成功 merge 导致 5 次重试全部失败</title>
     <id>tag:rssforge,a88c98f09dab7916</id>
@@ -69,17 +79,17 @@
 &lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/74c807926b317126145a6895010ae579864bfb0e&quot;&gt;74c80792&lt;/a&gt;&lt;/p&gt;</content>
   </entry>
   <entry>
-    <title>📡 爬取更新 x14 (2026-07-04)</title>
-    <id>tag:rssforge,06f737b8b052ca9c</id>
+    <title>📡 爬取更新 x15 (2026-07-04)</title>
+    <id>tag:rssforge,46a973bf822cdfa0</id>
     <updated>2026-07-04T01:13:16+08:00</updated>
     <published>2026-07-04T01:13:16+08:00</published>
-    <link href="https://github.com/gitfox-enter/RSSForge/commit/4407b296ee3c559d738b3a499adaad988f92f733"/>
+    <link href="https://github.com/gitfox-enter/RSSForge/commit/8ed7851cf2e154c58b358fd3c75d90d454c48ed1"/>
     <category term="爬取更新"/>
-    <content type="html">&lt;p&gt;当日爬取更新共 14 次提交。示例:
+    <content type="html">&lt;p&gt;当日爬取更新共 15 次提交。示例:
+  - 自动更新: 2026-07-04 17:27:19 | 新增 8 个 feed
   - 自动更新: 2026-07-04 16:22:31 | 新增 7 个 feed
-  - 自动更新: 2026-07-04 14:26:02 | 新增 7 个 feed
-  - 自动更新: 2026-07-04 13:37:35 | 新增 7 个 feed&lt;/p&gt;
-&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/4407b296ee3c559d738b3a499adaad988f92f733&quot;&gt;4407b296&lt;/a&gt;&lt;/p&gt;
+  - 自动更新: 2026-07-04 14:26:02 | 新增 7 个 feed&lt;/p&gt;
+&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/8ed7851cf2e154c58b358fd3c75d90d454c48ed1&quot;&gt;8ed7851c&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;（聚合提交，点击查看详情）&lt;/em&gt;&lt;/p&gt;</content>
   </entry>
   <entry>
@@ -564,13 +574,11 @@
     <content type="html">&lt;p&gt;彻底清理'爱Q生活'残留：xian-bao-ku.xml 和 app.js&lt;/p&gt;
 &lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/36d52126d8b62327b3db51cd689cd90e711a2106&quot;&gt;36d52126&lt;/a&gt;&lt;/p&gt;</content>
   </entry>
-  <entry>
-    <title>移除'爱Q生活'(axutongxue.net)订阅</title>
-    <id>tag:rssforge,c117c0ba22abd6d3</id>
-    <updated>2026-06-26T20:58:36+08:00</updated>
-    <published>2026-06-26T20:58:36+08:00</published>
-    <link href="https://github.com/gitfox-enter/RSSForge/commit/aea92bff512d41faecde842fd2fc2641a902b292"/>
-    <content type="html">&lt;p&gt;移除'爱Q生活'(axutongxue.net)订阅&lt;/p&gt;
-&lt;p&gt;提交: &lt;a href=&quot;https://github.com/gitfox-enter/RSSForge/commit/aea92bff512d41faecde842fd2fc2641a902b292&quot;&gt;aea92bff&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
+  <link rel="alternate" type="application/rss+xml" title="爱Q社区" href="https://gitfox-enter.github.io/RSSForge/feeds/ai-Q-she-qu.xml"/>
+  <link rel="alternate" type="application/rss+xml" title="超级线报" href="https://gitfox-enter.github.io/RSSForge/feeds/chao-ji-xian-bao.xml"/>
+  <link rel="alternate" type="application/rss+xml" title="汇发部" href="https://gitfox-enter.github.io/RSSForge/feeds/hui-fa-bu.xml"/>
+  <link rel="alternate" type="application/rss+xml" title="线报ICU" href="https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ICU.xml"/>
+  <link rel="alternate" type="application/rss+xml" title="线报酷" href="https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ku.xml"/>
+  <link rel="alternate" type="application/rss+xml" title="线报网" href="https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wang.xml"/>
+  <link rel="alternate" type="application/rss+xml" title="专业线报" href="https://gitfox-enter.github.io/RSSForge/feeds/zhuan-ye-xian-bao.xml"/>
 </feed>

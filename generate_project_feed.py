@@ -389,6 +389,16 @@ def generate_feed() -> Dict:
         content_el.set('type', 'html')
         content_el.text = content_html
 
+    # 回填已有订阅源的 RSS feed 链接（供 RSS 阅读器自动发现）
+    # 从已有 feed XML 提取 name→slug 映射，在 project-updates feed 中添加 alternate link
+    name_slug_map = _build_name_to_slug_map()
+    for name, slug in name_slug_map.items():
+        feed_link = ET.SubElement(root, f'{{{ns}}}link')
+        feed_link.set('rel', 'alternate')
+        feed_link.set('type', 'application/rss+xml')
+        feed_link.set('title', name)
+        feed_link.set('href', f'{SITE_URL}feeds/{slug}.xml')
+
     # 写入文件
     os.makedirs(FEEDS_DIR, exist_ok=True)
     tmp_path = OUTPUT_FILE + '.tmp'
