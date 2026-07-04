@@ -16,6 +16,7 @@ from crawler.config import (
     get_source_name, get_site_tier, is_dead_site, JS_RENDER_SITES,
     REQUEST_TIMEOUT, MAX_RETRIES, RETRY_BASE_DELAY, BROWSER_PROFILES,
     SOURCE_NAME_MAP as _CFG_SOURCE_NAME_MAP,
+    NOTIFIED_ITEMS_FILE,
 )
 from crawler.network import (
     MetricsTracker, metrics, rate_limiter,
@@ -32,8 +33,19 @@ from crawler.storage import (
 from crawler.parsers import (
     _match_parser, extract_article_items, parse_rss_feed,
     parse_ghxi_items, fetch_page_content,
+    # Re-export all deal/software/forum parsers for backward compatibility with tests
+    parse_423down_items, parse_wycad_items, parse_h6room_items, parse_xzba_items,
+    parse_apprcn_items, parse_daydayzhuan_items, parse_007ymd_items,
+    parse_baicaio_items_v2, parse_manmanbuy_items, parse_12345pro_items,
+    parse_ym2cc_items, parse_wobangzhao_items, parse_haodanku_items,
+    parse_hybase_items, parse_huodong5_items, parse_yangmaodang_items,
+    parse_xianbaomi_items, parse_yangmao_wang_items, parse_iqnew_items,
+    parse_51kanong_items, parse_ymxianbao_items, parse_linejia_items,
+    parse_10000yun_items,
+    parse_yxssp_items, parse_foxirj_items, parse_appinn_items,
+    parse_lsapk_items, parse_thosefree_items, parse_ithome_xijiayi_items,
+    parse_discuz_items, parse_douban_group_items,
 )
-from crawler.parsers import _match_parser  # private name not exported by *
 
 # Import the main function from the crawler engine
 from crawler.engine import main
