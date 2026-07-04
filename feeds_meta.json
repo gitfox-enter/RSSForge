@@ -2,20 +2,20 @@
   "线报酷": {
     "interval": 15,
     "freq_label": "每15分钟",
-    "count": 5594,
+    "count": 5686,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ku.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/xian-bao-ku.png",
     "site_url": "https://news.ixbk.net/",
-    "items_hash": "857e3aabc08591cab93701fb377b10db"
+    "items_hash": "49e719ad2eaed9aaf3977f68be76004d"
   },
   "线报ICU": {
     "interval": 15,
     "freq_label": "每15分钟",
-    "count": 792,
+    "count": 806,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ICU.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/xian-bao-ICU.png",
     "site_url": "https://xianbao.icu/",
-    "items_hash": "6288abda22a84ea6639530b7cce1b1a6"
+    "items_hash": "e4fa5c2a7bd2e3aa58078350804243e9"
   },
   "专业线报": {
     "interval": 20,
@@ -38,11 +38,11 @@
   "线报网": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 86,
+    "count": 88,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wang.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/xian-bao-wang.png",
     "site_url": "https://v1.xianbao.net/",
-    "items_hash": "c6eb996ae04dc29dd8939f7f935e83ab"
+    "items_hash": "d0dc269eb234a9af9adf5b93ddf2835a"
   },
   "小角落": {
     "interval": 20,
@@ -101,20 +101,20 @@
   "超级线报": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 146,
+    "count": 148,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/chao-ji-xian-bao.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/chao-ji-xian-bao.png",
     "site_url": "https://cjx8.com/",
-    "items_hash": "75c923a9a218d13375518b47584566b3"
+    "items_hash": "1cf3a5320e037ae31a51753d6ebd07aa"
   },
   "汇发部": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 4684,
+    "count": 4784,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/hui-fa-bu.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/hui-fa-bu.png",
     "site_url": "https://www.huifabu.cn/",
-    "items_hash": "551ed6f74f99651df8b8a920388abce9"
+    "items_hash": "bce97ac910b551a8352fb757f10f3d19"
   },
   "爱Q社区": {
     "interval": 20,
