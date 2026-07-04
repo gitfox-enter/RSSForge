@@ -11,12 +11,14 @@ import sys
 
 # Re-export everything from the crawler package and its submodules
 from common import *  # noqa: F401,F403
+# Re-export CATEGORY_KEYWORDS and ITEMS_DB_FILE from common (not in __all__)
+from common import CATEGORY_KEYWORDS, ITEMS_DB_FILE  # noqa: F401
 from crawler.config import (
     MONITOR_SITES, SOURCE_NAME_MAP, SITE_INTERVALS,
     get_source_name, get_site_tier, is_dead_site, JS_RENDER_SITES,
     REQUEST_TIMEOUT, MAX_RETRIES, RETRY_BASE_DELAY, BROWSER_PROFILES,
-    SOURCE_NAME_MAP as _CFG_SOURCE_NAME_MAP,
-    NOTIFIED_ITEMS_FILE,
+    NOTIFIED_ITEMS_FILE, HASH_RECORD_FILE, MAX_ITEMS_DB,
+    DEAD_SITES, RUN_LOG_FILE,
 )
 from crawler.network import (
     MetricsTracker, metrics, rate_limiter,
@@ -29,6 +31,8 @@ from crawler.storage import (
     filter_new_items, merge_items_into_db, load_hash_records,
     save_hash_records, export_items_latest_json,
     get_random_delay, get_random_profile, get_referer,
+    # Re-export constants for backward compat with tests
+    NOTIFIED_ITEMS_FILE, HASH_RECORD_FILE, ITEMS_DB_FILE, RUN_LOG_FILE,
 )
 from crawler.parsers import (
     _match_parser, extract_article_items, parse_rss_feed,
