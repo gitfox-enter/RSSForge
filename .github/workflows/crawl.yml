@@ -49,6 +49,8 @@ jobs:
         run: python rss_feed.py
       - name: 生成 OPML
         run: python opml_generator.py
+      - name: 生成多镜像 OPML
+        run: python generate_opml_mirrors.py
       - name: 生成订阅源目录
         run: python generate_feeds_index.py
 
