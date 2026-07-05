@@ -52,8 +52,6 @@ jobs:
 
       - name: 生成多镜像 OPML
         run: python generate_opml_mirrors.py
-      - name: 生成多镜像 OPML
-        run: python generate_opml_mirrors.py
       - name: 生成订阅源目录
         run: python generate_feeds_index.py
 
