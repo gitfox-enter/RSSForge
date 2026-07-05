@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="https://gitfox-enter.github.io/RSSForge/pretty-feed-v3.xsl" type="text/xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/syndication/1.0">
-  <title>鸭先知 - RSSForge</title>
-  <subtitle>鸭先知 的 RSS 订阅源（由 RSSForge 生成）</subtitle>
+  <title>鸭先知</title>
+  <subtitle>鸭先知 feed</subtitle>
   <link href="https://www.yxzhi.com/" rel="alternate" />
   <link href="https://gitfox-enter.github.io/RSSForge/feeds/ya-xian-zhi.xml" rel="self" type="application/atom+xml" />
   <id>https://gitfox-enter.github.io/RSSForge/feeds/ya-xian-zhi.xml</id>
-  <updated>2026-07-06T03:42:53+08:00</updated>
+  <updated>2026-07-06T03:42:00+08:00</updated>
   <generator uri="https://github.com/gitfox-enter/RSSForge">RSSForge</generator>
   <rights>内容版权归原作者所有，RSSForge 仅提供聚合索引</rights>
   <sy:updatePeriod>daily</sy:updatePeriod>

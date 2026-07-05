@@ -296,7 +296,7 @@ def _build_atom_feed(
 
 
 def _write_feed(root: ET.Element, output_path: str) -> bool:
-    """将 Atom feed 写入文件（原子写入）."""
+    """Write Atom feed to file with XSL stylesheet for browser rendering."""
     tmp_path = output_path + '.tmp'
     try:
         os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else '.', exist_ok=True)
@@ -304,11 +304,12 @@ def _write_feed(root: ET.Element, output_path: str) -> bool:
         ET.indent(tree, space='  ')
         with open(tmp_path, 'w', encoding='utf-8') as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+            f.write('<?xml-stylesheet href="https://gitfox-enter.github.io/RSSForge/pretty-feed-v3.xsl" type="text/xsl"?>\n')
             tree.write(f, encoding='unicode', xml_declaration=False)
         os.replace(tmp_path, output_path)
         return True
     except Exception as e:
-        print(f"写入 feed 失败 {output_path}: {e}")
+        print(f"Failed to write feed {output_path}: {e}")
         if os.path.exists(tmp_path):
             os.remove(tmp_path)
         return False
@@ -473,7 +474,7 @@ def generate_all_feeds() -> Dict[str, int]:
         ET.SubElement(root, f'{{{_NS}}}subtitle').text = _sanitize_xml(f'{name} - no items yet')
         tree = ET.ElementTree(root)
         ET.indent(tree, space='  ')
-        tree.write(filepath, encoding='utf-8', xml_declaration=True)
+        _write_feed(root, filepath)
         print(f"  Generated empty placeholder: {sn}.xml")
 
     # 删除 public/icons/ 中含中文的旧图标文件
