@@ -161,8 +161,8 @@ def build_html(meta):
     html.append('  <title>RSSForge - 订阅源目录</title>\n')
     # RSS Autodiscovery links
     html.append(f'  <link rel="alternate" type="application/rss+xml" title="RSSForge (官方)" href="{BASE}/opml.xml">\n')
-    html.append(f'  <link rel="alternate" type="application/rss+xml" title="RSSForge (ghfast 镜像)" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.xml">\n')
-    html.append(f'  <link rel="alternate" type="application/rss+xml" title="RSSForge (jsDelivr CDN)" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.xml">\n')
+    html.append(f'  <link rel="alternate" type="application/rss+xml" title="RSSForge (ghfast 镜像)" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.ghfast.xml">\n')
+    html.append(f'  <link rel="alternate" type="application/rss+xml" title="RSSForge (jsDelivr CDN)" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml">\n')
     html.append(f'  <style>\n{css}\n  </style>\n')
     html.append('</head>\n<body>\n')
     html.append('  <div class="container">\n')
@@ -179,8 +179,8 @@ def build_html(meta):
     html.append(f'      </div>\n')
     html.append(f'      <div class="opml-bar">\n')
     html.append(f'        <a class="opml-btn" href="{BASE}/opml.xml" title="官方链接（GitHub Pages）">🌐 官方 OPML</a>\n')
-    html.append(f'        <a class="opml-btn" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.xml" title="国内加速（ghfast.top）">🚀 ghfast 镜像</a>\n')
-    html.append(f'        <a class="opml-btn" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.xml" title="CDN 加速（jsDelivr）">📦 jsDelivr CDN</a>\n')
+    html.append(f'        <a class="opml-btn" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.ghfast.xml" title="国内加速（ghfast.top 镜像 OPML）">🚀 ghfast 镜像</a>\n')
+    html.append(f'        <a class="opml-btn" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml" title="CDN 加速（jsDelivr 镜像 OPML）">📦 jsDelivr CDN</a>\n')
     html.append(f'      </div>\n')
     html.append(f'    </header>\n')
 
