@@ -3,65 +3,52 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RSSForge - 订阅源目录</title>
-  <link rel="alternate" type="application/rss+xml" title="RSSForge (官方)" href="https://gitfox-enter.github.io/RSSForge/opml.xml">
-  <link rel="alternate" type="application/rss+xml" title="RSSForge (ghfast)" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.ghfast.xml">
-  <link rel="alternate" type="application/rss+xml" title="RSSForge (jsDelivr)" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml">
-  <style>\
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: -apple-system,'Segoe UI',Roboto,'Noto Sans SC',sans-serif;
-           background:#f4f5f7; color:#24292f; }
-    a { color:#0969da; text-decoration:none; }
-    a:hover { text-decoration:underline; }
-
-    header { background:linear-gradient(135deg,#1a73e8,#0d47a1);
-             color:#fff; padding:32px 24px 24px; text-align:center; }
-    header h1 { font-size:28px; font-weight:700; margin-bottom:4px; }
-    header .subtitle { font-size:14px; opacity:.85; margin-bottom:16px; }
-    .stats { display:flex; justify-content:center; gap:24px; margin-bottom:20px; flex-wrap:wrap; }
-    .stat { text-align:center; }
-    .stat-value { font-size:24px; font-weight:700; }
-    .stat-label { font-size:12px; opacity:.8; }
-    .opml-bar { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:8px; }
-    .opml-btn { display:inline-block; padding:8px 18px; border-radius:20px;
-                 background:rgba(255,255,255,.18); color:#fff; font-size:14px; font-weight:500;
-                 transition:background .2s; }
-    .opml-btn:hover { background:rgba(255,255,255,.32); text-decoration:none; color:#fff; }
-    .container { max-width:1200px; margin:0 auto; padding:24px 16px; }
-    .table-wrap { background:#fff; border-radius:8px;
-                  box-shadow:0 1px 3px rgba(0,0,0,.12); overflow:hidden; }
-    table { width:100%; border-collapse:collapse; font-size:14px; }
-    thead { position:sticky; top:0; z-index:1; }
-    thead th { background:#e8eaed; color:#24292f; font-weight:600; text-align:left;
-               padding:10px 12px; border-bottom:2px solid #c0c4cc;
-               white-space:nowrap; cursor:pointer; user-select:none; }
-    thead th:hover { background:#d2d5da; }
-    tbody tr { border-bottom:1px solid #eaeef2; transition:background .12s; }
-    tbody tr:nth-child(even) { background:#f6f8fa; }
-    tbody tr:hover { background:#e8f0fe; }
-    tbody td { padding:8px 12px; vertical-align:middle; }
-    td.num { color:#6e7781; font-size:13px; text-align:center; width:40px; }
-    td.title { font-weight:500; color:#1f2328; max-width:180px;
-               overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    td.site a { color:#0550ae; font-size:13px; max-width:180px;
-                overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block; }
-    td.feed a { display:inline-block; padding:3px 9px; border-radius:4px;
-                font-size:12px; font-weight:500; white-space:nowrap; margin-right:4px; }
-    td.feed .official { background:#dcfce7; color:#15803d; }
-    td.feed .mirror1  { background:#dbeafe; color:#1d4ed8; }
-    td.feed .mirror2  { background:#fae8ff; color:#7e22ce; }
-    td.feed a:hover { opacity:.75; text-decoration:none; }
-    .filter-bar { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
-    .filter-bar label { font-size:13px; color:#57606a; }
-    .filter-bar input { padding:6px 10px; border:1px solid #d0d7de; border-radius:6px;
-                         font-size:13px; width:220px; }
-    .filter-bar input:focus { outline:2px solid #0969da; border-color:#0969da; }
-    @media(max-width:768px) { .table-wrap{overflow-x:auto} table{min-width:900px} }
-</style>
+<title>RSSForge - 订阅源目录</title>
+<link rel="alternate" type="application/rss+xml" title="RSSForge (官方)" href="https://gitfox-enter.github.io/RSSForge/opml.xml">
+<link rel="alternate" type="application/rss+xml" title="RSSForge (ghfast)" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.ghfast.xml">
+<link rel="alternate" type="application/rss+xml" title="RSSForge (jsDelivr)" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml">
+  <style>* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system,"Segoe UI",Roboto,"Noto Sans SC",sans-serif; background:#f4f5f7; color:#24292f; }
+a { color:#0969da; text-decoration:none; }
+a:hover { text-decoration:underline; }
+header { background:linear-gradient(135deg,#1a73e8,#0d47a1); color:#fff; padding:32px 24px 24px; text-align:center; }
+header h1 { font-size:28px; font-weight:700; margin-bottom:4px; }
+header .subtitle { font-size:14px; opacity:.85; margin-bottom:16px; }
+.stats { display:flex; justify-content:center; gap:24px; margin-bottom:20px; flex-wrap:wrap; }
+.stat { text-align:center; }
+.stat-value { font-size:24px; font-weight:700; }
+.stat-label { font-size:12px; opacity:.8; }
+.opml-bar { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:8px; }
+.opml-btn { display:inline-block; padding:8px 18px; border-radius:20px; background:rgba(255,255,255,.18); color:#fff; font-size:14px; font-weight:500; transition:background .2s; }
+.opml-btn:hover { background:rgba(255,255,255,.32); text-decoration:none; color:#fff; }
+.container { max-width:1200px; margin:0 auto; padding:24px 16px; }
+.table-wrap { background:#fff; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.12); overflow:hidden; }
+table { width:100%; border-collapse:collapse; font-size:14px; }
+thead { position:sticky; top:0; z-index:1; }
+thead th { background:#e8eaed; color:#24292f; font-weight:600; text-align:left; padding:10px 12px; border-bottom:2px solid #c0c4cc; white-space:nowrap; cursor:pointer; user-select:none; }
+thead th:hover { background:#d2d5da; }
+tbody tr { border-bottom:1px solid #eaeef2; transition:background .12s; }
+tbody tr:nth-child(even) { background:#f6f8fa; }
+tbody tr:hover { background:#e8f0fe; }
+tbody td { padding:8px 12px; vertical-align:middle; }
+td.favicon { width:50px; text-align:center; padding:4px 8px; }
+td.num { color:#6e7781; font-size:13px; text-align:center; width:40px; }
+td.title { font-weight:500; color:#1f2328; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+td.site a { color:#0550ae; font-size:13px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block; }
+td.feed a { display:inline-block; padding:3px 9px; border-radius:4px; font-size:12px; font-weight:500; white-space:nowrap; margin-right:4px; }
+td.feed .official { background:#dcfce7; color:#15803d; }
+td.feed .mirror1  { background:#dbeafe; color:#1d4ed8; }
+td.feed .mirror2  { background:#fae8ff; color:#7e22ce; }
+td.feed a:hover { opacity:.75; text-decoration:none; }
+.filter-bar { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
+.filter-bar label { font-size:13px; color:#57606a; }
+.filter-bar input { padding:6px 10px; border:1px solid #d0d7de; border-radius:6px; font-size:13px; width:220px; }
+.filter-bar input:focus { outline:2px solid #0969da; border-color:#0969da; }
+@media(max-width:768px) { .table-wrap{overflow-x:auto} table{min-width:900px} }  </style>
 </head><body>
   <header>
     <h1>&#x1F4E1; RSSForge</h1>
-    <p class="subtitle">订阅源目录 &middot; 2026-07-05 21:12</p>
+    <p class="subtitle">订阅源目录 &middot; 2026-07-05 21:20</p>
     <div class="stats">
       <div class="stat"><div class="stat-value">47</div><div class="stat-label">订阅源总数</div></div>
     </div>
@@ -71,7 +58,7 @@
       <a class="opml-btn" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml">&#x1F4E6; jsDelivr CDN</a>
     </div>
   </header>
-  <div class="container>
+  <div class="container">
     <div class="filter-bar">
       <label>&#x1F50D;</label>
       <input type="text" id="searchInput" placeholder="搜索站点名称或网址..." oninput="filterTable()">
@@ -80,14 +67,15 @@
     <table id="feedTable">
       <thead><tr>
         <th onclick="sortTable(0)">#</th>
-        <th onclick="sortTable(1)">站点名称 &uttri;</th>
-        <th onclick="sortTable(2)">网址 &uttri;</th>
+        <th onclick="sortTable(1)">站点名称 &#9650;</th>
+        <th onclick="sortTable(2)">网址 &#9650;</th>
         <th>官方订阅</th>
         <th>加速链接 1</th>
         <th>加速链接 2</th>
       </tr></thead>
       <tbody>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=news.ixbk.net&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">1</td>
           <td class="title">线报酷</td>
           <td class="site"><a href="https://news.ixbk.net/" target="_blank">https://news.ixbk.net/</a></td>
@@ -96,6 +84,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报酷.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=xianbao.icu&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">2</td>
           <td class="title">线报ICU</td>
           <td class="site"><a href="https://xianbao.icu/" target="_blank">https://xianbao.icu/</a></td>
@@ -104,6 +93,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报ICU.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.zhuanyes.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">3</td>
           <td class="title">专业线报</td>
           <td class="site"><a href="https://www.zhuanyes.com/xianbao/" target="_blank">https://www.zhuanyes.com/xianbao/</a></td>
@@ -112,6 +102,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/专业线报.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=xianbaomi.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">4</td>
           <td class="title">线报迷</td>
           <td class="site"><a href="https://xianbaomi.com/" target="_blank">https://xianbaomi.com/</a></td>
@@ -120,6 +111,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报迷.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=v1.xianbao.net&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">5</td>
           <td class="title">线报网</td>
           <td class="site"><a href="https://v1.xianbao.net/" target="_blank">https://v1.xianbao.net/</a></td>
@@ -128,6 +120,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报网.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=yangmao.19970709.xyz&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">6</td>
           <td class="title">小角落</td>
           <td class="site"><a href="https://yangmao.19970709.xyz/" target="_blank">https://yangmao.19970709.xyz/</a></td>
@@ -136,6 +129,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/小角落.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=xzba.cc&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">7</td>
           <td class="title">新赚吧</td>
           <td class="site"><a href="https://xzba.cc/" target="_blank">https://xzba.cc/</a></td>
@@ -144,6 +138,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/新赚吧.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.h6room.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">8</td>
           <td class="title">H6线报</td>
           <td class="site"><a href="https://www.h6room.com/" target="_blank">https://www.h6room.com/</a></td>
@@ -152,6 +147,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/H6线报.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=yangmao.wang&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">9</td>
           <td class="title">羊毛王</td>
           <td class="site"><a href="https://yangmao.wang/" target="_blank">https://yangmao.wang/</a></td>
@@ -160,6 +156,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/羊毛王.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.yangmaodang.club&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">10</td>
           <td class="title">羊毛党</td>
           <td class="site"><a href="https://www.yangmaodang.club/" target="_blank">https://www.yangmaodang.club/</a></td>
@@ -168,6 +165,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/羊毛党.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=b1.ymxianbao.cn&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">11</td>
           <td class="title">羊毛线报</td>
           <td class="site"><a href="https://b1.ymxianbao.cn/" target="_blank">https://b1.ymxianbao.cn/</a></td>
@@ -176,6 +174,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/羊毛线报.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=cjx8.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">12</td>
           <td class="title">超级线报</td>
           <td class="site"><a href="https://cjx8.com/" target="_blank">https://cjx8.com/</a></td>
@@ -184,6 +183,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/超级线报.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.huifabu.cn&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">13</td>
           <td class="title">汇发部</td>
           <td class="site"><a href="https://www.huifabu.cn/" target="_blank">https://www.huifabu.cn/</a></td>
@@ -192,6 +192,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/汇发部.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.iqnew.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">14</td>
           <td class="title">爱Q社区</td>
           <td class="site"><a href="https://www.iqnew.com/" target="_blank">https://www.iqnew.com/</a></td>
@@ -200,6 +201,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/爱Q社区.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.007ymd.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">15</td>
           <td class="title">007羊毛党</td>
           <td class="site"><a href="https://www.007ymd.com/" target="_blank">https://www.007ymd.com/</a></td>
@@ -208,6 +210,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/007羊毛党.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.12345pro.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">16</td>
           <td class="title">12345线报</td>
           <td class="site"><a href="https://www.12345pro.com/" target="_blank">https://www.12345pro.com/</a></td>
@@ -216,6 +219,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/12345线报.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=m.hybase.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">17</td>
           <td class="title">好赚网</td>
           <td class="site"><a href="https://m.hybase.com/" target="_blank">https://m.hybase.com/</a></td>
@@ -224,6 +228,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/好赚网.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.huodong5.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">18</td>
           <td class="title">活动5</td>
           <td class="site"><a href="https://www.huodong5.com/" target="_blank">https://www.huodong5.com/</a></td>
@@ -232,6 +237,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/活动5.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.daydayzhuan.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">19</td>
           <td class="title">天天赚</td>
           <td class="site"><a href="https://www.daydayzhuan.com/" target="_blank">https://www.daydayzhuan.com/</a></td>
@@ -240,6 +246,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/天天赚.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.wycad.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">20</td>
           <td class="title">网赚</td>
           <td class="site"><a href="https://www.wycad.com/" target="_blank">https://www.wycad.com/</a></td>
@@ -248,6 +255,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/网赚.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.wobangzhao.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">21</td>
           <td class="title">我不找</td>
           <td class="site"><a href="https://www.wobangzhao.com/" target="_blank">https://www.wobangzhao.com/</a></td>
@@ -256,6 +264,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/我不找.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.manmanbuy.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">22</td>
           <td class="title">慢慢买</td>
           <td class="site"><a href="https://www.manmanbuy.com/" target="_blank">https://www.manmanbuy.com/</a></td>
@@ -264,6 +273,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/慢慢买.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.baicaio.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">23</td>
           <td class="title">白菜哦</td>
           <td class="site"><a href="https://www.baicaio.com/" target="_blank">https://www.baicaio.com/</a></td>
@@ -272,6 +282,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/白菜哦.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.bacaoo.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">24</td>
           <td class="title">拔草哦</td>
           <td class="site"><a href="https://www.bacaoo.com/" target="_blank">https://www.bacaoo.com/</a></td>
@@ -280,6 +291,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/拔草哦.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.yxssp.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">25</td>
           <td class="title">优惠线报</td>
           <td class="site"><a href="https://www.yxssp.com/" target="_blank">https://www.yxssp.com/</a></td>
@@ -288,6 +300,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/优惠线报.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.ghxi.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">26</td>
           <td class="title">果核剥壳</td>
           <td class="site"><a href="https://www.ghxi.com/" target="_blank">https://www.ghxi.com/</a></td>
@@ -296,6 +309,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/果核剥壳.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.423down.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">27</td>
           <td class="title">423Down</td>
           <td class="site"><a href="https://www.423down.com/" target="_blank">https://www.423down.com/</a></td>
@@ -304,6 +318,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/423Down.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.appinn.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">28</td>
           <td class="title">小众软件</td>
           <td class="site"><a href="https://www.appinn.com/" target="_blank">https://www.appinn.com/</a></td>
@@ -312,6 +327,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/小众软件.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.lsapk.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">29</td>
           <td class="title">LSapk</td>
           <td class="site"><a href="https://www.lsapk.com/" target="_blank">https://www.lsapk.com/</a></td>
@@ -320,6 +336,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/LSapk.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.thosefree.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">30</td>
           <td class="title">免费族</td>
           <td class="site"><a href="https://www.thosefree.com/" target="_blank">https://www.thosefree.com/</a></td>
@@ -328,6 +345,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/免费族.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.foxirj.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">31</td>
           <td class="title">佛系软件</td>
           <td class="site"><a href="https://www.foxirj.com/" target="_blank">https://www.foxirj.com/</a></td>
@@ -336,6 +354,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/佛系软件.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=free.apprcn.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">32</td>
           <td class="title">反斗限免</td>
           <td class="site"><a href="https://free.apprcn.com/" target="_blank">https://free.apprcn.com/</a></td>
@@ -344,6 +363,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/反斗限免.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=feed.iplaysoft.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">33</td>
           <td class="title">异次元RSS</td>
           <td class="site"><a href="https://feed.iplaysoft.com/" target="_blank">https://feed.iplaysoft.com/</a></td>
@@ -352,6 +372,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/异次元RSS.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.douban.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">34</td>
           <td class="title">豆瓣小组</td>
           <td class="site"><a href="https://www.douban.com/group/711811/" target="_blank">https://www.douban.com/group/711811/</a></td>
@@ -360,6 +381,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/豆瓣小组.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.kxdao.net&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">35</td>
           <td class="title">开心赚</td>
           <td class="site"><a href="https://www.kxdao.net/forum-42-1.html" target="_blank">https://www.kxdao.net/forum-42-1.html</a></td>
@@ -368,6 +390,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/开心赚.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.51kanong.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">36</td>
           <td class="title">51卡农</td>
           <td class="site"><a href="https://www.51kanong.com/" target="_blank">https://www.51kanong.com/</a></td>
@@ -376,6 +399,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/51卡农.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.ithome.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">37</td>
           <td class="title">IT之家</td>
           <td class="site"><a href="https://www.ithome.com/zt/xijiayi" target="_blank">https://www.ithome.com/zt/xijiayi</a></td>
@@ -384,6 +408,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/IT之家.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=10000yun.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">38</td>
           <td class="title">万云积分</td>
           <td class="site"><a href="https://10000yun.com/" target="_blank">https://10000yun.com/</a></td>
@@ -392,6 +417,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/万云积分.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.yxzhi.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">39</td>
           <td class="title">鸭先知</td>
           <td class="site"><a href="https://www.yxzhi.com/" target="_blank">https://www.yxzhi.com/</a></td>
@@ -400,6 +426,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/鸭先知.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.fy6b.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">40</td>
           <td class="title">枫音应用</td>
           <td class="site"><a href="https://www.fy6b.com/" target="_blank">https://www.fy6b.com/</a></td>
@@ -408,6 +435,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/枫音应用.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.mefcl.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">41</td>
           <td class="title">免恶魔</td>
           <td class="site"><a href="https://www.mefcl.com/" target="_blank">https://www.mefcl.com/</a></td>
@@ -416,6 +444,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/免恶魔.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.appmiu.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">42</td>
           <td class="title">APP喵</td>
           <td class="site"><a href="https://www.appmiu.com/" target="_blank">https://www.appmiu.com/</a></td>
@@ -424,6 +453,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/APP喵.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=yrxq.xliangxi.vip&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">43</td>
           <td class="title">银软星球</td>
           <td class="site"><a href="https://yrxq.xliangxi.vip/" target="_blank">https://yrxq.xliangxi.vip/</a></td>
@@ -432,6 +462,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/银软星球.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=blog.xianbao.art&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">44</td>
           <td class="title">羊毛群</td>
           <td class="site"><a href="https://blog.xianbao.art/" target="_blank">https://blog.xianbao.art/</a></td>
@@ -440,6 +471,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/羊毛群.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=iehou.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">45</td>
           <td class="title">网猴线报</td>
           <td class="site"><a href="https://iehou.com/" target="_blank">https://iehou.com/</a></td>
@@ -448,6 +480,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/网猴线报.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.hxm5.com&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">46</td>
           <td class="title">线报屋</td>
           <td class="site"><a href="https://www.hxm5.com/" target="_blank">https://www.hxm5.com/</a></td>
@@ -456,6 +489,7 @@
           <td class="feed"><a class="mirror2"  href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报屋.xml" target="_blank">&#x1F4E6; jsDelivr</a></td>
         </tr>
         <tr>
+          <td class="favicon" style="text-align:center;"><img src="https://www.google.com/s2/favicons?domain=www.zuankeba.cn&sz=32" onerror="this.style.display=none" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;margin-right:4px;"></td>
           <td class="num">47</td>
           <td class="title">赚客吧</td>
           <td class="site"><a href="https://www.zuankeba.cn/" target="_blank">https://www.zuankeba.cn/</a></td>
@@ -467,28 +501,8 @@
     </table>
     </div>
   </div>
-<script>
-function filterTable(){
-  var q=document.getElementById('searchInput').value.toLowerCase();
-  var rows=document.querySelectorAll('#feedTable tbody tr');
-  rows.forEach(function(tr){
-    var t=tr.cells[1].textContent.toLowerCase();
-    var u=tr.cells[2].textContent.toLowerCase();
-    tr.style.display=(!q||t.includes(q)||u.includes(q))?'':'none';
-  });
-}
-function sortTable(col){
-  var tb=document.querySelector('#feedTable tbody');
-  var dir=tb.getAttribute('data-dir')==='asc'?'desc':'asc';
-  tb.setAttribute('data-dir',dir);
-  var rows=Array.from(tb.rows);
-  rows.sort(function(a,b){
-    var va=a.cells[col].textContent.trim();
-    var vb=b.cells[col].textContent.trim();
-    if(!isNaN(va)&&!isNaN(vb)){va=+va;vb=+vb;}
-    return dir==='asc'?(va>vb?1:-1):(va>vb?-1:1);
-  });
-  rows.forEach(function(r){tb.appendChild(r);});
-}
-</script>
+  <script>
+function filterTable(){var q=document.getElementById('searchInput').value.toLowerCase();document.querySelectorAll('#feedTable tbody tr').forEach(function(tr){var t=tr.cells[1].textContent.toLowerCase();var u=tr.cells[2].textContent.toLowerCase();tr.style.display=(!q||t.includes(q)||u.includes(q))?'':'none';});}
+function sortTable(col){var tb=document.querySelector('#feedTable tbody');var dir=tb.getAttribute('data-dir')==='asc'?'desc':'asc';tb.setAttribute('data-dir',dir);var rows=Array.from(tb.rows);rows.sort(function(a,b){var va=a.cells[col].textContent.trim();var vb=b.cells[col].textContent.trim();if(!isNaN(va)&&!isNaN(vb)){va=+va;vb=+vb;}return dir==='asc'?(va>vb?1:-1):(va>vb?-1:1);});rows.forEach(function(r){tb.appendChild(r);});}
+  </script>
 </body></html>
