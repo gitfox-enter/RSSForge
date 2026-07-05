@@ -22,7 +22,8 @@ from typing import Dict, List, Optional, Set, Tuple
 from urllib.parse import quote as url_quote
 from common import slugify, SITE_URL_BASE
 
-FEEDS_DIR = "feeds"
+FEEDS_DIR = "docs/feeds"  # 文件系统路径
+FEEDS_URL_PATH = "feeds"  # URL 路径
 SITE_URL = SITE_URL_BASE  # fix #17: 统一从 common.py 获取
 
 
@@ -90,7 +91,7 @@ def _try_load_source_name_map() -> Dict[str, str]:
 def _encode_feed_url(filename: str) -> str:
     """构建 feed URL，对非 ASCII 字符进行 percent-encode。"""
     encoded_filename = url_quote(filename, safe='')
-    return f"{SITE_URL}{FEEDS_DIR}/{encoded_filename}"
+    return f"{SITE_URL}{FEEDS_URL_PATH}/{encoded_filename}"
 
 
 def _load_feeds() -> List[Dict]:
@@ -306,7 +307,7 @@ def generate_opml() -> Dict[str, int]:
 
     root = _build_opml(feeds, "RSSForge - 订阅源")
 
-    if _write_opml(root, "opml.xml"):
+    if _write_opml(root, "docs/opml.xml"):
         stats['opml_generated'] = 1
         print(f"✓ OPML 生成成功: {len(feeds)} 个订阅源")
         for feed in feeds:

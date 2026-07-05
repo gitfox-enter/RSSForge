@@ -74,12 +74,14 @@ jobs:
           # 使用排他性文件名策略：仅 commit crawl workflow 负责的文件
           # 核心状态文件（git add -u 仅修改已跟踪的文件）
           git add -u crawl_status.json items.json items_latest.json scheduler_state.json run_log.jsonl hash_record.txt notified_items.json adaptive_tiers.json 2>/dev/null || true
-          # Per-site feeds 目录（feeds/ 中的文件由 crawl 创建）
-          git add -u feeds/ 2>/dev/null || true
+          # Per-site feeds 目录（docs/feeds/ 中的文件由 rss_feed.py 直接生成到 docs/feeds/）
+          git add docs/feeds/ 2>/dev/null || true
           # 订阅源目录页面
           git add -u docs/index.html 2>/dev/null || true
+          # OPML 和 icons（直接输出到 docs/ 下）
+          git add -u docs/opml.xml docs/opml.*.xml docs/icons/ 2>/dev/null || true
           # 不再 commit feeds_meta.json（由 fast_check 单独管理，避免并发冲突）
-          git add -u opml.xml opml-*.xml public/icons/ 2>/dev/null || true
+          git add -u opml.xml public/icons/ 2>/dev/null || true
 
           git status
           if git diff --staged --quiet 2>/dev/null; then
@@ -185,21 +187,14 @@ jobs:
             exit 1
           fi
 
-      - name: 部署到 GitHub Pages（直接提交 docs/）
+      - name: 部署到 GitHub Pages（docs/ 已包含所有部署文件）
         if: success()
         run: |
           set -e
           
-          # 复制站点内容到 docs/
-          rm -rf docs/
-          mkdir -p docs/feeds
-          cp feeds/*.xml docs/feeds/ 2>/dev/null || true
-          # cp feeds/index.html docs/ (已移除：index.html 现由 generate_feeds_index.py 直接生成到 docs/)
-          cp opml.xml docs/ 2>/dev/null || true
+          # feeds/OPML/icons 已由各脚本直接输出到 docs/ 目录下
+          # 仅需复制 crawl_status.json 供状态页使用
           cp crawl_status.json docs/ 2>/dev/null || true
-          if [ -d "public" ]; then
-            cp -r public/ docs/ 2>/dev/null || true
-          fi
           
           # 检查是否有变化
           git add docs/

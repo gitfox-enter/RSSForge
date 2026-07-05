@@ -830,7 +830,7 @@ def create_proxy_pool(extra_proxies: Optional[List[str]] = None) -> ProxyPool:
 import urllib.request as _urllib_request
 import urllib.error as _urllib_error
 
-_ICONS_DIR = "public/icons"
+_ICONS_DIR = "docs/icons"
 _favicon_cache: Dict[str, str] = {}
 
 _USER_AGENT = (

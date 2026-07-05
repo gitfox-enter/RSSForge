@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""重新生成 docs/index.html —— Excel 风格表格布局"""
+"""重新生成 docs/index.html —— 真正的在线 Excel 表格风格"""
 import json, os, textwrap
 
 BASE = "https://gitfox-enter.github.io/RSSForge"
@@ -8,86 +8,162 @@ def load_meta():
     with open("feeds_meta.json") as f:
         data = json.load(f)
     if isinstance(data, dict):
-        # 字典结构 {slug: {name, url, category, ...}}
         result = []
         for slug, info in data.items():
             info["slug"] = slug
             result.append(info)
         return result
     else:
-        # 列表结构 [{slug, name, url, category, ...}, ...]
         return data
 
 def css():
     return textwrap.dedent("""\
+    :root {
+      --excel-green: #217346;
+      --excel-green-light: #e8f5e9;
+      --excel-green-dark: #185c37;
+      --header-bg: #217346;
+      --row-alt: #f7f9fc;
+      --row-hover: #e3f2fd;
+      --border: #d6dce4;
+      --text-primary: #1a1a2e;
+      --text-secondary: #5f6368;
+      --badge-high-bg: #fce8e6; --badge-high-color: #c5221f;
+      --badge-medium-bg: #fef7e0; --badge-medium-color: #e37400;
+      --badge-low-bg: #e8f5e9; --badge-low-color: #188038;
+    }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: -apple-system, 'Segoe UI', Roboto, 'Noto Sans SC', sans-serif;
-           background: #f0f2f5; color: #222; }
-    a { color: #1a73e8; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    body { font-family: 'Segoe UI', -apple-system, 'Noto Sans SC', sans-serif;
+           background: #e8eaed; color: var(--text-primary); }
 
-    /* Header */
-    header { background: linear-gradient(135deg, #1a73e8, #0d47a1);
-             color: #fff; padding: 32px 24px 24px; text-align: center; }
-    header h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
-    header .subtitle { font-size: 14px; opacity: .85; margin-bottom: 16px; }
-    .stats { display:flex; justify-content:center; gap:24px; margin-bottom:20px; flex-wrap:wrap; }
-    .stat { text-align:center; }
-    .stat-value { font-size:24px; font-weight:700; }
-    .stat-label { font-size:12px; opacity:.8; }
+    /* ── Top ribbon (Excel-style) ── */
+    .ribbon {
+      background: var(--excel-green); color: #fff; padding: 6px 16px;
+      display: flex; align-items: center; gap: 16px; font-size: 13px;
+      border-bottom: 2px solid var(--excel-green-dark);
+    }
+    .ribbon .brand { font-size: 16px; font-weight: 700; letter-spacing: -.3px; }
+    .ribbon .sep { width:1px; height:18px; background:rgba(255,255,255,.3); }
+    .ribbon .stat-chip { background:rgba(255,255,255,.15); padding:3px 10px; border-radius:3px; font-size:12px; }
+    .ribbon .stat-chip b { margin-right:2px; }
 
-    /* OPML bar */
-    .opml-bar { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:8px; }
-    .opml-btn { display:inline-block; padding:8px 18px; border-radius:20px;
-                background:rgba(255,255,255,.18); color:#fff; font-size:14px; font-weight:500;
-                transition: background .2s; }
-    .opml-btn:hover { background:rgba(255,255,255,.32); text-decoration:none; color:#fff; }
+    /* ── Toolbar (formula bar style) ── */
+    .toolbar {
+      background: #f3f3f3; border-bottom: 1px solid var(--border);
+      padding: 6px 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .toolbar label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+    .toolbar input[type="text"] {
+      border: 1px solid var(--border); padding: 5px 10px; font-size: 13px;
+      border-radius: 2px; width: 260px; outline: none;
+      background: #fff; transition: border .2s;
+    }
+    .toolbar input[type="text"]:focus { border-color: var(--excel-green); box-shadow: 0 0 0 1px var(--excel-green); }
+    .toolbar select {
+      border: 1px solid var(--border); padding: 5px 8px; font-size: 13px;
+      border-radius: 2px; background: #fff; outline: none; cursor: pointer;
+    }
+    .toolbar select:focus { border-color: var(--excel-green); }
+    .toolbar .btn-opml {
+      background: var(--excel-green); color: #fff; border: none; padding: 5px 12px;
+      font-size: 12px; border-radius: 2px; cursor: pointer; font-weight: 500;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+    }
+    .toolbar .btn-opml:hover { background: var(--excel-green-dark); text-decoration: none; color: #fff; }
+    .toolbar .spacer { flex: 1; }
 
-    /* Container */
-    .container { max-width:1200px; margin:0 auto; padding:24px 16px; }
+    /* ── Sheet tab bar ── */
+    .sheet-tabs {
+      background: #f3f3f3; border-bottom: 1px solid var(--border);
+      padding: 0 12px; display: flex; gap: 0;
+    }
+    .sheet-tab {
+      padding: 6px 20px; font-size: 12px; cursor: pointer;
+      border: 1px solid transparent; border-bottom: none;
+      color: var(--text-secondary); font-weight: 500; background: transparent;
+      border-radius: 4px 4px 0 0; margin-bottom: -1px; transition: all .15s;
+    }
+    .sheet-tab.active {
+      background: #fff; color: var(--excel-green); border-color: var(--border);
+      border-bottom: 1px solid #fff; font-weight: 600;
+    }
+    .sheet-tab:hover:not(.active) { background: #e8eaed; }
 
-    /* Excel-style table */
-    .table-wrap { background:#fff; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,.12);
-                  overflow:hidden; }
-    table { width:100%; border-collapse:collapse; font-size:14px; }
-    thead { position:sticky; top:0; z-index:1; }
-    thead th { background:#e8eaed; color:#202124; font-weight:600; text-align:left;
-               padding:10px 12px; border-bottom:2px solid #c0c4cc;
-               white-space:nowrap; cursor:pointer; user-select:none; }
-    thead th:hover { background:#d2d5da; }
-    tbody tr { border-bottom:1px solid #e0e0e0; transition:background .15s; }
-    tbody tr:nth-child(even) { background:#f8f9fa; }
-    tbody tr:hover { background:#e8f0fe; }
-    tbody td { padding:8px 12px; vertical-align:middle; }
-    td.title { font-weight:500; color:#202124; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    td.url   { max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    td.url a { color:#5f6368; font-size:13px; }
-    td.feed a { display:inline-block; padding:3px 10px; border-radius:4px;
-                 font-size:12px; font-weight:500; white-space:nowrap; }
-    td.feed .official { background:#e8f5e9; color:#2e7d32; }
-    td.feed .mirror1 { background:#e3f2fd; color:#1565c0; }
-    td.feed .mirror2 { background:#fce4ec; color:#c62828; }
-    td.feed a:hover { opacity:.8; text-decoration:none; }
+    /* ── Table ── */
+    .table-wrap {
+      background: #fff; overflow: auto; max-height: calc(100vh - 130px);
+      border-top: 1px solid var(--border);
+    }
+    table { width:100%; border-collapse:collapse; font-size:13px; table-layout: fixed; }
+    col.col-no   { width: 48px; }
+    col.col-cat  { width: 72px; }
+    col.col-name { width: 180px; }
+    col.col-url  { width: auto; }
+    col.col-feed { width: 260px; }
+    thead { position: sticky; top: 0; z-index: 2; }
+    thead th {
+      background: #f3f3f3; color: var(--text-secondary); font-weight: 600;
+      text-align: left; padding: 7px 10px; border-right: 1px solid var(--border);
+      border-bottom: 2px solid var(--excel-green); white-space: nowrap;
+      cursor: pointer; user-select: none; font-size: 12px;
+    }
+    thead th:hover { background: #e8eaed; }
+    thead th .sort-arrow { font-size: 10px; opacity: .4; margin-left: 2px; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+    tbody tr:nth-child(even) { background: var(--row-alt); }
+    tbody tr:hover { background: var(--row-hover); }
+    tbody td {
+      padding: 6px 10px; border-right: 1px solid #eef1f5;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    /* Row number (like Excel row header) */
+    td.row-no {
+      background: #f3f3f3; color: var(--text-secondary); text-align: center;
+      font-size: 11px; font-weight: 500; border-right: 1px solid var(--border);
+    }
 
-    /* Category tag */
-    .cat { display:inline-block; padding:2px 8px; border-radius:10px;
-           font-size:11px; font-weight:600; margin-right:6px; }
-    .cat-high   { background:#fce8e6; color:#c5221f; }
-    .cat-medium { background:#fef7e0; color:#e37400; }
-    .cat-low    { background:#e8f5e9; color:#188038; }
+    /* Category badge */
+    .badge {
+      display: inline-block; padding: 2px 8px; border-radius: 2px;
+      font-size: 11px; font-weight: 600; letter-spacing: .2px;
+    }
+    .badge-high   { background: var(--badge-high-bg); color: var(--badge-high-color); }
+    .badge-medium { background: var(--badge-medium-bg); color: var(--badge-medium-color); }
+    .badge-low    { background: var(--badge-low-bg); color: var(--badge-low-color); }
 
-    /* Filter bar */
-    .filter-bar { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
-    .filter-bar label { font-size:13px; color:#5f6368; }
-    .filter-bar select, .filter-bar input {
-        padding:6px 10px; border:1px solid #dadce0; border-radius:6px;
-        font-size:13px; background:#fff; }
-    .filter-bar input { width:220px; }
+    /* Feed links */
+    .feed-links { display: flex; gap: 4px; }
+    .feed-link {
+      display: inline-block; padding: 2px 8px; border-radius: 2px;
+      font-size: 11px; font-weight: 500; text-decoration: none;
+      white-space: nowrap; transition: filter .15s;
+    }
+    .feed-link:hover { filter: brightness(.9); text-decoration: none; }
+    .feed-official { background: #e8f5e9; color: #2e7d32; }
+    .feed-mirror1  { background: #e3f2fd; color: #1565c0; }
+    .feed-mirror2  { background: #fce4ec; color: #c62828; }
+
+    /* Site name with favicon */
+    .site-name { display: flex; align-items: center; gap: 6px; }
+    .site-name img { width: 16px; height: 16px; border-radius: 2px; flex-shrink: 0; }
+    .site-name span { overflow: hidden; text-overflow: ellipsis; }
+
+    /* URL cell */
+    td.cell-url a { color: var(--text-secondary); font-size: 12px; text-decoration: none; }
+    td.cell-url a:hover { color: var(--excel-green); text-decoration: underline; }
+
+    /* Footer status bar (Excel-style) */
+    .status-bar {
+      background: var(--excel-green); color: #fff; padding: 4px 16px;
+      font-size: 11px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .status-bar .left { opacity: .9; }
+    .status-bar .right { display: flex; gap: 16px; opacity: .85; }
 
     /* Responsive */
     @media (max-width:768px) {
-        .table-wrap { overflow-x:auto; }
-        table { min-width:800px; }
+      .toolbar input[type="text"] { width: 160px; }
+      table { min-width: 700px; }
     }
     """)
 
@@ -98,7 +174,7 @@ def gen_html(meta):
     total = len(meta)
     cats = {"high": [], "medium": [], "low": []}
     for s in meta:
-        cats[s.get("category","low")].append(s)
+        cats[s.get("category", "low")].append(s)
 
     lines = []
     w = lines.append
@@ -109,85 +185,102 @@ def gen_html(meta):
     w('  <meta charset="utf-8">')
     w('  <meta name="viewport" content="width=device-width, initial-scale=1.0">')
     w('  <title>RSSForge - 订阅源目录</title>')
-    # RSS Autodiscovery
     w(f'  <link rel="alternate" type="application/rss+xml" title="RSSForge (官方)" href="{BASE}/opml.xml">')
-    w(f'  <link rel="alternate" type="application/rss+xml" title="RSSForge (ghfast)" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.ghfast.xml">')
-    w(f'  <link rel="alternate" type="application/rss+xml" title="RSSForge (jsDelivr)" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml">')
     w(f'  <style>{css()}</style>')
     w('</head><body>')
 
-    # ── Header ──
-    w('  <header>')
-    w('    <h1>📡 RSSForge</h1>')
-    w(f'   <p class="subtitle">订阅源目录 · 更新时间：{now}</p>')
-    w('    <div class="stats">')
-    w(f'     <div class="stat"><div class="stat-value">{total}</div><div class="stat-label">总订阅源</div></div>')
-    for cat, label in [("high","高频"), ("medium","中频"), ("low","低频")]:
-        w(f'     <div class="stat"><div class="stat-value">{len(cats[cat])}</div><div class="stat-label">{label}</div></div>')
-    w('    </div>')
-    # OPML buttons
-    w('    <div class="opml-bar">')
-    w(f'     <a class="opml-btn" href="{BASE}/opml.xml">🌐 官方 OPML</a>')
-    w(f'     <a class="opml-btn" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.ghfast.xml">🚀 ghfast 镜像</a>')
-    w(f'     <a class="opml-btn" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml">📦 jsDelivr CDN</a>')
-    w('    </div>')
-    w('  </header>')
+    # ── Ribbon ──
+    w('  <div class="ribbon">')
+    w('    <span class="brand">RSSForge</span>')
+    w('    <span class="sep"></span>')
+    w(f'    <span class="stat-chip"><b>{total}</b> 源</span>')
+    w(f'    <span class="stat-chip"><b>{len(cats["high"])}</b> 高频</span>')
+    w(f'    <span class="stat-chip"><b>{len(cats["medium"])}</b> 中频</span>')
+    w(f'    <span class="stat-chip"><b>{len(cats["low"])}</b> 低频</span>')
+    w('  </div>')
 
-    # ── Main ──
-    w('  <div class="container">')
+    # ── Toolbar ──
+    w('  <div class="toolbar">')
+    w('    <label>搜索</label>')
+    w('    <input type="text" id="searchInput" placeholder="输入站点名称或网址…" oninput="filterTable()">')
+    w('    <label>分类</label>')
+    w('    <select id="catFilter" onchange="filterTable()">')
+    w('      <option value="">全部</option>')
+    w('      <option value="high">高频</option>')
+    w('      <option value="medium">中频</option>')
+    w('      <option value="low">低频</option>')
+    w('    </select>')
+    w('    <span class="spacer"></span>')
+    w(f'    <a class="btn-opml" href="{BASE}/opml.xml" target="_blank">OPML 官方</a>')
+    w(f'    <a class="btn-opml" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.ghfast.xml" target="_blank" style="background:#1565c0">OPML ghfast</a>')
+    w(f'    <a class="btn-opml" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml" target="_blank" style="background:#c62828">OPML jsDelivr</a>')
+    w('  </div>')
 
-    # Filter bar
-    w('    <div class="filter-bar">')
-    w('      <label>🔍 搜索：</label>')
-    w('      <input type="text" id="searchInput" placeholder="输入标题或网址过滤…" oninput="filterTable()">')
-    w('      <label>分类：</label>')
-    w('      <select id="catFilter" onchange="filterTable()">')
-    w('        <option value="">全部</option>')
-    w('        <option value="high">高频</option>')
-    w('        <option value="medium">中频</option>')
-    w('        <option value="low">低频</option>')
-    w('      </select>')
-    w('    </div>')
+    # ── Sheet tabs ──
+    w('  <div class="sheet-tabs">')
+    w('    <div class="sheet-tab active" data-cat="" onclick="switchTab(this, \'\')">全部订阅源</div>')
+    w('    <div class="sheet-tab" data-cat="high" onclick="switchTab(this, \'high\')">高频源</div>')
+    w('    <div class="sheet-tab" data-cat="medium" onclick="switchTab(this, \'medium\')">中频源</div>')
+    w('    <div class="sheet-tab" data-cat="low" onclick="switchTab(this, \'low\')">低频源</div>')
+    w('  </div>')
 
-    # Table
-    w('    <div class="table-wrap">')
-    w('    <table id="feedTable">')
-    w('      <thead><tr>')
-    w('        <th onclick="sortTable(0)">#</th>')
-    w('        <th onclick="sortTable(1)">网页标题 ↕</th>')
-    w('        <th onclick="sortTable(2)">网址 ↕</th>')
-    w('        <th>官方订阅源</th>')
-    w('        <th>加速链接 1 (ghfast)</th>')
-    w('        <th>加速链接 2 (jsDelivr)</th>')
-    w('      </tr></thead>')
-    w('      <tbody>')
+    # ── Table ──
+    w('  <div class="table-wrap">')
+    w('  <table id="feedTable">')
+    w('    <colgroup>')
+    w('      <col class="col-no">')
+    w('      <col class="col-cat">')
+    w('      <col class="col-name">')
+    w('      <col class="col-url">')
+    w('      <col class="col-feed">')
+    w('    </colgroup>')
+    w('    <thead><tr>')
+    w('      <th onclick="sortTable(0)"><span class="sort-arrow"></span></th>')
+    w('      <th onclick="sortTable(1)">分类 <span class="sort-arrow">↕</span></th>')
+    w('      <th onclick="sortTable(2)">站点名称 <span class="sort-arrow">↕</span></th>')
+    w('      <th onclick="sortTable(3)">网址 <span class="sort-arrow">↕</span></th>')
+    w('      <th>订阅地址</th>')
+    w('    </tr></thead>')
+    w('    <tbody>')
 
     for i, s in enumerate(meta, 1):
         slug  = s["slug"]
         title = s.get("name", slug)
         url   = s.get("url", "")
         cat   = s.get("category", "low")
-        cat_label = {"high":"高频","medium":"中频","low":"低频"}[cat]
+        cat_label = {"high": "高频", "medium": "中频", "low": "低频"}[cat]
+        icon  = s.get("icon", "")
 
         official = f"{BASE}/feeds/{slug}.xml"
-        mirror1  = f"https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/{slug}.xml"
+        mirror1  = f"https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/{slug}.xml"
         mirror2  = f"https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/{slug}.xml"
 
+        icon_img = f'<img src="{icon}" alt="" onerror="this.style.display=\'none\'">' if icon else ''
+
         w(f'      <tr data-cat="{cat}">')
-        w(f'        <td>{i}</td>')
-        w(f'        <td class="title">')
-        w(f'          <span class="cat cat-{cat}">{cat_label}</span>{title}')
-        w(f'        </td>')
-        w(f'        <td class="url"><a href="{url}" target="_blank">{url}</a></td>')
-        w(f'        <td class="feed"><a class="official" href="{official}" target="_blank">📡 官方</a></td>')
-        w(f'        <td class="feed"><a class="mirror1" href="{mirror1}" target="_blank">🚀 ghfast</a></td>')
-        w(f'        <td class="feed"><a class="mirror2" href="{mirror2}" target="_blank">📦 jsDelivr</a></td>')
+        w(f'        <td class="row-no">{i}</td>')
+        w(f'        <td><span class="badge badge-{cat}">{cat_label}</span></td>')
+        w(f'        <td><div class="site-name">{icon_img}<span>{title}</span></div></td>')
+        w(f'        <td class="cell-url"><a href="{url}" target="_blank">{url}</a></td>')
+        w(f'        <td><div class="feed-links">')
+        w(f'          <a class="feed-link feed-official" href="{official}" target="_blank">官方</a>')
+        w(f'          <a class="feed-link feed-mirror1" href="{mirror1}" target="_blank">ghfast</a>')
+        w(f'          <a class="feed-link feed-mirror2" href="{mirror2}" target="_blank">jsDelivr</a>')
+        w(f'        </div></td>')
         w(f'      </tr>')
 
-    w('      </tbody>')
-    w('    </table>')
-    w('    </div>')  # table-wrap
-    w('  </div>')    # container
+    w('    </tbody>')
+    w('  </table>')
+    w('  </div>')
+
+    # ── Status bar ──
+    w('  <div class="status-bar">')
+    w(f'    <span class="left">就绪 | 上次更新：{now}</span>')
+    w(f'    <span class="right">')
+    w(f'      <span>共 {total} 条记录</span>')
+    w(f'      <span>高频 {len(cats["high"])} | 中频 {len(cats["medium"])} | 低频 {len(cats["low"])}</span>')
+    w(f'    </span>')
+    w('  </div>')
 
     # ── JS ──
     w(textwrap.dedent("""\
@@ -196,26 +289,34 @@ def gen_html(meta):
         const q = document.getElementById('searchInput').value.toLowerCase();
         const cat = document.getElementById('catFilter').value;
         const rows = document.querySelectorAll('#feedTable tbody tr');
+        let visible = 0;
         rows.forEach(tr => {
-            const title = tr.cells[1].textContent.toLowerCase();
-            const url   = tr.cells[2].textContent.toLowerCase();
+            const title = tr.cells[2].textContent.toLowerCase();
+            const url   = tr.cells[3].textContent.toLowerCase();
             const matchCat = !cat || tr.dataset.cat === cat;
             const matchQ   = !q   || title.includes(q) || url.includes(q);
             tr.style.display = (matchCat && matchQ) ? '' : 'none';
+            if (matchCat && matchQ) visible++;
         });
+        document.getElementById('visibleCount').textContent = visible;
     }
+    function switchTab(el, cat) {
+        document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('catFilter').value = cat;
+        filterTable();
+    }
+    let sortDir = {};
     function sortTable(colIdx) {
         const tbody = document.querySelector('#feedTable tbody');
         const rows  = Array.from(tbody.rows);
-        const asc   = tbody.getAttribute('data-sort-dir') !== 'asc';
-        tbody.setAttribute('data-sort-dir', asc ? 'asc' : 'desc');
+        sortDir[colIdx] = !sortDir[colIdx];
+        const asc = sortDir[colIdx];
         rows.sort((a, b) => {
             let va = a.cells[colIdx].textContent.trim();
             let vb = b.cells[colIdx].textContent.trim();
             if (!isNaN(va) && !isNaN(vb)) { va = +va; vb = +vb; }
-            if (va < vb) return asc ? -1 : 1;
-            if (va > vb) return asc ? 1 : -1;
-            return 0;
+            return va < vb ? (asc ? -1 : 1) : va > vb ? (asc ? 1 : -1) : 0;
         });
         rows.forEach(r => tbody.appendChild(r));
     }

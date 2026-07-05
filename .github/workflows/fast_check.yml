@@ -57,12 +57,12 @@ jobs:
           # 使用排他性文件名策略：仅 commit fast_check workflow 负责的文件
           # feeds_meta.json 由 fast_check 单独管理（避免与 crawl 并发冲突）
           git add -u feeds_meta.json 2>/dev/null || true
-          # feeds/ 目录（fast_check 更新 feeds）
-          git add -u feeds/ 2>/dev/null || true
+          # docs/feeds/ 目录（rss_feed.py 直接输出到 docs/feeds/）
+          git add docs/feeds/ 2>/dev/null || true
           # 调度器状态和日志
           git add -u scheduler_state.json fast_log.jsonl 2>/dev/null || true
-          # OPML 由 fast_check 更新
-          git add -u opml.xml opml-*.xml 2>/dev/null || true
+          # OPML 和 icons 由 fast_check 更新（直接在 docs/ 下）
+          git add -u docs/opml.xml docs/opml.*.xml docs/icons/ 2>/dev/null || true
 
           git status
           if git diff --staged --quiet 2>/dev/null; then

@@ -55,11 +55,12 @@ _INVALID_XML_RE = re.compile(
 # ============================================================
 
 SITE_URL = SITE_URL_BASE  # fix #17: 统一从 common.py 获取
-FEEDS_DIR = "feeds"
+FEEDS_DIR = "docs/feeds"  # 文件系统输出目录（直接在 docs/ 下供 GitHub Pages 部署）
+FEEDS_URL_PATH = "feeds"  # URL 路径（GitHub Pages 部署 docs/ 后，feeds/ 直接可访问）
 FEED_TITLE = "RSSForge"
 FEED_DESCRIPTION = "基于 GitHub Actions 的免费 RSS 订阅源生成器"
-ICONS_DIR = "public/icons"
-ICONS_URL_PATH = "icons"  # 部署后 URL 路径（public/ 被 GitHub Pages 剥离）
+ICONS_DIR = "docs/icons"
+ICONS_URL_PATH = "icons"  # 部署后 URL 路径
 
 
 # ============================================================
@@ -389,7 +390,7 @@ def generate_all_feeds() -> Dict[str, int]:
         
         safe_name = _safe_filename(site_name)
         filename = f"{FEEDS_DIR}/{safe_name}.xml"
-        feed_url = SITE_URL + filename
+        feed_url = f"{SITE_URL}{FEEDS_URL_PATH}/{safe_name}.xml"
         
         # 获取站点间隔配置
         interval = SITE_INTERVALS.get(site_url, 30)
@@ -507,7 +508,7 @@ def _generate_feeds_meta(stats: Dict, by_source: Dict[str, List[Dict]]) -> None:
             'interval': interval,
             'freq_label': freq_label,
             'count': items_count,
-            'feed_url': f"{SITE_URL}{FEEDS_DIR}/{safe_name}.xml",
+            'feed_url': f"{SITE_URL}{FEEDS_URL_PATH}/{safe_name}.xml",
             'icon': icon_url,
             'site_url': url,
             'items_hash': _compute_items_hash(site_items) if site_items else '',  # (#36)
