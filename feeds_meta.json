@@ -340,5 +340,59 @@
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/wan-yun-ji-fen.png",
     "site_url": "https://10000yun.com/",
     "items_hash": ""
+  },
+  "鸭先知": {
+    "interval": 360,
+    "freq_label": "每6小时",
+    "count": 0,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/ya-xian-zhi.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/icons/ya-xian-zhi.png",
+    "site_url": "https://www.yxzhi.com/",
+    "items_hash": ""
+  },
+  "枫音应用": {
+    "interval": 360,
+    "freq_label": "每6小时",
+    "count": 0,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/feng-yin-ying-yong.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/icons/feng-yin-ying-yong.png",
+    "site_url": "https://www.fy6b.com/",
+    "items_hash": ""
+  },
+  "免恶魔": {
+    "interval": 360,
+    "freq_label": "每6小时",
+    "count": 0,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/mian-e-mo.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/icons/mian-e-mo.png",
+    "site_url": "https://www.mefcl.com/",
+    "items_hash": ""
+  },
+  "APP喵": {
+    "interval": 360,
+    "freq_label": "每6小时",
+    "count": 0,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/APP-miao.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/icons/APP-miao.png",
+    "site_url": "https://www.appmiu.com/",
+    "items_hash": ""
+  },
+  "银软星球": {
+    "interval": 360,
+    "freq_label": "每6小时",
+    "count": 0,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/yin-ruan-xing-qiu.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/icons/yin-ruan-xing-qiu.png",
+    "site_url": "https://yrxq.xliangxi.vip/",
+    "items_hash": ""
+  },
+  "羊毛群": {
+    "interval": 30,
+    "freq_label": "每30分钟",
+    "count": 0,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/yang-mao-qun.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/icons/yang-mao-qun.png",
+    "site_url": "https://blog.xianbao.art/",
+    "items_hash": ""
   }
 }

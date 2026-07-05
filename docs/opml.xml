@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <opml version="2.0">
   <head>
     <title>RSSForge - 订阅源</title>
@@ -35,5 +35,5 @@
     <outline type="rss" text="羊毛线报" title="羊毛线报" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/yang-mao-xian-bao.xml" htmlUrl="https://b1.ymxianbao.cn/" iconUrl="https://gitfox-enter.github.io/RSSForge/icons/yang-mao-xian-bao.png" />
     <outline type="rss" text="豆瓣小组" title="豆瓣小组" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/dou-ban-xiao-zu.xml" htmlUrl="https://www.douban.com/group/711811/" iconUrl="https://gitfox-enter.github.io/RSSForge/icons/dou-ban-xiao-zu.png" />
     <outline type="rss" text="超级线报" title="超级线报" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/chao-ji-xian-bao.xml" htmlUrl="https://cjx8.com/" iconUrl="https://gitfox-enter.github.io/RSSForge/icons/chao-ji-xian-bao.png" />
-  </body>
+  <outline type="rss" text="鸭先知" title="鸭先知" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/ya-xian-zhi.xml" htmlUrl="https://www.yxzhi.com/" description="坚持以不付费的伟大原则获取资源" /><outline type="rss" text="枫音应用" title="枫音应用" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/feng-yin-ying-yong.xml" htmlUrl="https://www.fy6b.com/" description="专注分享免费、绿色、无毒无广的实用软件" /><outline type="rss" text="免恶魔" title="免恶魔" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/mian-e-mo.xml" htmlUrl="https://www.mefcl.com/" description="免费软件分享" /><outline type="rss" text="APP喵" title="APP喵" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/APP-miao.xml" htmlUrl="https://www.appmiu.com/" description="阿喵软件分享，发现互联网有趣好用的软件资源" /><outline type="rss" text="银软星球" title="银软星球" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/yin-ruan-xing-qiu.xml" htmlUrl="https://yrxq.xliangxi.vip/" description="高品质软件投稿与发现平台" /><outline type="rss" text="羊毛群" title="羊毛群" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/yang-mao-qun.xml" htmlUrl="https://blog.xianbao.art/" description="活动羊毛优惠分享实时更新的线报网站" /></body>
 </opml>

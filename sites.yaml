@@ -336,3 +336,47 @@ dead_sites:
     reason: "连接失败(Connection refused)"
     confirmed_at: "2026-06-12"
     test_result: "Connection refused"
+  # ---- 新增站点 (2026-07-05) ----
+  - url: "https://www.yxzhi.com/"           # 鸭先知
+    max_pages: 5
+    name: 鸭先知
+    tier: low
+    interval: 360
+    fast_check: true
+    rss_feed: "https://www.yxzhi.com/feed"
+
+  - url: "https://www.fy6b.com/"            # 枫音应用
+    max_pages: 5
+    name: 枫音应用
+    tier: low
+    interval: 360
+    fast_check: true
+
+  - url: "https://www.mefcl.com/"           # 免恶魔
+    max_pages: 5
+    name: 免恶魔
+    tier: low
+    interval: 360
+    fast_check: true
+
+  - url: "https://www.appmiu.com/"          # APP喵
+    max_pages: 5
+    name: APP喵
+    tier: low
+    interval: 360
+    fast_check: true
+    rss_feed: "https://www.appmiu.com/feed"
+
+  - url: "https://yrxq.xliangxi.vip/"      # 银软星球
+    max_pages: 5
+    name: 银软星球
+    tier: low
+    interval: 360
+    fast_check: true
+
+  - url: "https://blog.xianbao.art/"        # 羊毛群
+    max_pages: 5
+    name: 羊毛群
+    tier: high
+    interval: 30
+    fast_check: true
