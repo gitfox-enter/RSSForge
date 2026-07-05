@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="https://gitfox-enter.github.io/RSSForge/pretty-feed-v3.xsl" type="text/xsl"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/syndication/1.0">
+<feed xmlns="http://www.w3.org/2005/Atom">
   <title>银软星球</title>
-  <subtitle>银软星球 feed</subtitle>
-  <link href="https://yrxq.xliangxi.vip/" rel="alternate" />
   <link href="https://gitfox-enter.github.io/RSSForge/feeds/yin-ruan-xing-qiu.xml" rel="self" type="application/atom+xml" />
+  <link href="https://yrxq.xliangxi.vip/" rel="alternate" type="text/html" />
   <id>https://gitfox-enter.github.io/RSSForge/feeds/yin-ruan-xing-qiu.xml</id>
-  <updated>2026-07-06T07:29:20.391228+08:00</updated>
-  <generator uri="https://github.com/gitfox-enter/RSSForge">RSSForge</generator>
-  <rights>内容版权归原作者所有，RSSForge 仅提供聚合索引</rights>
-  <sy:updatePeriod>daily</sy:updatePeriod>
-  <sy:updateFrequency>4</sy:updateFrequency>
-  <sy:updateBase>2000-01-01T00:00:00+08:00</sy:updateBase>
-  <author>
-    <name>RSSForge</name>
-    <uri>https://github.com/gitfox-enter/RSSForge</uri>
-  </author>
-  <icon>https://yrxq.xliangxi.vip/favicon.ico</icon>
+  <updated>2026-07-06T07:44:48.104059+08:00</updated>
+  <subtitle>银软星球 - no items yet</subtitle>
 </feed>
