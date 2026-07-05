@@ -16,18 +16,24 @@ https://{username}.github.io/RSSForge/feeds/[站点名称].xml
 
 ## OPML Subscription
 
-Import the unified OPML file to subscribe all feeds at once:
+Import the unified OPML file to subscribe all feeds at once.
+Choose the mirror that works best for your network:
 
-```
-https://{username}.github.io/RSSForge/opml.xml
-```
+| Mirror | OPML URL |
+|--------|----------|
+| 🌐 Official (GitHub Pages) | `https://gitfox-enter.github.io/RSSForge/opml.xml` |
+| 🚀 ghfast.top (国内加速) | `https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.xml` |
+| 📦 jsDelivr CDN | `https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.xml` |
+
+> **Tip:** Each OPML contains feed URLs pointing to the same mirror,
+> — import the one matching your network environment.
 
 ## Quick Start
 
 1. **Fork** this repository
-2. **Enable GitHub Pages** — Settings → Pages → Deploy from branch → `gh-pages`
+2. **Enable GitHub Pages** — Settings → Pages → Deploy from branch → `main` (docs/ folder)
 3. **Customize sites.yaml** — Add the sites you want to monitor
-4. **Subscribe** — Import `opml.xml` into any RSS reader
+4. **Subscribe** — Import one of the OPML files (see above) into any RSS reader
 
 ## Blacklist — What We Don't Monitor
 
