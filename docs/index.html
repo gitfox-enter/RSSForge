@@ -5,616 +5,761 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RSSForge - 订阅源目录</title>
   <link rel="alternate" type="application/rss+xml" title="RSSForge (官方)" href="https://gitfox-enter.github.io/RSSForge/opml.xml">
-  <link rel="alternate" type="application/rss+xml" title="RSSForge (ghfast)" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.ghfast.xml">
-  <link rel="alternate" type="application/rss+xml" title="RSSForge (jsDelivr)" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml">
-  <style>* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: -apple-system, 'Segoe UI', Roboto, 'Noto Sans SC', sans-serif;
-       background: #f0f2f5; color: #222; }
-a { color: #1a73e8; text-decoration: none; }
-a:hover { text-decoration: underline; }
+  <style>:root {
+  --excel-green: #217346;
+  --excel-green-light: #e8f5e9;
+  --excel-green-dark: #185c37;
+  --header-bg: #217346;
+  --row-alt: #f7f9fc;
+  --row-hover: #e3f2fd;
+  --border: #d6dce4;
+  --text-primary: #1a1a2e;
+  --text-secondary: #5f6368;
+  --badge-high-bg: #fce8e6; --badge-high-color: #c5221f;
+  --badge-medium-bg: #fef7e0; --badge-medium-color: #e37400;
+  --badge-low-bg: #e8f5e9; --badge-low-color: #188038;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Segoe UI', -apple-system, 'Noto Sans SC', sans-serif;
+       background: #e8eaed; color: var(--text-primary); }
 
-/* Header */
-header { background: linear-gradient(135deg, #1a73e8, #0d47a1);
-         color: #fff; padding: 32px 24px 24px; text-align: center; }
-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
-header .subtitle { font-size: 14px; opacity: .85; margin-bottom: 16px; }
-.stats { display:flex; justify-content:center; gap:24px; margin-bottom:20px; flex-wrap:wrap; }
-.stat { text-align:center; }
-.stat-value { font-size:24px; font-weight:700; }
-.stat-label { font-size:12px; opacity:.8; }
+/* ── Top ribbon (Excel-style) ── */
+.ribbon {
+  background: var(--excel-green); color: #fff; padding: 6px 16px;
+  display: flex; align-items: center; gap: 16px; font-size: 13px;
+  border-bottom: 2px solid var(--excel-green-dark);
+}
+.ribbon .brand { font-size: 16px; font-weight: 700; letter-spacing: -.3px; }
+.ribbon .sep { width:1px; height:18px; background:rgba(255,255,255,.3); }
+.ribbon .stat-chip { background:rgba(255,255,255,.15); padding:3px 10px; border-radius:3px; font-size:12px; }
+.ribbon .stat-chip b { margin-right:2px; }
 
-/* OPML bar */
-.opml-bar { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:8px; }
-.opml-btn { display:inline-block; padding:8px 18px; border-radius:20px;
-            background:rgba(255,255,255,.18); color:#fff; font-size:14px; font-weight:500;
-            transition: background .2s; }
-.opml-btn:hover { background:rgba(255,255,255,.32); text-decoration:none; color:#fff; }
+/* ── Toolbar (formula bar style) ── */
+.toolbar {
+  background: #f3f3f3; border-bottom: 1px solid var(--border);
+  padding: 6px 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.toolbar label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+.toolbar input[type="text"] {
+  border: 1px solid var(--border); padding: 5px 10px; font-size: 13px;
+  border-radius: 2px; width: 260px; outline: none;
+  background: #fff; transition: border .2s;
+}
+.toolbar input[type="text"]:focus { border-color: var(--excel-green); box-shadow: 0 0 0 1px var(--excel-green); }
+.toolbar select {
+  border: 1px solid var(--border); padding: 5px 8px; font-size: 13px;
+  border-radius: 2px; background: #fff; outline: none; cursor: pointer;
+}
+.toolbar select:focus { border-color: var(--excel-green); }
+.toolbar .btn-opml {
+  background: var(--excel-green); color: #fff; border: none; padding: 5px 12px;
+  font-size: 12px; border-radius: 2px; cursor: pointer; font-weight: 500;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+}
+.toolbar .btn-opml:hover { background: var(--excel-green-dark); text-decoration: none; color: #fff; }
+.toolbar .spacer { flex: 1; }
 
-/* Container */
-.container { max-width:1200px; margin:0 auto; padding:24px 16px; }
+/* ── Sheet tab bar ── */
+.sheet-tabs {
+  background: #f3f3f3; border-bottom: 1px solid var(--border);
+  padding: 0 12px; display: flex; gap: 0;
+}
+.sheet-tab {
+  padding: 6px 20px; font-size: 12px; cursor: pointer;
+  border: 1px solid transparent; border-bottom: none;
+  color: var(--text-secondary); font-weight: 500; background: transparent;
+  border-radius: 4px 4px 0 0; margin-bottom: -1px; transition: all .15s;
+}
+.sheet-tab.active {
+  background: #fff; color: var(--excel-green); border-color: var(--border);
+  border-bottom: 1px solid #fff; font-weight: 600;
+}
+.sheet-tab:hover:not(.active) { background: #e8eaed; }
 
-/* Excel-style table */
-.table-wrap { background:#fff; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,.12);
-              overflow:hidden; }
-table { width:100%; border-collapse:collapse; font-size:14px; }
-thead { position:sticky; top:0; z-index:1; }
-thead th { background:#e8eaed; color:#202124; font-weight:600; text-align:left;
-           padding:10px 12px; border-bottom:2px solid #c0c4cc;
-           white-space:nowrap; cursor:pointer; user-select:none; }
-thead th:hover { background:#d2d5da; }
-tbody tr { border-bottom:1px solid #e0e0e0; transition:background .15s; }
-tbody tr:nth-child(even) { background:#f8f9fa; }
-tbody tr:hover { background:#e8f0fe; }
-tbody td { padding:8px 12px; vertical-align:middle; }
-td.title { font-weight:500; color:#202124; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-td.url   { max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-td.url a { color:#5f6368; font-size:13px; }
-td.feed a { display:inline-block; padding:3px 10px; border-radius:4px;
-             font-size:12px; font-weight:500; white-space:nowrap; }
-td.feed .official { background:#e8f5e9; color:#2e7d32; }
-td.feed .mirror1 { background:#e3f2fd; color:#1565c0; }
-td.feed .mirror2 { background:#fce4ec; color:#c62828; }
-td.feed a:hover { opacity:.8; text-decoration:none; }
+/* ── Table ── */
+.table-wrap {
+  background: #fff; overflow: auto; max-height: calc(100vh - 130px);
+  border-top: 1px solid var(--border);
+}
+table { width:100%; border-collapse:collapse; font-size:13px; table-layout: fixed; }
+col.col-no   { width: 48px; }
+col.col-cat  { width: 72px; }
+col.col-name { width: 180px; }
+col.col-url  { width: auto; }
+col.col-feed { width: 260px; }
+thead { position: sticky; top: 0; z-index: 2; }
+thead th {
+  background: #f3f3f3; color: var(--text-secondary); font-weight: 600;
+  text-align: left; padding: 7px 10px; border-right: 1px solid var(--border);
+  border-bottom: 2px solid var(--excel-green); white-space: nowrap;
+  cursor: pointer; user-select: none; font-size: 12px;
+}
+thead th:hover { background: #e8eaed; }
+thead th .sort-arrow { font-size: 10px; opacity: .4; margin-left: 2px; }
+tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+tbody tr:nth-child(even) { background: var(--row-alt); }
+tbody tr:hover { background: var(--row-hover); }
+tbody td {
+  padding: 6px 10px; border-right: 1px solid #eef1f5;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* Row number (like Excel row header) */
+td.row-no {
+  background: #f3f3f3; color: var(--text-secondary); text-align: center;
+  font-size: 11px; font-weight: 500; border-right: 1px solid var(--border);
+}
 
-/* Category tag */
-.cat { display:inline-block; padding:2px 8px; border-radius:10px;
-       font-size:11px; font-weight:600; margin-right:6px; }
-.cat-high   { background:#fce8e6; color:#c5221f; }
-.cat-medium { background:#fef7e0; color:#e37400; }
-.cat-low    { background:#e8f5e9; color:#188038; }
+/* Category badge */
+.badge {
+  display: inline-block; padding: 2px 8px; border-radius: 2px;
+  font-size: 11px; font-weight: 600; letter-spacing: .2px;
+}
+.badge-high   { background: var(--badge-high-bg); color: var(--badge-high-color); }
+.badge-medium { background: var(--badge-medium-bg); color: var(--badge-medium-color); }
+.badge-low    { background: var(--badge-low-bg); color: var(--badge-low-color); }
 
-/* Filter bar */
-.filter-bar { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
-.filter-bar label { font-size:13px; color:#5f6368; }
-.filter-bar select, .filter-bar input {
-    padding:6px 10px; border:1px solid #dadce0; border-radius:6px;
-    font-size:13px; background:#fff; }
-.filter-bar input { width:220px; }
+/* Feed links */
+.feed-links { display: flex; gap: 4px; }
+.feed-link {
+  display: inline-block; padding: 2px 8px; border-radius: 2px;
+  font-size: 11px; font-weight: 500; text-decoration: none;
+  white-space: nowrap; transition: filter .15s;
+}
+.feed-link:hover { filter: brightness(.9); text-decoration: none; }
+.feed-official { background: #e8f5e9; color: #2e7d32; }
+.feed-mirror1  { background: #e3f2fd; color: #1565c0; }
+.feed-mirror2  { background: #fce4ec; color: #c62828; }
+
+/* Site name with favicon */
+.site-name { display: flex; align-items: center; gap: 6px; }
+.site-name img { width: 16px; height: 16px; border-radius: 2px; flex-shrink: 0; }
+.site-name span { overflow: hidden; text-overflow: ellipsis; }
+
+/* URL cell */
+td.cell-url a { color: var(--text-secondary); font-size: 12px; text-decoration: none; }
+td.cell-url a:hover { color: var(--excel-green); text-decoration: underline; }
+
+/* Footer status bar (Excel-style) */
+.status-bar {
+  background: var(--excel-green); color: #fff; padding: 4px 16px;
+  font-size: 11px; display: flex; justify-content: space-between; align-items: center;
+}
+.status-bar .left { opacity: .9; }
+.status-bar .right { display: flex; gap: 16px; opacity: .85; }
 
 /* Responsive */
 @media (max-width:768px) {
-    .table-wrap { overflow-x:auto; }
-    table { min-width:800px; }
+  .toolbar input[type="text"] { width: 160px; }
+  table { min-width: 700px; }
 }
 </style>
 </head><body>
-  <header>
-    <h1>📡 RSSForge</h1>
-   <p class="subtitle">订阅源目录 · 更新时间：2026-07-05 17:58</p>
-    <div class="stats">
-     <div class="stat"><div class="stat-value">47</div><div class="stat-label">总订阅源</div></div>
-     <div class="stat"><div class="stat-value">0</div><div class="stat-label">高频</div></div>
-     <div class="stat"><div class="stat-value">0</div><div class="stat-label">中频</div></div>
-     <div class="stat"><div class="stat-value">47</div><div class="stat-label">低频</div></div>
-    </div>
-    <div class="opml-bar">
-     <a class="opml-btn" href="https://gitfox-enter.github.io/RSSForge/opml.xml">🌐 官方 OPML</a>
-     <a class="opml-btn" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.ghfast.xml">🚀 ghfast 镜像</a>
-     <a class="opml-btn" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml">📦 jsDelivr CDN</a>
-    </div>
-  </header>
-  <div class="container">
-    <div class="filter-bar">
-      <label>🔍 搜索：</label>
-      <input type="text" id="searchInput" placeholder="输入标题或网址过滤…" oninput="filterTable()">
-      <label>分类：</label>
-      <select id="catFilter" onchange="filterTable()">
-        <option value="">全部</option>
-        <option value="high">高频</option>
-        <option value="medium">中频</option>
-        <option value="low">低频</option>
-      </select>
-    </div>
-    <div class="table-wrap">
-    <table id="feedTable">
-      <thead><tr>
-        <th onclick="sortTable(0)">#</th>
-        <th onclick="sortTable(1)">网页标题 ↕</th>
-        <th onclick="sortTable(2)">网址 ↕</th>
-        <th>官方订阅源</th>
-        <th>加速链接 1 (ghfast)</th>
-        <th>加速链接 2 (jsDelivr)</th>
-      </tr></thead>
-      <tbody>
+  <div class="ribbon">
+    <span class="brand">RSSForge</span>
+    <span class="sep"></span>
+    <span class="stat-chip"><b>47</b> 源</span>
+    <span class="stat-chip"><b>0</b> 高频</span>
+    <span class="stat-chip"><b>0</b> 中频</span>
+    <span class="stat-chip"><b>47</b> 低频</span>
+  </div>
+  <div class="toolbar">
+    <label>搜索</label>
+    <input type="text" id="searchInput" placeholder="输入站点名称或网址…" oninput="filterTable()">
+    <label>分类</label>
+    <select id="catFilter" onchange="filterTable()">
+      <option value="">全部</option>
+      <option value="high">高频</option>
+      <option value="medium">中频</option>
+      <option value="low">低频</option>
+    </select>
+    <span class="spacer"></span>
+    <a class="btn-opml" href="https://gitfox-enter.github.io/RSSForge/opml.xml" target="_blank">OPML 官方</a>
+    <a class="btn-opml" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.ghfast.xml" target="_blank" style="background:#1565c0">OPML ghfast</a>
+    <a class="btn-opml" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml" target="_blank" style="background:#c62828">OPML jsDelivr</a>
+  </div>
+  <div class="sheet-tabs">
+    <div class="sheet-tab active" data-cat="" onclick="switchTab(this, '')">全部订阅源</div>
+    <div class="sheet-tab" data-cat="high" onclick="switchTab(this, 'high')">高频源</div>
+    <div class="sheet-tab" data-cat="medium" onclick="switchTab(this, 'medium')">中频源</div>
+    <div class="sheet-tab" data-cat="low" onclick="switchTab(this, 'low')">低频源</div>
+  </div>
+  <div class="table-wrap">
+  <table id="feedTable">
+    <colgroup>
+      <col class="col-no">
+      <col class="col-cat">
+      <col class="col-name">
+      <col class="col-url">
+      <col class="col-feed">
+    </colgroup>
+    <thead><tr>
+      <th onclick="sortTable(0)"><span class="sort-arrow"></span></th>
+      <th onclick="sortTable(1)">分类 <span class="sort-arrow">↕</span></th>
+      <th onclick="sortTable(2)">站点名称 <span class="sort-arrow">↕</span></th>
+      <th onclick="sortTable(3)">网址 <span class="sort-arrow">↕</span></th>
+      <th>订阅地址</th>
+    </tr></thead>
+    <tbody>
       <tr data-cat="low">
-        <td>1</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>007羊毛党
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/007羊毛党.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/007羊毛党.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/007羊毛党.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">1</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/007-yang-mao-dang.svg" alt="" onerror="this.style.display='none'"><span>007羊毛党</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/007羊毛党.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/007羊毛党.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/007羊毛党.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>2</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>12345线报
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/12345线报.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/12345线报.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/12345线报.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">2</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/12345-xian-bao.svg" alt="" onerror="this.style.display='none'"><span>12345线报</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/12345线报.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/12345线报.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/12345线报.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>3</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>423Down
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/423Down.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/423Down.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/423Down.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">3</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/423Down.png" alt="" onerror="this.style.display='none'"><span>423Down</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/423Down.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/423Down.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/423Down.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>4</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>51卡农
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/51卡农.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/51卡农.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/51卡农.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">4</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/51-ka-nong.png" alt="" onerror="this.style.display='none'"><span>51卡农</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/51卡农.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/51卡农.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/51卡农.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>5</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>APP喵
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/APP喵.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/APP喵.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/APP喵.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">5</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/APP-miao.png" alt="" onerror="this.style.display='none'"><span>APP喵</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/APP喵.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/APP喵.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/APP喵.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>6</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>H6线报
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/H6线报.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/H6线报.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/H6线报.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">6</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/H6-xian-bao.png" alt="" onerror="this.style.display='none'"><span>H6线报</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/H6线报.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/H6线报.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/H6线报.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>7</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>IT之家
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/IT之家.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/IT之家.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/IT之家.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">7</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/IT-zhi-jia.png" alt="" onerror="this.style.display='none'"><span>IT之家</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/IT之家.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/IT之家.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/IT之家.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>8</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>LSapk
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/LSapk.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/LSapk.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/LSapk.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">8</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/LSapk.png" alt="" onerror="this.style.display='none'"><span>LSapk</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/LSapk.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/LSapk.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/LSapk.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>9</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>万云积分
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/万云积分.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/万云积分.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/万云积分.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">9</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/wan-yun-ji-fen.png" alt="" onerror="this.style.display='none'"><span>万云积分</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/万云积分.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/万云积分.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/万云积分.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>10</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>专业线报
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/专业线报.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/专业线报.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/专业线报.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">10</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/zhuan-ye-xian-bao.png" alt="" onerror="this.style.display='none'"><span>专业线报</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/专业线报.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/专业线报.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/专业线报.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>11</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>优惠线报
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/优惠线报.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/优惠线报.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/优惠线报.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">11</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/you-hui-xian-bao.png" alt="" onerror="this.style.display='none'"><span>优惠线报</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/优惠线报.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/优惠线报.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/优惠线报.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>12</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>佛系软件
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/佛系软件.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/佛系软件.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/佛系软件.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">12</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/fo-xi-ruan-jian.png" alt="" onerror="this.style.display='none'"><span>佛系软件</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/佛系软件.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/佛系软件.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/佛系软件.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>13</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>免恶魔
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/免恶魔.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/免恶魔.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/免恶魔.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">13</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/mian-e-mo.png" alt="" onerror="this.style.display='none'"><span>免恶魔</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/免恶魔.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/免恶魔.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/免恶魔.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>14</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>免费族
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/免费族.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/免费族.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/免费族.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">14</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/mian-fei-zu.png" alt="" onerror="this.style.display='none'"><span>免费族</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/免费族.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/免费族.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/免费族.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>15</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>反斗限免
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/反斗限免.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/反斗限免.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/反斗限免.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">15</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/fan-dou-xian-mian.png" alt="" onerror="this.style.display='none'"><span>反斗限免</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/反斗限免.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/反斗限免.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/反斗限免.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>16</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>天天赚
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/天天赚.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/天天赚.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/天天赚.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">16</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/tian-tian-zhuan.png" alt="" onerror="this.style.display='none'"><span>天天赚</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/天天赚.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/天天赚.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/天天赚.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>17</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>好赚网
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/好赚网.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/好赚网.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/好赚网.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">17</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/hao-zhuan-wang.png" alt="" onerror="this.style.display='none'"><span>好赚网</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/好赚网.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/好赚网.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/好赚网.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>18</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>小众软件
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/小众软件.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/小众软件.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/小众软件.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">18</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/xiao-zhong-ruan-jian.png" alt="" onerror="this.style.display='none'"><span>小众软件</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/小众软件.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/小众软件.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/小众软件.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>19</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>小角落
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/小角落.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/小角落.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/小角落.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">19</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/xiao-jiao-luo.png" alt="" onerror="this.style.display='none'"><span>小角落</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/小角落.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/小角落.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/小角落.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>20</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>开心赚
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/开心赚.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/开心赚.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/开心赚.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">20</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/kai-xin-zhuan.png" alt="" onerror="this.style.display='none'"><span>开心赚</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/开心赚.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/开心赚.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/开心赚.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>21</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>异次元RSS
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/异次元RSS.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/异次元RSS.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/异次元RSS.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">21</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/yi-ci-yuan-RSS.png" alt="" onerror="this.style.display='none'"><span>异次元RSS</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/异次元RSS.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/异次元RSS.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/异次元RSS.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>22</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>慢慢买
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/慢慢买.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/慢慢买.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/慢慢买.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">22</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/man-man-mai.png" alt="" onerror="this.style.display='none'"><span>慢慢买</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/慢慢买.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/慢慢买.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/慢慢买.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>23</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>我不找
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/我不找.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/我不找.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/我不找.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">23</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/wo-bu-zhao.png" alt="" onerror="this.style.display='none'"><span>我不找</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/我不找.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/我不找.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/我不找.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>24</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>拔草哦
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/拔草哦.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/拔草哦.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/拔草哦.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">24</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/ba-cao-o.png" alt="" onerror="this.style.display='none'"><span>拔草哦</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/拔草哦.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/拔草哦.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/拔草哦.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>25</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>新赚吧
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/新赚吧.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/新赚吧.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/新赚吧.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">25</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/xin-zhuan-ba.png" alt="" onerror="this.style.display='none'"><span>新赚吧</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/新赚吧.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/新赚吧.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/新赚吧.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>26</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>果核剥壳
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/果核剥壳.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/果核剥壳.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/果核剥壳.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">26</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/guo-he-bao-ke.png" alt="" onerror="this.style.display='none'"><span>果核剥壳</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/果核剥壳.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/果核剥壳.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/果核剥壳.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>27</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>枫音应用
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/枫音应用.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/枫音应用.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/枫音应用.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">27</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/feng-yin-ying-yong.png" alt="" onerror="this.style.display='none'"><span>枫音应用</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/枫音应用.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/枫音应用.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/枫音应用.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>28</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>汇发部
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/汇发部.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/汇发部.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/汇发部.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">28</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/hui-fa-bu.png" alt="" onerror="this.style.display='none'"><span>汇发部</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/汇发部.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/汇发部.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/汇发部.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>29</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>活动5
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/活动5.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/活动5.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/活动5.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">29</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/huo-dong-5.png" alt="" onerror="this.style.display='none'"><span>活动5</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/活动5.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/活动5.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/活动5.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>30</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>爱Q社区
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/爱Q社区.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/爱Q社区.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/爱Q社区.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">30</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/ai-Q-she-qu.png" alt="" onerror="this.style.display='none'"><span>爱Q社区</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/爱Q社区.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/爱Q社区.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/爱Q社区.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>31</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>白菜哦
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/白菜哦.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/白菜哦.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/白菜哦.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">31</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/bai-cai-o.png" alt="" onerror="this.style.display='none'"><span>白菜哦</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/白菜哦.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/白菜哦.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/白菜哦.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>32</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>线报ICU
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/线报ICU.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/线报ICU.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报ICU.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">32</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/xian-bao-ICU.png" alt="" onerror="this.style.display='none'"><span>线报ICU</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/线报ICU.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/线报ICU.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报ICU.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>33</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>线报屋
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/线报屋.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/线报屋.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报屋.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">33</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/xian-bao-wu.png" alt="" onerror="this.style.display='none'"><span>线报屋</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/线报屋.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/线报屋.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报屋.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>34</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>线报网
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/线报网.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/线报网.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报网.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">34</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/xian-bao-wang.png" alt="" onerror="this.style.display='none'"><span>线报网</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/线报网.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/线报网.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报网.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>35</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>线报迷
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/线报迷.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/线报迷.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报迷.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">35</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/xian-bao-mi.svg" alt="" onerror="this.style.display='none'"><span>线报迷</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/线报迷.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/线报迷.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报迷.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>36</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>线报酷
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/线报酷.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/线报酷.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报酷.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">36</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/xian-bao-ku.png" alt="" onerror="this.style.display='none'"><span>线报酷</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/线报酷.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/线报酷.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/线报酷.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>37</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>网猴线报
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/网猴线报.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/网猴线报.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/网猴线报.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">37</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/wang-hou-xian-bao.png" alt="" onerror="this.style.display='none'"><span>网猴线报</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/网猴线报.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/网猴线报.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/网猴线报.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>38</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>网赚
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/网赚.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/网赚.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/网赚.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">38</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/wang-zhuan.png" alt="" onerror="this.style.display='none'"><span>网赚</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/网赚.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/网赚.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/网赚.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>39</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>羊毛党
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/羊毛党.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/羊毛党.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/羊毛党.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">39</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/yang-mao-dang.png" alt="" onerror="this.style.display='none'"><span>羊毛党</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/羊毛党.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/羊毛党.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/羊毛党.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>40</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>羊毛王
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/羊毛王.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/羊毛王.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/羊毛王.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">40</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/yang-mao-wang.png" alt="" onerror="this.style.display='none'"><span>羊毛王</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/羊毛王.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/羊毛王.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/羊毛王.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>41</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>羊毛线报
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/羊毛线报.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/羊毛线报.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/羊毛线报.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">41</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/yang-mao-xian-bao.png" alt="" onerror="this.style.display='none'"><span>羊毛线报</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/羊毛线报.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/羊毛线报.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/羊毛线报.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>42</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>羊毛群
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/羊毛群.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/羊毛群.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/羊毛群.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">42</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/yang-mao-qun.png" alt="" onerror="this.style.display='none'"><span>羊毛群</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/羊毛群.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/羊毛群.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/羊毛群.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>43</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>豆瓣小组
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/豆瓣小组.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/豆瓣小组.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/豆瓣小组.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">43</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/dou-ban-xiao-zu.png" alt="" onerror="this.style.display='none'"><span>豆瓣小组</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/豆瓣小组.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/豆瓣小组.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/豆瓣小组.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>44</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>赚客吧
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/赚客吧.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/赚客吧.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/赚客吧.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">44</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/zhuan-ke-ba.png" alt="" onerror="this.style.display='none'"><span>赚客吧</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/赚客吧.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/赚客吧.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/赚客吧.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>45</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>超级线报
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/超级线报.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/超级线报.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/超级线报.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">45</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/chao-ji-xian-bao.png" alt="" onerror="this.style.display='none'"><span>超级线报</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/超级线报.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/超级线报.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/超级线报.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>46</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>银软星球
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/银软星球.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/银软星球.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/银软星球.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">46</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/yin-ruan-xing-qiu.png" alt="" onerror="this.style.display='none'"><span>银软星球</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/银软星球.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/银软星球.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/银软星球.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
       <tr data-cat="low">
-        <td>47</td>
-        <td class="title">
-          <span class="cat cat-low">低频</span>鸭先知
-        </td>
-        <td class="url"><a href="" target="_blank"></a></td>
-        <td class="feed"><a class="official" href="https://gitfox-enter.github.io/RSSForge/feeds/鸭先知.xml" target="_blank">📡 官方</a></td>
-        <td class="feed"><a class="mirror1" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/鸭先知.xml" target="_blank">🚀 ghfast</a></td>
-        <td class="feed"><a class="mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/鸭先知.xml" target="_blank">📦 jsDelivr</a></td>
+        <td class="row-no">47</td>
+        <td><span class="badge badge-low">低频</span></td>
+        <td><div class="site-name"><img src="https://gitfox-enter.github.io/RSSForge/icons/ya-xian-zhi.png" alt="" onerror="this.style.display='none'"><span>鸭先知</span></div></td>
+        <td class="cell-url"><a href="" target="_blank"></a></td>
+        <td><div class="feed-links">
+          <a class="feed-link feed-official" href="https://gitfox-enter.github.io/RSSForge/feeds/鸭先知.xml" target="_blank">官方</a>
+          <a class="feed-link feed-mirror1" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/鸭先知.xml" target="_blank">ghfast</a>
+          <a class="feed-link feed-mirror2" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/鸭先知.xml" target="_blank">jsDelivr</a>
+        </div></td>
       </tr>
-      </tbody>
-    </table>
-    </div>
+    </tbody>
+  </table>
+  </div>
+  <div class="status-bar">
+    <span class="left">就绪 | 上次更新：2026-07-05 18:27</span>
+    <span class="right">
+      <span>共 47 条记录</span>
+      <span>高频 0 | 中频 0 | 低频 47</span>
+    </span>
   </div>
 <script>
 function filterTable() {
     const q = document.getElementById('searchInput').value.toLowerCase();
     const cat = document.getElementById('catFilter').value;
     const rows = document.querySelectorAll('#feedTable tbody tr');
+    let visible = 0;
     rows.forEach(tr => {
-        const title = tr.cells[1].textContent.toLowerCase();
-        const url   = tr.cells[2].textContent.toLowerCase();
+        const title = tr.cells[2].textContent.toLowerCase();
+        const url   = tr.cells[3].textContent.toLowerCase();
         const matchCat = !cat || tr.dataset.cat === cat;
         const matchQ   = !q   || title.includes(q) || url.includes(q);
         tr.style.display = (matchCat && matchQ) ? '' : 'none';
+        if (matchCat && matchQ) visible++;
     });
+    document.getElementById('visibleCount').textContent = visible;
 }
+function switchTab(el, cat) {
+    document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('catFilter').value = cat;
+    filterTable();
+}
+let sortDir = {};
 function sortTable(colIdx) {
     const tbody = document.querySelector('#feedTable tbody');
     const rows  = Array.from(tbody.rows);
-    const asc   = tbody.getAttribute('data-sort-dir') !== 'asc';
-    tbody.setAttribute('data-sort-dir', asc ? 'asc' : 'desc');
+    sortDir[colIdx] = !sortDir[colIdx];
+    const asc = sortDir[colIdx];
     rows.sort((a, b) => {
         let va = a.cells[colIdx].textContent.trim();
         let vb = b.cells[colIdx].textContent.trim();
         if (!isNaN(va) && !isNaN(vb)) { va = +va; vb = +vb; }
-        if (va < vb) return asc ? -1 : 1;
-        if (va > vb) return asc ? 1 : -1;
-        return 0;
+        return va < vb ? (asc ? -1 : 1) : va > vb ? (asc ? 1 : -1) : 0;
     });
     rows.forEach(r => tbody.appendChild(r));
 }
