@@ -97,6 +97,7 @@ def css():
     thead th { background:#e8eaed; color:#24292f; font-weight:600; text-align:left;
                padding:10px 12px; border-bottom:2px solid #c0c4cc;
                white-space:nowrap; cursor:pointer; user-select:none; }
+    td.icon { width:24px; text-align:center; padding:4px 8px !important; vertical-align:middle; }
     thead th:hover { background:#d2d5da; }
     tbody tr { border-bottom:1px solid #eaeef2; transition:background .12s; }
     tbody tr:nth-child(even) { background:#f6f8fa; }
@@ -121,10 +122,22 @@ def css():
     @media(max-width:768px) { .table-wrap{overflow-x:auto} table{min-width:900px} }
     ''')
 
+def favicon_url(s):
+    icon = s.get("icon", "")
+    if icon and icon.startswith("https://"):
+        return icon
+    site = s.get("site_url", "")
+    if site:
+        domain = site.replace("https://", "").replace("http://", "").split("/")[0]
+        return "https://" + domain + "/favicon.ico"
+    return ""
+
 def build_row(i, s):
     slug = s["slug"]
     name = s["name"]
     site = s.get("site_url", "")
+    icon = favicon_url(s)
+    icon_img = '<img src="' + icon + '" style="width:16px;height:16px;border-radius:2px;" loading="lazy" onerror="this.style.opacity=.3">' if icon else ""
     official = "https://gitfox-enter.github.io/RSSForge/feeds/" + slug + ".xml"
     m1 = "https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/" + slug + ".xml"
     m2 = "https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/" + slug + ".xml"
