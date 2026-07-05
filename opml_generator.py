@@ -287,6 +287,7 @@ def generate_opml() -> Dict[str, int]:
     Returns:
         dict: {'feeds_count': N, 'opml_generated': 0/1, 'cleaned': N}
     """
+    cleaned = 0  # 清理重复 feed 的计数
     feeds = _load_feeds()
 
     # 加入项目更新 feed（置顶）
@@ -317,6 +318,7 @@ def generate_opml() -> Dict[str, int]:
             extra_str = f" ({', '.join(extra)})" if extra else ""
             print(f"  - {feed['name']}: {feed['feed_url']}{extra_str}")
 
+    stats['cleaned'] = cleaned
     return stats
 
 
