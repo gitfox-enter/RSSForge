@@ -1,9 +1,55 @@
-<?xml version='1.0' encoding='utf-8'?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>网猴线报</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/wang-hou-xian-bao.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://iehou.com/" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/wang-hou-xian-bao.xml</ns0:id>
-  <ns0:updated>2026-07-05T18:28:12.526936+08:00</ns0:updated>
-  <ns0:subtitle>网猴线报 - 暂无条目，等待下次抓取</ns0:subtitle>
-</ns0:feed>
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/syndication/1.0">
+  <title>网猴线报 - RSSForge</title>
+  <subtitle>网猴线报 的 RSS 订阅源（由 RSSForge 生成）</subtitle>
+  <link href="https://iehou.com/" rel="alternate" />
+  <link href="https://gitfox-enter.github.io/RSSForge/feeds/wang-hou-xian-bao.xml" rel="self" type="application/atom+xml" />
+  <id>https://gitfox-enter.github.io/RSSForge/feeds/wang-hou-xian-bao.xml</id>
+  <updated>2026-07-05T20:04:48+08:00</updated>
+  <generator uri="https://github.com/gitfox-enter/RSSForge">RSSForge</generator>
+  <rights>内容版权归原作者所有，RSSForge 仅提供聚合索引</rights>
+  <sy:updatePeriod>daily</sy:updatePeriod>
+  <sy:updateFrequency>4</sy:updateFrequency>
+  <sy:updateBase>2000-01-01T00:00:00+08:00</sy:updateBase>
+  <author>
+    <name>RSSForge</name>
+    <uri>https://github.com/gitfox-enter/RSSForge</uri>
+  </author>
+  <icon>https://gitfox-enter.github.io/RSSForge/icons/wang-hou-xian-bao.png</icon>
+  <entry>
+    <title type="text">...23004</title>
+    <link href="https://iehou.com/index-23004.htm" rel="alternate" />
+    <id>tag:iehou.com,2024-01-01:b6fbe8372d7e0a3c</id>
+    <updated>2026-07-05T20:04:43+08:00</updated>
+    <published>2026-07-05T20:04:43+08:00</published>
+    <author>
+      <name>网猴线报</name>
+    </author>
+    <summary type="text">...23004</summary>
+    <content type="html">&lt;p&gt;...23004&lt;/p&gt;&lt;p&gt;&lt;a href="https://iehou.com/index-23004.htm"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">24小时热门</title>
+    <link href="https://iehou.com/page-dayhot.htm" rel="alternate" />
+    <id>tag:iehou.com,2024-01-01:aedcab7917025b60</id>
+    <updated>2026-07-05T18:27:15+08:00</updated>
+    <published>2026-07-05T18:27:15+08:00</published>
+    <author>
+      <name>网猴线报</name>
+    </author>
+    <summary type="text">24小时热门</summary>
+    <content type="html">&lt;p&gt;24小时热门&lt;/p&gt;&lt;p&gt;&lt;a href="https://iehou.com/page-dayhot.htm"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">...23003</title>
+    <link href="https://iehou.com/index-23003.htm" rel="alternate" />
+    <id>tag:iehou.com,2024-01-01:1c7fbd0574e948dd</id>
+    <updated>2026-07-05T18:27:15+08:00</updated>
+    <published>2026-07-05T18:27:15+08:00</published>
+    <author>
+      <name>网猴线报</name>
+    </author>
+    <summary type="text">...23003</summary>
+    <content type="html">&lt;p&gt;...23003&lt;/p&gt;&lt;p&gt;&lt;a href="https://iehou.com/index-23003.htm"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+</feed>

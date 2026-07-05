@@ -1,9 +1,458 @@
-<?xml version='1.0' encoding='utf-8'?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>免恶魔</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/mian-e-mo.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://www.mefcl.com/" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/mian-e-mo.xml</ns0:id>
-  <ns0:updated>2026-07-05T18:28:12.526936+08:00</ns0:updated>
-  <ns0:subtitle>免恶魔 - 暂无条目，等待下次抓取</ns0:subtitle>
-</ns0:feed>
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/syndication/1.0">
+  <title>免恶魔 - RSSForge</title>
+  <subtitle>免恶魔 的 RSS 订阅源（由 RSSForge 生成）</subtitle>
+  <link href="https://www.mefcl.com/" rel="alternate" />
+  <link href="https://gitfox-enter.github.io/RSSForge/feeds/mian-e-mo.xml" rel="self" type="application/atom+xml" />
+  <id>https://gitfox-enter.github.io/RSSForge/feeds/mian-e-mo.xml</id>
+  <updated>2026-07-05T20:04:48+08:00</updated>
+  <generator uri="https://github.com/gitfox-enter/RSSForge">RSSForge</generator>
+  <rights>内容版权归原作者所有，RSSForge 仅提供聚合索引</rights>
+  <sy:updatePeriod>daily</sy:updatePeriod>
+  <sy:updateFrequency>4</sy:updateFrequency>
+  <sy:updateBase>2000-01-01T00:00:00+08:00</sy:updateBase>
+  <author>
+    <name>RSSForge</name>
+    <uri>https://github.com/gitfox-enter/RSSForge</uri>
+  </author>
+  <icon>https://gitfox-enter.github.io/RSSForge/icons/mian-e-mo.png</icon>
+  <entry>
+    <title type="text">合作推荐</title>
+    <link href="https://www.mefcl.com/category/cooperate" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:08169df5a7e04102</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">合作推荐</summary>
+    <content type="html">&lt;p&gt;合作推荐&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/category/cooperate"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">网页浏览</title>
+    <link href="https://www.mefcl.com/category/pcsoft/browsewebs" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:05fbd14bdf0f8a87</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">网页浏览</summary>
+    <content type="html">&lt;p&gt;网页浏览&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/category/pcsoft/browsewebs"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">评论(85)</title>
+    <link href="https://www.mefcl.com/360csejs.html#comments" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:47913ae2fe4137b5</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">评论(85)</summary>
+    <content type="html">&lt;p&gt;评论(85)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/360csejs.html#comments"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">评论(339)</title>
+    <link href="https://www.mefcl.com/jsx22.html#comments" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:d26263ea00833b0c</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">评论(339)</summary>
+    <content type="html">&lt;p&gt;评论(339)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/jsx22.html#comments"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">工具软件</title>
+    <link href="https://www.mefcl.com/category/pcsoft/tools" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:b5062f1d805e3ea8</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">工具软件</summary>
+    <content type="html">&lt;p&gt;工具软件&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/category/pcsoft/tools"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="效率" />
+  </entry>
+  <entry>
+    <title type="text">评论(3)</title>
+    <link href="https://www.mefcl.com/risoheditor.html#comments" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:8de4e9881cf952b6</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">评论(3)</summary>
+    <content type="html">&lt;p&gt;评论(3)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/risoheditor.html#comments"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">图像影音</title>
+    <link href="https://www.mefcl.com/category/pcsoft/image" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:91f053aa4f00a34e</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">图像影音</summary>
+    <content type="html">&lt;p&gt;图像影音&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/category/pcsoft/image"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">评论(21)</title>
+    <link href="https://www.mefcl.com/screencapture.html#comments" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:ec62353cddd86905</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">评论(21)</summary>
+    <content type="html">&lt;p&gt;评论(21)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/screencapture.html#comments"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">评论(13)</title>
+    <link href="https://www.mefcl.com/losslesschecker.html#comments" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:b310751e9a83d5c3</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">评论(13)</summary>
+    <content type="html">&lt;p&gt;评论(13)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/losslesschecker.html#comments"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">评论(9)</title>
+    <link href="https://www.mefcl.com/sharex.html#comments" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:7be10da06cb4c5a1</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">评论(9)</summary>
+    <content type="html">&lt;p&gt;评论(9)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/sharex.html#comments"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">上传下载</title>
+    <link href="https://www.mefcl.com/category/pcsoft/upordown" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:d22b6ae3ae5d6e7a</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">上传下载</summary>
+    <content type="html">&lt;p&gt;上传下载&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/category/pcsoft/upordown"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">评论(165)</title>
+    <link href="https://www.mefcl.com/thunder12.html#comments" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:055f2f2e94b9d57d</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">评论(165)</summary>
+    <content type="html">&lt;p&gt;评论(165)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/thunder12.html#comments"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">安卓软件</title>
+    <link href="https://www.mefcl.com/category/android" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:ec561c8ccf34627e</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">安卓软件</summary>
+    <content type="html">&lt;p&gt;安卓软件&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/category/android"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="效率" />
+  </entry>
+  <entry>
+    <title type="text">评论(23)</title>
+    <link href="https://www.mefcl.com/xplayer.html#comments" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:5ae46810f63e7950</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">评论(23)</summary>
+    <content type="html">&lt;p&gt;评论(23)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/xplayer.html#comments"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">办公软件</title>
+    <link href="https://www.mefcl.com/category/pcsoft/office" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:d06e15e3b952c75b</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">办公软件</summary>
+    <content type="html">&lt;p&gt;办公软件&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/category/pcsoft/office"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="效率" />
+  </entry>
+  <entry>
+    <title type="text">评论(14)</title>
+    <link href="https://www.mefcl.com/calibre.html#comments" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:a44bc9797599b4d6</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">评论(14)</summary>
+    <content type="html">&lt;p&gt;评论(14)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/calibre.html#comments"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">评论(86)</title>
+    <link href="https://www.mefcl.com/pixpin.html#comments" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:b8b0838d798c372b</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">评论(86)</summary>
+    <content type="html">&lt;p&gt;评论(86)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/pixpin.html#comments"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">评论(2)</title>
+    <link href="https://www.mefcl.com/imagestitching.html#comments" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:b90ba9af55520fad</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">评论(2)</summary>
+    <content type="html">&lt;p&gt;评论(2)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/imagestitching.html#comments"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">其它软件</title>
+    <link href="https://www.mefcl.com/category/pcsoft/other" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:75fb2d47d7e02689</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">其它软件</summary>
+    <content type="html">&lt;p&gt;其它软件&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/category/pcsoft/other"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="效率" />
+  </entry>
+  <entry>
+    <title type="text">国产软件正当红，国货之光限时大促，低至 6 折！</title>
+    <link href="https://www.mefcl.com/lizhi2603.html" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:d70b306b0aeb45bb</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">国产软件正当红，国货之光限时大促，低至 6 折！</summary>
+    <content type="html">&lt;p&gt;国产软件正当红，国货之光限时大促，低至 6 折！&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/lizhi2603.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="效率" />
+  </entry>
+  <entry>
+    <title type="text">中国特惠！多平台广告屏蔽专家 AdGuard 买断仅需 119 元起</title>
+    <link href="https://www.mefcl.com/ad-adguard.html" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:44f7e0590cea00c6</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">中国特惠！多平台广告屏蔽专家 AdGuard 买断仅需 119 元起</summary>
+    <content type="html">&lt;p&gt;中国特惠！多平台广告屏蔽专家 AdGuard 买断仅需 119 元起&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/ad-adguard.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">数码荔枝黑五正版特惠，快来看看有适合你的没？仅剩一天啦！</title>
+    <link href="https://www.mefcl.com/bk5.html" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:78f479b216b1b628</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">数码荔枝黑五正版特惠，快来看看有适合你的没？仅剩一天啦！</summary>
+    <content type="html">&lt;p&gt;数码荔枝黑五正版特惠，快来看看有适合你的没？仅剩一天啦！&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/bk5.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">节省你90%PPT设计时间，iSlide 买一年送 180 天，仅需 98 元起！双11大促</title>
+    <link href="https://www.mefcl.com/islide.html" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:ebddd3799864858c</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">节省你90%PPT设计时间，iSlide 买一年送 180 天，仅需 98 元起！双11大促</summary>
+    <content type="html">&lt;p&gt;节省你90%PPT设计时间，iSlide 买一年送 180 天，仅需 98 元起！双11大促&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/islide.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">2022 双 11 正版软件年度大促，1.11 元起秒杀+6 折+满减优惠够给力！</title>
+    <link href="https://www.mefcl.com/2022-11.html" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:db3b98dc45cdead5</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">2022 双 11 正版软件年度大促，1.11 元起秒杀+6 折+满减优惠够给力！</summary>
+    <content type="html">&lt;p&gt;2022 双 11 正版软件年度大促，1.11 元起秒杀+6 折+满减优惠够给力！&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/2022-11.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="优惠券" />
+  </entry>
+  <entry>
+    <title type="text">WPS Office 2019、专业版、繁体版（v11.8.2.12344）2026-03-07</title>
+    <link href="https://www.mefcl.com/wps-office-2019-pro.html" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:5f3a234d95dce63a</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">WPS Office 2019、专业版、繁体版（v11.8.2.12344）2026-03-07</summary>
+    <content type="html">&lt;p&gt;WPS Office 2019、专业版、繁体版（v11.8.2.12344）2026-03-07&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/wps-office-2019-pro.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">WPS Office 2023 专业版（v12.8.2.26895 x86 / v12.8.2.26884 x64 2026.07.03）2026-07-03</title>
+    <link href="https://www.mefcl.com/wps-office-2023.html" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:d4ca278fc8aeab6c</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">WPS Office 2023 专业版（v12.8.2.26895 x86 / v12.8.2.26884 x64 2026.07.03）2026-07-03</summary>
+    <content type="html">&lt;p&gt;WPS Office 2023 专业版（v12.8.2.26895 x86 / v12.8.2.26884 x64 2026.07.03）2026-07-03&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/wps-office-2023.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">留言及关于2020-07-23</title>
+    <link href="https://www.mefcl.com/42-2.html" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:1c45495d3b0d3757</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">留言及关于2020-07-23</summary>
+    <content type="html">&lt;p&gt;留言及关于2020-07-23&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/42-2.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">2345看图王去广告精简安装版（v13.4.0.12514 2026.01.06）2026-01-06</title>
+    <link href="https://www.mefcl.com/2345pic.html" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:d8574cad4b29f3d1</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">2345看图王去广告精简安装版（v13.4.0.12514 2026.01.06）2026-01-06</summary>
+    <content type="html">&lt;p&gt;2345看图王去广告精简安装版（v13.4.0.12514 2026.01.06）2026-01-06&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/2345pic.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">视频播放器 PotPlayer 美化增强版（v1.7.22989.0 / 260703 Dev）2026-07-03</title>
+    <link href="https://www.mefcl.com/potplayer.html" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:4584709c37d56e15</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">视频播放器 PotPlayer 美化增强版（v1.7.22989.0 / 260703 Dev）2026-07-03</summary>
+    <content type="html">&lt;p&gt;视频播放器 PotPlayer 美化增强版（v1.7.22989.0 / 260703 Dev）2026-07-03&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/potplayer.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">微信 PC 版，多开防撤回有提示 | WeChat（v4.1.11.24 正式版）2026-06-26</title>
+    <link href="https://www.mefcl.com/wechat.html" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:d1352a2119dee9d9</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">微信 PC 版，多开防撤回有提示 | WeChat（v4.1.11.24 正式版）2026-06-26</summary>
+    <content type="html">&lt;p&gt;微信 PC 版，多开防撤回有提示 | WeChat（v4.1.11.24 正式版）2026-06-26&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/wechat.html"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">Windows PE</title>
+    <link href="https://www.mefcl.com/tag/windows-pe" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:9e0ab86b511774e0</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">Windows PE</summary>
+    <content type="html">&lt;p&gt;Windows PE&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/tag/windows-pe"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">117559分钟前：有没有低清晰度一点的，太大了</title>
+    <link href="https://www.mefcl.com/fanren.html/comment-page-5#comment-27472" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:763b249d39304c1f</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">117559分钟前：有没有低清晰度一点的，太大了</summary>
+    <content type="html">&lt;p&gt;117559分钟前：有没有低清晰度一点的，太大了&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/fanren.html/comment-page-5#comment-27472"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">暖暖国度1小时前：翻图很快无卡顿，简单好用，UI现代，有深色模式，看图软件已经换成这个了</title>
+    <link href="https://www.mefcl.com/guoheview.html/comment-page-2#comment-27471" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:81a4bf2551484abb</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">暖暖国度1小时前：翻图很快无卡顿，简单好用，UI现代，有深色模式，看图软件已经换成这个了</summary>
+    <content type="html">&lt;p&gt;暖暖国度1小时前：翻图很快无卡顿，简单好用，UI现代，有深色模式，看图软件已经换成这个了&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/guoheview.html/comment-page-2#comment-27471"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="效率" />
+  </entry>
+  <entry>
+    <title type="text">a1850391362小时前：好的，谢谢</title>
+    <link href="https://www.mefcl.com/wps-office-2023.html/comment-page-52#comment-27469" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:586ae96e42018594</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">a1850391362小时前：好的，谢谢</summary>
+    <content type="html">&lt;p&gt;a1850391362小时前：好的，谢谢&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/wps-office-2023.html/comment-page-52#comment-27469"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">xiaomin2小时前：PotPlayer_美化增强版_32Bit_1.7.22980.0_Public_mefcl_Setup，这个 32位的文件网盘没有，上传了两个 Dev 的。</title>
+    <link href="https://www.mefcl.com/potplayer.html/comment-page-45#comment-27468" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:0186e1e135d4d201</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">xiaomin2小时前：PotPlayer_美化增强版_32Bit_1.7.22980.0_Public_mefcl_Setup，这个 32位的文件网盘没有，上传了两个 Dev 的。</summary>
+    <content type="html">&lt;p&gt;xiaomin2小时前：PotPlayer_美化增强版_32Bit_1.7.22980.0_Public_mefcl_Setup，这个 32位的文件网盘没有，上传了两个 Dev 的。&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/potplayer.html/comment-page-45#comment-27468"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">晕崽Zz5小时前：而且有频谱图，跟Spek一样的，还不用一个一个的拖进Spek，再说分析假无损是一件很简单的事，结合高级分析依据，简直就是手到擒来🤣🤣🤣</title>
+    <link href="https://www.mefcl.com/losslesschecker.html/comment-page-1#comment-27467" rel="alternate" />
+    <id>tag:www.mefcl.com,2024-01-01:906641beac24c670</id>
+    <updated>2026-07-05T20:04:41+08:00</updated>
+    <published>2026-07-05T20:04:41+08:00</published>
+    <author>
+      <name>免恶魔</name>
+    </author>
+    <summary type="text">晕崽Zz5小时前：而且有频谱图，跟Spek一样的，还不用一个一个的拖进Spek，再说分析假无损是一件很简单的事，结合高级分析依据，简直就是手到擒来🤣🤣🤣</summary>
+    <content type="html">&lt;p&gt;晕崽Zz5小时前：而且有频谱图，跟Spek一样的，还不用一个一个的拖进Spek，再说分析假无损是一件很简单的事，结合高级分析依据，简直就是手到擒来🤣🤣🤣&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.mefcl.com/losslesschecker.html/comment-page-1#comment-27467"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+</feed>
