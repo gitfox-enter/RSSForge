@@ -136,8 +136,6 @@ sites:
     tier: high
     interval: 30
 
-    interval: 60
-
   - url: "https://www.wycad.com/"          # 网赚
     max_pages: 5
     name: 网赚
@@ -249,9 +247,6 @@ sites:
     interval: 240
     rss_feed: "https://www.foxirj.com/feed/"
 
-    interval: 360
-
-
   - url: "https://free.apprcn.com/"        # 反斗限免
     max_pages: 5
     name: 反斗限免
@@ -304,39 +299,9 @@ sites:
     tier: medium
     interval: 360
 
-# ============================================================
-# 死站列表（经多轮测试确认无法访问）
-# ============================================================
-dead_sites:
-  "https://907k.cn/":
-    reason: "DNS/连接失败"
-    confirmed_at: "2026-06-10"
-    test_result: "HTTP 000 - 无法建立连接"
-  "http://www.xiaodigu.com/":
-    reason: "服务器 502 错误"
-    confirmed_at: "2026-06-10"
-    test_result: "HTTP 502 Bad Gateway"
-  "https://www.ym2.cc/":
-    reason: "DNS/连接失败"
-    confirmed_at: "2026-06-10"
-    test_result: "HTTP 000 - 域名无法解析"
-  "https://79tao.linejia.com/":
-    reason: "连接失败(Connection refused)"
-    confirmed_at: "2026-06-12"
-    test_result: "Connection refused"
-  "https://www.0818tuan.com/":
-    reason: "连接失败(Connection refused)"
-    confirmed_at: "2026-06-12"
-    test_result: "Connection refused"
-  "http://79tao.linejia.com/":
-    reason: "连接失败(Connection refused)"
-    confirmed_at: "2026-06-12"
-    test_result: "Connection refused"
-  "http://www.0818tuan.com/":
-    reason: "连接失败(Connection refused)"
-    confirmed_at: "2026-06-12"
-    test_result: "Connection refused"
-  # ---- 新增站点 (2026-07-05) ----
+  # ============================================================
+  # 新增站点 (2026-07-05)
+  # ============================================================
   - url: "https://www.yxzhi.com/"           # 鸭先知
     max_pages: 5
     name: 鸭先知
@@ -401,3 +366,36 @@ dead_sites:
     tier: high
     interval: 30
     fast_check: true
+
+# ============================================================
+# 死站列表（经多轮测试确认无法访问）
+# ============================================================
+dead_sites:
+  "https://907k.cn/":
+    reason: "DNS/连接失败"
+    confirmed_at: "2026-06-10"
+    test_result: "HTTP 000 - 无法建立连接"
+  "http://www.xiaodigu.com/":
+    reason: "服务器 502 错误"
+    confirmed_at: "2026-06-10"
+    test_result: "HTTP 502 Bad Gateway"
+  "https://www.ym2.cc/":
+    reason: "DNS/连接失败"
+    confirmed_at: "2026-06-10"
+    test_result: "HTTP 000 - 域名无法解析"
+  "https://79tao.linejia.com/":
+    reason: "连接失败(Connection refused)"
+    confirmed_at: "2026-06-12"
+    test_result: "Connection refused"
+  "https://www.0818tuan.com/":
+    reason: "连接失败(Connection refused)"
+    confirmed_at: "2026-06-12"
+    test_result: "Connection refused"
+  "http://79tao.linejia.com/":
+    reason: "连接失败(Connection refused)"
+    confirmed_at: "2026-06-12"
+    test_result: "Connection refused"
+  "http://www.0818tuan.com/":
+    reason: "连接失败(Connection refused)"
+    confirmed_at: "2026-06-12"
+    test_result: "Connection refused"

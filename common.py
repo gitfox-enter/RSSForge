@@ -423,17 +423,25 @@ def upgrade_to_https(url: str) -> str:
 # ============================================================
 
 class DomainRateLimiter:
-    """Thread-safe per-domain rate limiter enforcing a minimum gap between requests."""
+    """Thread-safe per-domain rate limiter enforcing a minimum gap between requests.
+
+    Uses separate locks for sync and async paths:
+      - ``threading.Lock`` for the synchronous ``wait()`` method
+      - ``asyncio.Lock`` for the async ``async_wait()`` method
+    This avoids the Bug #85 regression where ``asyncio.Lock`` was used in a
+    synchronous ``with`` statement, which raises ``RuntimeError`` outside an
+    event loop.
+    """
 
     def __init__(self, min_gap: float = 2.0) -> None:
-        # Use asyncio.Lock so async_wait can use async with (Bug #85 fixed method but not lock type)
-        self._lock: asyncio.Lock = asyncio.Lock()
+        self._sync_lock: threading.Lock = threading.Lock()
+        self._async_lock: asyncio.Lock = asyncio.Lock()
         self._last_request: Dict[str, float] = {}
         self._min_gap = min_gap
 
     def wait(self, domain: str) -> None:
         """Block until at least *min_gap* seconds have elapsed since the last request to *domain*."""
-        with self._lock:
+        with self._sync_lock:
             now = time.time()
             last = self._last_request.get(domain, 0)
             elapsed = now - last
@@ -454,7 +462,7 @@ class DomainRateLimiter:
         Uses an asyncio.Lock to protect shared state, preventing race conditions
         where multiple coroutines could simultaneously bypass the rate limit.
         """
-        async with self._lock:
+        async with self._async_lock:
             now = time.time()
             last = self._last_request.get(domain, 0)
             elapsed = now - last
@@ -959,13 +967,22 @@ SITE_URL_BASE = "https://gitfox-enter.github.io/RSSForge/"
 # ============================================================
 
 async def fetch_article_summary(url: str, timeout: int = 8) -> Dict[str, str]:
-    """抓取文章页面并提取摘要文本和图片（fix #59: must be async when called in async contexts）。
+    """抓取文章页面并提取摘要文本和图片（fix #59: fully async-safe）.
 
-    WARNING: This is a synchronous function called in async event loops.
-    TODO(#59): Convert to httpx/aiohttp async, or wrap with asyncio.to_thread() at call sites.
+    Uses ``asyncio.to_thread()`` to offload the blocking ``urllib.request``
+    call so the event loop is never blocked.
 
     Returns:
         dict with keys: 'summary' (text), 'image' (first image URL or '')
+    """
+    return await asyncio.to_thread(_fetch_article_summary_sync, url, timeout)
+
+
+def _fetch_article_summary_sync(url: str, timeout: int = 8) -> Dict[str, str]:
+    """Synchronous implementation of article summary extraction.
+
+    Separated from the async wrapper so it can be tested independently
+    and called via ``asyncio.to_thread()`` without blocking the event loop.
     """
     result = {"summary": "", "image": ""}
     try:

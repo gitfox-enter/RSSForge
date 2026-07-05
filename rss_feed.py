@@ -28,6 +28,7 @@ from common import (
     ITEMS_DB_FILE,
     slugify,
     SITE_URL_BASE,
+    fetch_site_favicon,
 )
 
 # 导入站点配置
@@ -59,131 +60,6 @@ FEED_TITLE = "RSSForge"
 FEED_DESCRIPTION = "基于 GitHub Actions 的免费 RSS 订阅源生成器"
 ICONS_DIR = "public/icons"
 ICONS_URL_PATH = "icons"  # 部署后 URL 路径（public/ 被 GitHub Pages 剥离）
-
-
-# ============================================================
-# Favicon 获取（强制本地存储）
-# ============================================================
-
-_USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/126.0.0.0 Safari/537.36"
-)
-
-_favicon_cache: Dict[str, str] = {}
-
-
-def _download_to_file(url: str, filepath: str, timeout: int = 8) -> bool:
-    """Download URL to filepath. Returns True on success."""
-    try:
-        import urllib.request as _urllib_request
-        import urllib.error as _urllib_error
-        req = _urllib_request.Request(url, headers={"User-Agent": _USER_AGENT})
-        with _urllib_request.urlopen(req, timeout=timeout) as resp:
-            data = resp.read()
-            if len(data) < 50:
-                return False
-            os.makedirs(os.path.dirname(filepath), exist_ok=True)
-            with open(filepath, "wb") as f:
-                f.write(data)
-            return True
-    except Exception:
-        return False
-
-
-def _extract_favicon_from_html(site_url: str, filepath: str) -> bool:
-    """从网站 HTML 中解析 <link rel="icon"> 并下载."""
-    try:
-        import urllib.request as _urllib_request
-        req = _urllib_request.Request(site_url, headers={"User-Agent": _USER_AGENT})
-        with _urllib_request.urlopen(req, timeout=10) as resp:
-            html = resp.read(32768).decode("utf-8", errors="replace")  # fix #116
-
-        # 查找 icon link 标签
-        for m in re.finditer(
-            r'<link[^>]+rel=["\'](?:shortcut icon|icon|apple-touch-icon)["\'][^>]*>',
-            html, re.IGNORECASE,
-        ):
-            tag = m.group(0)
-            href_m = re.search(r'href=["\']([^"\']+)["\']', tag)
-            if href_m:
-                icon_href = href_m.group(1).strip()
-                if not icon_href or icon_href.startswith("data:"):
-                    continue
-                
-                parsed_site = urlparse(site_url)
-                if icon_href.startswith("//"):
-                    icon_url = parsed_site.scheme + ":" + icon_href
-                elif icon_href.startswith("/"):
-                    icon_url = f"{parsed_site.scheme}://{parsed_site.hostname}{icon_href}"
-                elif icon_href.startswith("http"):
-                    icon_url = icon_href
-                else:
-                    icon_url = f"{parsed_site.scheme}://{parsed_site.hostname}/{icon_href}"
-                
-                if _download_to_file(icon_url, filepath):
-                    return True
-
-        # 备用: /favicon.ico
-        parsed = urlparse(site_url)
-        ico_url = f"{parsed.scheme}://{parsed.hostname}/favicon.ico"
-        return _download_to_file(ico_url, filepath)
-    except Exception:
-        return False
-
-
-def fetch_site_favicon(site_url: str, site_name: str) -> str:
-    """获取网站 favicon 并强制保存到本地 public/icons/ 目录.
-    
-    优先级:
-      1. 本地已缓存
-      2. 从网站 HTML 解析
-      3. /favicon.ico
-      4. DuckDuckGo Icons（海外备用）
-      5. 生成 SVG 占位图
-    """
-    if site_name in _favicon_cache:
-        return _favicon_cache[site_name]
-
-    os.makedirs(ICONS_DIR, exist_ok=True)
-    safe_name = slugify(site_name)
-    filepath = os.path.join(ICONS_DIR, f"{safe_name}.png")
-    icon_url = f"{SITE_URL}{ICONS_URL_PATH}/{safe_name}.png"
-
-    # 1) 本地已缓存
-    if os.path.exists(filepath) and os.path.getsize(filepath) > 50:
-        _favicon_cache[site_name] = icon_url
-        return icon_url
-
-    # 2) 从网站 HTML 解析
-    if _extract_favicon_from_html(site_url, filepath):
-        _favicon_cache[site_name] = icon_url
-        return icon_url
-
-    # 3) DuckDuckGo Icons（海外备用）
-    domain = urlparse(site_url).hostname or ""
-    if _download_to_file(
-        f"https://icons.duckduckgo.com/ip3/{domain}.ico", filepath
-    ):
-        _favicon_cache[site_name] = icon_url
-        return icon_url
-
-    # 4) 兜底: 生成 SVG 占位图
-    letter = site_name[0] if site_name else "?"
-    svg_content = (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">'
-        f'<rect width="64" height="64" rx="12" fill="#e91e8e"/>'
-        f'<text x="32" y="44" font-size="32" fill="white" text-anchor="middle" '
-        f'font-family="sans-serif">{letter}</text></svg>'
-    )
-    svg_path = os.path.join(ICONS_DIR, f"{safe_name}.svg")
-    with open(svg_path, "w", encoding="utf-8") as f:
-        f.write(svg_content)
-    
-    fallback_url = f"{SITE_URL}{ICONS_URL_PATH}/{safe_name}.svg"
-    _favicon_cache[site_name] = fallback_url
-    return fallback_url
 
 
 # ============================================================
