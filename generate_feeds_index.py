@@ -1,564 +1,245 @@
 #!/usr/bin/env python3
 """
-RSS Feed 订阅源目录页面生成器
+生成 RSSForge 订阅源目录页面 docs/index.html。
 
-生成 feeds/index.html，展示所有可用的 RSS 订阅源。
+读取 feeds_meta.json，按频率分组，生成带 RSS autodiscovery 的美观页面。
+用法：python generate_feeds_index.py
 """
 
+import json
 import os
-import re
-import sys
-from pathlib import Path
+from datetime import datetime
+
+BASE = "https://gitfox-enter.github.io/RSSForge"
+
+def load_meta():
+    with open("feeds_meta.json", "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def classify(freq_min):
+    if freq_min <= 30:
+        return "high"
+    elif freq_min <= 120:
+        return "medium"
+    return "low"
+
+LABELS = {
+    "high":   ("高频更新", "⚡"),
+    "medium":  ("中频更新", "📰"),
+    "low":     ("低频更新", "📚"),
+}
+
+FREQ_LABEL = {
+    "high":   "高频",
+    "medium":  "中频",
+    "low":     "低频",
+}
 
 
-def simple_parse_yaml(content: str) -> dict:
-    """简易 YAML 解析器，避免依赖 PyYAML。"""
-    result = {}
-    current_section = None
-    current_list = []
-    in_list = False
-    in_multiline = False
-    multiline_key = None
-    multiline_value = []
-    
-    for line_num, line in enumerate(content.split('\n'), 1):
-        # 跳过空行和注释
-        stripped = line.strip()
-        if not stripped or stripped.startswith('#'):
+def build_html(meta):
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    groups = {"high": [], "medium": [], "low": []}
+    for name, info in meta.items():
+        freq = info.get("frequency", 30)
+        cat = classify(freq)
+        groups[cat].append((name, info))
+
+    total = sum(len(v) for v in groups.values())
+
+    for cat in groups:
+        groups[cat].sort(key=lambda x: x[0])
+
+    # ---- HTML ----
+    HR = "⚡📰📚"[0]  # dummy, not used
+
+    css = """
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 2.5rem 2rem;
+      background: linear-gradient(135deg, #6366f1 0%, #a78bfa 100%);
+      color: #fff;
+      border-radius: 14px;
+      margin-bottom: 2rem;
+    }
+    header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .subtitle { opacity: 0.85; font-size: 0.95rem; margin-bottom: 1.5rem; }
+
+    .stats { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-value { font-size: 1.75rem; font-weight: 700; }
+    .stat-label { font-size: 0.8rem; opacity: 0.8; }
+
+    /* OPML bar */
+    .opml-bar { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    .opml-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 8px;
+      color: #fff; text-decoration: none; font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+    .opml-btn:hover { background: rgba(255,255,255,0.30); }
+
+    /* Section */
+    .section {
+      background: #fff; border-radius: 14px;
+      padding: 1.5rem; margin-bottom: 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem; padding-bottom: 0.75rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .section-header h2 { font-size: 1.15rem; font-weight: 600; }
+    .badge {
+      background: #eef2ff; color: #4f46e5;
+      padding: 0.2rem 0.7rem; border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 500;
+    }
+
+    /* Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+
+    /* Card */
+    .card {
+      border: 1px solid #e2e8f0; border-radius: 10px;
+      padding: 1rem 1.1rem;
+      display: flex; flex-direction: column; gap: 0.4rem;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .card:hover {
+      box-shadow: 0 4px 16px rgba(99,102,241,0.13);
+      border-color: #6366f1;
+    }
+    .card-top { display: flex; align-items: center; justify-content: space-between; }
+    .card-name { font-weight: 600; font-size: 1rem; color: #4f46e5; }
+    .card-name a { color: inherit; text-decoration: none; }
+    .card-name a:hover { text-decoration: underline; }
+    .freq-tag { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 5px; font-weight: 500; }
+    .freq-high   { background: #fef3c7; color: #92400e; }
+    .freq-medium { background: #dbeafe; color: #1e40af; }
+    .freq-low    { background: #dcfce7; color: #166534; }
+    .card-site { font-size: 0.78rem; color: #64748b; word-break: break-all; }
+    .card-site a { color: inherit; text-decoration: none; }
+    .card-site a:hover { text-decoration: underline; }
+    .card-meta { display: flex; gap: 0.5rem; flex-wrap: wrap;
+                   font-size: 0.75rem; color: #64748b; margin-top: auto; padding-top: 0.3rem; }
+
+    /* Footer */
+    footer { text-align: center; margin-top: 2rem; padding: 1.5rem;
+               color: #64748b; font-size: 0.85rem; }
+    footer a { color: #4f46e5; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      body { padding: 0.75rem; }
+      header h1 { font-size: 1.5rem; }
+      .grid { grid-template-columns: 1fr; }
+    }
+    """
+
+    # HTML 组装
+    html = []
+    html.append('<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n')
+    html.append('  <meta charset="UTF-8">\n')
+    html.append('  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n')
+    html.append('  <title>RSSForge - 订阅源目录</title>\n')
+    # RSS Autodiscovery links
+    html.append(f'  <link rel="alternate" type="application/rss+xml" title="RSSForge (官方)" href="{BASE}/opml.xml">\n')
+    html.append(f'  <link rel="alternate" type="application/rss+xml" title="RSSForge (ghfast 镜像)" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.xml">\n')
+    html.append(f'  <link rel="alternate" type="application/rss+xml" title="RSSForge (jsDelivr CDN)" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.xml">\n')
+    html.append(f'  <style>\n{css}\n  </style>\n')
+    html.append('</head>\n<body>\n')
+    html.append('  <div class="container">\n')
+
+    # Header
+    html.append(f'    <header>\n')
+    html.append(f'      <h1>📡 RSSForge</h1>\n')
+    html.append(f'      <p class="subtitle">订阅源目录 · 更新时间：{now}</p>\n')
+    html.append(f'      <div class="stats">\n')
+    html.append(f'        <div class="stat"><div class="stat-value">{total}</div><div class="stat-label">总订阅源</div></div>\n')
+    for cat in ["high", "medium", "low"]:
+        label = {"high": "高频", "medium": "中频", "low": "低频"}[cat]
+        html.append(f'        <div class="stat"><div class="stat-value">{len(groups[cat])}</div><div class="stat-label">{label}</div></div>\n')
+    html.append(f'      </div>\n')
+    html.append(f'      <div class="opml-bar">\n')
+    html.append(f'        <a class="opml-btn" href="{BASE}/opml.xml" title="官方链接（GitHub Pages）">🌐 官方 OPML</a>\n')
+    html.append(f'        <a class="opml-btn" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.xml" title="国内加速（ghfast.top）">🚀 ghfast 镜像</a>\n')
+    html.append(f'        <a class="opml-btn" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.xml" title="CDN 加速（jsDelivr）">📦 jsDelivr CDN</a>\n')
+    html.append(f'      </div>\n')
+    html.append(f'    </header>\n')
+
+    # Sections
+    for cat in ["high", "medium", "low"]:
+        items = groups[cat]
+        if not items:
             continue
-        
-        # 处理多行值
-        if in_multiline:
-            if stripped and (stripped.startswith(' ') or stripped.startswith('\t')):
-                multiline_value.append(stripped)
-                continue
+        icon, label = LABELS[cat]
+        html.append(f'    <div class="section">\n')
+        html.append(f'      <div class="section-header"><h2>{icon} {label}</h2><span class="badge">{len(items)} 个站点</span></div>\n')
+        html.append(f'      <div class="grid">\n')
+        for name, info in items:
+            # 提取 slug
+            feed_url = info.get("feed_url", "")
+            if "/feeds/" in feed_url:
+                slug = feed_url.split("/feeds/")[-1].replace(".xml", "")
             else:
-                # 多行结束，保存之前的值
-                if multiline_key and multiline_value:
-                    current_list[-1][multiline_key] = '\n'.join(multiline_value)
-                in_multiline = False
-                multiline_key = None
-                multiline_value = []
-        
-        # 列表项
-        if stripped.startswith('- '):
-            item = {}
-            current_list.append(item)
-            in_list = True
-            value_part = stripped[2:].strip()
-            
-            if ':' in value_part:
-                key, val = value_part.split(':', 1)
-                item[key.strip()] = val.strip().strip('"\'')
-            continue
-        
-        # 键值对
-        if ':' in stripped:
-            # 如果在列表内，处理下一个键
-            if in_list and not stripped.startswith('-'):
-                in_list = False
-            
-            key, val = stripped.split(':', 1)
-            key = key.strip()
-            val = val.strip()
-            
-            if val == '' or val is None:
-                # 可能开始多行值
-                if key in ['description', 'instructions', 'content']:
-                    in_multiline = True
-                    multiline_key = key
-                    multiline_value = []
-                    current_section = key
-                else:
-                    current_section = key
-                    result[key] = ''
-            elif val.startswith('"') or val.startswith("'"):
-                result[key] = val.strip('"\'')
-            else:
-                try:
-                    result[key] = int(val) if val.isdigit() else val
-                except:
-                    result[key] = val
-    
-    return result
+                slug = name
+            xml_url = f"{BASE}/feeds/{slug}.xml"
+            site_url = info.get("site_url", "")
+            freq_min = info.get("frequency", 30)
+            freq_cls = f"freq-{cat}"
 
+            site_link = ""
+            if site_url:
+                display = site_url.replace("https://", "").replace("http://", "")[:42]
+                site_link = f'<div class="card-site"><a href="{site_url}" target="_blank" rel="noopener">{display}</a></div>\n'
 
-def load_sites_yaml():
-    """加载 sites.yaml。"""
-    sites_file = Path(__file__).parent / 'sites.yaml'
-    if not sites_file.exists():
-        print(f"警告: {sites_file} 不存在", file=sys.stderr)
-        return {}
-    
-    with open(sites_file, 'r', encoding='utf-8') as f:
-        content = f.read()
-    
-    # 简单解析
-    sites = []
-    current_site = {}
-    current_key = None
-    in_content = False
-    content_lines = []
-    
-    for line in content.split('\n'):
-        stripped = line.strip()
-        
-        # 处理多行内容
-        if in_content:
-            if stripped and (stripped.startswith('      ') or stripped.startswith('\t')):
-                content_lines.append(stripped)
-                continue
-            else:
-                # 多行结束
-                if content_lines:
-                    current_site['content'] = '\n'.join(content_lines)
-                in_content = False
-                content_lines = []
-        
-        if not stripped or stripped.startswith('#'):
-            continue
-        
-        # 列表项
-        if stripped.startswith('- '):
-            if current_site and current_site.get('url'):
-                sites.append(current_site)
-            current_site = {}
-            item = stripped[2:].strip()
-            if ':' in item:
-                key, val = item.split(':', 1)
-                current_site[key.strip()] = val.strip().strip('"\'')
-            continue
-        
-        # 键值对
-        if ':' in stripped:
-            key, val = stripped.split(':', 1)
-            key = key.strip()
-            val = val.strip()
-            
-            if val == '':
-                if key == 'content':
-                    in_content = True
-                    content_lines = []
-                current_key = key
-            else:
-                current_site[key] = val.strip('"\'')
-    
-    if current_site and current_site.get('url'):
-        sites.append(current_site)
-    
-    return sites
+            html.append(f'        <div class="card">\n')
+            html.append(f'          <div class="card-top">\n')
+            html.append(f'            <div class="card-name"><a href="{xml_url}" target="_blank">📡 {name}</a></div>\n')
+            html.append(f'            <span class="freq-tag {freq_cls}">{FREQ_LABEL[cat]}</span>\n')
+            html.append(f'          </div>\n')
+            if site_link:
+                html.append(f'          {site_link}')
+            html.append(f'          <div class="card-meta"><span>每 {freq_min} 分钟</span></div>\n')
+            html.append(f'        </div>\n')
+        html.append(f'      </div>\n')
+        html.append(f'    </div>\n')
 
+    # Footer
+    html.append(f'    <footer>\n')
+    html.append(f'      <p>由 <a href="https://github.com/gitfox-enter/RSSForge">RSSForge</a> 驱动 · 自动更新</p>\n')
+    html.append(f'    </footer>\n')
+    html.append(f'  </div>\n')
+    html.append(f'</body>\n</html>\n')
 
-def load_custom_sources():
-    """加载 custom_sources.yaml（如果存在）。"""
-    custom_file = Path(__file__).parent / 'custom_sources.yaml'
-    if not custom_file.exists():
-        return []
-    
-    with open(custom_file, 'r', encoding='utf-8') as f:
-        content = f.read()
-    
-    sites = []
-    current_site = {}
-    
-    for line in content.split('\n'):
-        stripped = line.strip()
-        
-        if not stripped or stripped.startswith('#'):
-            continue
-        
-        if stripped.startswith('- '):
-            if current_site and current_site.get('url'):
-                sites.append(current_site)
-            current_site = {}
-            item = stripped[2:].strip()
-            if ':' in item:
-                key, val = item.split(':', 1)
-                current_site[key.strip()] = val.strip().strip('"\'')
-            continue
-        
-        if ':' in stripped:
-            key, val = stripped.split(':', 1)
-            current_site[key.strip()] = val.strip('"\'')
-    
-    if current_site and current_site.get('url'):
-        sites.append(current_site)
-    
-    return sites
-
-
-def generate_html(sites, custom_sites):
-    """生成 HTML 页面。"""
-    # 分类站点
-    high_freq = [s for s in sites if s.get('tier') == 'high']
-    medium_freq = [s for s in sites if s.get('tier') == 'medium']
-    low_freq = [s for s in sites if s.get('tier') == 'low']
-    
-    # 统计
-    total = len(sites) + len(custom_sites)
-    high_count = len(high_freq)
-    medium_count = len(medium_freq)
-    low_count = len(low_freq)
-    custom_count = len(custom_sites)
-    
-    html = f'''<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSS 订阅源目录 - RSSForge</title>
-    <style>
-        :root {{
-            --bg-color: #f5f5f5;
-            --card-bg: #ffffff;
-            --text-color: #333;
-            --text-secondary: #666;
-            --accent-color: #2563eb;
-            --border-color: #e5e5e5;
-            --badge-bg: #e0e7ff;
-            --badge-text: #3730a3;
-        }}
-        
-        * {{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }}
-        
-        body {{
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            padding: 2rem;
-        }}
-        
-        .container {{
-            max-width: 1200px;
-            margin: 0 auto;
-        }}
-        
-        header {{
-            text-align: center;
-            margin-bottom: 2rem;
-            padding: 2rem;
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }}
-        
-        h1 {{
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }}
-        
-        .subtitle {{
-            color: var(--text-secondary);
-        }}
-        
-        .stats {{
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
-        }}
-        
-        .stat {{
-            text-align: center;
-        }}
-        
-        .stat-value {{
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--accent-color);
-        }}
-        
-        .stat-label {{
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }}
-        
-        .section {{
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }}
-        
-        .section-header {{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid var(--border-color);
-        }}
-        
-        h2 {{
-            font-size: 1.25rem;
-        }}
-        
-        .badge {{
-            background: var(--badge-bg);
-            color: var(--badge-text);
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }}
-        
-        .feeds-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1rem;
-        }}
-        
-        .feed-card {{
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1rem;
-            transition: box-shadow 0.2s, border-color 0.2s;
-        }}
-        
-        .feed-card:hover {{
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-color: var(--accent-color);
-        }}
-        
-        .feed-name {{
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            color: var(--accent-color);
-        }}
-        
-        .feed-url {{
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            word-break: break-all;
-            margin-bottom: 0.5rem;
-        }}
-        
-        .feed-meta {{
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            font-size: 0.75rem;
-        }}
-        
-        .meta-tag {{
-            background: var(--bg-color);
-            padding: 0.125rem 0.5rem;
-            border-radius: 4px;
-            color: var(--text-secondary);
-        }}
-        
-        .custom-badge {{
-            background: #dcfce7;
-            color: #166534;
-        }}
-        
-        footer {{
-            text-align: center;
-            margin-top: 2rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }}
-        
-        footer a {{
-            color: var(--accent-color);
-            text-decoration: none;
-        }}
-        
-        footer a:hover {{
-            text-decoration: underline;
-        }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>📡 RSS 订阅源目录</h1>
-            <p class="subtitle">RSSForge 自动生成 · 更新时间: {update_time()}</p>
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-value">{total}</div>
-                    <div class="stat-label">总订阅源</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">{high_count}</div>
-                    <div class="stat-label">高频更新</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">{medium_count}</div>
-                    <div class="stat-label">中频更新</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">{low_count}</div>
-                    <div class="stat-label">低频更新</div>
-                </div>
-                {f'<div class="stat"><div class="stat-value">{custom_count}</div><div class="stat-label">自定义源</div></div>' if custom_count > 0 else ''}
-            </div>
-        </header>
-'''
-    
-    # 高频站点
-    if high_freq:
-        html += f'''
-        <div class="section">
-            <div class="section-header">
-                <h2>⚡ 高频更新</h2>
-                <span class="badge">{len(high_freq)} 个站点</span>
-            </div>
-            <div class="feeds-grid">
-'''
-        for site in high_freq:
-            name = site.get('name', site.get('url', '未知'))
-            url = site.get('url', '')
-            tier = site.get('tier', 'medium')
-            interval = site.get('interval', 60)
-            html += f'''
-                <div class="feed-card">
-                    <div class="feed-name">{escape_html(name)}</div>
-                    <div class="feed-url">{escape_html(url)}</div>
-                    <div class="feed-meta">
-                        <span class="meta-tag">每 {interval} 分钟</span>
-                        <span class="meta-tag">{tier}</span>
-                    </div>
-                </div>
-'''
-        html += '            </div>\n        </div>\n'
-    
-    # 中频站点
-    if medium_freq:
-        html += f'''
-        <div class="section">
-            <div class="section-header">
-                <h2>📰 中频更新</h2>
-                <span class="badge">{len(medium_freq)} 个站点</span>
-            </div>
-            <div class="feeds-grid">
-'''
-        for site in medium_freq:
-            name = site.get('name', site.get('url', '未知'))
-            url = site.get('url', '')
-            tier = site.get('tier', 'medium')
-            interval = site.get('interval', 60)
-            html += f'''
-                <div class="feed-card">
-                    <div class="feed-name">{escape_html(name)}</div>
-                    <div class="feed-url">{escape_html(url)}</div>
-                    <div class="feed-meta">
-                        <span class="meta-tag">每 {interval} 分钟</span>
-                        <span class="meta-tag">{tier}</span>
-                    </div>
-                </div>
-'''
-        html += '            </div>\n        </div>\n'
-    
-    # 低频站点
-    if low_freq:
-        html += f'''
-        <div class="section">
-            <div class="section-header">
-                <h2>📚 低频更新</h2>
-                <span class="badge">{len(low_freq)} 个站点</span>
-            </div>
-            <div class="feeds-grid">
-'''
-        for site in low_freq:
-            name = site.get('name', site.get('url', '未知'))
-            url = site.get('url', '')
-            tier = site.get('tier', 'low')
-            interval = site.get('interval', 60)
-            html += f'''
-                <div class="feed-card">
-                    <div class="feed-name">{escape_html(name)}</div>
-                    <div class="feed-url">{escape_html(url)}</div>
-                    <div class="feed-meta">
-                        <span class="meta-tag">每 {interval} 分钟</span>
-                        <span class="meta-tag">{tier}</span>
-                    </div>
-                </div>
-'''
-        html += '            </div>\n        </div>\n'
-    
-    # 自定义站点
-    if custom_sites:
-        html += f'''
-        <div class="section">
-            <div class="section-header">
-                <h2>✨ 自定义源</h2>
-                <span class="badge">{len(custom_sites)} 个站点</span>
-            </div>
-            <div class="feeds-grid">
-'''
-        for site in custom_sites:
-            name = site.get('name', site.get('url', '未知'))
-            url = site.get('url', '')
-            interval = site.get('interval', 60)
-            html += f'''
-                <div class="feed-card">
-                    <div class="feed-name">{escape_html(name)}</div>
-                    <div class="feed-url">{escape_html(url)}</div>
-                    <div class="feed-meta">
-                        <span class="meta-tag">每 {interval} 分钟</span>
-                        <span class="meta-tag custom-badge">自定义</span>
-                    </div>
-                </div>
-'''
-        html += '            </div>\n        </div>\n'
-    
-    html += f'''
-        <footer>
-            <p>由 <a href="https://github.com/gitfox-enter/rssforge">RSSForge</a> 驱动 · 自动更新</p>
-        </footer>
-    </div>
-</body>
-</html>'''
-    
-    return html
-
-
-def escape_html(text):
-    """转义 HTML 特殊字符。"""
-    return (text
-            .replace('&', '&amp;')
-            .replace('<', '&lt;')
-            .replace('>', '&gt;')
-            .replace('"', '&quot;')
-            .replace("'", '&#39;'))
-
-
-def update_time():
-    """获取当前时间。"""
-    from datetime import datetime
-    return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return "".join(html)
 
 
 def main():
-    """主函数。"""
-    # 加载数据
-    sites = load_sites_yaml()
-    custom_sites = load_custom_sources()
-    
-    print(f"加载了 {len(sites)} 个订阅源 + {len(custom_sites)} 个自定义源")
-    
-    # 生成 HTML
-    html = generate_html(sites, custom_sites)
-    
-    # 确保 feeds 目录存在
-    feeds_dir = Path(__file__).parent / 'feeds'
-    feeds_dir.mkdir(exist_ok=True)
-    
-    # 写入文件
-    index_file = feeds_dir / 'index.html'
-    with open(index_file, 'w', encoding='utf-8') as f:
+    meta = load_meta()
+    html = build_html(meta)
+    os.makedirs("docs", exist_ok=True)
+    with open("docs/index.html", "w", encoding="utf-8") as f:
         f.write(html)
-    
-    print(f"生成完成: {index_file}")
+    print(f"  ✓ docs/index.html 已生成（{len(meta)} 个订阅源）")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
