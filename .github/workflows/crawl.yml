@@ -77,7 +77,7 @@ jobs:
           # Per-site feeds 目录（feeds/ 中的文件由 crawl 创建）
           git add -u feeds/ 2>/dev/null || true
           # 订阅源目录页面
-          git add -u feeds/index.html 2>/dev/null || true
+          git add -u docs/index.html 2>/dev/null || true
           # 不再 commit feeds_meta.json（由 fast_check 单独管理，避免并发冲突）
           git add -u opml.xml opml-*.xml public/icons/ 2>/dev/null || true
 
@@ -194,7 +194,7 @@ jobs:
           rm -rf docs/
           mkdir -p docs/feeds
           cp feeds/*.xml docs/feeds/ 2>/dev/null || true
-          cp feeds/index.html docs/ 2>/dev/null || true
+          # cp feeds/index.html docs/ (已移除：index.html 现由 generate_feeds_index.py 直接生成到 docs/)
           cp opml.xml docs/ 2>/dev/null || true
           cp crawl_status.json docs/ 2>/dev/null || true
           if [ -d "public" ]; then
@@ -244,3 +244,4 @@ jobs:
           name: run-log-${{ github.run_number }}
           path: run_log.jsonl
           retention-days: 30
+
