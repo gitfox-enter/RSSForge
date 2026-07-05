@@ -1,48 +1,48 @@
-# RSSForge 功能路线图 (v2.0)
+# RSSForge Roadmap (v2.0)
 
-> 此文件由 AI 维护，每周迭代开发时更新进度
+> This file is maintained by AI and updated weekly during iteration
 
-## 核心主线：每周发现并添加新订阅源
+## Core Theme: Discover and Add New Feed Sources Weekly
 
-项目最重要的更新 = 订阅源持续增长。每周通过搜索发现新的线报/羊毛/限免/软件网站，测试通过后加入项目。
+The most important update for this project = continuous growth of feed sources. Every week, discover new deal/coupon/freebie/software sites through search, test them, and add them to the project.
 
-## 第1周 (2026-07-11): 新源发现 + 基础修复
-**新源发现**: 搜索"线报网站""羊毛线报"等关键词，测试并加入 2-3 个新源
-**附带**: feeds_meta.json 过滤零内容源（#131），修复 #105 appinn 选择器
-**目标**: 源数量从 39 增长到 42+
+## Week 1 (2026-07-11): New Sources + Basic Fixes
+**New sources**: Search for deal/coupon site keywords, test and add 2-3 new sources
+**Alongside**: Filter zero-content sources in feeds_meta.json (#131), fix #105 appinn selector
+**Target**: Source count grows from 39 to 42+
 
-## 第2周 (2026-07-18): 新源发现 + 解析器修复
-**新源发现**: 搜索"限免软件""免费资源"等关键词，加入 2-3 个新源
-**附带**: 修复 5-8 个零内容源解析器（12345pro, 10000yun, yxssp 等）
-**目标**: 源数量 45+，活跃源 12+
+## Week 2 (2026-07-18): New Sources + Parser Fixes
+**New sources**: Search for free software/resource site keywords, add 2-3 new sources
+**Alongside**: Fix 5-8 zero-content source parsers (12345pro, 10000yun, yxssp, etc.)
+**Target**: Source count 45+, active sources 12+
 
-## 第3周 (2026-07-25): 新源发现 + 前端体验
-**新源发现**: 搜索"优惠信息聚合""赚客论坛"等
-**附带**: feeds/index.html 添加搜索框和源过滤功能
-**目标**: 源数量 48+
+## Week 3 (2026-07-25): New Sources + Frontend UX
+**New sources**: Search for deal aggregation / coupon forum keywords
+**Alongside**: Add search box and source filtering to index page
+**Target**: Source count 48+
 
-## 第4周 (2026-08-01): 新源发现 + 每日热门 Feed
-**新源发现**: 继续搜索扩展
-**附带**: 生成 daily_top.xml — 每日热门条目 feed
-**目标**: 源数量 50+
+## Week 4 (2026-08-01): New Sources + Daily Top Feed
+**New sources**: Continue searching and expanding
+**Alongside**: Generate daily_top.xml — daily top items feed
+**Target**: Source count 50+
 
-## 后续每周
-- 持续发现新源（每周 1-3 个）
-- 附带功能改进（API接口、健康度系统、摘要feed、OPML分类等）
-- 附带 bug 修复（从 open issues 中选取）
+## Ongoing Weekly
+- Continuously discover new sources (1-3 per week)
+- Feature improvements (API, health scoring, summary feed, OPML grouping, etc.)
+- Bug fixes (from open issues)
 
-## 候选功能池（附带做）
-- 每日热门 feed（按来源数、关键词权重排序）
-- 订阅源健康度评分系统
-- JSON API 接口
-- 每周摘要自动生成
-- OPML 分类分组结构
-- PWA 离线访问
-- Telegram Bot 推送精选
-- Webhook 通知
-- 贡献指南和 Issue/PR 模板
+## Feature Backlog
+- Daily top feed (sorted by source count, keyword weight)
+- Feed health scoring system
+- JSON API endpoint
+- Weekly summary auto-generation
+- OPML category grouping
+- PWA offline access
+- Telegram Bot for curated pushes
+- Webhook notifications
+- Contribution guide and Issue/PR templates
 
-## 进度记录
-| 周次 | 日期 | 新增源 | 活跃源数 | 总源数 | 总条目数 | 其他改进 |
-|------|------|--------|----------|--------|----------|----------|
-| - | 2026-07-04 (初始) | - | 7 | 39 | 11577 | 项目更新feed + OPML合并 |
+## Progress Log
+| Week | Date | New Sources | Active Sources | Total Sources | Total Items | Other Changes |
+|------|------|-------------|----------------|---------------|-------------|---------------|
+| - | 2026-07-04 (initial) | - | 7 | 39 | 11577 | Project feed + OPML merge |

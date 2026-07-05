@@ -11,7 +11,7 @@ RSSForge is an open source, easy to use, and extensible RSS feed aggregator buil
 Each monitored site has its own RSS feed at:
 
 ```
-https://{username}.github.io/RSSForge/feeds/[站点名称].xml
+https://{username}.github.io/RSSForge/feeds/{site-slug}.xml
 ```
 
 ## OPML Subscription
@@ -21,12 +21,11 @@ Choose the mirror that works best for your network:
 
 | Mirror | OPML URL |
 |--------|----------|
-| 🌐 Official (GitHub Pages) | `https://gitfox-enter.github.io/RSSForge/opml.xml` |
-| 🚀 ghfast.top (国内加速) | `https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.xml` |
-| 📦 jsDelivr CDN | `https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.xml` |
+| Official (GitHub Pages) | `https://gitfox-enter.github.io/RSSForge/opml.xml` |
+| ghfast.top (CN accelerated) | `https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.xml` |
+| jsDelivr CDN | `https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.xml` |
 
-> **Tip:** Each OPML contains feed URLs pointing to the same mirror,
-> — import the one matching your network environment.
+> **Tip:** Each OPML contains feed URLs pointing to the same mirror — import the one matching your network environment.
 
 ## Quick Start
 
@@ -53,41 +52,41 @@ Before adding a new site, always check if it appears in `blacklist.json`.
 
 | Category | Code | Description |
 |----------|------|-------------|
-| 付费门槛 | `paid_required` | Requires paid account to register or access content |
-| 反爬严格 | `anti_crawl` | Returns 403, blocks known bot patterns, or blocks our fetch methods |
-| 流氓下载站 | `spam_download` | Bundles malware, excessive ads, homepage hijacking, misleading download buttons |
-| 用户讨厌 | `user_hated` | Owner explicitly doesn't want this site monitored |
-| 不可访问 | `inaccessible` | Domain expired, parked, or unreachable |
-| 非内容站点 | `not_content` | Pure navigation portals, site directories, link collections, or tool pages with no original article/content listing |
+| Paywall | `paid_required` | Requires paid account to register or access content |
+| Aggressive anti-crawl | `anti_crawl` | Returns 403, blocks known bot patterns, or blocks our fetch methods |
+| Malicious download | `spam_download` | Bundles malware, excessive ads, homepage hijacking, misleading download buttons |
+| User rejected | `user_hated` | Owner explicitly doesn't want this site monitored |
+| Inaccessible | `inaccessible` | Domain expired, parked, or unreachable |
+| Non-content site | `not_content` | Pure navigation portals, site directories, link collections, or tool pages with no original article/content listing |
 
 ### Current Blacklist (11 sites)
 
 | Domain | Category | Reason |
 |--------|----------|--------|
-| `store.steampowered.com` | user_hated | 所有者明确讨厌 Steam |
-| `store.epicgames.com` | user_hated | 所有者明确要求不要 Epic Games Store |
-| `ypojie.com` | paid_required | 亿破解需要付费注册才能使用 |
-| `52hb.com` | paid_required | 52破解需要付费注册才能使用 |
-| `xdowns.com` | spam_download | 流氓下载站 |
-| `downza.com` | spam_download | 流氓下载站 |
-| `pc6.com` | spam_download | 流氓下载站 |
-| `crsky.com` | anti_crawl | 返回 403 反爬 |
-| `smzdm.com` | anti_crawl | 反爬严格，WebFetch 无法获取内容 |
-| `hisprice.com` | not_content | 纯工具页（比价查询），无内容列表可监控 |
-| `ziyuanting.com` | not_content | 网站导航/资源目录，非内容站点，无法抓取实时资源内容 |
+| `store.steampowered.com` | user_hated | Owner explicitly dislikes Steam |
+| `store.epicgames.com` | user_hated | Owner explicitly rejects Epic Games Store |
+| `ypojie.com` | paid_required | Requires paid registration |
+| `52hb.com` | paid_required | Requires paid registration |
+| `xdowns.com` | spam_download | Malicious download site |
+| `downza.com` | spam_download | Malicious download site |
+| `pc6.com` | spam_download | Malicious download site |
+| `crsky.com` | anti_crawl | Returns 403 anti-bot |
+| `smzdm.com` | anti_crawl | Aggressive anti-crawl, WebFetch cannot retrieve content |
+| `hisprice.com` | not_content | Pure tool page (price comparison), no content listing to monitor |
+| `ziyuanting.com` | not_content | Site navigation/resource directory, no real-time content to crawl |
 
 ### Site Quality Score (How to Evaluate New Sites)
 
 Before adding a new site, score it honestly:
 
-**✅ Must have (all required)**
+**Must have (all required)**
 - Content site (produces original articles/posts, not a directory)
 - No paywall or forced login
 - Accessible without JavaScript rendering (or only need Playwright for specific pages)
 - Provides a list/index page with recent content (can be homepage)
 - Not on the blacklist
 
-**🔍 Good to have (score each 1 point)**
+**Good to have (score each 1 point)**
 - Clean HTML, predictable structure (no heavy SPA)
 - Consistent URL patterns for articles
 - Publication date visible in HTML
@@ -95,14 +94,14 @@ Before adding a new site, score it honestly:
 - Reasonable robots.txt policy
 - No excessive anti-bot measures
 
-**❌ Immediate rejection**
+**Immediate rejection**
 - Requires payment to read content
 - Heavily obfuscated HTML or anti-debugging
 - Site is primarily a link directory / navigation portal
 - Known bundling of malware or browser hijacking
 - User has expressed dislike
 
-**Score ≥ 3** → Consider adding
+**Score >= 3** → Consider adding
 **Score < 3** → Probably not worth it
 
 ### Enforcement
@@ -114,15 +113,15 @@ Any PR that adds a blacklisted site will be automatically rejected by CI.
 
 ## Features
 
-- 🔧 **Zero server cost** — GitHub Actions free compute, 24/7 auto-run
-- 📡 **Per-site RSS** — Each monitored site has its own independent feed
-- 🖼️ **Real favicons** — Automatically fetches and caches website favicons
-- 📋 **Unified OPML** — One OPML file to import all feeds into any RSS reader
-- ⚡ **Smart scheduling** — Per-site intervals (15 min ~ 8 hrs), auto night-mode throttle
-- 🔄 **Auto deduplication** — MD5 + URL + fuzzy title dedup, 7-day rolling window
-- 📖 **Full article content** — Smart content extraction for selected sites
-- 🗂️ **Public feed directory** — Browse all feeds at `/feeds/index.html`
-- 👤 **Custom sources** — Add your own feeds via `custom_sources.yaml` (no code changes needed)
+- Zero server cost — GitHub Actions free compute, 24/7 auto-run
+- Per-site RSS — Each monitored site has its own independent feed
+- Real favicons — Automatically fetches and caches website favicons
+- Unified OPML — One OPML file to import all feeds into any RSS reader
+- Smart scheduling — Per-site intervals (15 min ~ 8 hrs), auto night-mode throttle
+- Auto deduplication — MD5 + URL + fuzzy title dedup, 7-day rolling window
+- Full article content — Smart content extraction for selected sites
+- Public feed directory — Browse all feeds at the index page
+- Custom sources — Add your own feeds via `custom_sources.yaml` (no code changes needed)
 
 ## Related Projects
 

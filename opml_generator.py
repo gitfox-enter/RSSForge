@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-OPML 生成器 — 从 feeds 目录和 feeds_meta.json 生成统一的 OPML 订阅列表。
+OPML generator - builds a unified OPML subscription list from feeds directory and feeds_meta.json.
 
-功能:
-  - 以 feeds_meta.json 为主要数据源，feeds/ 目录为补充
-  - 智能去重：仅在存在 pinyin-slug 版本时跳过中文命名文件
-  - 使用中文站名作为 OPML 显示标题
-  - 自动填充 htmlUrl、iconUrl 元数据
-  - 中文文件名自动 percent-encode（兼容 RSS 阅读器）
-  - 动态日期（不硬编码）
-  - 扁平结构（兼容所有 RSS 阅读器）
+Features:
+  - Uses feeds_meta.json as primary data source, feeds/ directory as fallback
+  - Smart dedup: skip CJK-named files when a pinyin-slug version exists
+  - Uses site display names as OPML titles
+  - Auto-fills htmlUrl, iconUrl metadata
+  - Auto percent-encodes CJK filenames (RSS reader compatible)
+  - Dynamic dates (no hardcoding)
+  - Flat structure (compatible with all RSS readers)
 """
 
 import os
@@ -22,23 +22,23 @@ from typing import Dict, List, Optional, Set, Tuple
 from urllib.parse import quote as url_quote
 from common import slugify, SITE_URL_BASE
 
-FEEDS_DIR = "docs/feeds"  # 文件系统路径
-FEEDS_URL_PATH = "feeds"  # URL 路径
-SITE_URL = SITE_URL_BASE  # fix #17: 统一从 common.py 获取
+FEEDS_DIR = "docs/feeds"  # filesystem path
+FEEDS_URL_PATH = "feeds"  # URL path
+SITE_URL = SITE_URL_BASE  # fix #17: unified from common.py
 
 
 def _has_cjk(s: str) -> bool:
-    """检查字符串是否包含 CJK 字符。"""
+    """Check if string contains CJK characters."""
     return bool(re.search(r'[\u4e00-\u9fff\u3400-\u4dbf]', s))
 
 
 def _safe_filename(name: str) -> str:
-    """ASCII 安全文件名 (fix #9)."""
+    """ASCII-safe filename (fix #9)."""
     return slugify(name)
 
 
 def _feed_has_entries(filepath: str) -> bool:
-    """检查 feed 文件是否包含至少一个 <entry>。"""
+    """Check if feed file contains at least one <entry>。"""
     try:
         tree = ET.parse(filepath)
         root = tree.getroot()
@@ -52,7 +52,7 @@ def _feed_has_entries(filepath: str) -> bool:
 
 
 def _load_feeds_meta() -> Dict:
-    """加载 feeds_meta.json。"""
+    """Load feeds_meta.json."""
     try:
         if os.path.exists('feeds_meta.json'):
             with open('feeds_meta.json', 'r', encoding='utf-8') as f:
@@ -63,7 +63,7 @@ def _load_feeds_meta() -> Dict:
 
 
 def _build_slug_to_meta(feeds_meta: Dict) -> Dict[str, Tuple[str, Dict]]:
-    """从 feeds_meta.json 构建 slug -> (中文站名, 元数据) 映射。"""
+    """Build slug from feeds_meta.json -> (site name, metadata) mapping."""
     slug_map = {}
     for chinese_name, meta in feeds_meta.items():
         feed_url = meta.get('feed_url', '')
@@ -76,7 +76,7 @@ def _build_slug_to_meta(feeds_meta: Dict) -> Dict[str, Tuple[str, Dict]]:
 
 
 def _try_load_source_name_map() -> Dict[str, str]:
-    """尝试加载 SOURCE_NAME_MAP（slug -> 中文名）作为后备。"""
+    """Try loading SOURCE_NAME_MAP (slug -> name) as fallback."""
     try:
         from crawler.config import SOURCE_NAME_MAP
         name_to_slug = {}
@@ -89,29 +89,29 @@ def _try_load_source_name_map() -> Dict[str, str]:
 
 
 def _encode_feed_url(filename: str) -> str:
-    """构建 feed URL，对非 ASCII 字符进行 percent-encode。"""
+    """Build feed URL with percent-encoding for non-ASCII chars."""
     encoded_filename = url_quote(filename, safe='')
     return f"{SITE_URL}{FEEDS_URL_PATH}/{encoded_filename}"
 
 
 def _load_feeds() -> List[Dict]:
-    """从 feeds 目录和 feeds_meta.json 加载所有有效 feed。
+    """Load all valid feeds from feeds directory and feeds_meta.json.
 
-    策略：
-    1. 扫描 feeds/ 目录，分为 pinyin-slug 文件和中文命名文件
-    2. 中文命名文件：仅在存在对应 pinyin-slug 版本时跳过
-    3. 对每个 feed 查找对应的中文名和元数据
-    4. 仅包含至少有 1 个 entry 的 feed
+    Strategy:
+    1. Scan feeds/ directory, separate pinyin-slug files from CJK-named files
+    2. CJK-named files: skip only if pinyin-slug version exists
+    3. Look up display name and metadata for each feed
+    4. Include only feeds with at least 1 entry
     """
     feeds_meta = _load_feeds_meta()
     slug_to_meta = _build_slug_to_meta(feeds_meta)
     slug_to_chinese = _try_load_source_name_map()
 
     if not os.path.exists(FEEDS_DIR):
-        print(f"警告: {FEEDS_DIR} 目录不存在")
+        print(f"Warning: {FEEDS_DIR} directory does not exist")
         return []
 
-    # 第一遍扫描：收集所有 pinyin-slug 文件名（用于去重判断）
+    # First pass: collect all pinyin-slug filenames (for dedup)
     all_filenames = [f for f in os.listdir(FEEDS_DIR) if f.endswith('.xml')]
     pinyin_slugs: Set[str] = set()
     for filename in all_filenames:
@@ -126,23 +126,23 @@ def _load_feeds() -> List[Dict]:
         feed_name = os.path.splitext(filename)[0]
         filepath = os.path.join(FEEDS_DIR, filename)
 
-        # 跳过项目更新 feed（由 _load_project_feed 单独处理，置顶显示）
+        # Skip project update feed (handled separately by _load_project_feed, pinned)
         if feed_name == 'project-updates':
             continue
 
-        # 中文命名文件：检查是否存在 pinyin-slug 版本
+        # CJK-named file: check if pinyin-slug version exists
         if _has_cjk(feed_name):
             expected_slug = slugify(feed_name)
             if expected_slug in pinyin_slugs:
-                # 有对应的 pinyin 版本 → 跳过此重复文件
+                # Pinyin version exists -> skip this duplicate
                 skipped_dup.append(filename)
                 continue
-            # 没有 pinyin 版本 → 保留此文件，用中文名作为显示名
+            # No pinyin version -> keep this file, use CJK name as display name
             display_name = feed_name
         else:
-            display_name = feed_name  # 先用 slug，后面替换
+            display_name = feed_name  # Use slug first, replace later
 
-        # 跳过空 feed (fix #1)
+        # Skip empty feed (fix #1)
         if not _feed_has_entries(filepath):
             continue
 
@@ -150,7 +150,7 @@ def _load_feeds() -> List[Dict]:
         html_url = ""
         icon_url = ""
 
-        # 从 feeds_meta.json 查找元数据
+        # Look up metadata from feeds_meta.json
         slug_key = feed_name if not _has_cjk(feed_name) else slugify(feed_name)
         if slug_key in slug_to_meta:
             chinese_name, meta = slug_to_meta[slug_key]
@@ -169,16 +169,16 @@ def _load_feeds() -> List[Dict]:
         })
 
     if skipped_dup:
-        print(f"跳过 {len(skipped_dup)} 个中文命名的重复 feed: "
+        print(f"Skipped {len(skipped_dup)} CJK-named duplicate feed: "
               f"{', '.join(skipped_dup[:5])}{'...' if len(skipped_dup) > 5 else ''}")
 
-    # 按中文名称排序
+    # Sort by site name
     feeds.sort(key=lambda x: x['name'])
     return feeds
 
 
 def _build_opml(feeds: List[Dict], title: str) -> ET.Element:
-    """构建 OPML 根元素（扁平结构）."""
+    """Build OPML root element (flat structure)."""
     root = ET.Element('opml')
     root.set('version', '2.0')
 
@@ -205,7 +205,7 @@ def _build_opml(feeds: List[Dict], title: str) -> ET.Element:
 
 
 def _write_opml(root: ET.Element, output_path: str) -> bool:
-    """写入 OPML 文件（原子写入）."""
+    """Write OPML file (atomic write)."""
     tmp_path = output_path + '.tmp'
     try:
         os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else '.', exist_ok=True)
@@ -217,29 +217,29 @@ def _write_opml(root: ET.Element, output_path: str) -> bool:
         os.replace(tmp_path, output_path)
         return True
     except Exception as e:
-        print(f"写入 OPML 失败 {output_path}: {e}")
+        print(f"Failed to write OPML {output_path}: {e}")
         if os.path.exists(tmp_path):
             os.remove(tmp_path)
         return False
 
 
 def _cleanup_legacy_files() -> int:
-    """清理遗留的分类 OPML 文件和中文命名的重复 feed 文件。"""
+    """Clean up legacy category OPML files and duplicate CJK-named feed files."""
     import glob
     removed = 0
 
-    # 删除遗留的分类 OPML 文件 (opml-*.xml)
+    # Delete legacy category OPML files (opml-*.xml)
     for f in glob.glob('opml-*.xml'):
         try:
             os.remove(f)
             removed += 1
-            print(f"  清理遗留 OPML: {f}")
+            print(f"  Cleaned up legacy OPML: {f}")
         except Exception as e:
-            print(f"  清理失败 {f}: {e}")
+            print(f"  Cleanup failed {f}: {e}")
 
-    # 删除中文命名的重复 feed 文件（仅当有 pinyin-slug 版本时）
+    # Remove CJK-named duplicate feed files（only when pinyin-slug version exists）
     if os.path.exists(FEEDS_DIR):
-        # 先收集所有 pinyin-slug 文件名
+        # Collect all pinyin-slug filenames first
         pinyin_slugs = set()
         for filename in os.listdir(FEEDS_DIR):
             if not filename.endswith('.xml'):
@@ -259,22 +259,22 @@ def _cleanup_legacy_files() -> int:
                     try:
                         os.remove(filepath)
                         removed += 1
-                        print(f"  清理重复 feed: {filepath}")
+                        print(f"  Cleaned up duplicate feed: {filepath}")
                     except Exception as e:
-                        print(f"  清理失败 {filepath}: {e}")
+                        print(f"  Cleanup failed {filepath}: {e}")
 
     return removed
 
 
 def _load_project_feed() -> Optional[Dict]:
-    """加载项目更新 feed（如果存在）。"""
+    """Load project update feed if it exists."""
     project_feed_path = os.path.join(FEEDS_DIR, 'project-updates.xml')
     if not os.path.exists(project_feed_path):
         return None
     if not _feed_has_entries(project_feed_path):
         return None
     return {
-        'name': '📌 RSSForge 项目更新',
+        'name': 'RSSForge Project Updates',
         'slug': 'project-updates',
         'feed_url': _encode_feed_url('project-updates.xml'),
         'html_url': SITE_URL,
@@ -283,21 +283,21 @@ def _load_project_feed() -> Optional[Dict]:
 
 
 def generate_opml() -> Dict[str, int]:
-    """生成统一 OPML 文件.
+    """Generate unified OPML file.
 
     Returns:
         dict: {'feeds_count': N, 'opml_generated': 0/1, 'cleaned': N}
     """
-    cleaned = 0  # 清理重复 feed 的计数
+    cleaned = 0  # Cleaned up duplicate feed count
     feeds = _load_feeds()
 
-    # 加入项目更新 feed（置顶）
+    # Add project update feed (pinned to top)
     project_feed = _load_project_feed()
     if project_feed:
         feeds.insert(0, project_feed)
 
     if not feeds:
-        print("警告: 未找到任何 feed")
+        print("Warning: no feeds found")
         return {'feeds_count': 0, 'opml_generated': 0, 'cleaned': cleaned}
 
     stats = {
@@ -305,11 +305,11 @@ def generate_opml() -> Dict[str, int]:
         'opml_generated': 0,
     }
 
-    root = _build_opml(feeds, "RSSForge - 订阅源")
+    root = _build_opml(feeds, "RSSForge Feeds")
 
     if _write_opml(root, "docs/opml.xml"):
         stats['opml_generated'] = 1
-        print(f"✓ OPML 生成成功: {len(feeds)} 个订阅源")
+        print(f"✓ OPML generated successfully: {len(feeds)} feeds")
         for feed in feeds:
             extra = []
             if feed['html_url']:
@@ -325,4 +325,4 @@ def generate_opml() -> Dict[str, int]:
 
 if __name__ == '__main__':
     result = generate_opml()
-    print(f"\n完成: {result}")
+    print(f"\nDone: {result}")

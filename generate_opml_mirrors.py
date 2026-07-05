@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-为 RSSForge 生成多镜像 OPML 文件。
+Generate multi-mirror OPML files for RSSForge.
 
-读取 feeds_meta.json，为每个 feed 生成 3 套 URL：
-  1. 官方 (github.io)
-  2. ghfast.top 镜像
-  3. jsDelivr CDN 镜像
+Read feeds_meta.json and generate 3 sets of URLs per feed:
+  1. Official (github.io)
+  2. ghfast.top mirror
+  3. jsDelivr CDN mirror
 
-输出 3 个 OPML 文件到 docs/ 目录。
-用法: python generate_opml_mirrors.py
+Output 3 OPML files to docs/ directory.
+Usage: python generate_opml_mirrors.py
 """
 
 import json
@@ -22,17 +22,17 @@ RAW  = "https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs"
 
 MIRRORS = {
     "official": (
-        "RSSForge - 官方订阅源",
+        "RSSForge Feeds",
         f"{BASE}/feeds/{{slug}}.xml",
         f"{BASE}/opml.xml",
     ),
     "ghfast": (
-        "RSSForge - ghfast.top 镜像",
+        "RSSForge Feeds (ghfast)",
         "https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/{slug}.xml",
         "https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.xml",
     ),
     "jsdelivr": (
-        "RSSForge - jsDelivr CDN 镜像",
+        "RSSForge Feeds (jsDelivr)",
         "https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/{slug}.xml",
         "https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.xml",
     ),
@@ -79,10 +79,10 @@ def main():
         ET.ElementTree(root).write(path, encoding="utf-8", xml_declaration=True)
         print(f"  ✓ {path}  ({len(meta)} feeds)")
 
-    # 主 opml.xml = official 版本
-    root = build_opml("RSSForge - 订阅源", f"{BASE}/feeds/{{slug}}.xml", meta)
+    # Main opml.xml = official version
+    root = build_opml("RSSForge Feeds", f"{BASE}/feeds/{{slug}}.xml", meta)
     ET.ElementTree(root).write("docs/opml.xml", encoding="utf-8", xml_declaration=True)
-    print(f"  ✓ docs/opml.xml (主文件)")
+    print(f"  ✓ docs/opml.xml (main file)")
 
 
 if __name__ == "__main__":

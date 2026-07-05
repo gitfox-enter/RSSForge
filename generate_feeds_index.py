@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""重新生成 docs/index.html —— 简洁 Excel 表格风格，无分类"""
+"""Regenerate docs/index.html — clean Excel-style table, no categories"""
 import json, os, textwrap
 
 BASE = "https://gitfox-enter.github.io/RSSForge"
@@ -123,11 +123,11 @@ def gen_html(meta):
     w = lines.append
 
     w('<!DOCTYPE html>')
-    w('<html lang="zh-CN">')
+    w('<html lang="en">')
     w('<head>')
     w('  <meta charset="utf-8">')
     w('  <meta name="viewport" content="width=device-width, initial-scale=1.0">')
-    w('  <title>RSSForge - 订阅源目录</title>')
+    w('  <title>RSSForge - Feed Directory</title>')
     w(f'  <link rel="alternate" type="application/rss+xml" title="RSSForge" href="{BASE}/opml.xml">')
     w(f'  <style>{css()}</style>')
     w('</head><body>')
@@ -136,15 +136,15 @@ def gen_html(meta):
     w('  <div class="ribbon">')
     w('    <span class="brand">RSSForge</span>')
     w('    <span class="sep"></span>')
-    w(f'    <span class="stat">{total} 个订阅源</span>')
-    w(f'    <span class="stat">{active} 个活跃</span>')
+    w(f'    <span class="stat">{total} feeds</span>')
+    w(f'    <span class="stat">{active} active</span>')
     w('  </div>')
 
     # ── Toolbar ──
     w('  <div class="toolbar">')
-    w('    <input type="text" id="searchInput" placeholder="搜索站点名称或网址…" oninput="filterTable()">')
+    w('    <input type="text" id="searchInput" placeholder="Search by name or URL..." oninput="filterTable()">')
     w('    <span class="spacer"></span>')
-    w(f'    <a class="btn btn-green" href="{BASE}/opml.xml" target="_blank">OPML 官方</a>')
+    w(f'    <a class="btn btn-green" href="{BASE}/opml.xml" target="_blank">OPML Official</a>')
     w(f'    <a class="btn btn-blue" href="https://ghfast.top/https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.ghfast.xml" target="_blank">OPML ghfast</a>')
     w(f'    <a class="btn btn-red" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml" target="_blank">OPML jsDelivr</a>')
     w('  </div>')
@@ -160,9 +160,9 @@ def gen_html(meta):
     w('    </colgroup>')
     w('    <thead><tr>')
     w('      <th></th>')
-    w('      <th onclick="sortTable(1)">站点名称 <span style="font-size:10px;opacity:.4">↕</span></th>')
-    w('      <th onclick="sortTable(2)">网址 <span style="font-size:10px;opacity:.4">↕</span></th>')
-    w('      <th>订阅地址</th>')
+    w('      <th onclick="sortTable(1)">Site Name <span style="font-size:10px;opacity:.4">↕</span></th>')
+    w('      <th onclick="sortTable(2)">URL <span style="font-size:10px;opacity:.4">↕</span></th>')
+    w('      <th>Feed</th>')
     w('    </tr></thead>')
     w('    <tbody>')
 
@@ -183,7 +183,7 @@ def gen_html(meta):
         w(f'        <td><div class="site-name">{icon_img}<span>{title}</span></div></td>')
         w(f'        <td class="cell-url"><a href="{url}" target="_blank">{url}</a></td>')
         w(f'        <td><div class="feed-links">')
-        w(f'          <a class="fl fl-g" href="{official}" target="_blank">官方</a>')
+        w(f'          <a class="fl fl-g" href="{official}" target="_blank">Official</a>')
         w(f'          <a class="fl fl-b" href="{mirror1}" target="_blank">ghfast</a>')
         w(f'          <a class="fl fl-r" href="{mirror2}" target="_blank">jsDelivr</a>')
         w(f'        </div></td>')
@@ -195,8 +195,8 @@ def gen_html(meta):
 
     # ── Status bar ──
     w('  <div class="status-bar">')
-    w(f'    <span>就绪 | 更新：{now}</span>')
-    w(f'    <span class="right"><span>共 {total} 条</span><span>活跃 {active}</span></span>')
+    w(f'    <span>Ready | Updated: {now}</span>')
+    w(f'    <span class="right"><span>{total} total</span><span>{active} active</span></span>')
     w('  </div>')
 
     # ── JS ──
@@ -236,7 +236,7 @@ def main():
     out = "docs/index.html"
     with open(out, "w") as f:
         f.write(html)
-    print(f"  ✓ {out} 已生成（{len(meta)} 个订阅源）")
+    print(f"  ✓ {out} generated ({len(meta)} feeds)")
 
 if __name__ == "__main__":
     main()
