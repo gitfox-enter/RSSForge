@@ -380,3 +380,24 @@ dead_sites:
     tier: high
     interval: 30
     fast_check: true
+
+  - url: "https://iehou.com/"
+    max_pages: 5
+    name: 网猴线报
+    tier: low
+    interval: 360
+    fast_check: true
+
+  - url: "https://www.hxm5.com/"
+    max_pages: 5
+    name: 线报屋
+    tier: low
+    interval: 360
+    fast_check: true
+
+  - url: "https://www.zuankeba.cn/"
+    max_pages: 5
+    name: 赚客吧
+    tier: high
+    interval: 30
+    fast_check: true

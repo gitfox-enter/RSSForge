@@ -394,5 +394,32 @@
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/yang-mao-qun.png",
     "site_url": "https://blog.xianbao.art/",
     "items_hash": ""
+  },
+  "网猴线报": {
+    "interval": 360,
+    "freq_label": "每6小时",
+    "count": 0,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/wang-hou-xian-bao.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/icons/wang-hou-xian-bao.png",
+    "site_url": "https://iehou.com/",
+    "items_hash": ""
+  },
+  "线报屋": {
+    "interval": 360,
+    "freq_label": "每6小时",
+    "count": 0,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wu.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/icons/xian-bao-wu.png",
+    "site_url": "https://www.hxm5.com/",
+    "items_hash": ""
+  },
+  "赚客吧": {
+    "interval": 30,
+    "freq_label": "每30分钟",
+    "count": 0,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/zhuan-ke-ba.xml",
+    "icon": "https://gitfox-enter.github.io/RSSForge/icons/zhuan-ke-ba.png",
+    "site_url": "https://www.zuankeba.cn/",
+    "items_hash": ""
   }
 }
