@@ -236,8 +236,11 @@ def extract_article_items(soup: BeautifulSoup, base_url: str = '') -> List[Dict[
     返回：[{'text': '标题', 'url': '链接'}, ...] 最多50条
     """
     # 移除干扰元素
-    for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside', 'iframe']):
+        for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside', 'iframe', 'form', 'button']):
         tag.decompose()
+    # 过滤友链/板块分类区域
+    for noise in soup.select('.friend-link, .links-box, .link-box, .blogroll, .roll-links, .category-list, .sidebar-links, .friendly-link, .friendlink, aside, .widget, .sidebar, .related-posts, .similar-posts'):
+        noise.decompose()
 
     body = soup.find('body')
     if not body:

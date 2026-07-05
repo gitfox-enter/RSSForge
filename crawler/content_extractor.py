@@ -172,6 +172,9 @@ def _extract_by_selector(url: str, selector_config: Dict) -> Dict[str, str]:
     # 清理无用标签
     for tag in content_el.find_all(['script', 'style', 'noscript', 'iframe', 'nav', 'aside', 'footer', 'header', 'form', 'button']):
         tag.decompose()
+        # 过滤友链/板块分类区域
+        for noise in content_el.select('.friend-link, .links-box, .link-box, .blogroll, .roll-links, .category-list, .sidebar-links, .friendly-link, .friendlink, .links, .交换链接, .友情链接, [class*=links], [class*=link-box], [class*=friend-link], [class*=blogroll], [class*=friendlink], [class*=roll-links], aside, .widget, .sidebar, .related-posts, .similar-posts'):
+            noise.decompose()
 
     # 移除注释
     for comment in content_el.find_all(string=lambda text: isinstance(text, Comment)):
