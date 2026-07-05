@@ -73,10 +73,10 @@ def css():
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family: -apple-system,\'Segoe UI\',Roboto,\'Noto Sans SC\',sans-serif;
            background:#f4f5f7; color:#24292f; }
-    a { color:#0969da; text-decoration:none; }
+    a { color:#15803d; text-decoration:none; }
     a:hover { text-decoration:underline; }
 
-    header { background:linear-gradient(135deg,#1a73e8,#0d47a1);
+    header { background:linear-gradient(135deg,#16a34a,#14532d);
              color:#fff; padding:32px 24px 24px; text-align:center; }
     header h1 { font-size:28px; font-weight:700; margin-bottom:4px; }
     header .subtitle { font-size:14px; opacity:.85; margin-bottom:16px; }
@@ -106,19 +106,19 @@ def css():
     td.num { color:#6e7781; font-size:13px; text-align:center; width:40px; }
     td.title { font-weight:500; color:#1f2328; max-width:180px;
                overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    td.site a { color:#0550ae; font-size:13px; max-width:180px;
+    td.site a { color:#15803d; font-size:13px; max-width:180px;
                 overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block; }
     td.feed a { display:inline-block; padding:3px 9px; border-radius:4px;
                 font-size:12px; font-weight:500; white-space:nowrap; margin-right:4px; }
     td.feed .official { background:#dcfce7; color:#15803d; }
-    td.feed .mirror1  { background:#dbeafe; color:#1d4ed8; }
+    td.feed .mirror1  { background:#dcfce7; color:#15803d; }
     td.feed .mirror2  { background:#fae8ff; color:#7e22ce; }
     td.feed a:hover { opacity:.75; text-decoration:none; }
     .filter-bar { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
     .filter-bar label { font-size:13px; color:#57606a; }
     .filter-bar input { padding:6px 10px; border:1px solid #d0d7de; border-radius:6px;
                          font-size:13px; width:220px; }
-    .filter-bar input:focus { outline:2px solid #0969da; border-color:#0969da; }
+    .filter-bar input:focus { outline:2px solid #15803d; border-color:#15803d; }
     @media(max-width:768px) { .table-wrap{overflow-x:auto} table{min-width:900px} }
     ''')
 
