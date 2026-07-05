@@ -28,13 +28,13 @@ MIRRORS = {
     ),
     "ghfast": (
         "RSSForge - ghfast.top 镜像",
-        f"https://ghfast.top/{RAW}/feeds/{{slug}}.xml",
-        f"https://ghfast.top/{RAW}/opml.xml",
+        "https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/{slug}.xml",
+        "https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.xml",
     ),
     "jsdelivr": (
         "RSSForge - jsDelivr CDN 镜像",
-        f"https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/{{slug}}.xml",
-        f"https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.xml",
+        "https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/{slug}.xml",
+        "https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.xml",
     ),
 }
 
