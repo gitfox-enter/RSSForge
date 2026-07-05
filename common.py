@@ -896,66 +896,21 @@ def _try_fetch_favicon_from_html(site_url: str, filepath: str) -> bool:
 
 
 def fetch_site_favicon(site_url: str, site_name: str) -> str:
-    """获取网站真实 favicon 并缓存到 public/icons/。
-
-    尝试顺序：
-      1. 本地缓存（已存在则直接返回）
-      2. 从网站 HTML 解析 <link rel="icon">
-      3. 网站 /favicon.ico
-      4. DuckDuckGo 图标服务（备选）
-      5. Icon.horse 服务（备选）
-      6. 生成占位 SVG（兜底）
+    """获取网站 favicon URL，直接用原始网站 /favicon.ico（国内可访问）。
 
     Returns:
         favicon 的 URL（用于 feeds_meta.json 和 Atom feed 的 <icon>）
     """
     if site_name in _favicon_cache:
         return _favicon_cache[site_name]
-
-    os.makedirs(_ICONS_DIR, exist_ok=True)
-    safe_name = slugify(site_name)
-    filepath = os.path.join(_ICONS_DIR, f"{safe_name}.png")
-    icon_url = SITE_URL_BASE + f"icons/{safe_name}.png"
-
-    # 1) 本地已缓存
-    if os.path.exists(filepath) and os.path.getsize(filepath) > 50:
+    if site_url:
+        parsed = urlparse(site_url)
+        domain = parsed.netloc or ""
+        icon_url = f"https://{domain}/favicon.ico"
         _favicon_cache[site_name] = icon_url
         return icon_url
-
-    # 2) 从网站 HTML 解析 + /favicon.ico
-    if _try_fetch_favicon_from_html(site_url, filepath):
-        _favicon_cache[site_name] = icon_url
-        return icon_url
-
-    # 3) DuckDuckGo 图标服务（不需要 API key，国内可访问）
-    domain = urlparse(site_url).hostname or ""
-    if _download_to_file(
-        f"https://icons.duckduckgo.com/ip3/{domain}.ico", filepath
-    ):
-        _favicon_cache[site_name] = icon_url
-        return icon_url
-
-    # 4) Icon.horse
-    if _download_to_file(
-        f"https://icon.horse/icon/{domain}", filepath
-    ):
-        _favicon_cache[site_name] = icon_url
-        return icon_url
-
-    # 5) 兜底：生成带首字母的 SVG 占位图
-    letter = site_name[0] if site_name else "?"
-    svg = (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">'
-        f'<rect width="64" height="64" rx="12" fill="#e91e8e"/>'
-        f'<text x="32" y="44" font-size="32" fill="white" text-anchor="middle" '
-        f'font-family="sans-serif">{letter}</text></svg>'
-    )
-    svg_path = filepath.replace(".png", ".svg")
-    with open(svg_path, "w", encoding="utf-8") as f:
-        f.write(svg)
-    fallback_url = SITE_URL_BASE + f"icons/{safe_name}.svg"
-    _favicon_cache[site_name] = fallback_url
-    return fallback_url
+    _favicon_cache[site_name] = ""
+    return ""
 
 
 # 基础 URL，供 favicon 和 summary 使用
