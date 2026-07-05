@@ -283,6 +283,10 @@ def _build_atom_feed(
     """构建 Atom feed 根元素."""
     from html import escape as html_escape
 
+    # 限制每个 feed 最多保留最近 N 条，防止无限增长
+    MAX_FEED_ITEMS = 1000
+    items = items[:MAX_FEED_ITEMS]
+
     NS = 'http://www.w3.org/2005/Atom'
     SY_NS = 'http://purl.org/syndication/1.0'
     MEDIA_NS = 'http://search.yahoo.com/mrss/'
