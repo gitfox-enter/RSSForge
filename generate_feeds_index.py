@@ -9,8 +9,14 @@ def load_meta():
         data = json.load(f)
     if isinstance(data, dict):
         result = []
-        for slug, info in data.items():
+        for name, info in data.items():
+            # Extract slug from feed_url (e.g. "12345-xian-bao"), NOT from the dict key (e.g. "12345线报")
+            feed_url = info.get("feed_url", "")
+            slug = ""
+            if feed_url:
+                slug = feed_url.rsplit("/", 1)[-1].replace(".xml", "")
             info["slug"] = slug
+            info["name"] = info.get("name", name)
             result.append(info)
         return result
     else:
