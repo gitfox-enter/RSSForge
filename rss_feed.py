@@ -437,22 +437,52 @@ def generate_all_feeds() -> Dict[str, int]:
         else:
             stats['feeds_skipped'] += 1
 
-    # ---- 清理旧的 feed 和 icon 文件 ----
-    # 收集本次生成的有效 feed 文件名
-    generated_feed_files = set()
-    generated_icon_names = set()
-    for site_url_key, name in url_to_name.items():
-        sn = _safe_filename(name)
-        generated_feed_files.add(sn + '.xml')
-        generated_icon_names.add(sn)
-
-    # 删除 feeds/ 中不属于本次生成结果的 .xml 文件
+    # ---- Clean up stale feed files ----
+    # Only remove .xml files that are NOT in the current site list at all
+    # (e.g. removed from sites.yaml). Keep files for sites with no data.
     if os.path.isdir(FEEDS_DIR):
+        all_expected = set()
+        for site_url_key, name in url_to_name.items():
+            all_expected.add(_safe_filename(name) + '.xml')
+        # Also keep files for sites in SOURCE_NAME_MAP that have no items
+        try:
+            from crawler.config import SOURCE_NAME_MAP
+            for url, name in SOURCE_NAME_MAP.items():
+                all_expected.add(_safe_filename(name) + '.xml')
+        except ImportError:
+            pass
         for f in os.listdir(FEEDS_DIR):
-            if f.endswith('.xml') and f not in generated_feed_files:
+            if f.endswith('.xml') and f not in all_expected:
                 old_path = os.path.join(FEEDS_DIR, f)
                 os.remove(old_path)
-                print(f"  🗑 清理旧 feed: {f}")
+                print(f"  Cleaned stale feed: {f}")
+
+    # ---- Generate empty placeholder feeds for sites with no data ----
+    _NS = 'http://www.w3.org/2005/Atom'
+    tz = timezone(timedelta(hours=8))
+    now_iso = datetime.now(tz).isoformat()
+    try:
+        from crawler.config import SOURCE_NAME_MAP
+        for url, name in SOURCE_NAME_MAP.items():
+            sn = _safe_filename(name)
+            filepath = os.path.join(FEEDS_DIR, f"{sn}.xml")
+            if os.path.exists(filepath):
+                continue  # already generated with items or placeholder
+            # Generate empty Atom feed placeholder
+            feed_url = f"{SITE_URL}{FEEDS_URL_PATH}/{sn}.xml"
+            root = ET.Element(f'{{{_NS}}}feed')
+            ET.SubElement(root, f'{{{_NS}}}title').text = _sanitize_xml(name)
+            ET.SubElement(root, f'{{{_NS}}}link', href=feed_url, rel='self', type='application/atom+xml')
+            ET.SubElement(root, f'{{{_NS}}}link', href=url, rel='alternate', type='text/html')
+            ET.SubElement(root, f'{{{_NS}}}id').text = feed_url
+            ET.SubElement(root, f'{{{_NS}}}updated').text = now_iso
+            ET.SubElement(root, f'{{{_NS}}}subtitle').text = _sanitize_xml(f'{name} - no items yet')
+            tree = ET.ElementTree(root)
+            ET.indent(tree, space='  ')
+            tree.write(filepath, encoding='utf-8', xml_declaration=True)
+            print(f"  Generated empty placeholder: {sn}.xml")
+    except ImportError:
+        pass
 
     # 删除 public/icons/ 中含中文的旧图标文件
     if os.path.isdir(ICONS_DIR):
