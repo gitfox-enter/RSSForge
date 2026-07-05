@@ -138,9 +138,12 @@ def build_row(i, s):
     site = s.get("site_url", "")
     icon = favicon_url(s)
     icon_img = '<img src="' + icon + '" style="width:16px;height:16px;border-radius:2px;" loading="lazy" onerror="this.style.opacity=.3">' if icon else ""
-    official = "https://gitfox-enter.github.io/RSSForge/feeds/" + slug + ".xml"
-    m1 = "https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/" + slug + ".xml"
-    m2 = "https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/" + slug + ".xml"
+    # 从 feed_url 提取文件名（如 xian-bao-ku.xml），不用 slug（中文 key）
+    feed_url = s.get("feed_url", "")
+    fname = feed_url.split("/")[-1] if feed_url else (slug + ".xml")
+    official = "https://gitfox-enter.github.io/RSSForge/feeds/" + fname
+    m1 = "https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/" + fname
+    m2 = "https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/" + fname
     return (
         "        <tr>\n"
         "          <td class=\"num\">" + str(i) + "</td>\n"
