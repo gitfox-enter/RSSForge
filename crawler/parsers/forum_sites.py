@@ -21,15 +21,26 @@ from crawler.parsers._utils import (
 logger = logging.getLogger('crawl')
 
 def parse_discuz_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
-    """Discuz论坛 - 结构化条目提取"""
+    """Discuz论坛 - 结构化条目提取
+
+    兼容两种 URL 格式：
+    - 绝对路径：/thread-4409-1-1.html
+    - 相对路径：thread-4409-1-1.html（Discuz 默认伪静态）
+    """
     items: List[Dict[str, str]] = []
     seen: Set[str] = set()
-    for a in soup.select('.threadlist .t a, .tl .t a, #threadlist .t a, .threadlist tr td a.xst, .threadlist tr td a'):
+    # 主选择器：覆盖常见 Discuz 列表结构 + 通用 thread- 链接
+    for a in soup.select('.threadlist .t a, .tl .t a, #threadlist .t a, '
+                         '.threadlist tr td a.xst, .threadlist tr td a, a[href*="thread-"]'):
         text = a.get_text(strip=True)
         href = a.get('href', '').strip()
-        if not text or len(text) < 3 or text in seen or '/thread-' not in href:
+        if not text or len(text) < 3 or text in seen:
             continue
-        if href.startswith('/'):
+        # 接受绝对 (/thread-...) 和相对 (thread-\d+...) 两种 Discuz 链接
+        if '/thread-' not in href and not re.search(r'thread-\d+', href):
+            continue
+        # 相对 URL 必须用 urljoin 补全，否则不会被加入
+        if not href.startswith('http'):
             href = urljoin(base_url, href)
         if href.startswith('http'):
             seen.add(text)
@@ -39,13 +50,14 @@ def parse_discuz_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str
             for a in tr.select('a'):
                 text = a.get_text(strip=True)
                 href = a.get('href', '').strip()
-                if text and len(text) > 3 and '/thread-' in href and text not in seen:
-                    if href.startswith('/'):
-                        href = urljoin(base_url, href)
-                    if href.startswith('http'):
-                        seen.add(text)
-                        items.append({'text': text, 'url': href})
-                        break
+                if text and len(text) > 3 and text not in seen:
+                    if '/thread-' in href or re.search(r'thread-\d+', href):
+                        if not href.startswith('http'):
+                            href = urljoin(base_url, href)
+                        if href.startswith('http'):
+                            seen.add(text)
+                            items.append({'text': text, 'url': href})
+                            break
     return items[:30]
 
 

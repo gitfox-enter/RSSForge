@@ -34,7 +34,7 @@ from crawler.parsers.deal_sites import (
     parse_yangmaodang_items, parse_xianbaomi_items, parse_yangmao_wang_items,
     parse_iqnew_items, parse_51kanong_items, parse_ymxianbao_items,
     parse_linejia_items, parse_10000yun_items, parse_yangmao_19970709_items,
-    parse_manmanbuy_items, parse_ym2cc_items,
+    parse_manmanbuy_items, parse_ym2cc_items, parse_xianbao_art_items,
 )
 from crawler.parsers.software_sites import (
     parse_yxssp_items, parse_foxirj_items,
@@ -84,6 +84,8 @@ PARSER_REGISTRY: Dict[str, Tuple[Any, Optional[Any]]] = {
     'linejia.com':      (parse_linejia_items,        None),
     '10000yun.com':      (parse_10000yun_items,      None),
     'yangmao.19970709.xyz': (parse_yangmao_19970709_items, None),
+    'xianbao.art':         (parse_xianbao_art_items,    None),
+    'blog.xianbao.art':    (parse_xianbao_art_items,    None),
 }
 
 

@@ -338,6 +338,7 @@ sites:
     tier: low
     interval: 360
     fast_check: true
+    js_render: true           # SPA 无静态链接，需 JS 渲染
 
   - url: "https://blog.xianbao.art/"        # YangMao Qun
     max_pages: 5
@@ -359,6 +360,7 @@ sites:
     tier: low
     interval: 360
     fast_check: true
+    js_render: true           # SPA 无静态链接，需 JS 渲染
 
   - url: "https://www.zuankeba.cn/"
     max_pages: 5
@@ -371,6 +373,10 @@ sites:
 # Dead sites (confirmed unreachable after multiple tests)
 # ============================================================
 dead_sites:
+  "https://www.007ymd.com/":
+    reason: "DNS/连接失败 - 域名无法解析"
+    confirmed_at: "2026-07-06"
+    test_result: "NameResolutionError - 域名无法解析"
   "https://907k.cn/":
     reason: "DNS/连接失败"
     confirmed_at: "2026-06-10"

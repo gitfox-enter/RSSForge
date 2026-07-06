@@ -1500,3 +1500,37 @@ def fetch_yangmao_19970709_api(page: int = 1, page_size: int = 20) -> List[Dict[
         logger.warning(f"小角落 API 请求异常: {e}")
 
     return items
+
+
+# ---------------------------------------------------------------------------
+# blog.xianbao.art - 羊毛群 (静态 HTML 文章列表)
+# ---------------------------------------------------------------------------
+
+def parse_xianbao_art_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """羊毛群 (blog.xianbao.art) - 提取线报文章条目。
+
+    文章链接格式：https://blog.xianbao.art/{id}.html
+    标题位于 <h2><a href="{id}.html">...</a></h2> 中。
+    导航菜单项（联系我们、设置推送等）位于 <li class="menu-item"> 内，需排除。
+    """
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
+
+    for a in soup.select('a[href*=".html"]'):
+        # 排除导航/菜单项（联系我们、设置推送等）
+        parent = a.parent
+        cls = ' '.join(parent.get('class', [])) if parent else ''
+        if 'menu-item' in cls or 'nav-item' in cls:
+            continue
+        text = a.get_text(strip=True)
+        href = a.get('href', '').strip()
+        if not text or len(text) < 3 or text in seen:
+            continue
+        if not re.search(r'\.html', href):
+            continue
+        if not href.startswith('http'):
+            href = urljoin(base_url, href)
+        if href.startswith('http'):
+            seen.add(text)
+            items.append({'text': text, 'url': href})
+    return items[:30]
