@@ -52,6 +52,12 @@ from crawler.parsers.deal_sites import (
     parse_xianbao_art_items,
 )
 
+# --- ReadHub parser (API-based, SPA) ---
+from crawler.parsers.readhub import (
+    parse_readhub_topic_items,
+    fetch_readhub_topic_api,
+)
+
 # --- Software site parsers ---
 from crawler.parsers.software_sites import (
     parse_yxssp_items,

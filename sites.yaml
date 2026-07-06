@@ -55,6 +55,13 @@ sites:
     interval: 20
     parser: yangmao19970709
 
+  - url: "https://readhub.cn/hot"        # ReadHub 热门话题 (Vue SPA + 官方 API)
+    max_pages: 1
+    name: ReadHub 热门
+    tier: medium
+    interval: 30
+    parser: readhub
+
   - url: "https://xzba.cc/"                # Xin ZhuanBa
     max_pages: 3
     name: 新赚吧

@@ -212,6 +212,17 @@ def _parse_response_html(
             body = soup.find('body')
             text = body.get_text(separator=' ', strip=True) if body else ''
             text = ' '.join(text.split())
+    elif parser_strategy == 'readhub' or 'readhub.cn' in url:
+        # ReadHub 热门话题：Vue SPA + 官方 API
+        from crawler.parsers.readhub import fetch_readhub_topic_api
+        article_items = fetch_readhub_topic_api(page_size=30)
+        if article_items:
+            text = '\n'.join(item['text'] for item in article_items)
+        else:
+            article_items = extract_article_items(soup, url)
+            body = soup.find('body')
+            text = body.get_text(separator=' ', strip=True) if body else ''
+            text = ' '.join(text.split())
     elif parser_pair is not None:
         items_parser, text_parser = parser_pair
         article_items = items_parser(soup, url)
