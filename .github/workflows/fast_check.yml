@@ -2,8 +2,8 @@ name: 快速增量检查
 
 on:
   schedule:
-    # 每 30 分钟唤醒，由 smart_scheduler 决定是否执行
-    - cron: '15,45 * * * *'
+    # 每 15 分钟唤醒，由 smart_scheduler 决定是否执行（提高触发点密度，降低被 GitHub 漏触发的影响）
+    - cron: '0,15,30,45 * * * *'
   workflow_dispatch:
 
 concurrency:
