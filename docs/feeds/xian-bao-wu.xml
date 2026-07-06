@@ -1,10 +1,253 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="https://gitfox-enter.github.io/RSSForge/pretty-feed-v3.xsl" type="text/xsl"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title>线报屋</title>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/syndication/1.0">
+  <title>线报屋 - RSSForge</title>
+  <subtitle>线报屋 的 RSS 订阅源（由 RSSForge 生成）</subtitle>
+  <link href="https://www.hxm5.com/" rel="alternate" />
   <link href="https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wu.xml" rel="self" type="application/atom+xml" />
-  <link href="https://www.hxm5.com/" rel="alternate" type="text/html" />
   <id>https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wu.xml</id>
-  <updated>2026-07-06T20:16:17.771516+08:00</updated>
-  <subtitle>线报屋 - no items yet</subtitle>
+  <updated>2026-07-06T22:41:03+08:00</updated>
+  <generator uri="https://github.com/gitfox-enter/RSSForge">RSSForge</generator>
+  <rights>内容版权归原作者所有，RSSForge 仅提供聚合索引</rights>
+  <sy:updatePeriod>daily</sy:updatePeriod>
+  <sy:updateFrequency>4</sy:updateFrequency>
+  <sy:updateBase>2000-01-01T00:00:00+08:00</sy:updateBase>
+  <author>
+    <name>RSSForge</name>
+    <uri>https://github.com/gitfox-enter/RSSForge</uri>
+  </author>
+  <icon>https://www.hxm5.com/favicon.ico</icon>
+  <entry>
+    <title type="text">最新线报</title>
+    <link href="https://www.hxm5.com/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:6666cd76f9695646</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">最新线报</summary>
+    <content type="html">&lt;p&gt;最新线报&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">推送订阅</title>
+    <link href="https://www.hxm5.com/xianbao/1/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:d96f360541b10b57</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">推送订阅</summary>
+    <content type="html">&lt;p&gt;推送订阅&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/xianbao/1/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">热门活动</title>
+    <link href="https://www.hxm5.com/xianbao/3/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:911c3471e7142ab1</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">热门活动</summary>
+    <content type="html">&lt;p&gt;热门活动&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/xianbao/3/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">赚吧线报</title>
+    <link href="https://www.hxm5.com/xianbao/5/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:a83cd5e275f897d0</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">赚吧线报</summary>
+    <content type="html">&lt;p&gt;赚吧线报&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/xianbao/5/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">群组线报</title>
+    <link href="https://www.hxm5.com/xianbao/7/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:e93b4fd482ee83be</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">群组线报</summary>
+    <content type="html">&lt;p&gt;群组线报&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/xianbao/7/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">24.9元，单果5g 京东快递</title>
+    <link href="https://www.hxm5.com/t/2888406" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:01715b1a0fb0b801</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">24.9元，单果5g 京东快递</summary>
+    <content type="html">&lt;p&gt;24.9元，单果5g 京东快递&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888406"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="京东" />
+  </entry>
+  <entry>
+    <title type="text">横幅那个 现在也能抽1元哈</title>
+    <link href="https://www.hxm5.com/t/2888404" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:f9d89ca2c82f880e</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">横幅那个 现在也能抽1元哈</summary>
+    <content type="html">&lt;p&gt;横幅那个 现在也能抽1元哈&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888404"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">百搭个性包包👜和漂亮单鞋</title>
+    <link href="https://www.hxm5.com/t/2888402" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:a0eee5670633a295</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">百搭个性包包👜和漂亮单鞋</summary>
+    <content type="html">&lt;p&gt;百搭个性包包👜和漂亮单鞋&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888402"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">桂格猴头菇燕麦礼盒1080g</title>
+    <link href="https://www.hxm5.com/t/2888399" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:c2ac847c7a2a579c</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">桂格猴头菇燕麦礼盒1080g</summary>
+    <content type="html">&lt;p&gt;桂格猴头菇燕麦礼盒1080g&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888399"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">跳转APP 砸6-5 拍下1快多</title>
+    <link href="https://www.hxm5.com/t/2888397" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:9e0e510d598bc1bb</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">跳转APP 砸6-5 拍下1快多</summary>
+    <content type="html">&lt;p&gt;跳转APP 砸6-5 拍下1快多&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888397"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">中心领5-5卷</title>
+    <link href="https://www.hxm5.com/t/2888396" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:461f20f9812cf228</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">中心领5-5卷</summary>
+    <content type="html">&lt;p&gt;中心领5-5卷&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888396"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">维他联名经典柠檬茶310ml*24罐 55元，2.2/罐‼</title>
+    <link href="https://www.hxm5.com/t/2888393" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:cec3fcc4423b7654</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">维他联名经典柠檬茶310ml*24罐 55元，2.2/罐‼</summary>
+    <content type="html">&lt;p&gt;维他联名经典柠檬茶310ml*24罐 55元，2.2/罐‼&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888393"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">商超1盒3块多！咱1.2元/盒！</title>
+    <link href="https://www.hxm5.com/t/2888392" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:3f4745390400ec6d</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">商超1盒3块多！咱1.2元/盒！</summary>
+    <content type="html">&lt;p&gt;商超1盒3块多！咱1.2元/盒！&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888392"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">LINODERy氨基丁酸水解蛋黄钙饮 甜橙味10ml*10袋，叠礼金【0.01】</title>
+    <link href="https://www.hxm5.com/t/2888391" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:be77743e09b6c6fa</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">LINODERy氨基丁酸水解蛋黄钙饮 甜橙味10ml*10袋，叠礼金【0.01】</summary>
+    <content type="html">&lt;p&gt;LINODERy氨基丁酸水解蛋黄钙饮 甜橙味10ml*10袋，叠礼金【0.01】&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888391"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">打开去αpp弹11-10卷</title>
+    <link href="https://www.hxm5.com/t/2888390" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:f8198bb431c088f0</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">打开去αpp弹11-10卷</summary>
+    <content type="html">&lt;p&gt;打开去αpp弹11-10卷&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888390"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">打开去app弹11-10卷</title>
+    <link href="https://www.hxm5.com/t/2888389" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:df4f82cb6470282e</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">打开去app弹11-10卷</summary>
+    <content type="html">&lt;p&gt;打开去app弹11-10卷&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888389"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">打开跳APP 自动弹11-10卷</title>
+    <link href="https://www.hxm5.com/t/2888387" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:5b2d2800f93c2787</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">打开跳APP 自动弹11-10卷</summary>
+    <content type="html">&lt;p&gt;打开跳APP 自动弹11-10卷&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888387"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">益周适强韧护龈牙龈护理组合牙膏3支装(110g 100g*2 到手66.9</title>
+    <link href="https://www.hxm5.com/t/2888386" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:9de1a0c097259af4</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">益周适强韧护龈牙龈护理组合牙膏3支装(110g 100g*2 到手66.9</summary>
+    <content type="html">&lt;p&gt;益周适强韧护龈牙龈护理组合牙膏3支装(110g 100g*2 到手66.9&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888386"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">9.7元🉐10枚！叠0.19淘金币</title>
+    <link href="https://www.hxm5.com/t/2888384" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:79be0846c87f47f3</id>
+    <updated>2026-07-06T22:41:03+08:00</updated>
+    <published>2026-07-06T22:41:03+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">9.7元🉐10枚！叠0.19淘金币</summary>
+    <content type="html">&lt;p&gt;9.7元🉐10枚！叠0.19淘金币&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888384"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="淘宝" />
+  </entry>
 </feed>
