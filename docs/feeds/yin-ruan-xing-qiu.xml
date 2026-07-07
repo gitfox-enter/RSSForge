@@ -1,44 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="https://gitfox-enter.github.io/RSSForge/pretty-feed-v3.xsl" type="text/xsl"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/syndication/1.0">
-  <title>银软星球 - RSSForge</title>
-  <subtitle>银软星球 的 RSS 订阅源（由 RSSForge 生成）</subtitle>
-  <link href="https://yrxq.xliangxi.vip/" rel="alternate" />
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>银软星球</title>
   <link href="https://gitfox-enter.github.io/RSSForge/feeds/yin-ruan-xing-qiu.xml" rel="self" type="application/atom+xml" />
+  <link href="https://yrxq.xliangxi.vip/" rel="alternate" type="text/html" />
   <id>https://gitfox-enter.github.io/RSSForge/feeds/yin-ruan-xing-qiu.xml</id>
-  <updated>2026-07-07T07:57:03+08:00</updated>
-  <generator uri="https://github.com/gitfox-enter/RSSForge">RSSForge</generator>
-  <rights>内容版权归原作者所有，RSSForge 仅提供聚合索引</rights>
-  <sy:updatePeriod>daily</sy:updatePeriod>
-  <sy:updateFrequency>4</sy:updateFrequency>
-  <sy:updateBase>2000-01-01T00:00:00+08:00</sy:updateBase>
-  <author>
-    <name>RSSForge</name>
-    <uri>https://github.com/gitfox-enter/RSSForge</uri>
-  </author>
-  <icon>https://yrxq.xliangxi.vip/favicon.ico</icon>
-  <entry>
-    <title type="text">查看全部</title>
-    <link href="https://yrxq.xliangxi.vip/articles" rel="alternate" />
-    <id>tag:yrxq.xliangxi.vip,2024-01-01:3016b1a32453def5</id>
-    <updated>2026-07-07T07:57:03+08:00</updated>
-    <published>2026-07-07T07:57:03+08:00</published>
-    <author>
-      <name>银软星球</name>
-    </author>
-    <summary type="text">查看全部</summary>
-    <content type="html">&lt;p&gt;查看全部&lt;/p&gt;&lt;p&gt;&lt;a href="https://yrxq.xliangxi.vip/articles"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title type="text">如何卸载：点击“卸载菜单”即可。</title>
-    <link href="https://yrxq.xliangxi.vip/" rel="alternate" />
-    <id>tag:yrxq.xliangxi.vip,2024-01-01:6666cd76f9695646</id>
-    <updated>2026-07-07T07:57:03+08:00</updated>
-    <published>2026-07-07T07:57:03+08:00</published>
-    <author>
-      <name>银软星球</name>
-    </author>
-    <summary type="text">如何卸载：点击“卸载菜单”即可。</summary>
-    <content type="html">&lt;p&gt;如何卸载：点击“卸载菜单”即可。&lt;/p&gt;&lt;p&gt;&lt;a href="https://yrxq.xliangxi.vip/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
-  </entry>
+  <updated>2026-07-07T09:11:13.875051+08:00</updated>
+  <subtitle>银软星球 - no items yet</subtitle>
 </feed>
