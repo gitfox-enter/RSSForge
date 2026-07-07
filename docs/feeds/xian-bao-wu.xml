@@ -1,10 +1,355 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="https://gitfox-enter.github.io/RSSForge/pretty-feed-v3.xsl" type="text/xsl"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title>线报屋</title>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/syndication/1.0">
+  <title>线报屋 - RSSForge</title>
+  <subtitle>线报屋 的 RSS 订阅源（由 RSSForge 生成）</subtitle>
+  <link href="https://www.hxm5.com/" rel="alternate" />
   <link href="https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wu.xml" rel="self" type="application/atom+xml" />
-  <link href="https://www.hxm5.com/" rel="alternate" type="text/html" />
   <id>https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wu.xml</id>
-  <updated>2026-07-07T09:17:49.597266+08:00</updated>
-  <subtitle>线报屋 - no items yet</subtitle>
+  <updated>2026-07-07T10:14:51+08:00</updated>
+  <generator uri="https://github.com/gitfox-enter/RSSForge">RSSForge</generator>
+  <rights>内容版权归原作者所有，RSSForge 仅提供聚合索引</rights>
+  <sy:updatePeriod>daily</sy:updatePeriod>
+  <sy:updateFrequency>4</sy:updateFrequency>
+  <sy:updateBase>2000-01-01T00:00:00+08:00</sy:updateBase>
+  <author>
+    <name>RSSForge</name>
+    <uri>https://github.com/gitfox-enter/RSSForge</uri>
+  </author>
+  <icon>https://www.hxm5.com/favicon.ico</icon>
+  <entry>
+    <title type="text">最新线报</title>
+    <link href="https://www.hxm5.com/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:6666cd76f9695646</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">最新线报</summary>
+    <content type="html">&lt;p&gt;最新线报&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">推送订阅</title>
+    <link href="https://www.hxm5.com/xianbao/1/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:d96f360541b10b57</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">推送订阅</summary>
+    <content type="html">&lt;p&gt;推送订阅&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/xianbao/1/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">热门活动</title>
+    <link href="https://www.hxm5.com/xianbao/3/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:911c3471e7142ab1</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">热门活动</summary>
+    <content type="html">&lt;p&gt;热门活动&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/xianbao/3/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">赚吧线报</title>
+    <link href="https://www.hxm5.com/xianbao/5/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:a83cd5e275f897d0</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">赚吧线报</summary>
+    <content type="html">&lt;p&gt;赚吧线报&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/xianbao/5/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">群组线报</title>
+    <link href="https://www.hxm5.com/xianbao/7/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:e93b4fd482ee83be</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">群组线报</summary>
+    <content type="html">&lt;p&gt;群组线报&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/xianbao/7/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">兴业6000达标 转盘，刚才抽到25券包。</title>
+    <link href="https://www.hxm5.com/t/2888568" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:0953b2ab1283bcc8</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">兴业6000达标 转盘，刚才抽到25券包。</summary>
+    <content type="html">&lt;p&gt;兴业6000达标 转盘，刚才抽到25券包。&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888568"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="优惠券" />
+  </entry>
+  <entry>
+    <title type="text">火车票10元无门槛，出行后到账</title>
+    <link href="https://www.hxm5.com/t/2888567" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:7e90988c616038dc</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">火车票10元无门槛，出行后到账</summary>
+    <content type="html">&lt;p&gt;火车票10元无门槛，出行后到账&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888567"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">消耗品直接薅啊 超市价翻倍！</title>
+    <link href="https://www.hxm5.com/t/2888566" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:27ed9c43b6b69bda</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">消耗品直接薅啊 超市价翻倍！</summary>
+    <content type="html">&lt;p&gt;消耗品直接薅啊 超市价翻倍！&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888566"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">展开下拉看看 快过期的去换下</title>
+    <link href="https://www.hxm5.com/t/2888565" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:6c2640996d910a4a</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">展开下拉看看 快过期的去换下</summary>
+    <content type="html">&lt;p&gt;展开下拉看看 快过期的去换下&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888565"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">伊利纯牛奶12盒*2大箱💰35.8</title>
+    <link href="https://www.hxm5.com/t/2888564" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:4872188ab0065c53</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">伊利纯牛奶12盒*2大箱💰35.8</summary>
+    <content type="html">&lt;p&gt;伊利纯牛奶12盒*2大箱💰35.8&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888564"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">光大转盘有水</title>
+    <link href="https://www.hxm5.com/t/2888563" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:fda4d9c0ff8b9cb1</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">光大转盘有水</summary>
+    <content type="html">&lt;p&gt;光大转盘有水&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888563"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">想买个自行车，上下班用，单趟10km，求老哥们推荐下</title>
+    <link href="https://www.hxm5.com/t/2888562" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:f5737925e24ce086</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">想买个自行车，上下班用，单趟10km，求老哥们推荐下</summary>
+    <content type="html">&lt;p&gt;想买个自行车，上下班用，单趟10km，求老哥们推荐下&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888562"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">维达悬挂式M码抽纸210抽*6提 23.4元 折3.9元/提‼</title>
+    <link href="https://www.hxm5.com/t/2888561" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:54c600baaadc7c2b</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">维达悬挂式M码抽纸210抽*6提 23.4元 折3.9元/提‼</summary>
+    <content type="html">&lt;p&gt;维达悬挂式M码抽纸210抽*6提 23.4元 折3.9元/提‼&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888561"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">【小米】米家桌面小风扇，85元(用拼多多V3券)</title>
+    <link href="https://www.hxm5.com/t/2888560" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:5c845c9da9995b1d</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">【小米】米家桌面小风扇，85元(用拼多多V3券)</summary>
+    <content type="html">&lt;p&gt;【小米】米家桌面小风扇，85元(用拼多多V3券)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888560"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="拼多多" />
+  </entry>
+  <entry>
+    <title type="text">Sweet Color健康亮油透明指甲油【1】</title>
+    <link href="https://www.hxm5.com/t/2888559" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:be4427de0ab1db50</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">Sweet Color健康亮油透明指甲油【1】</summary>
+    <content type="html">&lt;p&gt;Sweet Color健康亮油透明指甲油【1】&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888559"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">2000-400/1200-240券防身 &amp;&amp;union_lens=lensId:TAPI@1783390195@210</title>
+    <link href="https://www.hxm5.com/t/2888558" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:31c7d0f3688877b7</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">2000-400/1200-240券防身 &amp;&amp;union_lens=lensId:TAPI@1783390195@210</summary>
+    <content type="html">&lt;p&gt;2000-400/1200-240券防身 &amp;amp;&amp;amp;union_lens=lensId:TAPI@1783390195@210&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888558"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="优惠券" />
+  </entry>
+  <entry>
+    <title type="text">每天都会有很多1元起的实物</title>
+    <link href="https://www.hxm5.com/t/2888557" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:a32a29d30afe0dd2</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">每天都会有很多1元起的实物</summary>
+    <content type="html">&lt;p&gt;每天都会有很多1元起的实物&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888557"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">碧芭宝贝 盛夏一代纸尿裤M码4片，1.9</title>
+    <link href="https://www.hxm5.com/t/2888556" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:aa015c2ddf8e87cc</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">碧芭宝贝 盛夏一代纸尿裤M码4片，1.9</summary>
+    <content type="html">&lt;p&gt;碧芭宝贝 盛夏一代纸尿裤M码4片，1.9&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888556"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">10点淘宝</title>
+    <link href="https://www.hxm5.com/t/2888555" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:953e2709c29990ca</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">10点淘宝</summary>
+    <content type="html">&lt;p&gt;10点淘宝&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888555"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="淘宝" />
+  </entry>
+  <entry>
+    <title type="text">0-1💰 蓝漂洗衣液500g</title>
+    <link href="https://www.hxm5.com/t/2888554" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:6a646203a776d800</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">0-1💰 蓝漂洗衣液500g</summary>
+    <content type="html">&lt;p&gt;0-1💰 蓝漂洗衣液500g&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888554"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">1️⃣美团-闪购-底部 抢神券</title>
+    <link href="https://www.hxm5.com/t/2888552" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:cd9598e090295643</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">1️⃣美团-闪购-底部 抢神券</summary>
+    <content type="html">&lt;p&gt;1️⃣美团-闪购-底部 抢神券&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888552"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="外卖" />
+  </entry>
+  <entry>
+    <title type="text">美tuan搜小耳朵抢20-20饮品券</title>
+    <link href="https://www.hxm5.com/t/2888551" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:9276613066d0b440</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">美tuan搜小耳朵抢20-20饮品券</summary>
+    <content type="html">&lt;p&gt;美tuan搜小耳朵抢20-20饮品券&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888551"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="优惠券" />
+  </entry>
+  <entry>
+    <title type="text">每天0点，10点，20点</title>
+    <link href="https://www.hxm5.com/t/2888549" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:445126bed637594b</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">每天0点，10点，20点</summary>
+    <content type="html">&lt;p&gt;每天0点，10点，20点&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888549"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">❶0-1💰 蓝漂洗衣液500g/袋</title>
+    <link href="https://www.hxm5.com/t/2888548" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:d62e9f0d0bc4d629</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">❶0-1💰 蓝漂洗衣液500g/袋</summary>
+    <content type="html">&lt;p&gt;❶0-1💰 蓝漂洗衣液500g/袋&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888548"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">持有临沂工商银行储蓄卡APP搜工行消费季，领10元糁券</title>
+    <link href="https://www.hxm5.com/t/2888547" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:f331c3bf3bddfb39</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">持有临沂工商银行储蓄卡APP搜工行消费季，领10元糁券</summary>
+    <content type="html">&lt;p&gt;持有临沂工商银行储蓄卡APP搜工行消费季，领10元糁券&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888547"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="优惠券" />
+  </entry>
+  <entry>
+    <title type="text">乐事（Lay's）薯片 135克</title>
+    <link href="https://www.hxm5.com/t/2888546" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:95d1596f33825f34</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">乐事（Lay's）薯片 135克</summary>
+    <content type="html">&lt;p&gt;乐事（Lay&amp;#x27;s）薯片 135克&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888546"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">⭐美团-闪购-底部 抢神券</title>
+    <link href="https://www.hxm5.com/t/2888545" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:d2060fccec9c7cba</id>
+    <updated>2026-07-07T10:14:51+08:00</updated>
+    <published>2026-07-07T10:14:51+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">⭐美团-闪购-底部 抢神券</summary>
+    <content type="html">&lt;p&gt;⭐美团-闪购-底部 抢神券&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2888545"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="外卖" />
+  </entry>
 </feed>
