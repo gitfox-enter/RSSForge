@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="https://gitfox-enter.github.io/RSSForge/pretty-feed-v3.xsl" type="text/xsl"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>慢慢买</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/man-man-mai.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://www.manmanbuy.com/" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/man-man-mai.xml</ns0:id>
-  <ns0:updated>2026-07-08T05:00:22.707407+08:00</ns0:updated>
-  <ns0:subtitle>慢慢买 - no items yet</ns0:subtitle>
-</ns0:feed>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>慢慢买</title>
+  <link href="https://gitfox-enter.github.io/RSSForge/feeds/man-man-mai.xml" rel="self" type="application/atom+xml" />
+  <link href="https://www.manmanbuy.com/" rel="alternate" type="text/html" />
+  <id>https://gitfox-enter.github.io/RSSForge/feeds/man-man-mai.xml</id>
+  <updated>2026-07-08T05:16:45.774446+08:00</updated>
+  <subtitle>慢慢买 - no items yet</subtitle>
+</feed>
