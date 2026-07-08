@@ -1,10 +1,312 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="https://gitfox-enter.github.io/RSSForge/pretty-feed-v3.xsl" type="text/xsl"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title>线报屋</title>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/syndication/1.0">
+  <title>线报屋 - RSSForge</title>
+  <subtitle>线报屋 的 RSS 订阅源（由 RSSForge 生成）</subtitle>
+  <link href="https://www.hxm5.com/" rel="alternate" />
   <link href="https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wu.xml" rel="self" type="application/atom+xml" />
-  <link href="https://www.hxm5.com/" rel="alternate" type="text/html" />
   <id>https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wu.xml</id>
-  <updated>2026-07-08T17:12:25.545714+08:00</updated>
-  <subtitle>线报屋 - no items yet</subtitle>
+  <updated>2026-07-08T17:22:15+08:00</updated>
+  <generator uri="https://github.com/gitfox-enter/RSSForge">RSSForge</generator>
+  <rights>内容版权归原作者所有，RSSForge 仅提供聚合索引</rights>
+  <sy:updatePeriod>daily</sy:updatePeriod>
+  <sy:updateFrequency>4</sy:updateFrequency>
+  <sy:updateBase>2000-01-01T00:00:00+08:00</sy:updateBase>
+  <author>
+    <name>RSSForge</name>
+    <uri>https://github.com/gitfox-enter/RSSForge</uri>
+  </author>
+  <icon>https://www.hxm5.com/favicon.ico</icon>
+  <entry>
+    <title type="text">最新线报</title>
+    <link href="https://www.hxm5.com/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:6666cd76f9695646</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">最新线报</summary>
+    <content type="html">&lt;p&gt;最新线报&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">推送订阅</title>
+    <link href="https://www.hxm5.com/xianbao/1/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:d96f360541b10b57</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">推送订阅</summary>
+    <content type="html">&lt;p&gt;推送订阅&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/xianbao/1/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">热门活动</title>
+    <link href="https://www.hxm5.com/xianbao/3/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:911c3471e7142ab1</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">热门活动</summary>
+    <content type="html">&lt;p&gt;热门活动&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/xianbao/3/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">赚吧线报</title>
+    <link href="https://www.hxm5.com/xianbao/5/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:a83cd5e275f897d0</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">赚吧线报</summary>
+    <content type="html">&lt;p&gt;赚吧线报&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/xianbao/5/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">群组线报</title>
+    <link href="https://www.hxm5.com/xianbao/7/" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:e93b4fd482ee83be</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">群组线报</summary>
+    <content type="html">&lt;p&gt;群组线报&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/xianbao/7/"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="生活" />
+  </entry>
+  <entry>
+    <title type="text">厨邦渔女蚝油 605g 【0脂肪】 拍3件14元 反6卡到手8元</title>
+    <link href="https://www.hxm5.com/t/2889275" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:31a989dc39a6315d</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">厨邦渔女蚝油 605g 【0脂肪】 拍3件14元 反6卡到手8元</summary>
+    <content type="html">&lt;p&gt;厨邦渔女蚝油 605g 【0脂肪】 拍3件14元 反6卡到手8元&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889275"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">半边天 生脉饮党参方10ml*80支 86元自营包邮，OTC认证</title>
+    <link href="https://www.hxm5.com/t/2889274" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:2faef920e6112150</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">半边天 生脉饮党参方10ml*80支 86元自营包邮，OTC认证</summary>
+    <content type="html">&lt;p&gt;半边天 生脉饮党参方10ml*80支 86元自营包邮，OTC认证&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889274"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">上车‼几十块的的骆驼跑鞋</title>
+    <link href="https://www.hxm5.com/t/2889273" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:d3d491714eb928b1</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">上车‼几十块的的骆驼跑鞋</summary>
+    <content type="html">&lt;p&gt;上车‼几十块的的骆驼跑鞋&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889273"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">3、再凑1件，用200-25消费劵</title>
+    <link href="https://www.hxm5.com/t/2889272" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:63863629f2e34dc2</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">3、再凑1件，用200-25消费劵</summary>
+    <content type="html">&lt;p&gt;3、再凑1件，用200-25消费劵&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889272"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">丽邦抽纸 5层 300张*30包</title>
+    <link href="https://www.hxm5.com/t/2889271" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:1c0631d06b886af8</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">丽邦抽纸 5层 300张*30包</summary>
+    <content type="html">&lt;p&gt;丽邦抽纸 5层 300张*30包&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889271"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">美团拼好饭大牌爆品一口价</title>
+    <link href="https://www.hxm5.com/t/2889269" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:9e011736d9f0ff4c</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">美团拼好饭大牌爆品一口价</summary>
+    <content type="html">&lt;p&gt;美团拼好饭大牌爆品一口价&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889269"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+    <category term="外卖" />
+  </entry>
+  <entry>
+    <title type="text">小红薯开了哈 要全对才行</title>
+    <link href="https://www.hxm5.com/t/2889268" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:4063e7eb312bbc94</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">小红薯开了哈 要全对才行</summary>
+    <content type="html">&lt;p&gt;小红薯开了哈 要全对才行&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889268"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">珂拉琪唇釉家族合集</title>
+    <link href="https://www.hxm5.com/t/2889267" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:3c005db160bc064d</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">珂拉琪唇釉家族合集</summary>
+    <content type="html">&lt;p&gt;珂拉琪唇釉家族合集&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889267"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">楼上罐头忽略吧！变价了</title>
+    <link href="https://www.hxm5.com/t/2889266" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:946df83e774c97c8</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">楼上罐头忽略吧！变价了</summary>
+    <content type="html">&lt;p&gt;楼上罐头忽略吧！变价了&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889266"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">外星人电解质水600ML*7瓶</title>
+    <link href="https://www.hxm5.com/t/2889263" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:e23d6200abc6b723</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">外星人电解质水600ML*7瓶</summary>
+    <content type="html">&lt;p&gt;外星人电解质水600ML*7瓶&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889263"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">琪纽特酵母β接骨木莓软糖</title>
+    <link href="https://www.hxm5.com/t/2889262" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:0714f240903bfe7d</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">琪纽特酵母β接骨木莓软糖</summary>
+    <content type="html">&lt;p&gt;琪纽特酵母β接骨木莓软糖&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889262"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">安徽工行风控能自动解除吗？</title>
+    <link href="https://www.hxm5.com/t/2889261" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:51d2230191bcfe34</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">安徽工行风控能自动解除吗？</summary>
+    <content type="html">&lt;p&gt;安徽工行风控能自动解除吗？&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889261"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">小金库888结束了？怎么都没了</title>
+    <link href="https://www.hxm5.com/t/2889260" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:761dd4bb15b49985</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">小金库888结束了？怎么都没了</summary>
+    <content type="html">&lt;p&gt;小金库888结束了？怎么都没了&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889260"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">美的 多功能双胆电压力锅5L 163元-反10=153元‼️</title>
+    <link href="https://www.hxm5.com/t/2889259" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:83ebf69c27ca959f</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">美的 多功能双胆电压力锅5L 163元-反10=153元‼️</summary>
+    <content type="html">&lt;p&gt;美的 多功能双胆电压力锅5L 163元-反10=153元‼️&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889259"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">単商品加车1件 才4</title>
+    <link href="https://www.hxm5.com/t/2889258" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:acd4a6237aa836b3</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">単商品加车1件 才4</summary>
+    <content type="html">&lt;p&gt;単商品加车1件 才4&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889258"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">用工行cxk 有2k-4块多</title>
+    <link href="https://www.hxm5.com/t/2889257" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:ee9e6fcb6b6c512c</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">用工行cxk 有2k-4块多</summary>
+    <content type="html">&lt;p&gt;用工行cxk 有2k-4块多&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889257"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">上海杏花村嘟嘟黄油蛋糕</title>
+    <link href="https://www.hxm5.com/t/2889253" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:598de468636eb4a5</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">上海杏花村嘟嘟黄油蛋糕</summary>
+    <content type="html">&lt;p&gt;上海杏花村嘟嘟黄油蛋糕&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889253"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">YZF越来越变态，领个权益 都要扫脸了，以前还可以发短信</title>
+    <link href="https://www.hxm5.com/t/2889252" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:e1e7414daa183175</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">YZF越来越变态，领个权益 都要扫脸了，以前还可以发短信</summary>
+    <content type="html">&lt;p&gt;YZF越来越变态，领个权益 都要扫脸了，以前还可以发短信&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889252"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <title type="text">泸溪河.桃酥饼干礼盒745g</title>
+    <link href="https://www.hxm5.com/t/2889251" rel="alternate" />
+    <id>tag:www.hxm5.com,2024-01-01:62c83f3ba8ebd4f4</id>
+    <updated>2026-07-08T17:22:15+08:00</updated>
+    <published>2026-07-08T17:22:15+08:00</published>
+    <author>
+      <name>线报屋</name>
+    </author>
+    <summary type="text">泸溪河.桃酥饼干礼盒745g</summary>
+    <content type="html">&lt;p&gt;泸溪河.桃酥饼干礼盒745g&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.hxm5.com/t/2889251"&gt;查看原文 →&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
 </feed>
