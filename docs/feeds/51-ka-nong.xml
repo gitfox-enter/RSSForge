@@ -1,26 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-  <channel>
-    <title>51卡农 - RSSForge</title>
-    <link>https://www.51kanong.com/</link>
-    <description>51卡农 的 RSS 订阅源（由 RSSForge 生成）</description>
-    <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Jul 2026 08:40:40 +0800</lastBuildDate>
-    <generator>RSSForge</generator>
-    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
-    <ttl>60</ttl>
-    <image>
-      <url>https://www.51kanong.com/favicon.ico</url>
-      <title>51卡农 - RSSForge</title>
-      <link>https://www.51kanong.com/</link>
-    </image>
-    <item>
-      <title>官方微信：kanongfeifei</title>
-      <link>https://www.51kanong.com/xyk-7510279-1.htm</link>
-      <guid isPermaLink="false">urn:md5:0ff073e85321430d@www.51kanong.com</guid>
-      <pubDate>Thu, 09 Jul 2026 08:35:43 -0000</pubDate>
-      <author>51卡农</author>
-      <description xml:space="preserve">官方微信：kanongfeifei&lt;br/&gt;&lt;a href="https://www.51kanong.com/xyk-7510279-1.htm"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-  </channel>
-</rss>
+<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
+  <ns0:title>51卡农</ns0:title>
+  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/51-ka-nong.xml" rel="self" type="application/atom+xml" />
+  <ns0:link href="https://www.51kanong.com/" rel="alternate" type="text/html" />
+  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/51-ka-nong.xml</ns0:id>
+  <ns0:updated>2026-07-09T09:14:39.675641+08:00</ns0:updated>
+  <ns0:subtitle>51卡农 - no items yet</ns0:subtitle>
+</ns0:feed>
