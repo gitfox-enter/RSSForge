@@ -1,9 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>反斗限免</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/fan-dou-xian-mian.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://free.apprcn.com/" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/fan-dou-xian-mian.xml</ns0:id>
-  <ns0:updated>2026-07-09T22:52:32.002307+08:00</ns0:updated>
-  <ns0:subtitle>反斗限免 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>反斗限免 - RSSForge</title>
+    <link>https://free.apprcn.com/</link>
+    <description>反斗限免 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 09 Jul 2026 23:53:29 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>240</ttl>
+    <image>
+      <url>https://free.apprcn.com/favicon.ico</url>
+      <title>反斗限免 - RSSForge</title>
+      <link>https://free.apprcn.com/</link>
+    </image>
+    <item>
+      <title>限时免费获取 Steam 游戏 Play a game with me[Windows]</title>
+      <link>https://free.apprcn.com/limited-time-get-steam-game-play-a-game-with-me-for-free/</link>
+      <guid isPermaLink="false">urn:md5:2e4e1434e8edaae0@free.apprcn.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>反斗限免</author>
+      <description xml:space="preserve">限时免费获取 Steam 游戏 Play a game with me[Windows]&lt;br/&gt;&lt;a href="https://free.apprcn.com/limited-time-get-steam-game-play-a-game-with-me-for-free/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Windows</title>
+      <link>https://free.apprcn.com/category/windows/</link>
+      <guid isPermaLink="false">urn:md5:dba53c35b4e55f18@free.apprcn.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>反斗限免</author>
+      <description xml:space="preserve">Windows&lt;br/&gt;&lt;a href="https://free.apprcn.com/category/windows/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>限时免费获取视频编辑软件 Winxvideo Al 授权[Windows][$89.95→0]</title>
+      <link>https://free.apprcn.com/limited-time-get-winxvideo-ai-license-for-free-10/</link>
+      <guid isPermaLink="false">urn:md5:cb7ebf5e47b59149@free.apprcn.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>反斗限免</author>
+      <description xml:space="preserve">限时免费获取视频编辑软件 Winxvideo Al 授权[Windows][$89.95→0]&lt;br/&gt;&lt;a href="https://free.apprcn.com/limited-time-get-winxvideo-ai-license-for-free-10/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Wise Duplicate Finder Pro – 重复文件查找工具[终身授权][Windows][$19.95→0]</title>
+      <link>https://free.apprcn.com/wise-duplicate-finder-pro-19/</link>
+      <guid isPermaLink="false">urn:md5:27152a1154733fe8@free.apprcn.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>反斗限免</author>
+      <description xml:space="preserve">Wise Duplicate Finder Pro – 重复文件查找工具[终身授权][Windows][$19.95→0]&lt;br/&gt;&lt;a href="https://free.apprcn.com/wise-duplicate-finder-pro-19/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>限时免费获取字体 Birthday Girl[Windows、macOS][$10→0]</title>
+      <link>https://free.apprcn.com/limited-time-get-birthday-girl-for-free/</link>
+      <guid isPermaLink="false">urn:md5:36f5898d65aed35f@free.apprcn.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>反斗限免</author>
+      <description xml:space="preserve">限时免费获取字体 Birthday Girl[Windows、macOS][$10→0]&lt;br/&gt;&lt;a href="https://free.apprcn.com/limited-time-get-birthday-girl-for-free/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Mac</title>
+      <link>https://free.apprcn.com/category/mac/</link>
+      <guid isPermaLink="false">urn:md5:a1dc19785d44c96e@free.apprcn.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>反斗限免</author>
+      <description xml:space="preserve">Mac&lt;br/&gt;&lt;a href="https://free.apprcn.com/category/mac/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>BootRacer Premium – 系统启动提速工具[Windows][$39.95→0]</title>
+      <link>https://free.apprcn.com/bootracer-premium-18/</link>
+      <guid isPermaLink="false">urn:md5:a4b9d4e59ac2add5@free.apprcn.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>反斗限免</author>
+      <description xml:space="preserve">BootRacer Premium – 系统启动提速工具[Windows][$39.95→0]&lt;br/&gt;&lt;a href="https://free.apprcn.com/bootracer-premium-18/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>MobiKin HEIC to JPG Converter - 将 HEIC 格式转换为其他图片格式[1年授权][Windows][$9.95→0]</title>
+      <link>https://free.apprcn.com/mobikin-heic-to-jpg-converter-10/</link>
+      <guid isPermaLink="false">urn:md5:6029896cdb273ec3@free.apprcn.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>反斗限免</author>
+      <description xml:space="preserve">MobiKin HEIC to JPG Converter - 将 HEIC 格式转换为其他图片格式[1年授权][Windows][$9.95→0]&lt;br/&gt;&lt;a href="https://free.apprcn.com/mobikin-heic-to-jpg-converter-10/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>限时免费获取字体 Hello Fall Duo[Windows、macOS][$15→0]</title>
+      <link>https://free.apprcn.com/limited-time-get-hello-fall-duo-for-free/</link>
+      <guid isPermaLink="false">urn:md5:63c7122d7ea05107@free.apprcn.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>反斗限免</author>
+      <description xml:space="preserve">限时免费获取字体 Hello Fall Duo[Windows、macOS][$15→0]&lt;br/&gt;&lt;a href="https://free.apprcn.com/limited-time-get-hello-fall-duo-for-free/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Zortam Mp3 Media Studio Pro – 音乐文件管理软件[Windows][$29.95→0]</title>
+      <link>https://free.apprcn.com/zortam-mp3-media-studio-pro-33/</link>
+      <guid isPermaLink="false">urn:md5:04f58aee7e0f6f5e@free.apprcn.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>反斗限免</author>
+      <description xml:space="preserve">Zortam Mp3 Media Studio Pro – 音乐文件管理软件[Windows][$29.95→0]&lt;br/&gt;&lt;a href="https://free.apprcn.com/zortam-mp3-media-studio-pro-33/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>https://www.bitsdujour.com/software/winxvideo-ai/</title>
+      <link>https://www.bitsdujour.com/software/winxvideo-ai/</link>
+      <guid isPermaLink="false">urn:md5:5c824c01be88a021@www.bitsdujour.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>反斗限免</author>
+      <description xml:space="preserve">https://www.bitsdujour.com/software/winxvideo-ai/&lt;br/&gt;&lt;a href="https://www.bitsdujour.com/software/winxvideo-ai/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>

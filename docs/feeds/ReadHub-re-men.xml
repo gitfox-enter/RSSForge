@@ -1,9 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>ReadHub 热门</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/ReadHub-re-men.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://readhub.cn/hot" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/ReadHub-re-men.xml</ns0:id>
-  <ns0:updated>2026-07-09T22:52:32.002307+08:00</ns0:updated>
-  <ns0:subtitle>ReadHub 热门 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>ReadHub 热门 - RSSForge</title>
+    <link>https://readhub.cn/hot</link>
+    <description>ReadHub 热门 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 09 Jul 2026 23:53:29 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>30</ttl>
+    <image>
+      <url>https://readhub.cn/favicon.ico</url>
+      <title>ReadHub 热门 - RSSForge</title>
+      <link>https://readhub.cn/hot</link>
+    </image>
+    <item>
+      <title>宁夏两地升级发布暴雨红色预警</title>
+      <link>https://readhub.cn/topic/8ud6Lbxinmn</link>
+      <guid isPermaLink="false">urn:md5:8a300f2e8c695110@readhub.cn</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">宁夏两地升级发布暴雨红色预警&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ud6Lbxinmn"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>特斯拉三代 Optimus 初步定型，马斯克给供应链定下量产红线</title>
+      <link>https://readhub.cn/topic/8ucnoOQdcr5</link>
+      <guid isPermaLink="false">urn:md5:3d10726d8ea76197@readhub.cn</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">特斯拉三代 Optimus 初步定型，马斯克给供应链定下量产红线&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ucnoOQdcr5"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>美伊冲突再起 石油主题 LOF 高开</title>
+      <link>https://readhub.cn/topic/8ubzTHjBiEJ</link>
+      <guid isPermaLink="false">urn:md5:daa4cb72dab16d56@readhub.cn</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">美伊冲突再起 石油主题 LOF 高开&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ubzTHjBiEJ"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Meta 推出首款付费 AI 开发者模型 拟打造性价比优势</title>
+      <link>https://readhub.cn/topic/8uczavQ5gsI</link>
+      <guid isPermaLink="false">urn:md5:5cc34c4ba1834de2@readhub.cn</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">Meta 推出首款付费 AI 开发者模型 拟打造性价比优势&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uczavQ5gsI"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>广西南宁自然灾害救助应急响应提升为一级</title>
+      <link>https://readhub.cn/topic/8ucs3weBo8O</link>
+      <guid isPermaLink="false">urn:md5:c29fc968d3cd2d7c@readhub.cn</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">广西南宁自然灾害救助应急响应提升为一级&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ucs3weBo8O"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>EIA 天然气报告：截至 7 月 3 日当周，美国天然气库存总量为 29830 亿立方英尺</title>
+      <link>https://readhub.cn/topic/8ud1ic0gLLE</link>
+      <guid isPermaLink="false">urn:md5:a1f0c1abf587b409@readhub.cn</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">EIA 天然气报告：截至 7 月 3 日当周，美国天然气库存总量为 29830 亿立方英尺&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ud1ic0gLLE"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>逻辑比特完成数亿元 A 轮融资，量子计算寻找「确定性」</title>
+      <link>https://readhub.cn/topic/8ucXlwHFQAV</link>
+      <guid isPermaLink="false">urn:md5:154e03e232f68a17@readhub.cn</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">逻辑比特完成数亿元 A 轮融资，量子计算寻找「确定性」&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ucXlwHFQAV"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>苹果洽谈 AI 公司 PrismML 拟将 270 亿参数大模型部署至 iPhone</title>
+      <link>https://readhub.cn/topic/8ucwLuv11p6</link>
+      <guid isPermaLink="false">urn:md5:fe2f4fbf44b6aef7@readhub.cn</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">苹果洽谈 AI 公司 PrismML 拟将 270 亿参数大模型部署至 iPhone&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ucwLuv11p6"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>艺康完成 47.5 亿美元收购 CoolIT，押注 AI 液冷新蓝海</title>
+      <link>https://readhub.cn/topic/8ub1Q47DTG7</link>
+      <guid isPermaLink="false">urn:md5:4b014629853fff15@readhub.cn</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">艺康完成 47.5 亿美元收购 CoolIT，押注 AI 液冷新蓝海&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ub1Q47DTG7"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>三峡旅游：拟 4576.11 万元向控股股东出售九凤谷公司 100% 股权</title>
+      <link>https://readhub.cn/topic/8ucqzExSdQ1</link>
+      <guid isPermaLink="false">urn:md5:65c8920bfa8800c6@readhub.cn</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">三峡旅游：拟 4576.11 万元向控股股东出售九凤谷公司 100% 股权&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ucqzExSdQ1"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>

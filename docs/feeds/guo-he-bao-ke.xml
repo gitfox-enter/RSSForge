@@ -1,9 +1,258 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>果核剥壳</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/guo-he-bao-ke.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://www.ghxi.com/" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/guo-he-bao-ke.xml</ns0:id>
-  <ns0:updated>2026-07-09T22:52:32.002307+08:00</ns0:updated>
-  <ns0:subtitle>果核剥壳 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>果核剥壳 - RSSForge</title>
+    <link>https://www.ghxi.com/</link>
+    <description>果核剥壳 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 09 Jul 2026 23:53:29 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>360</ttl>
+    <image>
+      <url>https://www.ghxi.com/favicon.ico</url>
+      <title>果核剥壳 - RSSForge</title>
+      <link>https://www.ghxi.com/</link>
+    </image>
+    <item>
+      <title>Android F-Stop(高级相册) v5.5.490 修改版</title>
+      <link>https://www.ghxi.com/fstop.html</link>
+      <guid isPermaLink="false">urn:md5:7bb5c4609a4b64e5@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Android F-Stop(高级相册) v5.5.490 修改版&lt;br/&gt;&lt;a href="https://www.ghxi.com/fstop.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Android PowerDirector(威力导演)v16.5.0 修改版</title>
+      <link>https://www.ghxi.com/wldy.html</link>
+      <guid isPermaLink="false">urn:md5:6395cbe6ad64e1c1@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Android PowerDirector(威力导演)v16.5.0 修改版&lt;br/&gt;&lt;a href="https://www.ghxi.com/wldy.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Android RAR v7.23.build133 修改版</title>
+      <link>https://www.ghxi.com/andrar.html</link>
+      <guid isPermaLink="false">urn:md5:5064b2bfce15a2c0@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Android RAR v7.23.build133 修改版&lt;br/&gt;&lt;a href="https://www.ghxi.com/andrar.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>夸克 (QuarkPC) 电脑版 v6.9.6.896</title>
+      <link>https://www.ghxi.com/quarkpc.html</link>
+      <guid isPermaLink="false">urn:md5:b285bc71ddc73f9e@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">夸克 (QuarkPC) 电脑版 v6.9.6.896&lt;br/&gt;&lt;a href="https://www.ghxi.com/quarkpc.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Google Chrome v150.0.7871.115 便携增强版</title>
+      <link>https://www.ghxi.com/chrome.html</link>
+      <guid isPermaLink="false">urn:md5:1da504d08409ce59@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Google Chrome v150.0.7871.115 便携增强版&lt;br/&gt;&lt;a href="https://www.ghxi.com/chrome.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Google Chrome v150.0.7871.115 正式版 离线安装包</title>
+      <link>https://www.ghxi.com/pcchrome.html</link>
+      <guid isPermaLink="false">urn:md5:f26631b291dd289b@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Google Chrome v150.0.7871.115 正式版 离线安装包&lt;br/&gt;&lt;a href="https://www.ghxi.com/pcchrome.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Ungoogled Chromium 150.0.7871.46-1.1 果核优化便携版</title>
+      <link>https://www.ghxi.com/uchrome.html</link>
+      <guid isPermaLink="false">urn:md5:d6103aee2886bf7e@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Ungoogled Chromium 150.0.7871.46-1.1 果核优化便携版&lt;br/&gt;&lt;a href="https://www.ghxi.com/uchrome.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Chrome v150.0.7871.101 果核增强版</title>
+      <link>https://www.ghxi.com/chromeplus.html</link>
+      <guid isPermaLink="false">urn:md5:84978230fe5d8509@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Chrome v150.0.7871.101 果核增强版&lt;br/&gt;&lt;a href="https://www.ghxi.com/chromeplus.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>WinSnap v6.2.4 便携修改版</title>
+      <link>https://www.ghxi.com/winsnap.html</link>
+      <guid isPermaLink="false">urn:md5:c5bc712536e6eb23@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">WinSnap v6.2.4 便携修改版&lt;br/&gt;&lt;a href="https://www.ghxi.com/winsnap.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Light Image Resizer 7.6.4.173 绿色便携版/单文件版</title>
+      <link>https://www.ghxi.com/lightimageresizer.html</link>
+      <guid isPermaLink="false">urn:md5:9b3d7ffe795f7aae@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Light Image Resizer 7.6.4.173 绿色便携版/单文件版&lt;br/&gt;&lt;a href="https://www.ghxi.com/lightimageresizer.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>PowerDirector 2026(威力导演) v24.6.1907.0 修改版</title>
+      <link>https://www.ghxi.com/powerdirector2026.html</link>
+      <guid isPermaLink="false">urn:md5:e5dd06ac11938721@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">PowerDirector 2026(威力导演) v24.6.1907.0 修改版&lt;br/&gt;&lt;a href="https://www.ghxi.com/powerdirector2026.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>WinCam(屏幕录制)v4.0 修改版</title>
+      <link>https://www.ghxi.com/wincam.html</link>
+      <guid isPermaLink="false">urn:md5:1b407186714ecc65@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">WinCam(屏幕录制)v4.0 修改版&lt;br/&gt;&lt;a href="https://www.ghxi.com/wincam.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Converseen(图像格式转换工具) v0.15.2.6-1 便携版</title>
+      <link>https://www.ghxi.com/converseen.html</link>
+      <guid isPermaLink="false">urn:md5:0580d25fcb78e9d9@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Converseen(图像格式转换工具) v0.15.2.6-1 便携版&lt;br/&gt;&lt;a href="https://www.ghxi.com/converseen.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>QOwnNotes(开源Markdown笔记本) v26.7.4 绿色版</title>
+      <link>https://www.ghxi.com/qownnotes.html</link>
+      <guid isPermaLink="false">urn:md5:9078bd1f2b82b4c1@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">QOwnNotes(开源Markdown笔记本) v26.7.4 绿色版&lt;br/&gt;&lt;a href="https://www.ghxi.com/qownnotes.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>VNote(开源Markdown笔记) v4.1.1 官方中文版</title>
+      <link>https://www.ghxi.com/vnote.html</link>
+      <guid isPermaLink="false">urn:md5:45235da94ad8d0fa@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">VNote(开源Markdown笔记) v4.1.1 官方中文版&lt;br/&gt;&lt;a href="https://www.ghxi.com/vnote.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>iPhone 18 Pro 芯片曝光：A20 Pro 延续 LPDDR5X，通过 6 通道架构提升带宽</title>
+      <link>https://www.ghxi.com/new202607092.html</link>
+      <guid isPermaLink="false">urn:md5:95710bb0d9bd01ee@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">iPhone 18 Pro 芯片曝光：A20 Pro 延续 LPDDR5X，通过 6 通道架构提升带宽&lt;br/&gt;&lt;a href="https://www.ghxi.com/new202607092.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>SpaceXAI 发布首个编程智能体模型 Grok 4.5：联合 Cursor 训练，效率翻倍成本减半</title>
+      <link>https://www.ghxi.com/ai202607092.html</link>
+      <guid isPermaLink="false">urn:md5:ab67d2c30d9ae6c5@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">SpaceXAI 发布首个编程智能体模型 Grok 4.5：联合 Cursor 训练，效率翻倍成本减半&lt;br/&gt;&lt;a href="https://www.ghxi.com/ai202607092.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Wireshark v4.6.7 便携版</title>
+      <link>https://www.ghxi.com/wireshark.html</link>
+      <guid isPermaLink="false">urn:md5:468ea18eb10a0bd8@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Wireshark v4.6.7 便携版&lt;br/&gt;&lt;a href="https://www.ghxi.com/wireshark.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Visual Studio Code 1.128.0 官方版</title>
+      <link>https://www.ghxi.com/vscode.html</link>
+      <guid isPermaLink="false">urn:md5:4d87959c81e78034@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Visual Studio Code 1.128.0 官方版&lt;br/&gt;&lt;a href="https://www.ghxi.com/vscode.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>抖音PC版 v8.1.1 官方版</title>
+      <link>https://www.ghxi.com/douyinpc.html</link>
+      <guid isPermaLink="false">urn:md5:9aa4f810f5d0bf4d@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">抖音PC版 v8.1.1 官方版&lt;br/&gt;&lt;a href="https://www.ghxi.com/douyinpc.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>苹果停止签署多款旧款 iPhone 和 iPad 旧版固件</title>
+      <link>https://www.ghxi.com/new202607091.html</link>
+      <guid isPermaLink="false">urn:md5:0a716dfa12bcb823@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">苹果停止签署多款旧款 iPhone 和 iPad 旧版固件&lt;br/&gt;&lt;a href="https://www.ghxi.com/new202607091.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>HWiNFO(硬件检测工具) v8.50.6020.0 官方便携版</title>
+      <link>https://www.ghxi.com/hwinfo.html</link>
+      <guid isPermaLink="false">urn:md5:6a30a58a51b2186b@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">HWiNFO(硬件检测工具) v8.50.6020.0 官方便携版&lt;br/&gt;&lt;a href="https://www.ghxi.com/hwinfo.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>OpenAI 发布全双工语音模型 GPT-Live：可边听边说，复杂任务交由 GPT-5.5 后台处理</title>
+      <link>https://www.ghxi.com/ai202607091.html</link>
+      <guid isPermaLink="false">urn:md5:83c928f8b4bed1b4@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">OpenAI 发布全双工语音模型 GPT-Live：可边听边说，复杂任务交由 GPT-5.5 后台处理&lt;br/&gt;&lt;a href="https://www.ghxi.com/ai202607091.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Waterfox(水狐浏览器) v6.6.16 官方版</title>
+      <link>https://www.ghxi.com/waterfox.html</link>
+      <guid isPermaLink="false">urn:md5:85d94ecc88333049@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Waterfox(水狐浏览器) v6.6.16 官方版&lt;br/&gt;&lt;a href="https://www.ghxi.com/waterfox.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Syncthing(文件同步工具) v2.1.2 官方版</title>
+      <link>https://www.ghxi.com/syncthing.html</link>
+      <guid isPermaLink="false">urn:md5:22c2244cfdadc0d8@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Syncthing(文件同步工具) v2.1.2 官方版&lt;br/&gt;&lt;a href="https://www.ghxi.com/syncthing.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>imFile(下载工具) v2.1.0</title>
+      <link>https://www.ghxi.com/imfile.html</link>
+      <guid isPermaLink="false">urn:md5:c41b4b44367fce85@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">imFile(下载工具) v2.1.0&lt;br/&gt;&lt;a href="https://www.ghxi.com/imfile.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>TagSpaces(文件标签管理器) v6.13.11 绿色版</title>
+      <link>https://www.ghxi.com/tagspaces.html</link>
+      <guid isPermaLink="false">urn:md5:1d3f404210d903be@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">TagSpaces(文件标签管理器) v6.13.11 绿色版&lt;br/&gt;&lt;a href="https://www.ghxi.com/tagspaces.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>OpenSpeedy(游戏变速工具) v3.3.1 绿色版</title>
+      <link>https://www.ghxi.com/openspeedy.html</link>
+      <guid isPermaLink="false">urn:md5:65804d8b969f5583@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">OpenSpeedy(游戏变速工具) v3.3.1 绿色版&lt;br/&gt;&lt;a href="https://www.ghxi.com/openspeedy.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Android 蜜蜂记账 v3.5.6</title>
+      <link>https://www.ghxi.com/mfjz.html</link>
+      <guid isPermaLink="false">urn:md5:05810bd595eb665b@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">Android 蜜蜂记账 v3.5.6&lt;br/&gt;&lt;a href="https://www.ghxi.com/mfjz.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>【正版特惠】WinRAR 国际正版</title>
+      <link>https://www.ghxi.com/winrarzb.html</link>
+      <guid isPermaLink="false">urn:md5:cf30f1d33918e0f2@www.ghxi.com</guid>
+      <pubDate>Thu, 09 Jul 2026 23:51:15 -0000</pubDate>
+      <author>果核剥壳</author>
+      <description xml:space="preserve">【正版特惠】WinRAR 国际正版&lt;br/&gt;&lt;a href="https://www.ghxi.com/winrarzb.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>
