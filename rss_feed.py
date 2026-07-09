@@ -295,8 +295,11 @@ def _build_atom_feed(
     return root
 
 
-def _write_feed(root: ET.Element, output_path: str) -> bool:
-    """Write Atom feed to file with XSL stylesheet for browser rendering."""
+def _write_feed(root: ET.Element, output_path: str, feed_type: str = 'rss2') -> bool:
+    """Write feed to file. feed_type: 'rss2' (default, no XSL) or 'atom' (with XSL).
+    
+    RSS 2.0 是通用标准格式，不加 XSL 以确保验证器兼容性。
+    """
     tmp_path = output_path + '.tmp'
     try:
         os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else '.', exist_ok=True)
@@ -304,7 +307,9 @@ def _write_feed(root: ET.Element, output_path: str) -> bool:
         ET.indent(tree, space='  ')
         with open(tmp_path, 'w', encoding='utf-8') as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-            f.write('<?xml-stylesheet href="https://gitfox-enter.github.io/RSSForge/pretty-feed-v3.xsl" type="text/xsl"?>\n')
+            # Atom 可选加 XSL 样式；RSS 2.0 不加，避免验证器误判
+            if feed_type == 'atom':
+                f.write('<?xml-stylesheet href="https://gitfox-enter.github.io/RSSForge/pretty-feed-v3.xsl" type="text/xsl"?>\n')
             tree.write(f, encoding='unicode', xml_declaration=False)
         os.replace(tmp_path, output_path)
         return True
@@ -313,6 +318,112 @@ def _write_feed(root: ET.Element, output_path: str) -> bool:
         if os.path.exists(tmp_path):
             os.remove(tmp_path)
         return False
+
+
+
+def _build_rss2_feed(
+    items: List[Dict],
+    title: str,
+    site_url: str,
+    description: str = "",
+    interval_min: Optional[int] = None,
+    site_name: str = '',
+) -> ET.Element:
+    """构建 RSS 2.0 feed（fix: 切换为 RSS 2.0 格式，兼容验证器）."""
+    from html import escape as html_escape
+    from email.utils import formatdate
+
+    MAX_FEED_ITEMS = 1000
+    items = items[:MAX_FEED_ITEMS]
+
+    # RSS 2.0 根元素
+    rss = ET.Element('rss', version='2.0')
+    ET.register_namespace('', '')
+
+    channel = ET.SubElement(rss, 'channel')
+
+    # 频道基本信息
+    ET.SubElement(channel, 'title').text = _sanitize_xml(title)
+    ET.SubElement(channel, 'link').text = site_url
+    ET.SubElement(channel, 'description').text = _sanitize_xml(
+        description or f'{title} 的 RSS 订阅源（由 RSSForge 生成）'
+    )
+    ET.SubElement(channel, 'language').text = 'zh-cn'
+    ET.SubElement(channel, 'lastBuildDate').text = formatdate(localtime=True)
+    ET.SubElement(channel, 'generator').text = 'RSSForge'
+    ET.SubElement(channel, 'copyright').text = '内容版权归原作者所有，RSSForge 仅提供聚合索引'
+
+    # TTL: 分钟为单位
+    if interval_min is not None:
+        ttl = max(1, interval_min)
+        ET.SubElement(channel, 'ttl').text = str(ttl)
+
+    # 图片（favicon）
+    icon_url = fetch_site_favicon(site_url, site_name or title)
+    if icon_url:
+        image = ET.SubElement(channel, 'image')
+        ET.SubElement(image, 'url').text = icon_url
+        ET.SubElement(image, 'title').text = _sanitize_xml(title)
+        ET.SubElement(image, 'link').text = site_url
+
+    # 条目
+    for idx, item in enumerate(items):
+        entry = ET.SubElement(channel, 'item')
+
+        title_text = _sanitize_xml(item.get('text', item.get('title', '无标题')))
+        ET.SubElement(entry, 'title').text = title_text
+
+        url = _sanitize_xml(item.get('url', ''))
+        if url:
+            ET.SubElement(entry, 'link').text = url
+            # GUID: 用 URL 的 MD5 哈希作为永久唯一 ID
+            parsed = urlparse(url)
+            path_qs = parsed.path + ('?' + parsed.query if parsed.query else '')
+            url_hash = hashlib.md5(path_qs.encode('utf-8')).hexdigest()[:16]
+            guid = ET.SubElement(entry, 'guid', isPermaLink='false')
+            guid.text = f"urn:md5:{url_hash}@{parsed.hostname}"
+
+        # pubDate: RFC 822 格式
+        item_time = item.get('time', '')
+        try:
+            if item_time:
+                dt = datetime.strptime(item_time, '%Y-%m-%d %H:%M:%S')
+                dt = dt.replace(tzinfo=timezone(timedelta(hours=8)))
+            else:
+                dt = datetime.now(timezone(timedelta(hours=8)))
+        except Exception:
+            dt = datetime.now(timezone(timedelta(hours=8)))
+        # calendar.timegm 把 timetuple 当作 UTC解释，配合 UTC+8 tzinfo 得到正确 UTC 时间戳
+        import calendar as _cal
+        utc_ts = _cal.timegm(dt.timetuple())
+        pub_date = formatdate(utc_ts, localtime=False)
+        ET.SubElement(entry, 'pubDate').text = pub_date
+
+        # 作者/来源
+        if site_name:
+            ET.SubElement(entry, 'author').text = site_name
+
+        # 描述（summary + content 合并）
+        summary = item.get('summary', '')
+        if summary:
+            html_content = html_escape(summary)
+            if url:
+                html_content += f'<br/><a href="{html_escape(url)}">查看原文 →</a>'
+        elif title_text:
+            html_content = html_escape(title_text)
+            if url:
+                html_content += f'<br/><a href="{html_escape(url)}">查看原文 →</a>'
+        elif url:
+            html_content = f'<a href="{html_escape(url)}">查看原文 →</a>'
+        else:
+            html_content = '暂无内容'
+
+        desc_el = ET.SubElement(entry, 'description')
+        desc_el.text = html_content
+        desc_el.set('xml:space', 'preserve')
+
+    return rss
+
 
 
 # ============================================================
@@ -425,14 +536,13 @@ def generate_all_feeds() -> Dict[str, int]:
             stats['feeds_unchanged'] += 1
             continue  # 数据无变化且 feed 文件存在，跳过生成
 
-        root = _build_atom_feed(
-            site_items, title, feed_url, desc, updated_at,
+        root = _build_rss2_feed(
+            site_items, title, site_url, desc,
             interval_min=interval,
             site_name=site_name,
-            site_url=site_url,
         )
-        
-        if _write_feed(root, filename):
+
+        if _write_feed(root, filename, feed_type='rss2'):
             stats['feeds_generated'] += 1
             print(f"  ✓ {site_name}: {len(site_items)} 条")
         else:

@@ -38,15 +38,20 @@ def _safe_filename(name: str) -> str:
 
 
 def _feed_has_entries(filepath: str) -> bool:
-    """Check if feed file contains at least one <entry>。"""
+    """Check if feed file contains at least one item (<entry> for Atom, <item> for RSS 2.0)."""
     try:
         tree = ET.parse(filepath)
         root = tree.getroot()
+        # Atom: <entry>
         ns = {'atom': 'http://www.w3.org/2005/Atom'}
         entries = root.findall('atom:entry', ns)
         if not entries:
             entries = root.findall('entry')
-        return len(entries) > 0
+        if entries:
+            return True
+        # RSS 2.0: <item>
+        items = root.findall('item')
+        return len(items) > 0
     except Exception:
         return False
 
