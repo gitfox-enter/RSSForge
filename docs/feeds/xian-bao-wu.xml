@@ -1,9 +1,194 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>线报屋</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wu.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://www.hxm5.com/" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wu.xml</ns0:id>
-  <ns0:updated>2026-07-10T04:25:30.194627+08:00</ns0:updated>
-  <ns0:subtitle>线报屋 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>线报屋 - RSSForge</title>
+    <link>https://www.hxm5.com/</link>
+    <description>线报屋 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 05:01:48 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>360</ttl>
+    <image>
+      <url>https://www.hxm5.com/favicon.ico</url>
+      <title>线报屋 - RSSForge</title>
+      <link>https://www.hxm5.com/</link>
+    </image>
+    <item>
+      <title>最新线报</title>
+      <link>https://www.hxm5.com/</link>
+      <guid isPermaLink="false">urn:md5:6666cd76f9695646@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">最新线报&lt;br/&gt;&lt;a href="https://www.hxm5.com/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>推送订阅</title>
+      <link>https://www.hxm5.com/xianbao/1/</link>
+      <guid isPermaLink="false">urn:md5:d96f360541b10b57@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">推送订阅&lt;br/&gt;&lt;a href="https://www.hxm5.com/xianbao/1/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>热门活动</title>
+      <link>https://www.hxm5.com/xianbao/3/</link>
+      <guid isPermaLink="false">urn:md5:911c3471e7142ab1@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">热门活动&lt;br/&gt;&lt;a href="https://www.hxm5.com/xianbao/3/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>赚吧线报</title>
+      <link>https://www.hxm5.com/xianbao/5/</link>
+      <guid isPermaLink="false">urn:md5:a83cd5e275f897d0@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">赚吧线报&lt;br/&gt;&lt;a href="https://www.hxm5.com/xianbao/5/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>微博线报</title>
+      <link>https://www.hxm5.com/xianbao/9/</link>
+      <guid isPermaLink="false">urn:md5:c72734365d1c26de@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">微博线报&lt;br/&gt;&lt;a href="https://www.hxm5.com/xianbao/9/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>群组线报</title>
+      <link>https://www.hxm5.com/xianbao/7/</link>
+      <guid isPermaLink="false">urn:md5:e93b4fd482ee83be@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">群组线报&lt;br/&gt;&lt;a href="https://www.hxm5.com/xianbao/7/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>法国鱼油 宠物专用</title>
+      <link>https://www.hxm5.com/t/2889948</link>
+      <guid isPermaLink="false">urn:md5:59adfb6537ee140c@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">法国鱼油 宠物专用&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889948"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>滋源 水杨酸控油去屑洗头水 400ml</title>
+      <link>https://www.hxm5.com/t/2889947</link>
+      <guid isPermaLink="false">urn:md5:845ffba55a25888c@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">滋源 水杨酸控油去屑洗头水 400ml&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889947"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>蒙牛 全脂纯牛奶250ml*21盒 世界杯定制装，买2件 后23.41/件</title>
+      <link>https://www.hxm5.com/t/2889943</link>
+      <guid isPermaLink="false">urn:md5:33adf1594a4eb688@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">蒙牛 全脂纯牛奶250ml*21盒 世界杯定制装，买2件 后23.41/件&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889943"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Yihai 亿海裙带菜丝芥末味230g*5 13首単，凑后0.2</title>
+      <link>https://www.hxm5.com/t/2889942</link>
+      <guid isPermaLink="false">urn:md5:90ad9087087c8e10@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">Yihai 亿海裙带菜丝芥末味230g*5 13首単，凑后0.2&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889942"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>威尔通（WELTSTON）pingu企鹅挂件钥匙扣吊坠 凑后【8.6】</title>
+      <link>https://www.hxm5.com/t/2889941</link>
+      <guid isPermaLink="false">urn:md5:95f56c769e891d58@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">威尔通（WELTSTON）pingu企鹅挂件钥匙扣吊坠 凑后【8.6】&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889941"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>稻香村 黄油桃酥原味300g，叠2礼金，2件 凑后3.99/件</title>
+      <link>https://www.hxm5.com/t/2889940</link>
+      <guid isPermaLink="false">urn:md5:0c1d0ff15cc192f7@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">稻香村 黄油桃酥原味300g，叠2礼金，2件 凑后3.99/件&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889940"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>还没抽的记得去抽哈 一直有水</title>
+      <link>https://www.hxm5.com/t/2889938</link>
+      <guid isPermaLink="false">urn:md5:10dfc0c5209838e8@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">还没抽的记得去抽哈 一直有水&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889938"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>珍味小梅园黑椒香酥牛肉饼450g（5片）*4袋 弹2元立减 凑后【5.85】</title>
+      <link>https://www.hxm5.com/t/2889937</link>
+      <guid isPermaLink="false">urn:md5:3532c4ccdb169209@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">珍味小梅园黑椒香酥牛肉饼450g（5片）*4袋 弹2元立减 凑后【5.85】&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889937"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Yihai 亿海裙带菜丝芥末味230g*5 13首单，凑后0.2</title>
+      <link>https://www.hxm5.com/t/2889936</link>
+      <guid isPermaLink="false">urn:md5:10319ce8712adc78@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">Yihai 亿海裙带菜丝芥末味230g*5 13首单，凑后0.2&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889936"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>折8r/袋‼南方黑芝麻丸</title>
+      <link>https://www.hxm5.com/t/2889935</link>
+      <guid isPermaLink="false">urn:md5:4b622482b837d5c1@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">折8r/袋‼南方黑芝麻丸&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889935"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>皇氏如业 高钙奶 250ml*12盒 拍3件，弹2立减 每件11.9</title>
+      <link>https://www.hxm5.com/t/2889934</link>
+      <guid isPermaLink="false">urn:md5:06070e81c9467142@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">皇氏如业 高钙奶 250ml*12盒 拍3件，弹2立减 每件11.9&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889934"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>正宗龙口粉丝300g💰5.9</title>
+      <link>https://www.hxm5.com/t/2889930</link>
+      <guid isPermaLink="false">urn:md5:dd23526fd2830e88@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">正宗龙口粉丝300g💰5.9&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889930"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>又送工行提现券了，转6000得8000</title>
+      <link>https://www.hxm5.com/t/2889928</link>
+      <guid isPermaLink="false">urn:md5:85342ba33873a05c@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">又送工行提现券了，转6000得8000&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889928"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>西贝莜面村DHA核桃油无抗鸡排85g*3片，弹2立减，买1件 后6.52</title>
+      <link>https://www.hxm5.com/t/2889927</link>
+      <guid isPermaLink="false">urn:md5:85f25f6bb09f45e1@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">西贝莜面村DHA核桃油无抗鸡排85g*3片，弹2立减，买1件 后6.52&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889927"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>招行 红包，夜毛</title>
+      <link>https://www.hxm5.com/t/2889926</link>
+      <guid isPermaLink="false">urn:md5:683e609fbd444280@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">招行 红包，夜毛&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889926"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>皇氏乳业 高钙奶 250ml*12盒 ，3件 凑后12.57/件</title>
+      <link>https://www.hxm5.com/t/2889924</link>
+      <guid isPermaLink="false">urn:md5:1105c3a7975c3df2@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 04:59:56 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">皇氏乳业 高钙奶 250ml*12盒 ，3件 凑后12.57/件&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889924"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>
