@@ -1,9 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>ReadHub 热门</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/ReadHub-re-men.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://readhub.cn/hot" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/ReadHub-re-men.xml</ns0:id>
-  <ns0:updated>2026-07-11T03:53:41.876040+08:00</ns0:updated>
-  <ns0:subtitle>ReadHub 热门 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>ReadHub 热门 - RSSForge</title>
+    <link>https://readhub.cn/hot</link>
+    <description>ReadHub 热门 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 11 Jul 2026 03:58:53 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>30</ttl>
+    <image>
+      <url>https://readhub.cn/favicon.ico</url>
+      <title>ReadHub 热门 - RSSForge</title>
+      <link>https://readhub.cn/hot</link>
+    </image>
+    <item>
+      <title>SK 海力士 CEO：内存芯片短缺可能持续到 2030 年以后</title>
+      <link>https://readhub.cn/topic/8uevcS3anrO</link>
+      <guid isPermaLink="false">urn:md5:b8dc3a76d7a1e611@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 03:56:38 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">SK 海力士 CEO：内存芯片短缺可能持续到 2030 年以后&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uevcS3anrO"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>SK 海力士考虑「内存即服务」模式 或允许客户租赁而非购买芯片</title>
+      <link>https://readhub.cn/topic/8uepXcp0L1v</link>
+      <guid isPermaLink="false">urn:md5:fa26746afb2d6b6c@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 03:56:38 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">SK 海力士考虑「内存即服务」模式 或允许客户租赁而非购买芯片&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uepXcp0L1v"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>欧盟批准匈牙利新版复苏与韧性计划</title>
+      <link>https://readhub.cn/topic/8ueo6oqZXGK</link>
+      <guid isPermaLink="false">urn:md5:35ecf323d9f14d20@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 03:56:38 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">欧盟批准匈牙利新版复苏与韧性计划&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ueo6oqZXGK"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>英伟达涨幅扩大至超 3%，市值重回 5 万亿美元</title>
+      <link>https://readhub.cn/topic/8uelFw5KnY2</link>
+      <guid isPermaLink="false">urn:md5:abd0378a6bfe5665@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 03:56:38 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">英伟达涨幅扩大至超 3%，市值重回 5 万亿美元&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uelFw5KnY2"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>SK 海力士美股正式上市 总市值超出美光近 2000 亿美元</title>
+      <link>https://readhub.cn/topic/8uen2jIKy3l</link>
+      <guid isPermaLink="false">urn:md5:c47c13b2ca6d1055@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 03:56:38 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">SK 海力士美股正式上市 总市值超出美光近 2000 亿美元&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uen2jIKy3l"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>SK 海力士 ADR 预示开盘价为 180 美元 较发行价高出 21%</title>
+      <link>https://readhub.cn/topic/8uegcOMb3gp</link>
+      <guid isPermaLink="false">urn:md5:cf60d5c07803b045@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 03:56:38 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">SK 海力士 ADR 预示开盘价为 180 美元 较发行价高出 21%&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uegcOMb3gp"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>石药集团：已收到阿斯利康 2500 万美元研发里程碑付款</title>
+      <link>https://readhub.cn/topic/8uegyAJ8tqn</link>
+      <guid isPermaLink="false">urn:md5:ec5d72b59b759e5b@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 03:56:38 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">石药集团：已收到阿斯利康 2500 万美元研发里程碑付款&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uegyAJ8tqn"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>国常会：系统推进数字中国建设，加快新一代通信网、算力网建设</title>
+      <link>https://readhub.cn/topic/8ueSfno1kTH</link>
+      <guid isPermaLink="false">urn:md5:2c85d3865fc609c5@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 03:56:38 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">国常会：系统推进数字中国建设，加快新一代通信网、算力网建设&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ueSfno1kTH"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>北京市气象局：10 日夜间至 11 日夜间 降雨将持续约 40 小时</title>
+      <link>https://readhub.cn/topic/8uegc0OLMco</link>
+      <guid isPermaLink="false">urn:md5:1519cf1dbe2aff96@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 03:56:38 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">北京市气象局：10 日夜间至 11 日夜间 降雨将持续约 40 小时&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uegc0OLMco"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>未上市新车遭 AI 虚假内容传播 小米官方辟谣并启动投诉处置</title>
+      <link>https://readhub.cn/topic/8ueNJUWgAPU</link>
+      <guid isPermaLink="false">urn:md5:937fc7931e2c8b84@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 03:56:38 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">未上市新车遭 AI 虚假内容传播 小米官方辟谣并启动投诉处置&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ueNJUWgAPU"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>
