@@ -1,9 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>ReadHub 热门</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/ReadHub-re-men.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://readhub.cn/hot" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/ReadHub-re-men.xml</ns0:id>
-  <ns0:updated>2026-07-10T09:11:01.174074+08:00</ns0:updated>
-  <ns0:subtitle>ReadHub 热门 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>ReadHub 热门 - RSSForge</title>
+    <link>https://readhub.cn/hot</link>
+    <description>ReadHub 热门 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 09:33:55 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>30</ttl>
+    <image>
+      <url>https://readhub.cn/favicon.ico</url>
+      <title>ReadHub 热门 - RSSForge</title>
+      <link>https://readhub.cn/hot</link>
+    </image>
+    <item>
+      <title>两市融资余额较上日减少 39.18 亿元</title>
+      <link>https://readhub.cn/topic/8udkMs36lyW</link>
+      <guid isPermaLink="false">urn:md5:fde7cdb0e0bc06f4@readhub.cn</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">两市融资余额较上日减少 39.18 亿元&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8udkMs36lyW"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>日本 10 年期国债收益率下降 4.5 个基点至 2.830%</title>
+      <link>https://readhub.cn/topic/8ucABH0QXyk</link>
+      <guid isPermaLink="false">urn:md5:67b7f84b7f70a813@readhub.cn</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">日本 10 年期国债收益率下降 4.5 个基点至 2.830%&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ucABH0QXyk"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>券商年内领 190 张罚单 经纪业务成违规重点</title>
+      <link>https://readhub.cn/topic/8udaMNJBF6A</link>
+      <guid isPermaLink="false">urn:md5:64955b01d8f225fe@readhub.cn</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">券商年内领 190 张罚单 经纪业务成违规重点&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8udaMNJBF6A"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>法国对英伟达反垄断调查接近尾声 最高或面临全球年度营收 10% 罚款</title>
+      <link>https://readhub.cn/topic/8ucs3PlH6oo</link>
+      <guid isPermaLink="false">urn:md5:0da076049f33569a@readhub.cn</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">法国对英伟达反垄断调查接近尾声 最高或面临全球年度营收 10% 罚款&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ucs3PlH6oo"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>美联储公布「五大改革工作组」领导名单</title>
+      <link>https://readhub.cn/topic/8udM4HWPZiM</link>
+      <guid isPermaLink="false">urn:md5:b42513ce1e97d7e5@readhub.cn</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">美联储公布「五大改革工作组」领导名单&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8udM4HWPZiM"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>首批基金二季报披露 主动权益类基金保持高仓位运作</title>
+      <link>https://readhub.cn/topic/8udYvgRr5Sc</link>
+      <guid isPermaLink="false">urn:md5:dafe1aaed6db1658@readhub.cn</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">首批基金二季报披露 主动权益类基金保持高仓位运作&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8udYvgRr5Sc"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>三星会长李在镕将于与黄仁勋会面 洽谈人工智能领域深化合作</title>
+      <link>https://readhub.cn/topic/8udeeFWkko6</link>
+      <guid isPermaLink="false">urn:md5:acf5d462ca782688@readhub.cn</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">三星会长李在镕将于与黄仁勋会面 洽谈人工智能领域深化合作&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8udeeFWkko6"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>高盛禁止员工参与金融和政治市场的预测交易</title>
+      <link>https://readhub.cn/topic/8udKefH90dk</link>
+      <guid isPermaLink="false">urn:md5:788c268d7776511f@readhub.cn</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">高盛禁止员工参与金融和政治市场的预测交易&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8udKefH90dk"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>德国大众拟大裁员，最高或裁减 12 万个岗位</title>
+      <link>https://readhub.cn/topic/8ud3qz6qWXO</link>
+      <guid isPermaLink="false">urn:md5:c2dc30bdd4df7721@readhub.cn</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">德国大众拟大裁员，最高或裁减 12 万个岗位&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ud3qz6qWXO"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>美联储 7 月维持利率不变的概率为 74.9%</title>
+      <link>https://readhub.cn/topic/8udYvhkTAOx</link>
+      <guid isPermaLink="false">urn:md5:505c4a63bcd9caa5@readhub.cn</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">美联储 7 月维持利率不变的概率为 74.9%&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8udYvhkTAOx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>

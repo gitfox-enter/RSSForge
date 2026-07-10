@@ -1,9 +1,194 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>线报屋</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wu.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://www.hxm5.com/" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wu.xml</ns0:id>
-  <ns0:updated>2026-07-10T09:11:01.174074+08:00</ns0:updated>
-  <ns0:subtitle>线报屋 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>线报屋 - RSSForge</title>
+    <link>https://www.hxm5.com/</link>
+    <description>线报屋 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 09:33:55 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>360</ttl>
+    <image>
+      <url>https://www.hxm5.com/favicon.ico</url>
+      <title>线报屋 - RSSForge</title>
+      <link>https://www.hxm5.com/</link>
+    </image>
+    <item>
+      <title>最新线报</title>
+      <link>https://www.hxm5.com/</link>
+      <guid isPermaLink="false">urn:md5:6666cd76f9695646@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">最新线报&lt;br/&gt;&lt;a href="https://www.hxm5.com/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>推送订阅</title>
+      <link>https://www.hxm5.com/xianbao/1/</link>
+      <guid isPermaLink="false">urn:md5:d96f360541b10b57@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">推送订阅&lt;br/&gt;&lt;a href="https://www.hxm5.com/xianbao/1/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>热门活动</title>
+      <link>https://www.hxm5.com/xianbao/3/</link>
+      <guid isPermaLink="false">urn:md5:911c3471e7142ab1@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">热门活动&lt;br/&gt;&lt;a href="https://www.hxm5.com/xianbao/3/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>赚吧线报</title>
+      <link>https://www.hxm5.com/xianbao/5/</link>
+      <guid isPermaLink="false">urn:md5:a83cd5e275f897d0@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">赚吧线报&lt;br/&gt;&lt;a href="https://www.hxm5.com/xianbao/5/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>群组线报</title>
+      <link>https://www.hxm5.com/xianbao/7/</link>
+      <guid isPermaLink="false">urn:md5:e93b4fd482ee83be@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">群组线报&lt;br/&gt;&lt;a href="https://www.hxm5.com/xianbao/7/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>滋源控油洗发水361g</title>
+      <link>https://www.hxm5.com/t/2889992</link>
+      <guid isPermaLink="false">urn:md5:c9734ced0deb479f@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">滋源控油洗发水361g&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889992"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>10点送杯子</title>
+      <link>https://www.hxm5.com/t/2889991</link>
+      <guid isPermaLink="false">urn:md5:f0ccb2318607b036@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">10点送杯子&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889991"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>10点 芬达59元 赠崩坏周边自辩</title>
+      <link>https://www.hxm5.com/t/2889990</link>
+      <guid isPermaLink="false">urn:md5:550f5ae3d8d35bf5@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">10点 芬达59元 赠崩坏周边自辩&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889990"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>plus189.05元 奶蓟草片护肝片120粒*2瓶</title>
+      <link>https://www.hxm5.com/t/2889989</link>
+      <guid isPermaLink="false">urn:md5:68a7eec9df7a4f6a@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">plus189.05元 奶蓟草片护肝片120粒*2瓶&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889989"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>答题得图书卡</title>
+      <link>https://www.hxm5.com/t/2889988</link>
+      <guid isPermaLink="false">urn:md5:8554d0f9800230e2@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">答题得图书卡&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889988"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>尔木萄洗脸巾20片</title>
+      <link>https://www.hxm5.com/t/2889987</link>
+      <guid isPermaLink="false">urn:md5:933b19058e2018e5@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">尔木萄洗脸巾20片&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889987"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>【京东】 0.01购世界杯啪啪圈</title>
+      <link>https://www.hxm5.com/t/2889986</link>
+      <guid isPermaLink="false">urn:md5:ddd79127babdf9c6@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">【京东】 0.01购世界杯啪啪圈&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889986"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>想要的先预约 相当于9块20瓶</title>
+      <link>https://www.hxm5.com/t/2889985</link>
+      <guid isPermaLink="false">urn:md5:cf85b27e035bebc7@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">想要的先预约 相当于9块20瓶&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889985"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>超市对暗号抽超市卡</title>
+      <link>https://www.hxm5.com/t/2889984</link>
+      <guid isPermaLink="false">urn:md5:0c3471ff2612402a@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">超市对暗号抽超市卡&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889984"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>【京东】领黑五200-20券 黄芪苹果干260g 拍2件 凑后每件【4.46】 br</title>
+      <link>https://www.hxm5.com/t/2889981</link>
+      <guid isPermaLink="false">urn:md5:2eee48fb7d76dd28@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">【京东】领黑五200-20券 黄芪苹果干260g 拍2件 凑后每件【4.46】 br&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889981"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>0.01💰世界`bei啪啪圈</title>
+      <link>https://www.hxm5.com/t/2889980</link>
+      <guid isPermaLink="false">urn:md5:e3ca5cf32c1c553c@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">0.01💰世界`bei啪啪圈&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889980"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>京东特价app进入部分弹6-5个护卷</title>
+      <link>https://www.hxm5.com/t/2889976</link>
+      <guid isPermaLink="false">urn:md5:a8cd69416d2e2282@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">京东特价app进入部分弹6-5个护卷&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889976"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>云南白药 全家福牙膏套装6支/共615g</title>
+      <link>https://www.hxm5.com/t/2889975</link>
+      <guid isPermaLink="false">urn:md5:a86629cf90b18449@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">云南白药 全家福牙膏套装6支/共615g&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889975"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>伊利纯牛奶12盒x2大箱，35.9</title>
+      <link>https://www.hxm5.com/t/2889974</link>
+      <guid isPermaLink="false">urn:md5:6f8ef87e202e1646@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">伊利纯牛奶12盒x2大箱，35.9&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889974"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>百亿补贴加购，需要限时7 br</title>
+      <link>https://www.hxm5.com/t/2889973</link>
+      <guid isPermaLink="false">urn:md5:5a3e9d7d835d8c34@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">百亿补贴加购，需要限时7 br&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889973"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>☀子弹头中性笔6支仅💰3.5 到手3.7</title>
+      <link>https://www.hxm5.com/t/2889971</link>
+      <guid isPermaLink="false">urn:md5:a9d04f1211a83726@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">☀子弹头中性笔6支仅💰3.5 到手3.7&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889971"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>周五工行抽豆</title>
+      <link>https://www.hxm5.com/t/2889968</link>
+      <guid isPermaLink="false">urn:md5:073dc13b7c16d5d2@www.hxm5.com</guid>
+      <pubDate>Fri, 10 Jul 2026 09:31:19 -0000</pubDate>
+      <author>线报屋</author>
+      <description xml:space="preserve">周五工行抽豆&lt;br/&gt;&lt;a href="https://www.hxm5.com/t/2889968"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>
