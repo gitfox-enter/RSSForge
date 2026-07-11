@@ -6,6 +6,7 @@ import logging
 import re
 import time
 import random
+import xml.etree.ElementTree as ET
 from typing import Any, Dict, List, Optional, Set, Tuple
 from urllib.parse import urljoin, urlparse
 
@@ -16,6 +17,8 @@ try:
     warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 except ImportError:
     pass
+
+BS4_AVAILABLE = True
 
 import html as html_mod
 import aiohttp
