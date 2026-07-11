@@ -2,11 +2,11 @@
   "线报酷": {
     "interval": 15,
     "freq_label": "每15分钟",
-    "count": 7909,
+    "count": 7924,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ku.xml",
     "icon": "https://news.ixbk.fun/favicon.ico",
     "site_url": "https://news.ixbk.net/",
-    "items_hash": "42a36aa559f5eebc6c6380bd88f5478c"
+    "items_hash": "f203d087740f48f57ddbcf61c4ca6bad"
   },
   "线报ICU": {
     "interval": 15,
@@ -119,11 +119,11 @@
   "汇发部": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 7774,
+    "count": 7789,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/hui-fa-bu.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/www-huifabu-cn.ico",
     "site_url": "https://www.huifabu.cn/",
-    "items_hash": "d5bd1d87973d53c8cf5dedf412b85975"
+    "items_hash": "c74595acd281038ab1180ef295e51679"
   },
   "爱Q社区": {
     "interval": 20,
@@ -310,7 +310,7 @@
     "freq_label": "每2小时",
     "count": 0,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/dou-ban-xiao-zu.xml",
-    "icon": "https://gitfox-enter.github.io/RSSForge/icons/www-douban-com.ico",
+    "icon": "https://www.douban.com/favicon.ico",
     "site_url": "https://www.douban.com/group/711811/",
     "items_hash": ""
   },
