@@ -1,9 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>ReadHub 热门</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/ReadHub-re-men.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://readhub.cn/hot" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/ReadHub-re-men.xml</ns0:id>
-  <ns0:updated>2026-07-11T14:39:41.358640+08:00</ns0:updated>
-  <ns0:subtitle>ReadHub 热门 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>ReadHub 热门 - RSSForge</title>
+    <link>https://readhub.cn/hot</link>
+    <description>ReadHub 热门 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 11 Jul 2026 16:19:58 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>30</ttl>
+    <image>
+      <url>https://readhub.cn/favicon.ico</url>
+      <title>ReadHub 热门 - RSSForge</title>
+      <link>https://readhub.cn/hot</link>
+    </image>
+    <item>
+      <title>全球首个潮玩创作者 AI 设计平台「妙呀」全量公测</title>
+      <link>https://readhub.cn/topic/8ueilS2sLh2</link>
+      <guid isPermaLink="false">urn:md5:ae471b71235b58b8@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 16:17:57 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">全球首个潮玩创作者 AI 设计平台「妙呀」全量公测&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ueilS2sLh2"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>北京升级发布山洪灾害风险红色预警</title>
+      <link>https://readhub.cn/topic/8ufrVRnUjeg</link>
+      <guid isPermaLink="false">urn:md5:0388be7bcdb37a2e@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 16:17:57 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">北京升级发布山洪灾害风险红色预警&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ufrVRnUjeg"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>天津市蓟州区发布红色山洪灾害气象风险预警</title>
+      <link>https://readhub.cn/topic/8ufnE9fojRw</link>
+      <guid isPermaLink="false">urn:md5:921d738e42213d8c@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 16:17:57 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">天津市蓟州区发布红色山洪灾害气象风险预警&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ufnE9fojRw"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>中国航协：下半年要深化通航与低空经济业务开展</title>
+      <link>https://readhub.cn/topic/8ufrVw23gey</link>
+      <guid isPermaLink="false">urn:md5:69688fc57ebfd3d6@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 16:17:57 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">中国航协：下半年要深化通航与低空经济业务开展&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ufrVw23gey"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>韩国 BOBOO 半导体关键耗材维修基地项目落地西安高新区</title>
+      <link>https://readhub.cn/topic/8ufqQRJYC0I</link>
+      <guid isPermaLink="false">urn:md5:57c4896b24a6680a@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 16:17:57 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">韩国 BOBOO 半导体关键耗材维修基地项目落地西安高新区&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ufqQRJYC0I"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>多家航司：受「巴威」影响，可免费变更或退票</title>
+      <link>https://readhub.cn/topic/8ufrVbZnvUZ</link>
+      <guid isPermaLink="false">urn:md5:419392399aa0aa47@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 16:17:57 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">多家航司：受「巴威」影响，可免费变更或退票&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ufrVbZnvUZ"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>法国电力公司 EDF 将圣阿尔邦核电站 2 号反应堆出力从 1335 兆瓦降至 260 兆瓦</title>
+      <link>https://readhub.cn/topic/8ufpM34d1qO</link>
+      <guid isPermaLink="false">urn:md5:b48cc3e3f25e9345@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 16:17:57 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">法国电力公司 EDF 将圣阿尔邦核电站 2 号反应堆出力从 1335 兆瓦降至 260 兆瓦&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ufpM34d1qO"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>国家能源局多措并举 全力保障电力供应平稳有序</title>
+      <link>https://readhub.cn/topic/8uesOvoic3l</link>
+      <guid isPermaLink="false">urn:md5:7074216c9a6b2f2f@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 16:17:57 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">国家能源局多措并举 全力保障电力供应平稳有序&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uesOvoic3l"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>二育补栏叠加养殖端压栏 生猪周均价环比大幅反弹</title>
+      <link>https://readhub.cn/topic/8ufm8iW99zW</link>
+      <guid isPermaLink="false">urn:md5:0182de1b79b7570b@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 16:17:57 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">二育补栏叠加养殖端压栏 生猪周均价环比大幅反弹&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ufm8iW99zW"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>福建启动防汛 Ⅳ 级应急响应 防范强降雨</title>
+      <link>https://readhub.cn/topic/8ufai5zURFl</link>
+      <guid isPermaLink="false">urn:md5:72f95500747ec38c@readhub.cn</guid>
+      <pubDate>Sat, 11 Jul 2026 16:17:57 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">福建启动防汛 Ⅳ 级应急响应 防范强降雨&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ufai5zURFl"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>
