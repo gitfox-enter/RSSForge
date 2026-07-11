@@ -10,6 +10,10 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse, unquote
 from crawler.config import RESPECT_ROBOTS_TXT, ROBOTS_BYPASS_DOMAINS
 
+def _strip_www(domain: str) -> str:
+    """去掉常见子域名前缀，用于白名单比对。"""
+    return domain.removeprefix('www.') if domain.startswith('www.') else domain
+
 import requests
 
 from common import DomainRateLimiter
@@ -172,9 +176,10 @@ def is_allowed_by_robots(url: str) -> bool:
     if not RESPECT_ROBOTS_TXT:
         return True
 
-    # 白名单域名跳过 robots.txt 检查
+    # 白名单域名跳过 robots.txt 检查（支持 www. 前缀自动剥离）
     parsed_bypass = urlparse(url)
-    if parsed_bypass.netloc in ROBOTS_BYPASS_DOMAINS:
+    netloc_stripped = parsed_bypass.netloc.removeprefix('www.') if parsed_bypass.netloc.startswith('www.') else parsed_bypass.netloc
+    if netloc_stripped in ROBOTS_BYPASS_DOMAINS:
         return True
 
     parsed = urlparse(url)
