@@ -383,7 +383,7 @@ def _build_rss2_feed(
             guid = ET.SubElement(entry, 'guid', isPermaLink='false')
             guid.text = f"urn:md5:{url_hash}@{parsed.hostname}"
 
-        # pubDate: RFC 822 格式
+        # pubDate: RFC 822 格式，明确显示 +0800 时区（而非 -0000）
         item_time = item.get('time', '')
         try:
             if item_time:
@@ -393,10 +393,9 @@ def _build_rss2_feed(
                 dt = datetime.now(timezone(timedelta(hours=8)))
         except Exception:
             dt = datetime.now(timezone(timedelta(hours=8)))
-        # calendar.timegm 把 timetuple 当作 UTC解释，配合 UTC+8 tzinfo 得到正确 UTC 时间戳
-        import calendar as _cal
-        utc_ts = _cal.timegm(dt.timetuple())
-        pub_date = formatdate(utc_ts, localtime=False)
+        # 格式化为 RFC 822，使用 +0800 时区（fix: -0000 导致 RSS 阅读器误判为 UTC）
+        # 示例: "Sat, 11 Jul 2026 14:38:42 +0800"
+        pub_date = dt.strftime('%a, %d %b %Y %H:%M:%S +0800')
         ET.SubElement(entry, 'pubDate').text = pub_date
 
         # 作者/来源
