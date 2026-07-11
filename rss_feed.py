@@ -363,8 +363,10 @@ def _build_rss2_feed(
     if icon_url:
         image = ET.SubElement(channel, 'image')
         ET.SubElement(image, 'url').text = icon_url
-        ET.SubElement(image, 'title').text = _sanitize_xml(title)
+        ET.SubElement(image, 'title').text = _sanitize_xml(site_name or title)
         ET.SubElement(image, 'link').text = site_url
+        ET.SubElement(image, 'width').text = '32'
+        ET.SubElement(image, 'height').text = '32'
 
     # 条目
     for idx, item in enumerate(items):

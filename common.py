@@ -856,61 +856,102 @@ def _download_to_file(url: str, filepath: str, timeout: int = 8) -> bool:
         return False
 
 
-def _try_fetch_favicon_from_html(site_url: str, filepath: str) -> bool:
-    """Fetch the site homepage, parse <link rel="icon">, and download the favicon."""
+def _try_fetch_favicon_from_html(site_url: str, filepath: str) -> str | bool:
+    """Fetch the site homepage, parse <link rel=icon>, and download the favicon.
+    
+    Returns:
+        The downloaded icon URL (string) on success, False on failure.
+        The filepath extension is updated to match the downloaded file type.
+    """
     try:
         req = _urllib_request.Request(site_url, headers={"User-Agent": _USER_AGENT})
         with _urllib_request.urlopen(req, timeout=10) as resp:
             html = resp.read(32768).decode("utf-8", errors="replace")  # fix #116
 
-        # Parse link tags for icon references
-        for m in re.finditer(
-            r'<link[^>]+rel=["\'](?:shortcut icon|icon|apple-touch-icon)["\'][^>]*>',
-            html, re.IGNORECASE,
-        ):
-            tag = m.group(0)
-            href_m = re.search(r'href=["\']([^"\']+)["\']', tag)
-            if href_m:
-                icon_href = href_m.group(1).strip()
-                if not icon_href or icon_href.startswith("data:"):
-                    continue
-                # Resolve relative URLs
-                parsed_site = urlparse(site_url)
-                if icon_href.startswith("//"):
-                    icon_url = parsed_site.scheme + ":" + icon_href
-                elif icon_href.startswith("/"):
-                    icon_url = f"{parsed_site.scheme}://{parsed_site.hostname}{icon_href}"
-                elif icon_href.startswith("http"):
-                    icon_url = icon_href
-                else:
-                    icon_url = f"{parsed_site.scheme}://{parsed_site.hostname}/{icon_href}"
-                if _download_to_file(icon_url, filepath):
-                    return True
+        # Parse link tags for icon references (按优先级：apple-touch-icon > shortcut icon > icon)
+        _icon_selectors = [
+            r'<link[^>]+rel=["\'](apple-touch-icon[^\s"\']*)["\'\s][^>]*>',
+            r'<link[^>]+rel=["\'](shortcut icon)["\'][^>]*>',
+            r'<link[^>]+rel=["\'](icon)["\'][^>]*>',
+        ]
+        for pattern in _icon_selectors:
+            for m in re.finditer(pattern, html, re.IGNORECASE):
+                tag = m.group(0)
+                href_m = re.search(r'href=["\']([^"\']+)["\']', tag)
+                if href_m:
+                    icon_href = href_m.group(1).strip().split('?')[0]  # strip query string
+                    if not icon_href or icon_href.startswith("data:"):
+                        continue
+                    # Resolve relative URLs
+                    parsed_site = urlparse(site_url)
+                    if icon_href.startswith("//"):
+                        icon_url = parsed_site.scheme + ":" + icon_href
+                    elif icon_href.startswith("/"):
+                        icon_url = f"{parsed_site.scheme}://{parsed_site.hostname}{icon_href}"
+                    elif icon_href.startswith("http"):
+                        icon_url = icon_href
+                    else:
+                        icon_url = f"{parsed_site.scheme}://{parsed_site.hostname}/{icon_href}"
+                    if _download_to_file(icon_url, filepath):
+                        # Update filepath extension based on actual downloaded URL
+                        ext = os.path.splitext(icon_url)[1] or '.ico'
+                        if not ext or ext == '.':
+                            ext = '.ico'
+                        new_path = filepath.rsplit('.', 1)[0] + ext
+                        if new_path != filepath and os.path.exists(filepath):
+                            os.rename(filepath, new_path)
+                        return icon_url
+
 
         # Fallback: try /favicon.ico
         parsed = urlparse(site_url)
         ico_url = f"{parsed.scheme}://{parsed.hostname}/favicon.ico"
-        return _download_to_file(ico_url, filepath)
+        if _download_to_file(ico_url, filepath):
+            return ico_url
+        return False
     except Exception:
         return False
 
 
 def fetch_site_favicon(site_url: str, site_name: str) -> str:
-    """获取网站 favicon URL，直接用原始网站 /favicon.ico（国内可访问）。
+    """获取网站 favicon URL，优先从 HTML 解析 <link rel=icon> 下载，再 fallback 到 /favicon.ico。
 
+    下载后的图标缓存到 docs/icons/，返回 GitHub Pages URL。
     Returns:
         favicon 的 URL（用于 feeds_meta.json 和 Atom feed 的 <icon>）
     """
     if site_name in _favicon_cache:
         return _favicon_cache[site_name]
-    if site_url:
-        parsed = urlparse(site_url)
-        domain = parsed.netloc or ""
-        icon_url = f"https://{domain}/favicon.ico"
+    if not site_url:
+        _favicon_cache[site_name] = ""
+        return ""
+
+    parsed = urlparse(site_url)
+    domain = parsed.netloc or ""
+    safe_domain = slugify(domain)
+    
+    # 构建本地缓存路径（扩展名由 _try_fetch_favicon_from_html 动态设置）
+    local_base = os.path.join(_ICONS_DIR, safe_domain)
+
+    # 优先从 HTML 解析真实 favicon（含 apple-touch-icon / shortcut icon 等）
+    result = _try_fetch_favicon_from_html(site_url, f"{local_base}.tmp")
+
+    if result and os.path.exists(f"{local_base}.tmp"):
+        # 推断扩展名
+        ext = os.path.splitext(result if isinstance(result, str) else f"{domain}/favicon.ico")[1]
+        if not ext or ext == '.':
+            ext = '.ico'
+        actual_path = f"{local_base}{ext}"
+        os.rename(f"{local_base}.tmp", actual_path)
+        # 返回 GitHub Pages 路径（部署后 docs/icons/ → /RSSForge/icons/）
+        icon_url = f"https://gitfox-enter.github.io/RSSForge/icons/{safe_domain}{ext}"
         _favicon_cache[site_name] = icon_url
         return icon_url
-    _favicon_cache[site_name] = ""
-    return ""
+
+    # Fallback：直接用网站 favicon.ico URL
+    icon_url = f"https://{domain}/favicon.ico"
+    _favicon_cache[site_name] = icon_url
+    return icon_url
 
 
 # 基础 URL，供 favicon 和 summary 使用
@@ -988,3 +1029,4 @@ def _fetch_article_summary_sync(url: str, timeout: int = 8) -> Dict[str, str]:
     except Exception:
         pass
     return result
+
