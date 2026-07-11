@@ -1,9 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>免费族</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/mian-fei-zu.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://www.thosefree.com/" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/mian-fei-zu.xml</ns0:id>
-  <ns0:updated>2026-07-11T16:30:13.249990+08:00</ns0:updated>
-  <ns0:subtitle>免费族 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>免费族 - RSSForge</title>
+    <link>https://www.thosefree.com/</link>
+    <description>免费族 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 11 Jul 2026 16:45:47 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>240</ttl>
+    <image>
+      <url>https://www.thosefree.com/favicon.ico</url>
+      <title>免费族 - RSSForge</title>
+      <link>https://www.thosefree.com/</link>
+    </image>
+    <item>
+      <title>Vector4Free - 收录几十万矢量的免费素材站，格式齐全，个人用途免费，商用需看协议</title>
+      <link>https://www.thosefree.com/vector4free</link>
+      <guid isPermaLink="false">urn:md5:1b9f9d92a3f6248c@www.thosefree.com</guid>
+      <pubDate>Sat, 11 Jul 2026 16:43:08 +0800</pubDate>
+      <author>免费族</author>
+      <description xml:space="preserve">Vector4Free - 收录几十万矢量的免费素材站，格式齐全，个人用途免费，商用需看协议&lt;br/&gt;&lt;a href="https://www.thosefree.com/vector4free"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>ClipSync - 免费开源的 macOS 菜单栏SD卡/U盘管理小工具，简单好用的照片/视频导入和管理功能</title>
+      <link>https://www.thosefree.com/clipsync</link>
+      <guid isPermaLink="false">urn:md5:3bfd314d7596fded@www.thosefree.com</guid>
+      <pubDate>Sat, 11 Jul 2026 16:43:08 +0800</pubDate>
+      <author>免费族</author>
+      <description xml:space="preserve">ClipSync - 免费开源的 macOS 菜单栏SD卡/U盘管理小工具，简单好用的照片/视频导入和管理功能&lt;br/&gt;&lt;a href="https://www.thosefree.com/clipsync"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>LaunchNext - 这个免费开源的 mac 应用帮我找回了 macOS 26 砍掉的 Launchpad，满屏图标回来了</title>
+      <link>https://www.thosefree.com/launchnext</link>
+      <guid isPermaLink="false">urn:md5:b472e2f26ca0bcf2@www.thosefree.com</guid>
+      <pubDate>Sat, 11 Jul 2026 16:43:08 +0800</pubDate>
+      <author>免费族</author>
+      <description xml:space="preserve">LaunchNext - 这个免费开源的 mac 应用帮我找回了 macOS 26 砍掉的 Launchpad，满屏图标回来了&lt;br/&gt;&lt;a href="https://www.thosefree.com/launchnext"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>docx-editor - React/Vue 都能用的开源 .docx 在线编辑器，纯前端实现无需后端</title>
+      <link>https://www.thosefree.com/docx-editor</link>
+      <guid isPermaLink="false">urn:md5:6788726eaa4b43fa@www.thosefree.com</guid>
+      <pubDate>Sat, 11 Jul 2026 16:43:08 +0800</pubDate>
+      <author>免费族</author>
+      <description xml:space="preserve">docx-editor - React/Vue 都能用的开源 .docx 在线编辑器，纯前端实现无需后端&lt;br/&gt;&lt;a href="https://www.thosefree.com/docx-editor"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Thiings - 超过 10000 个 AI 生成的精美 Q 版 3D 图标素材免费下载</title>
+      <link>https://www.thosefree.com/thiings</link>
+      <guid isPermaLink="false">urn:md5:f6a378e9d1c02dd2@www.thosefree.com</guid>
+      <pubDate>Sat, 11 Jul 2026 16:43:08 +0800</pubDate>
+      <author>免费族</author>
+      <description xml:space="preserve">Thiings - 超过 10000 个 AI 生成的精美 Q 版 3D 图标素材免费下载&lt;br/&gt;&lt;a href="https://www.thosefree.com/thiings"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Pinta - 免费开源、跨平台的轻量级绘图+图片编辑软件</title>
+      <link>https://www.thosefree.com/pinta</link>
+      <guid isPermaLink="false">urn:md5:05ff63fb3696c27c@www.thosefree.com</guid>
+      <pubDate>Sat, 11 Jul 2026 16:43:08 +0800</pubDate>
+      <author>免费族</author>
+      <description xml:space="preserve">Pinta - 免费开源、跨平台的轻量级绘图+图片编辑软件&lt;br/&gt;&lt;a href="https://www.thosefree.com/pinta"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>TikTok Voice - 可以免费使用文字转短视频搞笑语音工具（TTS），提供超多热门AI配音音色</title>
+      <link>https://www.thosefree.com/tiktokvoice</link>
+      <guid isPermaLink="false">urn:md5:ee73ba0acd97291b@www.thosefree.com</guid>
+      <pubDate>Sat, 11 Jul 2026 16:43:08 +0800</pubDate>
+      <author>免费族</author>
+      <description xml:space="preserve">TikTok Voice - 可以免费使用文字转短视频搞笑语音工具（TTS），提供超多热门AI配音音色&lt;br/&gt;&lt;a href="https://www.thosefree.com/tiktokvoice"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>《AI是怎么回事》- 免费的 AI 教程电子书，一本适合技术人的AI原理的探索笔记</title>
+      <link>https://www.thosefree.com/whats-ai</link>
+      <guid isPermaLink="false">urn:md5:c7a4dbbcf35ce5e8@www.thosefree.com</guid>
+      <pubDate>Sat, 11 Jul 2026 16:43:08 +0800</pubDate>
+      <author>免费族</author>
+      <description xml:space="preserve">《AI是怎么回事》- 免费的 AI 教程电子书，一本适合技术人的AI原理的探索笔记&lt;br/&gt;&lt;a href="https://www.thosefree.com/whats-ai"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>HeroUI - 免费开源的 React UI 组件库，曾经 NextUI 全新升级，UI 美得不像开源组件库</title>
+      <link>https://www.thosefree.com/heroui</link>
+      <guid isPermaLink="false">urn:md5:12063c24a0b0a72a@www.thosefree.com</guid>
+      <pubDate>Sat, 11 Jul 2026 16:43:08 +0800</pubDate>
+      <author>免费族</author>
+      <description xml:space="preserve">HeroUI - 免费开源的 React UI 组件库，曾经 NextUI 全新升级，UI 美得不像开源组件库&lt;br/&gt;&lt;a href="https://www.thosefree.com/heroui"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Silverman Sound Studios - 实在不想用 AI 生成的音乐？这个网站有 200 多首真人作曲的免费音乐库，CC BY 4.0 协议可商用</title>
+      <link>https://www.thosefree.com/silverman-sound-studios</link>
+      <guid isPermaLink="false">urn:md5:9a413213aa03b4eb@www.thosefree.com</guid>
+      <pubDate>Sat, 11 Jul 2026 16:43:08 +0800</pubDate>
+      <author>免费族</author>
+      <description xml:space="preserve">Silverman Sound Studios - 实在不想用 AI 生成的音乐？这个网站有 200 多首真人作曲的免费音乐库，CC BY 4.0 协议可商用&lt;br/&gt;&lt;a href="https://www.thosefree.com/silverman-sound-studios"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>
