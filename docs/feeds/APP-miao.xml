@@ -1,9 +1,460 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>APP喵</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/APP-miao.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://www.appmiu.com/" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/APP-miao.xml</ns0:id>
-  <ns0:updated>2026-07-11T22:51:20.556619+08:00</ns0:updated>
-  <ns0:subtitle>APP喵 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>APP喵 - RSSForge</title>
+    <link>https://www.appmiu.com/</link>
+    <description>APP喵 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 11 Jul 2026 22:58:14 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>360</ttl>
+    <image>
+      <url>https://gitfox-enter.github.io/RSSForge/icons/www-appmiu-com.ico</url>
+      <title>APP喵</title>
+      <link>https://www.appmiu.com/</link>
+      <width>32</width>
+      <height>32</height>
+    </image>
+    <item>
+      <title>阿喵手机卡大流量</title>
+      <link>https://sim.amiao.co</link>
+      <guid isPermaLink="false">urn:md5:d41d8cd98f00b204@sim.amiao.co</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">阿喵手机卡大流量&lt;br/&gt;&lt;a href="https://sim.amiao.co"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>客户端下载</title>
+      <link>https://www.appmiu.com/release</link>
+      <guid isPermaLink="false">urn:md5:708032c5b8904dd6@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">客户端下载&lt;br/&gt;&lt;a href="https://www.appmiu.com/release"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>￥{{role.user_data.money}}</title>
+      <link>https://www.appmiu.com/gold</link>
+      <guid isPermaLink="false">urn:md5:5af125aa46f5c02c@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">￥{{role.user_data.money}}&lt;br/&gt;&lt;a href="https://www.appmiu.com/gold"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>您已完成今天任务的</title>
+      <link>https://www.appmiu.com/task</link>
+      <guid isPermaLink="false">urn:md5:15a2028adadc8fa7@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">您已完成今天任务的&lt;br/&gt;&lt;a href="https://www.appmiu.com/task"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>私信列表所有往来私信</title>
+      <link>https://www.appmiu.com/directmessage</link>
+      <guid isPermaLink="false">urn:md5:b29ec75304970ce2@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">私信列表所有往来私信&lt;br/&gt;&lt;a href="https://www.appmiu.com/directmessage"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>成为会员购买付费会员</title>
+      <link>https://www.appmiu.com/vips</link>
+      <guid isPermaLink="false">urn:md5:b50d3325db4837f4@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">成为会员购买付费会员&lt;br/&gt;&lt;a href="https://www.appmiu.com/vips"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>认证服务申请认证NEW</title>
+      <link>https://www.appmiu.com/verify</link>
+      <guid isPermaLink="false">urn:md5:91006a114f11d9b2@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">认证服务申请认证NEW&lt;br/&gt;&lt;a href="https://www.appmiu.com/verify"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>进入后台管理</title>
+      <link>https://www.appmiu.com/wp-admin/</link>
+      <guid isPermaLink="false">urn:md5:5c55205db6f69bae@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">进入后台管理&lt;br/&gt;&lt;a href="https://www.appmiu.com/wp-admin/"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Windows电脑175篇</title>
+      <link>https://www.appmiu.com/apps/windows</link>
+      <guid isPermaLink="false">urn:md5:7ff12f2133d5f6c7@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">Windows电脑175篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/apps/windows"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Android86篇</title>
+      <link>https://www.appmiu.com/apps/android</link>
+      <guid isPermaLink="false">urn:md5:89af6e390a2f90a5@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">Android86篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/apps/android"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>iOS24篇</title>
+      <link>https://www.appmiu.com/apps/ios</link>
+      <guid isPermaLink="false">urn:md5:d56b5353137dbbb9@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">iOS24篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/apps/ios"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>macOS96篇</title>
+      <link>https://www.appmiu.com/apps/macos</link>
+      <guid isPermaLink="false">urn:md5:9c3ac52148e31433@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">macOS96篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/apps/macos"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>linux49篇</title>
+      <link>https://www.appmiu.com/apps/linux</link>
+      <guid isPermaLink="false">urn:md5:edd594726f2d56ea@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">linux49篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/apps/linux"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>电视直播0篇</title>
+      <link>https://www.appmiu.com/live/iptv</link>
+      <guid isPermaLink="false">urn:md5:b17dca06efc9f33b@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">电视直播0篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/live/iptv"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>KTV唱歌0篇</title>
+      <link>https://www.appmiu.com/live/ktv</link>
+      <guid isPermaLink="false">urn:md5:93d6bde6d5088271@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">KTV唱歌0篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/live/ktv"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>电视工具0篇</title>
+      <link>https://www.appmiu.com/live/tvtools</link>
+      <guid isPermaLink="false">urn:md5:22c0d735527d3f29@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">电视工具0篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/live/tvtools"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>影视播放1篇</title>
+      <link>https://www.appmiu.com/live/movies</link>
+      <guid isPermaLink="false">urn:md5:809f669a3d6f3ec0@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">影视播放1篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/live/movies"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>实用网站76篇</title>
+      <link>https://www.appmiu.com/webs/website</link>
+      <guid isPermaLink="false">urn:md5:d8e5748664b0b0ce@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">实用网站76篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/webs/website"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>浏览器扩展11篇</title>
+      <link>https://www.appmiu.com/webs/crx</link>
+      <guid isPermaLink="false">urn:md5:1b36f56920b05db0@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">浏览器扩展11篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/webs/crx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>油猴脚本12篇</title>
+      <link>https://www.appmiu.com/webs/%e6%b2%b9%e7%8c%b4%e8%84%9a%e6%9c%ac</link>
+      <guid isPermaLink="false">urn:md5:a9878278ba6a5a37@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">油猴脚本12篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/webs/%e6%b2%b9%e7%8c%b4%e8%84%9a%e6%9c%ac"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>网赚项目0篇</title>
+      <link>https://www.appmiu.com/fortune/onlineearning</link>
+      <guid isPermaLink="false">urn:md5:1d532f3fac173b05@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">网赚项目0篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/fortune/onlineearning"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>语言学习2篇</title>
+      <link>https://www.appmiu.com/fortune/language</link>
+      <guid isPermaLink="false">urn:md5:8a756cc1c4755a79@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">语言学习2篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/fortune/language"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>程序源码87篇</title>
+      <link>https://www.appmiu.com/fortune/code</link>
+      <guid isPermaLink="false">urn:md5:b34bbd4e62bbbc70@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">程序源码87篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/fortune/code"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>免费字体3篇</title>
+      <link>https://www.appmiu.com/fortune/fonts</link>
+      <guid isPermaLink="false">urn:md5:d9d93eea7004a4d2@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">免费字体3篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/fortune/fonts"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>系统镜像18篇</title>
+      <link>https://www.appmiu.com/fortune/system</link>
+      <guid isPermaLink="false">urn:md5:2151ea70ad86adfa@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">系统镜像18篇&lt;br/&gt;&lt;a href="https://www.appmiu.com/fortune/system"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Switch模拟器</title>
+      <link>https://www.appmiu.com/games/switchsimulator</link>
+      <guid isPermaLink="false">urn:md5:8b5aae075fba939a@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">Switch模拟器&lt;br/&gt;&lt;a href="https://www.appmiu.com/games/switchsimulator"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>tvgarden</title>
+      <link>https://www.appmiu.com/?s=tvgarden</link>
+      <guid isPermaLink="false">urn:md5:a65d75d3731d7951@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">tvgarden&lt;br/&gt;&lt;a href="https://www.appmiu.com/?s=tvgarden"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>哔咔强推，尽情享受甜蜜のAI女友！做什么都可以喵！</title>
+      <link>https://www.appmiu.com/34706.html</link>
+      <guid isPermaLink="false">urn:md5:c48f19ec758170b1@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">哔咔强推，尽情享受甜蜜のAI女友！做什么都可以喵！&lt;br/&gt;&lt;a href="https://www.appmiu.com/34706.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>APP喵的新电报频道，速速关注 @miaoaaaaa</title>
+      <link>https://www.appmiu.com/34650.html</link>
+      <guid isPermaLink="false">urn:md5:baa98a2a02b58b0c@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">APP喵的新电报频道，速速关注 @miaoaaaaa&lt;br/&gt;&lt;a href="https://www.appmiu.com/34650.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>喵卡 – 阿喵手机卡：快来加入卖卡副业，赚钱就是现在，官网地址+加入代理教程，注意事项</title>
+      <link>https://www.appmiu.com/3107.html</link>
+      <guid isPermaLink="false">urn:md5:45fb8a63655ab392@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">喵卡 – 阿喵手机卡：快来加入卖卡副业，赚钱就是现在，官网地址+加入代理教程，注意事项&lt;br/&gt;&lt;a href="https://www.appmiu.com/3107.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>TikTok MOD universal v45.5.3：国外版抖音MOD版可登陆，可换区，无须拔卡，最新版持续更新</title>
+      <link>https://www.appmiu.com/9987.html</link>
+      <guid isPermaLink="false">urn:md5:beee1e5a2ec13e4a@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">TikTok MOD universal v45.5.3：国外版抖音MOD版可登陆，可换区，无须拔卡，最新版持续更新&lt;br/&gt;&lt;a href="https://www.appmiu.com/9987.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>媒体运营：海外视频营销YouTube油管系列课程，吸引海外优质客户，做油管，赚美元</title>
+      <link>https://www.appmiu.com/34760.html</link>
+      <guid isPermaLink="false">urn:md5:20196401a408cddd@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">媒体运营：海外视频营销YouTube油管系列课程，吸引海外优质客户，做油管，赚美元&lt;br/&gt;&lt;a href="https://www.appmiu.com/34760.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>TikTok v45.9.5 MOD蓝色白金版 ，特别定制版，内置插件，无水印下载，不限地区，后台播放，可邮箱，谷歌登录。</title>
+      <link>https://www.appmiu.com/34123.html</link>
+      <guid isPermaLink="false">urn:md5:5d54b099302daea4@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">TikTok v45.9.5 MOD蓝色白金版 ，特别定制版，内置插件，无水印下载，不限地区，后台播放，可邮箱，谷歌登录。&lt;br/&gt;&lt;a href="https://www.appmiu.com/34123.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Internet Download Manager 6.43 build2最新版+注册机，IDM 2026年最新版</title>
+      <link>https://www.appmiu.com/427.html</link>
+      <guid isPermaLink="false">urn:md5:a242bcb3c9b2546a@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">Internet Download Manager 6.43 build2最新版+注册机，IDM 2026年最新版&lt;br/&gt;&lt;a href="https://www.appmiu.com/427.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>[Android]AdGuard Ad Blocker 4.14.41 高级版，最好用的广告拦截器</title>
+      <link>https://www.appmiu.com/8875.html</link>
+      <guid isPermaLink="false">urn:md5:67caa74ea7cbf4d7@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">[Android]AdGuard Ad Blocker 4.14.41 高级版，最好用的广告拦截器&lt;br/&gt;&lt;a href="https://www.appmiu.com/8875.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>PC单机版闲鱼麻将v1.0b，支持AI对战、多种难度、语音播报、番型计算~支持win10/11</title>
+      <link>https://www.appmiu.com/34727.html</link>
+      <guid isPermaLink="false">urn:md5:3eb58b9b394b782a@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">PC单机版闲鱼麻将v1.0b，支持AI对战、多种难度、语音播报、番型计算~支持win10/11&lt;br/&gt;&lt;a href="https://www.appmiu.com/34727.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>windows电脑游戏</title>
+      <link>https://www.appmiu.com/games/pcgame</link>
+      <guid isPermaLink="false">urn:md5:db8070794f8035bc@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">windows电脑游戏&lt;br/&gt;&lt;a href="https://www.appmiu.com/games/pcgame"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>CorelDRAW Graphics Suite 2026 27.0.0.121，专业的绘图绘画软件</title>
+      <link>https://www.appmiu.com/34749.html</link>
+      <guid isPermaLink="false">urn:md5:df5617783b2aa0c3@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">CorelDRAW Graphics Suite 2026 27.0.0.121，专业的绘图绘画软件&lt;br/&gt;&lt;a href="https://www.appmiu.com/34749.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>《剑星 完整版》 (Stellar Blade) PC破解版，原版镜像+Stellar Blade crack by voices38破解文件，绕过D加密，附安装游玩教程</title>
+      <link>https://www.appmiu.com/34588.html</link>
+      <guid isPermaLink="false">urn:md5:e59c58eb87c8d8f7@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">《剑星 完整版》 (Stellar Blade) PC破解版，原版镜像+Stellar Blade crack by voices38破解文件，绕过D加密，附安装游玩教程&lt;br/&gt;&lt;a href="https://www.appmiu.com/34588.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Shelldiver 龟龟潜海记，探险升级收集，越玩越爽，steam好评如潮，一杯奶茶钱=顶级游戏体验</title>
+      <link>https://www.appmiu.com/34010.html</link>
+      <guid isPermaLink="false">urn:md5:8ac24edb287ed66d@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">Shelldiver 龟龟潜海记，探险升级收集，越玩越爽，steam好评如潮，一杯奶茶钱=顶级游戏体验&lt;br/&gt;&lt;a href="https://www.appmiu.com/34010.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>植物大战僵尸海克斯大乱斗版，植物大战僵尸2 PCL青龙刀版，windows+安卓</title>
+      <link>https://www.appmiu.com/34297.html</link>
+      <guid isPermaLink="false">urn:md5:03082abf6b760391@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">植物大战僵尸海克斯大乱斗版，植物大战僵尸2 PCL青龙刀版，windows+安卓&lt;br/&gt;&lt;a href="https://www.appmiu.com/34297.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Android手机游戏</title>
+      <link>https://www.appmiu.com/games/androidgame</link>
+      <guid isPermaLink="false">urn:md5:e5f386a14111a58d@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">Android手机游戏&lt;br/&gt;&lt;a href="https://www.appmiu.com/games/androidgame"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>骑士精神2(Chivalry 2) v1.0.48.0 ，单机+联机，免安装中文版，支持网络联机</title>
+      <link>https://www.appmiu.com/34350.html</link>
+      <guid isPermaLink="false">urn:md5:85955c7360f68464@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">骑士精神2(Chivalry 2) v1.0.48.0 ，单机+联机，免安装中文版，支持网络联机&lt;br/&gt;&lt;a href="https://www.appmiu.com/34350.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>黑神话悟空Black Myth Wukong voices38 + CrackFix，免虚拟机，免Steam版，黑神话：悟空 v1.0.21.23831 豪华中文版 全DLC 打包XG器</title>
+      <link>https://www.appmiu.com/34504.html</link>
+      <guid isPermaLink="false">urn:md5:dd0909a77f0a20ef@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">黑神话悟空Black Myth Wukong voices38 + CrackFix，免虚拟机，免Steam版，黑神话：悟空 v1.0.21.23831 豪华中文版 全DLC 打包XG器&lt;br/&gt;&lt;a href="https://www.appmiu.com/34504.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>小丑牌 balatro 2026最新Android+windows+macOS三端齐发，受扑克启发的类 Rogue 卡牌构筑游戏，十分上头</title>
+      <link>https://www.appmiu.com/34278.html</link>
+      <guid isPermaLink="false">urn:md5:42cf8ec54349dc5f@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">小丑牌 balatro 2026最新Android+windows+macOS三端齐发，受扑克启发的类 Rogue 卡牌构筑游戏，十分上头&lt;br/&gt;&lt;a href="https://www.appmiu.com/34278.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>杀戮尖塔2/Slay the Spire 2，中文最新版-赠联机补丁+修改器（Window+macOS）</title>
+      <link>https://www.appmiu.com/34272.html</link>
+      <guid isPermaLink="false">urn:md5:9b87a7f2befd0845@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">杀戮尖塔2/Slay the Spire 2，中文最新版-赠联机补丁+修改器（Window+macOS）&lt;br/&gt;&lt;a href="https://www.appmiu.com/34272.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>流氓软件/Malware：一个模拟安装恶意捆绑流氓软件的游戏，让你在游戏中学会与无良软件商博弈</title>
+      <link>https://www.appmiu.com/34210.html</link>
+      <guid isPermaLink="false">urn:md5:10a509c5b1985e8c@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">流氓软件/Malware：一个模拟安装恶意捆绑流氓软件的游戏，让你在游戏中学会与无良软件商博弈&lt;br/&gt;&lt;a href="https://www.appmiu.com/34210.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>PotPlayer 260114(1.7.22769) 去广告绿色版 – Windows平台全能影音播放器</title>
+      <link>https://www.appmiu.com/4587.html</link>
+      <guid isPermaLink="false">urn:md5:84569c302d38a6b9@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">PotPlayer 260114(1.7.22769) 去广告绿色版 – Windows平台全能影音播放器&lt;br/&gt;&lt;a href="https://www.appmiu.com/4587.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>HiBitUninstaller v4.0.10 CN，免费小巧强大的卸载工具</title>
+      <link>https://www.appmiu.com/15721.html</link>
+      <guid isPermaLink="false">urn:md5:46d6d962cb7e2c6e@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">HiBitUninstaller v4.0.10 CN，免费小巧强大的卸载工具&lt;br/&gt;&lt;a href="https://www.appmiu.com/15721.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>BandiView 图片查看软件 v7.26专业绿色版，Honeyview 的更新替代</title>
+      <link>https://www.appmiu.com/34634.html</link>
+      <guid isPermaLink="false">urn:md5:2333d648d17862c3@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">BandiView 图片查看软件 v7.26专业绿色版，Honeyview 的更新替代&lt;br/&gt;&lt;a href="https://www.appmiu.com/34634.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>winRAR 7.20：老牌解压缩工具，最新官方简体中文/英文版本+WinRAR7.20-Final-x64烈火汉化版</title>
+      <link>https://www.appmiu.com/1021.html</link>
+      <guid isPermaLink="false">urn:md5:51108ff3c73740d1@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">winRAR 7.20：老牌解压缩工具，最新官方简体中文/英文版本+WinRAR7.20-Final-x64烈火汉化版&lt;br/&gt;&lt;a href="https://www.appmiu.com/1021.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Ditto Clipboard剪切板增强工具</title>
+      <link>https://www.appmiu.com/4908.html</link>
+      <guid isPermaLink="false">urn:md5:46fdce21852daa03@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">Ditto Clipboard剪切板增强工具&lt;br/&gt;&lt;a href="https://www.appmiu.com/4908.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>FastStone Capture 11.2 绿色版 – 最好用的屏幕截图和视频录制工具之一</title>
+      <link>https://www.appmiu.com/9535.html</link>
+      <guid isPermaLink="false">urn:md5:54fa424952554727@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">FastStone Capture 11.2 绿色版 – 最好用的屏幕截图和视频录制工具之一&lt;br/&gt;&lt;a href="https://www.appmiu.com/9535.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>nPlayer Pro1.7.7.7-手机端的影音播放神器，强力解码播放器，杜比音效解析，支持安卓16</title>
+      <link>https://www.appmiu.com/2339.html</link>
+      <guid isPermaLink="false">urn:md5:d76f6c43633e0c88@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">nPlayer Pro1.7.7.7-手机端的影音播放神器，强力解码播放器，杜比音效解析，支持安卓16&lt;br/&gt;&lt;a href="https://www.appmiu.com/2339.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>RIME 全平台开源输入法，不联网，无广告，可定制，中州韻輸入法引擎：小狼毫/鼠须管</title>
+      <link>https://www.appmiu.com/3773.html</link>
+      <guid isPermaLink="false">urn:md5:293292044df7b9b5@www.appmiu.com</guid>
+      <pubDate>Sat, 11 Jul 2026 22:57:22 +0800</pubDate>
+      <author>APP喵</author>
+      <description xml:space="preserve">RIME 全平台开源输入法，不联网，无广告，可定制，中州韻輸入法引擎：小狼毫/鼠须管&lt;br/&gt;&lt;a href="https://www.appmiu.com/3773.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>
