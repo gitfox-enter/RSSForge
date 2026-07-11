@@ -3033,7 +3033,7 @@ class TestDeadSites(unittest.TestCase):
     """Tests for DEAD_SITES blacklist and is_dead_site()."""
 
     def test_dead_sites_count(self):
-        self.assertEqual(len(crawl.DEAD_SITES), 7)
+        self.assertEqual(len(crawl.DEAD_SITES), 8)
 
     def test_dead_site_detected(self):
         self.assertIsNotNone(crawl.is_dead_site("https://907k.cn/"))
