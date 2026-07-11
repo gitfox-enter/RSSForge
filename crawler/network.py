@@ -8,7 +8,7 @@ import time
 from urllib.robotparser import RobotFileParser
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse, unquote
-from crawler.config import RESPECT_ROBOTS_TXT
+from crawler.config import RESPECT_ROBOTS_TXT, ROBOTS_BYPASS_DOMAINS
 
 import requests
 
