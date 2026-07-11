@@ -1,36 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-  <channel>
-    <title>银软星球 - RSSForge</title>
-    <link>https://yrxq.xliangxi.vip/</link>
-    <description>银软星球 的 RSS 订阅源（由 RSSForge 生成）</description>
-    <language>zh-cn</language>
-    <lastBuildDate>Sun, 12 Jul 2026 05:42:56 +0800</lastBuildDate>
-    <generator>RSSForge</generator>
-    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
-    <ttl>360</ttl>
-    <image>
-      <url>https://yrxq.xliangxi.vip/favicon.ico</url>
-      <title>银软星球</title>
-      <link>https://yrxq.xliangxi.vip/</link>
-      <width>32</width>
-      <height>32</height>
-    </image>
-    <item>
-      <title>查看全部</title>
-      <link>https://yrxq.xliangxi.vip/articles</link>
-      <guid isPermaLink="false">urn:md5:3016b1a32453def5@yrxq.xliangxi.vip</guid>
-      <pubDate>Sun, 12 Jul 2026 05:38:33 +0800</pubDate>
-      <author>银软星球</author>
-      <description xml:space="preserve">查看全部&lt;br/&gt;&lt;a href="https://yrxq.xliangxi.vip/articles"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>如何卸载：点击“卸载菜单”即可。</title>
-      <link>https://yrxq.xliangxi.vip/</link>
-      <guid isPermaLink="false">urn:md5:6666cd76f9695646@yrxq.xliangxi.vip</guid>
-      <pubDate>Sun, 12 Jul 2026 05:38:33 +0800</pubDate>
-      <author>银软星球</author>
-      <description xml:space="preserve">如何卸载：点击“卸载菜单”即可。&lt;br/&gt;&lt;a href="https://yrxq.xliangxi.vip/"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-  </channel>
-</rss>
+<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
+  <ns0:title>银软星球</ns0:title>
+  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/yin-ruan-xing-qiu.xml" rel="self" type="application/atom+xml" />
+  <ns0:link href="https://yrxq.xliangxi.vip/" rel="alternate" type="text/html" />
+  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/yin-ruan-xing-qiu.xml</ns0:id>
+  <ns0:updated>2026-07-12T05:52:39.503310+08:00</ns0:updated>
+  <ns0:subtitle>银软星球 - no items yet</ns0:subtitle>
+</ns0:feed>

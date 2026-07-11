@@ -2,11 +2,11 @@
   "线报酷": {
     "interval": 15,
     "freq_label": "每15分钟",
-    "count": 7936,
+    "count": 7928,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ku.xml",
     "icon": "https://news.ixbk.fun/favicon.ico",
     "site_url": "https://news.ixbk.net/",
-    "items_hash": "37540dbc17a523bc7526c64f9050f190"
+    "items_hash": "ee1ff065d949cf5ffc452bdd2d636f0b"
   },
   "线报ICU": {
     "interval": 15,
@@ -119,11 +119,11 @@
   "汇发部": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 7800,
+    "count": 7793,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/hui-fa-bu.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/www-huifabu-cn.ico",
     "site_url": "https://www.huifabu.cn/",
-    "items_hash": "9af3b3270a592f83d509cc59498d3a66"
+    "items_hash": "c8203a6f6dcf796faaff3d91cbd241fc"
   },
   "爱Q社区": {
     "interval": 20,
@@ -382,7 +382,7 @@
     "freq_label": "每6小时",
     "count": 55,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/APP-miao.xml",
-    "icon": "https://gitfox-enter.github.io/RSSForge/icons/www-appmiu-com.ico",
+    "icon": "https://www.appmiu.com/favicon.ico",
     "site_url": "https://www.appmiu.com/",
     "items_hash": "f3f58f1430e322b6df21654f64ef6980"
   },
