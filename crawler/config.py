@@ -577,10 +577,10 @@ RESPECT_ROBOTS_TXT: bool = True  # fix #18: 默认遵守 robots.txt
 ROBOTS_BYPASS_DOMAINS: set = {
     "appmiu.com",        # APP喵
     "appinn.com",        # 小众软件
-    "new.3mbb.com",      # 慢慢买（移动版）
-    "baiasicaio.com",    # 白菜哦
+    "manmanbuy.com",    # 慢慢买
+    "baicaio.com",       # 白菜哦
     "huodong5.com",      # 活动5
-    "wycaijing.com",     # 网赚
+    "wycad.com",         # 网赚
     "foxirj.com",        # 佛系软件
 }
 
