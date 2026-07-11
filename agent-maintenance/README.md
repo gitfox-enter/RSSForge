@@ -1,107 +1,229 @@
-# RSSForge 项目维护 Agent 工作手册
+# RSSForge Agent Handbook
 
-> 我是 RSSForge 项目的自动化运维 Agent，这是我的工作日志和操作手册。
+> I am the automated DevOps agent for RSSForge. This is my operational manual.
 
-## 我的身份
-- **角色**: RSSForge 全栈运维 Agent
-- **使命**: 以维护 RSSForge 项目为中心，不断完善项目为目标
-- **GitHub PAT**: 存储在本地 AGENTS.md 中（避免泄露）
-- **仓库**: https://github.com/gitfox-enter/rssforge
+## Identity
+- **Role**: RSSForge Full-Stack DevOps Agent
+- **Mission**: Maintain RSSForge project stability, continuously improve quality and coverage
+- **Repository**: https://github.com/gitfox-enter/RSSForge
+- **Status**: Active
 
-## 工作目标
+## Project Overview
 
-### 核心指标
-1. **Feed 可用性**: 确保所有订阅源稳定更新
-2. **内容质量**: RSS feed 包含完整信息（标题、时间、正文）
-3. **更新频率**: 合理的抓取间隔，不漏重要内容
-4. **错误处理**: 及时发现并修复失效源
+RSSForge is an RSS feed aggregation and monitoring system that:
+- Crawls 48 subscription sources
+- Generates RSS/Atom/OPML feeds
+- Monitors feed health and availability
+- Auto-updates via GitHub Actions (every 30min + fixed schedules at 7:00, 12:00, 18:00, 22:00)
 
-### 长期目标
-- 扩展优质订阅源
-- 优化抓取性能
-- 提升用户体验
-- 自动化运维流程
+## Current Status
 
-## 当前状态
+### Metrics (2026-07-11)
+```
+Total Sites:     48
+Healthy:         12 (25%)
+Suspected Down:  36 (75%)
+Actions Status:  ✅ All recent runs successful
+Last Update:     2026-07-11T06:10:19Z
+```
 
-### 健康站点 (12/48)
-- 线报酷 (7609条)、汇发部 (7376条) - 高频核心源
-- 线报ICU (1013条)、专栏吧 (524条) - 稳定更新
-- 其他 8 个站点保持更新
+### Healthy Feeds (Top Performers)
+| Site | Items | Status | Priority |
+|------|-------|--------|----------|
+| 线报酷 | 7609 | ✅ Active | P0 - Core |
+| 汇发部 | 7376 | ✅ Active | P0 - Core |
+| 线报ICU | 1013 | ✅ Active | P1 |
+| 专栏吧 | 524 | ✅ Active | P1 |
 
-### 疑似失效站点 (36/48)
-详见 `issues/` 目录下的分类报告
+### Pending Verification (36 sites)
+See `issues/ISSUES.md` for breakdown by priority.
 
-### 已完成工作
-- ✅ 2026-07-11: 修复 pubDate 时区问题 (-0000 → +0800)
-- ✅ 2026-07-11: 生成周报，识别 36 个疑似失效站点
-- ✅ 2026-07-11: 建立自动化运维体系
+## Recent Work
 
-### 进行中工作
-- ⏳ 验证 36 个疑似失效站点的实际状态
-- ⏳ 全文抓取功能实现
+### 2026-07-11
+- ✅ Fixed RSS pubDate timezone issue (-0000 → +0800)
+  - Commit: f6d07d820d67be1c828559a1f9263b9467932010
+  - Impact: Fixed time display in RSS readers (no longer +8 hours offset)
 
-## 工作流程
+- ✅ Established GitHub-based memory system
+  - Created `agent-maintenance/` for operational docs
+  - Created `agent-artifacts/` for work outputs
+  - Benefit: Platform-independent persistence
 
-### 每周任务（周日深夜）
-1. **检查 feeds 有效性**
-   - 分析 feeds_meta.json
-   - 识别 count=0 的站点
-   - 抽查 10 个站点的 HTTP 状态
+- ✅ Built automated monitoring system
+  - Quality checks: 4x daily (7:05, 12:05, 18:05, 23:05)
+  - Weekly maintenance: Every Sunday 23:00
+  - Scripts: `monitor.sh`, `check.sh`
 
-2. **清理失效站点**
-   - 确认域名失效的从 sites.yaml 移除
-   - 解析失败的修复 parser
-   - 更新 feeds_meta.json
+## Workflows
 
-3. **更新项目文件**
-   - 重新生成 OPML
-   - 更新 index.html
-   - commit + push
+### Daily Quality Monitoring (Automated)
+**Schedule**: 7:05, 12:05, 18:05, 23:05 (aligned with Actions + 5min)
 
-4. **创建 Issue**
-   - 新发现的问题写入 issues/
-   - 已修复的关闭对应 issue
+**Checks**:
+1. GitHub Actions run status (success/failure)
+2. `feeds_meta.json` update timestamp
+3. Stale feed detection (>2 hours without update)
+4. Error log analysis for failed runs
 
-### 日常监控（自动）
-**定时任务配置：**
+**Actions on Anomaly**:
+- Failed Actions: Analyze logs → fix issue → commit
+- Stale feeds: Check workflow status → manual trigger if needed
+- Multiple failures: Escalate to user notification
 
-1. **运行质量监控**（每天 4 次）
-   - 时间: 7:05, 12:05, 18:05, 23:05（对齐 GitHub Actions）
-   - 检查内容：
-     - GitHub Actions 运行状态（成功/失败）
-     - feeds_meta.json 更新时间
-     - 失败任务错误日志分析
-   - 异常处理：发现异常立即通知用户
+### Weekly Deep Maintenance (Sundays 23:00)
+**Tasks**:
+1. Feed health assessment
+   - Parse `feeds_meta.json`
+   - Identify `count=0` sites
+   - HTTP status check for suspected down sites
 
-2. **每周深度维护**（每周日 23:00）
-   - 检查 feeds 有效性
-   - 清理失效站点
-   - 更新文档和日志
-   - 生成周报
+2. Cleanup
+   - Remove confirmed dead domains from `sites.yaml`
+   - Fix parser issues for recoverable sites
+   - Update documentation
 
-**监控脚本：**
-- 位置: `rssforge-maintain/monitor.sh`
-- 用途: 快速检查项目运行状态
-- 输出: Actions 状态、feeds 更新时间、健康/失效站点数
+3. Reporting
+   - Generate weekly report
+   - Update `agent-artifacts/data/`
+   - Create/resolve issues in `issues/ISSUES.md`
 
-### 功能优化
-- 研究优秀 RSS 工具
-- 提取可借鉴的优点
-- 实现新功能
+4. Git operations
+   - Commit changes with descriptive messages
+   - Push to `origin/main`
+   - Handle merge conflicts (prefer local data files)
 
-## 决策记录
+### Ad-hoc Tasks
+- Bug fixes → Commit → Update `issues/ISSUES.md`
+- Feature planning → Create issue → Document in logs
+- Performance optimization → Test → Deploy → Record results
 
-### 2026-07-11: 时区修复
-**问题**: RSS feed 使用 -0000 时区，阅读器误判为 UTC
-**决策**: 修改 rss_feed.py，改用 +0800 时区
-**结果**: ✅ 成功，时间显示正确
+## Monitoring Commands
 
-### 2026-07-11: 抗遗忘系统
-**问题**: 平台重启导致记忆丢失
-**决策**: 将工作内容写入 GitHub 仓库
-**结果**: ✅ 可靠，不依赖平台状态
+### Quick Health Check
+```bash
+# Run monitoring script
+bash /home/node/.openclaw/workspace/agent-606489db/rssforge-maintain/monitor.sh
 
-## 联系方式
-- 项目维护者: Agent-606489db
-- 用户 ID: u:1158536988
+# Check Actions status via API
+curl -H "Authorization: token $PAT" \
+  https://api.github.com/repos/gitfox-enter/RSSForge/actions/workflows/crawl.yml/runs?per_page=1
+
+# Verify feeds_meta.json freshness
+curl -s https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/feeds_meta.json | \
+  grep -o '"updated_at":"[^"]*"' | head -1
+```
+
+## Architecture
+
+```
+GitHub Actions (Upstream)
+    ↓ Every 30min + fixed schedules
+    ↓ Crawls RSS feeds
+    ↓ Updates feeds_meta.json
+    ↓
+Agent Monitoring (Aligned +5min)
+    ↓ Checks Actions results
+    ↓ Detects anomalies
+    ↓ Auto-notifies on failures
+    ↓
+Agent Maintenance (Weekly)
+    ↓ Deep health check
+    ↓ Cleanup & optimization
+    ↓ Documentation updates
+```
+
+## Key Files
+
+| File | Purpose | Update Frequency |
+|------|---------|------------------|
+| `sites.yaml` | Site configurations | Weekly or on changes |
+| `feeds_meta.json` | Feed metadata | Every Actions run |
+| `agent-maintenance/README.md` | This handbook | On workflow changes |
+| `agent-maintenance/issues/ISSUES.md` | Issue tracking | As needed |
+| `agent-maintenance/logs/*.md` | Daily logs | Daily |
+| `agent-artifacts/` | Work outputs | Per task |
+
+## Recovery Procedure
+
+**If platform fails, restore from GitHub:**
+
+1. **Read Recovery Guide**
+   ```
+   https://github.com/gitfox-enter/RSSForge/blob/main/RECOVERY_GUIDE.md
+   ```
+
+2. **Clone Repository**
+   ```bash
+   git clone https://github.com/gitfox-enter/RSSForge.git
+   ```
+
+3. **Read This Handbook**
+   ```
+   agent-maintenance/README.md
+   ```
+
+4. **Check Current Issues**
+   ```
+   agent-maintenance/issues/ISSUES.md
+   ```
+
+5. **Review Recent Logs**
+   ```
+   agent-maintenance/logs/
+   ```
+
+6. **Resume Operations**
+   - Restore cron jobs
+   - Run `monitor.sh`
+   - Continue pending work
+
+## Decision Log
+
+### 2026-07-11: GitHub-based Memory System
+**Problem**: Platform restarts cause memory loss
+**Solution**: Store all context in GitHub repository
+**Result**: ✅ Platform-independent persistence achieved
+
+### 2026-07-11: Timezone Fix
+**Problem**: RSS pubDate used `-0000`, readers interpreted as UTC (+8h error)
+**Solution**: Modified `rss_feed.py` to emit explicit `+0800` timezone
+**Result**: ✅ Correct time display in all readers
+
+### 2026-07-11: Monitoring Alignment
+**Problem**: Need to detect Actions failures quickly
+**Solution**: Monitor runs 5 minutes after each Actions schedule
+**Result**: ✅ Near real-time anomaly detection
+
+## Priorities
+
+### P0 - Critical
+- Maintain core feeds (线报酷, 汇发部) availability
+- Ensure Actions runs successfully
+- Fix critical bugs within 24h
+
+### P1 - High
+- Verify suspected down sites
+- Remove dead subscriptions
+- Implement full-text extraction
+
+### P2 - Medium
+- Research RSS tool improvements
+- Optimize crawl performance
+- Expand quality sources
+
+### P3 - Low
+- UI/UX improvements
+- Documentation refinements
+- Code refactoring
+
+## Contact
+
+- **Agent ID**: agent-606489db
+- **User**: u:1158536988
+- **Repository**: https://github.com/gitfox-enter/RSSForge
+
+---
+
+**Last Updated**: 2026-07-11 16:15
+**Version**: 2.0
