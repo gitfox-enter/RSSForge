@@ -266,3 +266,212 @@ def _parse_atom_items(root) -> list:
 
     return items
 
+
+
+def _ghxi_fetch_sync() -> List[Dict[str, str]]:
+    """果核剥壳 WP API 同步请求（供 sync 路径使用）。"""
+    api_url = "https://www.ghxi.com/wp-json/wp/v2/posts?per_page=30"
+    headers = {
+        'User-Agent': get_random_ua(),
+        'Accept': 'application/json, */*;q=0.8',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    }
+    items: List[Dict[str, str]] = []
+    try:
+        resp = requests.get(api_url, headers=headers, timeout=REQUEST_TIMEOUT)
+        if resp.status_code == 200:
+            posts = resp.json()
+            for post in posts:
+                title = html_mod.unescape(post.get('title', {}).get('rendered', ''))
+                link = post.get('link', '')
+                if title and len(title) > 3 and link:
+                    items.append({'text': title, 'url': link})
+            logger.info("果核剥壳 WP API 获取到 %d 篇文章", len(items))
+        else:
+            logger.info("果核剥壳 WP API 返回 HTTP %d", resp.status_code)
+    except Exception as e:
+        logger.info("果核剥壳 WP API 请求失败: %s", e)
+    return items
+
+
+async def fetch_ghxi_items_async(session) -> List[Dict[str, str]]:
+    """果核剥壳 WP API 异步请求（带重试和 RSS 兜底）。"""
+    api_url = "https://www.ghxi.com/wp-json/wp/v2/posts?per_page=30"
+    headers = {
+        'User-Agent': get_random_ua(),
+        'Accept': 'application/json, */*;q=0.8',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    }
+    items: List[Dict[str, str]] = []
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            async with session.get(
+                api_url,
+                headers=headers,
+                timeout=aiohttp.ClientTimeout(total=60),
+                ssl=False,
+            ) as resp:
+                if resp.status == 200:
+                    posts = await resp.json()
+                    for post in posts:
+                        title = html_mod.unescape(post.get('title', {}).get('rendered', ''))
+                        link = post.get('link', '')
+                        if title and len(title) > 3 and link:
+                            items.append({'text': title, 'url': link})
+                    logger.info("果核剥壳 WP API (async) 获取到 %d 篇文章", len(items))
+                    return items
+                else:
+                    logger.info("果核剥壳 WP API (async) 返回 HTTP %d (尝试 %d/%d)", resp.status, attempt + 1, max_retries)
+        except asyncio.TimeoutError:
+            logger.info("果核剥壳 WP API (async) 超时 (尝试 %d/%d)", attempt + 1, max_retries)
+        except Exception as e:
+            logger.info("果核剥壳 WP API (async) 请求失败 [%s]: %s (尝试 %d/%d)", type(e).__name__, e, attempt + 1, max_retries)
+        if attempt < max_retries - 1:
+            await asyncio.sleep(2 ** (attempt + 1))
+    # WP API 全部失败，尝试 RSS feed 兜底
+    if not items:
+        logger.info("果核剥壳 WP API 全部失败，尝试 RSS feed 兜底")
+        items = await _fetch_ghxi_rss_fallback(session)
+    return items
+
+
+async def _fetch_ghxi_rss_fallback(session) -> List[Dict[str, str]]:
+    """果核剥壳 RSS feed 兜底请求。"""
+    feed_url = "https://www.ghxi.com/feed/"
+    headers = {
+        'User-Agent': get_random_ua(),
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*;q=0.8',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    }
+    try:
+        async with session.get(
+            feed_url,
+            headers=headers,
+            timeout=aiohttp.ClientTimeout(total=60),
+            ssl=False,
+        ) as resp:
+            if resp.status == 200:
+                content = await resp.read()
+                items = parse_rss_feed(content, feed_url)
+                logger.info("果核剥壳 RSS 兜底获取到 %d 条", len(items))
+                return items
+            else:
+                logger.info("果核剥壳 RSS 兜底返回 HTTP %d", resp.status)
+    except asyncio.TimeoutError:
+        logger.info("果核剥壳 RSS 兜底超时")
+    except Exception as e:
+        logger.info("果核剥壳 RSS 兜底失败 [%s]: %s", type(e).__name__, e)
+    return []
+
+
+async def fetch_rss_feed_async(session, feed_url: str, timeout_seconds: int = 25) -> List[Dict[str, str]]:
+    """异步获取并解析 RSS/Atom feed。
+
+    用于绕过主页 HTML 反爬策略（如 foxirj.com 的 403），
+    RSS 端点通常不受 IP 封锁影响。
+
+    Args:
+        session: aiohttp ClientSession
+        feed_url: RSS feed 完整 URL（如 https://www.foxirj.com/feed/）
+        timeout_seconds: 超时时间
+    Returns:
+        解析后的条目列表，失败返回空列表
+    """
+    headers = {
+        'User-Agent': get_random_ua(),
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*;q=0.8',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+        'Accept-Encoding': 'gzip, deflate',
+    }
+    try:
+        async with session.get(
+            feed_url,
+            headers=headers,
+            timeout=aiohttp.ClientTimeout(total=timeout_seconds),
+        ) as resp:
+            if resp.status == 200:
+                content = await resp.read()
+                items = parse_rss_feed(content, feed_url)
+                logger.info("RSS feed %s 获取到 %d 条", feed_url, len(items))
+                return items
+            else:
+                logger.info("RSS feed %s 返回 HTTP %d", feed_url, resp.status)
+    except Exception as e:
+        logger.info("RSS feed %s 请求失败: %s", feed_url, e)
+    return []
+
+
+def parse_ghxi_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """果核剥壳 - 通过 WordPress REST API 获取文章（站点为 Vue SPA，HTML 无法直接解析）
+
+    注意：此函数仅用于同步路径。异步路径应使用 fetch_ghxi_items_async。
+    """
+    return _ghxi_fetch_sync()
+
+
+def extract_article_items(soup: BeautifulSoup, base_url: str = '') -> List[Dict[str, str]]:
+    """
+    从页面中提取独立文章条目列表（含链接）
+    返回：[{'text': '标题', 'url': '链接'}, ...] 最多50条
+    """
+    # 移除干扰元素
+    for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside', 'iframe', 'form', 'button']):
+        tag.decompose()
+    # 过滤友链/板块分类区域
+    for noise in soup.select('.friend-link, .links-box, .link-box, .blogroll, .roll-links, .category-list, .sidebar-links, .friendly-link, .friendlink, aside, .widget, .sidebar, .related-posts, .similar-posts'):
+        noise.decompose()
+
+    body = soup.find('body')
+    if not body:
+        return []
+
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
+
+    # 策略1: 提取 <a> 标签的文本 + href
+    for a_tag in body.find_all('a', href=True):
+        text = a_tag.get_text(strip=True)
+        if not _is_valid_text(text):
+            continue
+        text = ' '.join(text.split())
+        if text in seen:
+            continue
+        # 过滤导航词/英文短词
+        if text[0].isupper() and len(text) < 20:
+            continue
+        if len(re.findall(r'[^\w\u4e00-\u9fff\u3000-\u303f\s]', text)) > len(text) * 0.3:
+            continue
+        href = a_tag['href'].strip()
+        # 转绝对链接
+        if href.startswith('/') or not href.startswith('http'):
+            href = urljoin(base_url, href)
+        _add_item(items, seen, text, href)
+
+    # 策略2: 如果 <a> 标签太少，用正文分句作为备选
+    if len(items) < 2:
+        text = body.get_text()
+        for sep in ['\n', '｜', '丨', '│']:
+            text = text.replace(sep, '|SPLIT|')
+        lines = text.split('|SPLIT|')
+        for line in lines:
+            line = ' '.join(line.split()).strip()
+            if not line or len(line) < 4 or len(line) > 150:
+                continue
+            if line in seen:
+                continue
+            if line.startswith('http') or line.startswith('www') or line.isdigit():
+                continue
+            if len(re.findall(r'[a-zA-Z0-9]', line)) > len(line) * 0.7 and len(line) < 30:
+                continue
+            seen.add(line)
+            items.append({'text': line, 'url': base_url})
+
+    return items[:50]
+
+
+
+
+# ---------------------------------------------------------------------------
+# 1. 12345pro.com  (12345线报)
+# ---------------------------------------------------------------------------
