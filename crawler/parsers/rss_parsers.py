@@ -73,10 +73,10 @@ def parse_rss_feed(content_bytes: bytes, base_url: str) -> List[Dict[str, str]]:
         # 检测格式：RSS 2.0 或 Atom
         if root.tag == 'rss' or root.find('.//item') is not None:
             # RSS 2.0
-            items = _parse_rss2_items(root)
+            items = _parse_rss2_items(root, base_url)
         elif root.tag.endswith('}feed') or '{http://www.w3.org/2005/Atom}' in root.tag or root.find('.//{http://www.w3.org/2005/Atom}entry') is not None:
             # Atom
-            items = _parse_atom_items(root)
+            items = _parse_atom_items(root, base_url)
 
     except ET.ParseError as e:
         # 解析失败，尝试用 BeautifulSoup 兜底
@@ -123,7 +123,7 @@ def _strip_html(html_text: str) -> str:
     return text.strip()
 
 
-def _parse_rss2_items(root) -> list:
+def _parse_rss2_items(root, base_url: str = '') -> list:
     """解析 RSS 2.0 格式"""
     items = []
     seen = set()
@@ -142,6 +142,8 @@ def _parse_rss2_items(root) -> list:
         link = ''
         if link_el is not None and link_el.text:
             link = link_el.text.strip()
+        if not link:
+            link = base_url
 
         # 提取 description/summary
         desc_el = item.find('description')
@@ -186,7 +188,7 @@ def _parse_rss2_items(root) -> list:
     return items
 
 
-def _parse_atom_items(root) -> list:
+def _parse_atom_items(root, base_url: str = '') -> list:
     """解析 Atom 格式"""
     items = []
     seen = set()
@@ -216,6 +218,8 @@ def _parse_atom_items(root) -> list:
             link_el = entry.find(f'{{{ATOM_NS}}}link')
             if link_el is not None:
                 link = link_el.get('href', '')
+        if not link:
+            link = base_url
 
         # 提取 summary/content
         summary = ''
