@@ -1,26 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-  <channel>
-    <title>羊毛线报 - RSSForge</title>
-    <link>https://b1.ymxianbao.cn/</link>
-    <description>羊毛线报 的 RSS 订阅源（由 RSSForge 生成）</description>
-    <language>zh-cn</language>
-    <lastBuildDate>Sat, 11 Jul 2026 16:19:58 +0800</lastBuildDate>
-    <generator>RSSForge</generator>
-    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
-    <ttl>30</ttl>
-    <image>
-      <url>https://b1.ymxianbao.cn/favicon.ico</url>
-      <title>羊毛线报 - RSSForge</title>
-      <link>https://b1.ymxianbao.cn/</link>
-    </image>
-    <item>
-      <title>工行抽0.6零钱到卡</title>
-      <link>https://b1.ymxianbao.cn/28986.html</link>
-      <guid isPermaLink="false">urn:md5:b0f256b8c45af9ec@b1.ymxianbao.cn</guid>
-      <pubDate>Sat, 11 Jul 2026 16:17:57 +0800</pubDate>
-      <author>羊毛线报</author>
-      <description xml:space="preserve">工行抽0.6零钱到卡&lt;br/&gt;&lt;a href="https://b1.ymxianbao.cn/28986.html"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-  </channel>
-</rss>
+<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
+  <ns0:title>羊毛线报</ns0:title>
+  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/yang-mao-xian-bao.xml" rel="self" type="application/atom+xml" />
+  <ns0:link href="https://b1.ymxianbao.cn/" rel="alternate" type="text/html" />
+  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/yang-mao-xian-bao.xml</ns0:id>
+  <ns0:updated>2026-07-11T16:30:13.249990+08:00</ns0:updated>
+  <ns0:subtitle>羊毛线报 - no items yet</ns0:subtitle>
+</ns0:feed>
