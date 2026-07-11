@@ -572,6 +572,18 @@ RETRY_BASE_DELAY = 1.0
 # robots.txt 合规配置
 RESPECT_ROBOTS_TXT: bool = True  # fix #18: 默认遵守 robots.txt
 
+# robots.txt 白名单 — 这些域名跳过 robots.txt 检查
+# 用于：站点有原生 RSS 但被自己的 robots.txt 误屏蔽的情况
+ROBOTS_BYPASS_DOMAINS: set = {
+    "appmiu.com",        # APP喵
+    "appinn.com",        # 小众软件
+    "new.3mbb.com",      # 慢慢买（移动版）
+    "baiasicaio.com",    # 白菜哦
+    "huodong5.com",      # 活动5
+    "wycaijing.com",     # 网赚
+    "foxirj.com",        # 佛系软件
+}
+
 # 代理池
 _proxy_pool: Optional[ProxyPool] = None
 
