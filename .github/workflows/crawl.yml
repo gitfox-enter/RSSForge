@@ -1,0 +1,242 @@
+name: 站点更新监控
+
+on:
+  schedule:
+    # 每 30 分钟常规轮询，由 smart_scheduler 决定是否执行
+    - cron: '0,30 * * * *'
+    # 固定时刻保底触发（防 GitHub 高峰期漏触发）
+    - cron: '0 7,12,18,22 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: site-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    environment:
+      name: github-pages
+    env:
+      TZ: Asia/Shanghai
+    permissions:
+      contents: write
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      - name: 设置Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: 安装 Playwright 浏览器
+        run: playwright install --with-deps chromium
+      - name: 配置Git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+      - name: 运行监控
+        run: python crawl.py
+      - name: 生成 RSS Feed
+        run: python rss_feed.py
+      - name: 生成 OPML
+        run: python opml_generator.py
+
+      - name: 生成多镜像 OPML
+        run: python generate_opml_mirrors.py
+      - name: 生成订阅源目录
+        run: python generate_feeds_index.py
+
+      - name: 删除主 RSS 聚合文件
+        run: |
+          # 删除主 feed.xml（不再需要聚合所有站点的 RSS）
+          if [ -f feed.xml ]; then
+            rm -f feed.xml
+            echo "已删除 feed.xml"
+          fi
+          # 删除旧的分类 OPML（如有）
+          rm -f opml-*.xml
+
+      - name: 提交变更
+        run: |
+          set +e
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          # 使用排他性文件名策略：仅 commit crawl workflow 负责的文件
+          # 核心状态文件（git add -u 仅修改已跟踪的文件）
+          git add -u crawl_status.json items.json items_latest.json scheduler_state.json run_log.jsonl hash_record.txt notified_items.json adaptive_tiers.json 2>/dev/null || true
+          # Per-site feeds 目录（docs/feeds/ 中的文件由 rss_feed.py 直接生成到 docs/feeds/）
+          git add docs/feeds/ 2>/dev/null || true
+          # 订阅源目录页面
+          git add -u docs/index.html 2>/dev/null || true
+          # OPML 和 icons（直接输出到 docs/ 下）
+          git add -u docs/opml.xml docs/opml.*.xml docs/icons/ 2>/dev/null || true
+          # 不再 commit feeds_meta.json（由 fast_check 单独管理，避免并发冲突）
+          git add -u opml.xml public/icons/ 2>/dev/null || true
+
+          git status
+          if git diff --staged --quiet 2>/dev/null; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          # 检查是否有新内容
+          HAS_NEW_CONTENT=false
+          if git diff --staged --name-only | grep -q "feeds/"; then
+            HAS_NEW_CONTENT=true
+            FEED_COUNT=$(git diff --staged --name-only | grep -c "feeds/" || echo "0")
+            COMMIT_MSG="自动更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S') | 新增 ${FEED_COUNT} 个 feed"
+          elif git diff --staged --name-only | grep -q "feeds_meta.json"; then
+            HAS_NEW_CONTENT=true
+            COMMIT_MSG="状态更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
+          elif git diff --staged --name-only | grep -q "opml.xml"; then
+            HAS_NEW_CONTENT=true
+            COMMIT_MSG="OPML 更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
+          elif git diff --staged --name-only | grep -q "adaptive_tiers.json"; then
+            HAS_NEW_CONTENT=true
+            COMMIT_MSG="状态更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
+          fi
+          
+          if [ "$HAS_NEW_CONTENT" = "true" ]; then
+            git commit -m "$COMMIT_MSG"
+          else
+            echo "No significant changes to commit"
+            exit 0
+          fi
+          
+          push_success=false
+          for i in 1 2 3 4 5; do
+            echo "=== Push attempt $i ==="
+            # Abort any existing rebase or merge first (fixes stale MERGE_HEAD)
+            git rebase --abort 2>/dev/null || true
+            git merge --abort 2>/dev/null || true
+            # Force merge strategy to avoid "divergent branches" error
+            git config pull.rebase false
+            git config merge.conflictstyle diff3
+            # Use --no-commit to avoid auto-committing merge; let conflicts be resolved manually
+            # Fix #58: --strategy-option=theirs can discard incoming crawled data
+            git pull --no-commit --no-rebase origin main
+            pull_rc=$?
+            if [ $pull_rc -eq 0 ]; then
+              # Pull succeeded with auto-merge; commit the merge if needed
+              if [ -f .git/MERGE_HEAD ]; then
+                git commit -m "Merge origin/main (auto-merged)" || true
+              fi
+            fi
+            if [ $pull_rc -ne 0 ]; then
+              echo "Rebase had conflicts, attempting auto-resolution..."
+              # Stage all resolved files (Git marks conflicts in index)
+              git diff --name-only --diff-filter=U | while read conflict_file; do
+                # Prefer local (our crawler) version for data files, else accept theirs
+                case "$conflict_file" in
+                  items.json|items_latest.json|run_log.jsonl|feeds/|feeds_meta.json)
+                    echo "Data conflict: keeping our crawler version of $conflict_file"
+                    git checkout --ours "$conflict_file" 2>/dev/null || git checkout --theirs "$conflict_file"
+                    ;;
+                  *)
+                    echo "Conflict in $conflict_file: accepting remote version"
+                    git checkout --theirs "$conflict_file"
+                    ;;
+                esac
+                git add "$conflict_file"
+              done
+              # Abort any pending merge before continuing (fixes stale MERGE_HEAD)
+              git merge --abort 2>/dev/null || true
+              # Retry pull with guaranteed merge strategy
+              git pull --no-commit --no-rebase origin main || true
+              # If still has conflicts, stage ours for data files, theirs for others
+              if [ -f .git/MERGE_HEAD ]; then
+                git diff --name-only --diff-filter=U | while read conflict_file; do
+                  case "$conflict_file" in
+                    items.json|items_latest.json|run_log.jsonl|feeds/|feeds_meta.json)
+                      echo "Data conflict: keeping our crawler version of $conflict_file"
+                      git checkout --ours "$conflict_file" 2>/dev/null || git checkout --theirs "$conflict_file"
+                      ;;
+                    *)
+                      echo "Conflict in $conflict_file: accepting remote version"
+                      git checkout --theirs "$conflict_file"
+                      ;;
+                  esac
+                  git add "$conflict_file"
+                done
+                git commit -m "Merge origin/main (auto-resolved)" || true
+              fi
+              # Use force-with-lease for final push to handle non-fast-forward cases
+              git push origin main --force-with-lease || git push origin main
+            fi
+            if git push origin main; then
+              push_success=true
+              break
+            fi
+            echo "Push attempt $i failed, waiting before retry..."
+            sleep 10
+          done
+          if [ "$push_success" = true ]; then
+            echo "Changes committed and pushed successfully"
+          else
+            echo "Failed to push changes after 5 attempts"
+            exit 1
+          fi
+
+      - name: 部署到 GitHub Pages（docs/ 已包含所有部署文件）
+        if: success()
+        run: |
+          set -e
+          
+          # feeds/OPML/icons 已由各脚本直接输出到 docs/ 目录下
+          # 仅需复制 crawl_status.json 供状态页使用
+          cp crawl_status.json docs/ 2>/dev/null || true
+          
+          # 检查是否有变化
+          git add docs/
+          git status docs/
+          
+          if git diff --staged --quiet docs/ 2>/dev/null; then
+            echo "docs/ 无变化，跳过提交"
+            exit 0
+          fi
+          
+          git commit -m "自动部署: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
+          
+          for i in 1 2 3; do
+            git pull --no-commit --no-rebase origin main 2>/dev/null || true
+            git merge --abort 2>/dev/null || true
+            if git push origin main; then
+              echo "部署成功"
+              exit 0
+            fi
+            echo "Push 失败，重试 $i/3..."
+            sleep 5
+          done
+          echo "部署失败"
+          exit 1
+
+      - name: 停滞检测
+        if: success()
+        run: |
+          # 检查本次 crawl 是否产出新内容
+          LAST_COMMIT_MSG=$(git log -1 --pretty=%s 2>/dev/null || echo "no commit")
+          echo "最新提交: $LAST_COMMIT_MSG"
+          if echo "$LAST_COMMIT_MSG" | grep -qE "^(状态更新|自动部署)"; then
+            echo "::warning title=停滞警告::本次未产出新 feed 内容，请查看 run_log.jsonl 检查各站点错误"
+          else
+            echo "有 feed 更新，状态正常"
+          fi
+
+      - name: 上传运行日志
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: run-log-${{ github.run_number }}
+          path: run_log.jsonl
+          retention-days: 30
+

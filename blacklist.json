@@ -1,0 +1,79 @@
+{
+  "_comment": "网站黑名单 - 被拒绝的站点不会加入MONITOR_SITES，也不会被推荐",
+  "_categories": {
+    "paid_required": "需要付费才能注册/使用的网站",
+    "anti_crawl": "反爬严格，无法抓取内容的网站",
+    "spam_download": "流氓软件下载站（捆绑安装/广告过多）",
+    "user_hated": "用户明确表示讨厌的网站",
+    "inaccessible": "域名无法访问/已失效的网站",
+    "not_content": "纯工具页无内容列表可监控的网站"
+  },
+  "blacklist": [
+    {
+      "domain": "store.steampowered.com",
+      "reason": "用户明确表示讨厌Steam",
+      "category": "user_hated",
+      "added": "2026-06-04"
+    },
+    {
+      "domain": "store.epicgames.com",
+      "reason": "用户明确要求不要Epic Games Store",
+      "category": "user_hated",
+      "added": "2026-06-04"
+    },
+    {
+      "domain": "ypojie.com",
+      "reason": "亿破解需要付费注册才能使用",
+      "category": "paid_required",
+      "added": "2026-06-04"
+    },
+    {
+      "domain": "52hb.com",
+      "reason": "52破解需要付费注册才能使用",
+      "category": "paid_required",
+      "added": "2026-06-04"
+    },
+    {
+      "domain": "xdowns.com",
+      "reason": "用户确认为流氓软件下载站",
+      "category": "spam_download",
+      "added": "2026-06-04"
+    },
+    {
+      "domain": "downza.com",
+      "reason": "用户确认为流氓软件下载站",
+      "category": "spam_download",
+      "added": "2026-06-04"
+    },
+    {
+      "domain": "pc6.com",
+      "reason": "用户确认为流氓软件下载站",
+      "category": "spam_download",
+      "added": "2026-06-04"
+    },
+    {
+      "domain": "crsky.com",
+      "reason": "返回403反爬",
+      "category": "anti_crawl",
+      "added": "2026-06-04"
+    },
+    {
+      "domain": "smzdm.com",
+      "reason": "反爬严格，WebFetch无法获取内容",
+      "category": "anti_crawl",
+      "added": "2026-06-04"
+    },
+    {
+      "domain": "hisprice.com",
+      "reason": "纯工具页，无内容列表可监控",
+      "category": "not_content",
+      "added": "2026-06-04"
+    },
+    {
+      "domain": "ziyuanting.com",
+      "reason": "网站导航/资源目录，非内容站点，无法抓取实时资源内容",
+      "category": "not_content",
+      "added": "2026-06-29"
+    }
+  ]
+}

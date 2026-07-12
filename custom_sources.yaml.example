@@ -1,0 +1,52 @@
+# ============================================================
+# 自定义订阅源配置示例
+# ============================================================
+# 
+# 这是用户可以自行维护的配置文件。
+# 
+# 使用方法：
+# 1. 复制此文件为 custom_sources.yaml
+# 2. 添加你想监控的网站
+# 3. 不需要修改 sites.yaml 或任何其他代码
+# 4. 提交后 GitHub Actions 会自动抓取
+#
+# 注意：所有在这里添加的源都会在 RSS feed 中展示
+#       如果源需要登录或有反爬限制，可能无法正常工作
+# ============================================================
+
+# 是否启用自定义订阅源（设为 false 可临时禁用所有自定义源）
+enabled: true
+
+# 自定义订阅源列表
+custom_feeds:
+  # 示例：果核剥壳
+  # - url: "https://www.ghpym.com/"           # 网站列表页 URL
+  #   name: "果核剥壳"                        # 显示名称
+  #   content: ".entry-content"               # 可选：文章列表容器选择器
+  #   interval: 60                            # 可选：抓取间隔（分钟），默认 60
+  #   tier: medium                            # 可选：优先级 high/medium/low
+  #   enabled: true                           # 可选：是否启用
+
+  # 示例：小众软件
+  # - url: "https://www.appinn.com/"
+  #   name: "小众软件"
+  #   content: ".post-list"
+  #   interval: 120
+  #   tier: medium
+  #   enabled: true
+
+  # 示例：423Down
+  # - url: "https://www.423down.com/"
+  #   name: "423Down"
+  #   content: ".content"
+  #   interval: 60
+  #   tier: high
+  #   enabled: true
+
+  # 示例：自定义博客
+  # - url: "https://your-blog.com/posts/"
+  #   name: "你的博客"
+  #   content: ".article"                     # 根据实际网站调整
+  #   interval: 360                          # 个人博客更新慢，设置较长间隔
+  #   tier: low
+  #   enabled: true
