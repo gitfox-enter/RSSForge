@@ -65,7 +65,7 @@ sites:
     interval: 30
     parser: readhub
 
-  - url: "https://xzba.cc/"                # Xin ZhuanBa
+  # - url: "https://xzba.cc/"  # 新赚吧 - 游戏论坛，非线报，已移除                # Xin ZhuanBa
     max_pages: 3
     name: 新赚吧
     tier: high
@@ -156,7 +156,7 @@ sites:
     tier: high
     interval: 30
 
-  - url: "https://www.wobangzhao.com/"
+  # - url: "https://www.wobangzhao.com/"  # 我不找 - 密码破解资源站，已移除
     max_pages: 3
     name: 我不找
     tier: medium
@@ -255,7 +255,7 @@ sites:
     interval: 240
     rss_feed: "https://www.thosefree.com/feed/"
 
-  # === 死站：RSS Feed 内容为空，确认已停用 ===
+# === 死站：RSS Feed 内容为空，确认已停用 ===
   # - url: "https://www.foxirj.com/"
   #   name: 佛系软件
   #   rss_feed: "https://www.foxirj.com/feed/"
@@ -283,15 +283,16 @@ sites:
     tier: medium
     interval: 120
 
-  - url: "https://www.kxdao.net/forum-42-1.html"
+  # - url: "https://www.kxdao.net/forum-42-1.html"  # 开心赚 - 论坛板块页抓取类别名，非线报，已移除
     max_pages: 10
     name: 开心赚
     tier: medium
     interval: 120
     js_render: true           # Discuz forum requires JS rendering
 
-  # === 死站：启用 js_render 后 Feed 仍为空 ===
-  # - url: "https://www.51kanong.com/"       # 51 KaNong
+# === 死站：启用 js_render 后 Feed 仍为空 ===
+  - url: "https://www.51kanong.com/"  # 51卡农
+  # - url: "https://10000yun.com/"  # 万云积分 - VPN/影视站聚合       # 51 KaNong
   #   name: 51卡农
   #   js_render: true
   #   reason: "启用 JS 渲染后 Feed 仍为空，网站可能已关闭 RSS"
@@ -305,11 +306,7 @@ sites:
   # ============================================================
   # Other (MEDIUM tier)
   # ============================================================
-  - url: "https://10000yun.com/"           # WanYun JiFen
-    max_pages: 5
-    name: 万云积分
-    tier: medium
-    interval: 360
+  # - url: "https://10000yun.com/"  # 万云积分 - VPN/影视聚合，非线报
 
   # ============================================================
   # New sites (2026-07-05)
@@ -343,7 +340,7 @@ sites:
     fast_check: true
     rss_feed: "https://www.appmiu.com/feed"
 
-  # === 死站：JS渲染后Feed仍为空，疑似网站已关闭 ===
+# === 死站：JS渲染后Feed仍为空，疑似网站已关闭 ===
   # - url: "https://yrxq.xliangxi.vip/"      # YinRuan XingQiu
   #   name: 银软星球
   #   js_render: true

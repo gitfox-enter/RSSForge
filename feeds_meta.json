@@ -53,15 +53,6 @@
     "site_url": "https://readhub.cn/hot",
     "items_hash": ""
   },
-  "新赚吧": {
-    "interval": 30,
-    "freq_label": "每30分钟",
-    "count": 0,
-    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xin-zhuan-ba.xml",
-    "icon": "https://xzba.cc/favicon.ico",
-    "site_url": "https://xzba.cc/",
-    "items_hash": ""
-  },
   "H6线报": {
     "interval": 30,
     "freq_label": "每30分钟",
@@ -168,15 +159,6 @@
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/wang-zhuan.xml",
     "icon": "https://www.wycad.com/favicon.ico",
     "site_url": "https://www.wycad.com/",
-    "items_hash": ""
-  },
-  "我不找": {
-    "interval": 60,
-    "freq_label": "每小时",
-    "count": 0,
-    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/wo-bu-zhao.xml",
-    "icon": "https://www.wobangzhao.com/favicon.ico",
-    "site_url": "https://www.wobangzhao.com/",
     "items_hash": ""
   },
   "慢慢买": {
@@ -287,15 +269,6 @@
     "site_url": "https://www.douban.com/group/711811/",
     "items_hash": ""
   },
-  "开心赚": {
-    "interval": 120,
-    "freq_label": "每2小时",
-    "count": 0,
-    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/kai-xin-zhuan.xml",
-    "icon": "https://gitfox-enter.github.io/RSSForge/icons/www-kxdao-net.ico",
-    "site_url": "https://www.kxdao.net/forum-42-1.html",
-    "items_hash": ""
-  },
   "IT之家": {
     "interval": 120,
     "freq_label": "每2小时",
@@ -303,15 +276,6 @@
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/IT-zhi-jia.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/www-ithome-com.ico",
     "site_url": "https://www.ithome.com/zt/xijiayi",
-    "items_hash": ""
-  },
-  "万云积分": {
-    "interval": 360,
-    "freq_label": "每6小时",
-    "count": 0,
-    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/wan-yun-ji-fen.xml",
-    "icon": "https://10000yun.com/favicon.ico",
-    "site_url": "https://10000yun.com/",
     "items_hash": ""
   },
   "鸭先知": {
