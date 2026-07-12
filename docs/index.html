@@ -208,6 +208,65 @@ footer a { color:var(--accent); }
 @media (max-width:768px) {
   table { min-width:unset; }
 }
+
+/* ── Blacklist Section ── */
+#blacklist-section {
+  margin: 40px auto;
+  max-width: 900px;
+  padding: 0 16px;
+}
+#blacklist-section h2 {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+#blacklist-section h2:hover { color: var(--text); }
+#blacklist-toggle {
+  font-size: 12px;
+  background: var(--border);
+  border: none;
+  border-radius: 10px;
+  padding: 2px 10px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-family: inherit;
+}
+#blacklist-toggle:hover { background: var(--hover); }
+#blacklist-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+#blacklist-list.collapsed { display: none; }
+.bl-item {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+}
+.bl-domain {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--accent);
+  word-break: break-all;
+  margin-bottom: 4px;
+}
+.bl-reason { color: var(--text-muted); font-size: 12px; line-height: 1.4; }
+.bl-tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-top: 5px;
+  background: var(--border);
+  color: var(--text-muted);
+}
 </style>
     </head>
     <body>
@@ -216,7 +275,7 @@ footer a { color:var(--accent); }
 
     <header>
       <h1>📡 RSSForge</h1>
-      <p class="subtitle">订阅源目录 &middot; 2026-07-12 08:42</p>
+      <p class="subtitle">订阅源目录 &middot; 2026-07-12 08:49</p>
       <div class="stats">
         <div class="stat"><div class="stat-value">39</div><div class="stat-label">订阅源</div></div>
         <div class="stat"><div class="stat-value">13</div><div class="stat-label">活跃源</div></div>
@@ -313,6 +372,11 @@ footer a { color:var(--accent); }
       </p>
     </footer>
 
+    <div id="blacklist-section">
+      <h2 onclick="toggleBlacklist()">🚫 已屏蔽站点 <button id="blacklist-toggle">展开</button></h2>
+      <div id="blacklist-list" class="collapsed"></div>
+    </div>
+
     <script>
     // ── Theme ──
     function toggleTheme() {
@@ -377,6 +441,32 @@ footer a { color:var(--accent); }
     document.querySelectorAll('.favicon-img').forEach(function(img) {
       if (!img.src || img.src.endsWith('/favicon.ico')) return;
     });
+
+    // ── Blacklist ──
+    var BLACKLIST = [{"domain": "store.steampowered.com", "reason": "用户明确表示讨厌Steam", "category": "user_hated", "added": "2026-06-04"}, {"domain": "store.epicgames.com", "reason": "用户明确要求不要Epic Games Store", "category": "user_hated", "added": "2026-06-04"}, {"domain": "ypojie.com", "reason": "亿破解需要付费注册才能使用", "category": "paid_required", "added": "2026-06-04"}, {"domain": "52hb.com", "reason": "52破解需要付费注册才能使用", "category": "paid_required", "added": "2026-06-04"}, {"domain": "xdowns.com", "reason": "用户确认为流氓软件下载站", "category": "spam_download", "added": "2026-06-04"}, {"domain": "downza.com", "reason": "用户确认为流氓软件下载站", "category": "spam_download", "added": "2026-06-04"}, {"domain": "pc6.com", "reason": "用户确认为流氓软件下载站", "category": "spam_download", "added": "2026-06-04"}, {"domain": "crsky.com", "reason": "返回403反爬", "category": "anti_crawl", "added": "2026-06-04"}, {"domain": "smzdm.com", "reason": "反爬严格，WebFetch无法获取内容", "category": "anti_crawl", "added": "2026-06-04"}, {"domain": "hisprice.com", "reason": "纯工具页，无内容列表可监控", "category": "not_content", "added": "2026-06-04"}, {"domain": "ziyuanting.com", "reason": "网站导航/资源目录，非内容站点，无法抓取实时资源内容", "category": "not_content", "added": "2026-06-29"}];
+    var blExpanded = false;
+    function toggleBlacklist() {
+      blExpanded = !blExpanded;
+      var list = document.getElementById('blacklist-list');
+      var btn  = document.getElementById('blacklist-toggle');
+      list.classList.toggle('collapsed', !blExpanded);
+      btn.textContent = blExpanded ? '收起' : '展开';
+    }
+    function renderBlacklist() {
+      var list = document.getElementById('blacklist-list');
+      if (!list) return;
+      var frag = document.createDocumentFragment();
+      BLACKLIST.forEach(function(item) {
+        var div = document.createElement('div');
+        div.className = 'bl-item';
+        div.innerHTML = '<div class="bl-domain">' + item.domain + '</div>' +
+          '<div class="bl-reason">' + item.reason + '</div>' +
+          '<span class="bl-tag">' + item.category + '</span>';
+        frag.appendChild(div);
+      });
+      list.appendChild(frag);
+    }
+    renderBlacklist();
     </script>
     </body>
     </html>

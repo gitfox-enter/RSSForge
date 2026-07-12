@@ -77,6 +77,19 @@ def get_name(slug, meta_name=None):
     return NAME_MAP.get(slug, slug)
 
 # ─────────────────────────────────────────────
+# 3a. 加载 blacklist
+# ─────────────────────────────────────────────
+def load_blacklist():
+    path = os.path.join(os.path.dirname(__file__) or '.', 'blacklist.json')
+    try:
+        with open(path, encoding='utf-8') as f:
+            data = json.load(f)
+        return json.dumps(data.get('blacklist', []), ensure_ascii=False)
+    except Exception:
+        return '[]'
+
+
+# ─────────────────────────────────────────────
 # 3. 加载 feeds_meta
 # ─────────────────────────────────────────────
 def load_meta():
@@ -298,6 +311,65 @@ def css():
     @media (max-width:768px) {
       table { min-width:unset; }
     }
+
+    /* ── Blacklist Section ── */
+    #blacklist-section {
+      margin: 40px auto;
+      max-width: 900px;
+      padding: 0 16px;
+    }
+    #blacklist-section h2 {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+    #blacklist-section h2:hover { color: var(--text); }
+    #blacklist-toggle {
+      font-size: 12px;
+      background: var(--border);
+      border: none;
+      border-radius: 10px;
+      padding: 2px 10px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-family: inherit;
+    }
+    #blacklist-toggle:hover { background: var(--hover); }
+    #blacklist-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 10px;
+    }
+    #blacklist-list.collapsed { display: none; }
+    .bl-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+    .bl-domain {
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--accent);
+      word-break: break-all;
+      margin-bottom: 4px;
+    }
+    .bl-reason { color: var(--text-muted); font-size: 12px; line-height: 1.4; }
+    .bl-tag {
+      display: inline-block;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-top: 5px;
+      background: var(--border);
+      color: var(--text-muted);
+    }
     ''')
 
 # ─────────────────────────────────────────────
@@ -367,7 +439,7 @@ def build_row(i, s):
 # ─────────────────────────────────────────────
 # 6. HTML 生成
 # ─────────────────────────────────────────────
-def gen_html(meta):
+def gen_html(meta, blacklist_json='[]'):
     from datetime import datetime, timezone, timedelta
     tz  = timezone(timedelta(hours=8))
     now = datetime.now(tz).strftime("%Y-%m-%d %H:%M")
@@ -378,6 +450,7 @@ def gen_html(meta):
     low_cnt     = sum(1 for s in meta if s.get("tier") == "low")
 
     rows_html = "\n".join(build_row(i, s) for i, s in enumerate(meta, 1))
+    bl_json = blacklist_json if blacklist_json else '[]'
 
     tmpl = f'''\
     <!DOCTYPE html>
@@ -457,6 +530,11 @@ def gen_html(meta):
       </p>
     </footer>
 
+    <div id="blacklist-section">
+      <h2 onclick="toggleBlacklist()">🚫 已屏蔽站点 <button id="blacklist-toggle">展开</button></h2>
+      <div id="blacklist-list" class="collapsed"></div>
+    </div>
+
     <script>
     // ── Theme ──
     function toggleTheme() {{
@@ -521,6 +599,32 @@ def gen_html(meta):
     document.querySelectorAll('.favicon-img').forEach(function(img) {{
       if (!img.src || img.src.endsWith('/favicon.ico')) return;
     }});
+
+    // ── Blacklist ──
+    var BLACKLIST = {bl_json};
+    var blExpanded = false;
+    function toggleBlacklist() {{
+      blExpanded = !blExpanded;
+      var list = document.getElementById('blacklist-list');
+      var btn  = document.getElementById('blacklist-toggle');
+      list.classList.toggle('collapsed', !blExpanded);
+      btn.textContent = blExpanded ? '收起' : '展开';
+    }}
+    function renderBlacklist() {{
+      var list = document.getElementById('blacklist-list');
+      if (!list) return;
+      var frag = document.createDocumentFragment();
+      BLACKLIST.forEach(function(item) {{
+        var div = document.createElement('div');
+        div.className = 'bl-item';
+        div.innerHTML = '<div class="bl-domain">' + item.domain + '</div>' +
+          '<div class="bl-reason">' + item.reason + '</div>' +
+          '<span class="bl-tag">' + item.category + '</span>';
+        frag.appendChild(div);
+      }});
+      list.appendChild(frag);
+    }}
+    renderBlacklist();
     </script>
     </body>
     </html>
@@ -532,7 +636,8 @@ def gen_html(meta):
 # ─────────────────────────────────────────────
 def main():
     meta = load_meta()
-    html = gen_html(meta)
+    blacklist_json = load_blacklist()
+    html = gen_html(meta, blacklist_json)
     os.makedirs("docs", exist_ok=True)
     out = "docs/index.html"
     with open(out, "w", encoding="utf-8") as f:
