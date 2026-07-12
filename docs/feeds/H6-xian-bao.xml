@@ -1,9 +1,260 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>H6线报</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/H6-xian-bao.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://www.h6room.com/" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/H6-xian-bao.xml</ns0:id>
-  <ns0:updated>2026-07-12T22:15:32.985375+08:00</ns0:updated>
-  <ns0:subtitle>H6线报 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>H6线报 - RSSForge</title>
+    <link>https://www.h6room.com/</link>
+    <description>H6线报 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 12 Jul 2026 22:42:18 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>30</ttl>
+    <image>
+      <url>https://www.h6room.com/favicon.ico</url>
+      <title>H6线报</title>
+      <link>https://www.h6room.com/</link>
+      <width>32</width>
+      <height>32</height>
+    </image>
+    <item>
+      <title>胖鱼资源导航-全网热门资源直达-效率工具智能素材导航</title>
+      <link>https://www.h6room.com/10874.html</link>
+      <guid isPermaLink="false">urn:md5:195da8ec0d205d88@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">胖鱼资源导航-全网热门资源直达-效率工具智能素材导航&lt;br/&gt;&lt;a href="https://www.h6room.com/10874.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>全网热门资源免费分享-软件/学习/考试/办公/影视/运营-好料空间www.h6room.com</title>
+      <link>https://www.h6room.com/6187.html</link>
+      <guid isPermaLink="false">urn:md5:c02d2e58e7663a87@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">全网热门资源免费分享-软件/学习/考试/办公/影视/运营-好料空间www.h6room.com&lt;br/&gt;&lt;a href="https://www.h6room.com/6187.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>酷漫星-全网免费漫画资源 v4.3.01 去广告纯净版</title>
+      <link>https://www.h6room.com/14838.html</link>
+      <guid isPermaLink="false">urn:md5:8d64585c191ab267@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">酷漫星-全网免费漫画资源 v4.3.01 去广告纯净版&lt;br/&gt;&lt;a href="https://www.h6room.com/14838.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>追剧喵-安卓高清蓝光影视 v4.0.5 去广告纯净版</title>
+      <link>https://www.h6room.com/3719.html</link>
+      <guid isPermaLink="false">urn:md5:6f3c7ebcecf3b4b8@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">追剧喵-安卓高清蓝光影视 v4.0.5 去广告纯净版&lt;br/&gt;&lt;a href="https://www.h6room.com/3719.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>蜂鸟PE维护系统 v2.5.3 小巧纯净流畅的WinPE</title>
+      <link>https://www.h6room.com/5385.html</link>
+      <guid isPermaLink="false">urn:md5:015a39a40be141a5@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">蜂鸟PE维护系统 v2.5.3 小巧纯净流畅的WinPE&lt;br/&gt;&lt;a href="https://www.h6room.com/5385.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>喵趣漫画-免费漫画App v5.4.0 去广告纯净版</title>
+      <link>https://www.h6room.com/23697.html</link>
+      <guid isPermaLink="false">urn:md5:e932d2cf725f2193@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">喵趣漫画-免费漫画App v5.4.0 去广告纯净版&lt;br/&gt;&lt;a href="https://www.h6room.com/23697.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>VLLO视频编辑器 v13.2.2 解锁高级版</title>
+      <link>https://www.h6room.com/298.html</link>
+      <guid isPermaLink="false">urn:md5:e64b81e2b242827d@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">VLLO视频编辑器 v13.2.2 解锁高级版&lt;br/&gt;&lt;a href="https://www.h6room.com/298.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>ToonApp卡通照片编辑 v3.4.1 解锁专业版</title>
+      <link>https://www.h6room.com/539.html</link>
+      <guid isPermaLink="false">urn:md5:aa642c9583907bc2@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">ToonApp卡通照片编辑 v3.4.1 解锁专业版&lt;br/&gt;&lt;a href="https://www.h6room.com/539.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Spring视频剪辑 v2.1.15.36566 解锁高级版</title>
+      <link>https://www.h6room.com/12330.html</link>
+      <guid isPermaLink="false">urn:md5:6987aaad73b20ddc@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">Spring视频剪辑 v2.1.15.36566 解锁高级版&lt;br/&gt;&lt;a href="https://www.h6room.com/12330.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Speedtest by Ookla 网速测试 v7.0.7 解锁高级版</title>
+      <link>https://www.h6room.com/3415.html</link>
+      <guid isPermaLink="false">urn:md5:23af8514c80ec755@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">Speedtest by Ookla 网速测试 v7.0.7 解锁高级版&lt;br/&gt;&lt;a href="https://www.h6room.com/3415.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>SnapEdit智能照片编辑 v7.7.1 解锁专业版</title>
+      <link>https://www.h6room.com/848.html</link>
+      <guid isPermaLink="false">urn:md5:4344a4a8379b5563@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">SnapEdit智能照片编辑 v7.7.1 解锁专业版&lt;br/&gt;&lt;a href="https://www.h6room.com/848.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>PhotoRoom照片编辑背景替换工具 v2026.28.04 解锁专业版</title>
+      <link>https://www.h6room.com/3510.html</link>
+      <guid isPermaLink="false">urn:md5:3dba63dcfb2be461@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">PhotoRoom照片编辑背景替换工具 v2026.28.04 解锁专业版&lt;br/&gt;&lt;a href="https://www.h6room.com/3510.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>OldRoll复古胶片相机 v7.6.1-CN/v6.5.2-GP 解锁VIP会员版</title>
+      <link>https://www.h6room.com/205.html</link>
+      <guid isPermaLink="false">urn:md5:d9583edf8751e15d@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">OldRoll复古胶片相机 v7.6.1-CN/v6.5.2-GP 解锁VIP会员版&lt;br/&gt;&lt;a href="https://www.h6room.com/205.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Kilonotes千本笔记-笔记便签记事本 v3.30.1.1 解锁VIP会员版</title>
+      <link>https://www.h6room.com/11792.html</link>
+      <guid isPermaLink="false">urn:md5:0bf983eee9f8f667@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">Kilonotes千本笔记-笔记便签记事本 v3.30.1.1 解锁VIP会员版&lt;br/&gt;&lt;a href="https://www.h6room.com/11792.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Duolingo多邻国-语言学习 v6.88.0 解锁高级版</title>
+      <link>https://www.h6room.com/719.html</link>
+      <guid isPermaLink="false">urn:md5:cf0c796b3c061dda@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">Duolingo多邻国-语言学习 v6.88.0 解锁高级版&lt;br/&gt;&lt;a href="https://www.h6room.com/719.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>AI Photo Enhancer-Ai照片增强修复 v1.4.2 解锁高级版</title>
+      <link>https://www.h6room.com/5068.html</link>
+      <guid isPermaLink="false">urn:md5:de85303d830a3ddb@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">AI Photo Enhancer-Ai照片增强修复 v1.4.2 解锁高级版&lt;br/&gt;&lt;a href="https://www.h6room.com/5068.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>追忆影视-高清经典免费影视追剧 v5.6.0 去广告纯净版</title>
+      <link>https://www.h6room.com/8126.html</link>
+      <guid isPermaLink="false">urn:md5:7050d545f9034923@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">追忆影视-高清经典免费影视追剧 v5.6.0 去广告纯净版&lt;br/&gt;&lt;a href="https://www.h6room.com/8126.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Xodo-佐道PDF阅读器 v10.17.1 解锁付费专业版</title>
+      <link>https://www.h6room.com/3774.html</link>
+      <guid isPermaLink="false">urn:md5:00ed8ee2c132e02b@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">Xodo-佐道PDF阅读器 v10.17.1 解锁付费专业版&lt;br/&gt;&lt;a href="https://www.h6room.com/3774.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Remini照片Ai增强修复 v3.7.1377.202522873 解锁专业版</title>
+      <link>https://www.h6room.com/260.html</link>
+      <guid isPermaLink="false">urn:md5:1bf2685e87c64a2d@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">Remini照片Ai增强修复 v3.7.1377.202522873 解锁专业版&lt;br/&gt;&lt;a href="https://www.h6room.com/260.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>繁花漫画App多源免费漫画阅读 v4.0.5 去广告纯净版</title>
+      <link>https://www.h6room.com/23686.html</link>
+      <guid isPermaLink="false">urn:md5:50136cc950a00aa3@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">繁花漫画App多源免费漫画阅读 v4.0.5 去广告纯净版&lt;br/&gt;&lt;a href="https://www.h6room.com/23686.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>红果免费短剧-海量热门短剧 v7.2.8.32 解锁VIP会员版</title>
+      <link>https://www.h6room.com/7115.html</link>
+      <guid isPermaLink="false">urn:md5:bd0bec8ab9a09710@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">红果免费短剧-海量热门短剧 v7.2.8.32 解锁VIP会员版&lt;br/&gt;&lt;a href="https://www.h6room.com/7115.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>爱笔思画X-专业插画绘图工具 v14.0.6 解锁高级版</title>
+      <link>https://www.h6room.com/7252.html</link>
+      <guid isPermaLink="false">urn:md5:6ce80cd63dc48f0c@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">爱笔思画X-专业插画绘图工具 v14.0.6 解锁高级版&lt;br/&gt;&lt;a href="https://www.h6room.com/7252.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>微博 v16.7.0-内置微博猪手 2.5.3-347 去广告净化模块-支持安卓15</title>
+      <link>https://www.h6room.com/88.html</link>
+      <guid isPermaLink="false">urn:md5:9d7beb662e6938e2@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">微博 v16.7.0-内置微博猪手 2.5.3-347 去广告净化模块-支持安卓15&lt;br/&gt;&lt;a href="https://www.h6room.com/88.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>AirBrush-Ai智能修图照片编辑 v8.11.6 解锁高级版</title>
+      <link>https://www.h6room.com/7906.html</link>
+      <guid isPermaLink="false">urn:md5:0663223a202ff989@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">AirBrush-Ai智能修图照片编辑 v8.11.6 解锁高级版&lt;br/&gt;&lt;a href="https://www.h6room.com/7906.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>4K影视App免费高清影视 v6.0.2 去广告纯净会员版</title>
+      <link>https://www.h6room.com/23194.html</link>
+      <guid isPermaLink="false">urn:md5:c7276588b960ea86@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">4K影视App免费高清影视 v6.0.2 去广告纯净会员版&lt;br/&gt;&lt;a href="https://www.h6room.com/23194.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>小修Windows 11 25H2 Pro 28000 2340 4合1 轻度精简版系统</title>
+      <link>https://www.h6room.com/21584.html</link>
+      <guid isPermaLink="false">urn:md5:dd5adbf0a76db02b@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">小修Windows 11 25H2 Pro 28000 2340 4合1 轻度精简版系统&lt;br/&gt;&lt;a href="https://www.h6room.com/21584.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>雷电模拟器14 v14.0.16 &amp; 雷电模拟器9 v9.5.27.0 去广告绿色纯净版</title>
+      <link>https://www.h6room.com/110.html</link>
+      <guid isPermaLink="false">urn:md5:3acbf626d5db4424@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">雷电模拟器14 v14.0.16 &amp;amp; 雷电模拟器9 v9.5.27.0 去广告绿色纯净版&lt;br/&gt;&lt;a href="https://www.h6room.com/110.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Solid Explorer文件管理 v3.5.14 解锁完整版</title>
+      <link>https://www.h6room.com/160.html</link>
+      <guid isPermaLink="false">urn:md5:57f017c4d5cafd40@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">Solid Explorer文件管理 v3.5.14 解锁完整版&lt;br/&gt;&lt;a href="https://www.h6room.com/160.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>RocksPlayer影片-多格式高清视频播放器 v12.1.439 解锁高级版</title>
+      <link>https://www.h6room.com/4340.html</link>
+      <guid isPermaLink="false">urn:md5:6b168dbb827bda20@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">RocksPlayer影片-多格式高清视频播放器 v12.1.439 解锁高级版&lt;br/&gt;&lt;a href="https://www.h6room.com/4340.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>Photo Editor照片编辑器 v13.4 解锁专业版</title>
+      <link>https://www.h6room.com/258.html</link>
+      <guid isPermaLink="false">urn:md5:debb83f7a0846159@www.h6room.com</guid>
+      <pubDate>Sun, 12 Jul 2026 22:40:16 +0800</pubDate>
+      <author>H6线报</author>
+      <description xml:space="preserve">Photo Editor照片编辑器 v13.4 解锁专业版&lt;br/&gt;&lt;a href="https://www.h6room.com/258.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>
