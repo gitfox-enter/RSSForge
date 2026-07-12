@@ -1,9 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>ReadHub 热门</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/ReadHub-re-men.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://readhub.cn/hot" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/ReadHub-re-men.xml</ns0:id>
-  <ns0:updated>2026-07-12T14:40:05.818347+08:00</ns0:updated>
-  <ns0:subtitle>ReadHub 热门 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>ReadHub 热门 - RSSForge</title>
+    <link>https://readhub.cn/hot</link>
+    <description>ReadHub 热门 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 12 Jul 2026 15:09:31 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>30</ttl>
+    <image>
+      <url>https://readhub.cn/favicon.ico</url>
+      <title>ReadHub 热门</title>
+      <link>https://readhub.cn/hot</link>
+      <width>32</width>
+      <height>32</height>
+    </image>
+    <item>
+      <title>三部门调拨 7 万件中央救灾物资支持浙津皖等地救助工作</title>
+      <link>https://readhub.cn/topic/8uhR2oGB6Nl</link>
+      <guid isPermaLink="false">urn:md5:9cefd829123f4713@readhub.cn</guid>
+      <pubDate>Sun, 12 Jul 2026 15:07:03 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">三部门调拨 7 万件中央救灾物资支持浙津皖等地救助工作&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhR2oGB6Nl"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>日本将推动其巨额养老基金增加另类资产配置</title>
+      <link>https://readhub.cn/topic/8uh4X0RGCLD</link>
+      <guid isPermaLink="false">urn:md5:537db2a8ab7508be@readhub.cn</guid>
+      <pubDate>Sun, 12 Jul 2026 15:07:03 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">日本将推动其巨额养老基金增加另类资产配置&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uh4X0RGCLD"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>上半年中国创新药对外授权规模接近去年全年</title>
+      <link>https://readhub.cn/topic/8uhPy8iICYC</link>
+      <guid isPermaLink="false">urn:md5:d568fc04bd596c06@readhub.cn</guid>
+      <pubDate>Sun, 12 Jul 2026 15:07:03 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">上半年中国创新药对外授权规模接近去年全年&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhPy8iICYC"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>1000℃烧透不变形徒手可拿 中国隔热材料跻身世界第一梯队</title>
+      <link>https://readhub.cn/topic/8uhLKEPapCA</link>
+      <guid isPermaLink="false">urn:md5:4035f4732b46a2bb@readhub.cn</guid>
+      <pubDate>Sun, 12 Jul 2026 15:07:03 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">1000℃烧透不变形徒手可拿 中国隔热材料跻身世界第一梯队&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhLKEPapCA"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>SpaceX 星舰第 13 次试飞定于当地时间 7 月 16 日</title>
+      <link>https://readhub.cn/topic/8ugy6iml57i</link>
+      <guid isPermaLink="false">urn:md5:022a35750102f2a3@readhub.cn</guid>
+      <pubDate>Sun, 12 Jul 2026 15:07:03 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">SpaceX 星舰第 13 次试飞定于当地时间 7 月 16 日&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ugy6iml57i"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>阿根廷 3-1 战胜瑞士 晋级四强</title>
+      <link>https://readhub.cn/topic/8uhH2SDHpXN</link>
+      <guid isPermaLink="false">urn:md5:574e1edec3d52630@readhub.cn</guid>
+      <pubDate>Sun, 12 Jul 2026 15:07:03 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">阿根廷 3-1 战胜瑞士 晋级四强&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhH2SDHpXN"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>三星计划将龙仁首座晶圆工厂投产时间提前至 2029 年</title>
+      <link>https://readhub.cn/topic/8uhFFeWTmMP</link>
+      <guid isPermaLink="false">urn:md5:e43c01399339599b@readhub.cn</guid>
+      <pubDate>Sun, 12 Jul 2026 15:07:03 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">三星计划将龙仁首座晶圆工厂投产时间提前至 2029 年&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhFFeWTmMP"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>国家防减救灾委对浙江启动国家四级救灾应急响应</title>
+      <link>https://readhub.cn/topic/8uhCkcQiv20</link>
+      <guid isPermaLink="false">urn:md5:14488c6eaed246bc@readhub.cn</guid>
+      <pubDate>Sun, 12 Jul 2026 15:07:03 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">国家防减救灾委对浙江启动国家四级救灾应急响应&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhCkcQiv20"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>苹果起诉 OpenAI，指控前华裔员工窃取商业机密</title>
+      <link>https://readhub.cn/topic/8ugYNKBx6JD</link>
+      <guid isPermaLink="false">urn:md5:5e57c11005937772@readhub.cn</guid>
+      <pubDate>Sun, 12 Jul 2026 15:07:03 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">苹果起诉 OpenAI，指控前华裔员工窃取商业机密&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ugYNKBx6JD"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>
