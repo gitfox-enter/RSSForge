@@ -1,9 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>ReadHub 热门</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/ReadHub-re-men.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://readhub.cn/hot" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/ReadHub-re-men.xml</ns0:id>
-  <ns0:updated>2026-07-13T02:39:18.431809+08:00</ns0:updated>
-  <ns0:subtitle>ReadHub 热门 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>ReadHub 热门 - RSSForge</title>
+    <link>https://readhub.cn/hot</link>
+    <description>ReadHub 热门 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 13 Jul 2026 03:23:30 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>30</ttl>
+    <image>
+      <url>https://readhub.cn/favicon.ico</url>
+      <title>ReadHub 热门</title>
+      <link>https://readhub.cn/hot</link>
+      <width>32</width>
+      <height>32</height>
+    </image>
+    <item>
+      <title>广东省与京东集团签署全面战略合作协议 首个 RoboBase 项目开工</title>
+      <link>https://readhub.cn/topic/8ug8eMH9kOh</link>
+      <guid isPermaLink="false">urn:md5:bce0ef1a723e17a0@readhub.cn</guid>
+      <pubDate>Mon, 13 Jul 2026 03:21:54 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">广东省与京东集团签署全面战略合作协议 首个 RoboBase 项目开工&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8ug8eMH9kOh"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>中信证券：港股扰动趋缓卖空料将收敛 短期推荐创新药、航空、机器人及工业金属</title>
+      <link>https://readhub.cn/topic/8uhmTqpoVwQ</link>
+      <guid isPermaLink="false">urn:md5:8d71de50f40e43a8@readhub.cn</guid>
+      <pubDate>Mon, 13 Jul 2026 03:21:54 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">中信证券：港股扰动趋缓卖空料将收敛 短期推荐创新药、航空、机器人及工业金属&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhmTqpoVwQ"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>BLG 战队错失赛点，HLE 战队 3:2 夺《英雄联盟》2026 MSI 冠军</title>
+      <link>https://readhub.cn/topic/8uhNpek4789</link>
+      <guid isPermaLink="false">urn:md5:d798f15a5dec4f6b@readhub.cn</guid>
+      <pubDate>Mon, 13 Jul 2026 03:21:54 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">BLG 战队错失赛点，HLE 战队 3:2 夺《英雄联盟》2026 MSI 冠军&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhNpek4789"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>上海地铁所有线路均恢复常态运营</title>
+      <link>https://readhub.cn/topic/8uhnYH34n9X</link>
+      <guid isPermaLink="false">urn:md5:33876b73deef7608@readhub.cn</guid>
+      <pubDate>Mon, 13 Jul 2026 03:21:54 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">上海地铁所有线路均恢复常态运营&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhnYH34n9X"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>赛力斯：预计上半年净亏损 15 亿元到 18 亿元，同比转亏</title>
+      <link>https://readhub.cn/topic/8uhdu4RSlzc</link>
+      <guid isPermaLink="false">urn:md5:4bfd193ab5a35cb5@readhub.cn</guid>
+      <pubDate>Mon, 13 Jul 2026 03:21:54 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">赛力斯：预计上半年净亏损 15 亿元到 18 亿元，同比转亏&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhdu4RSlzc"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>西部黄金：控股股东拟与新疆地矿投资集团整体合并</title>
+      <link>https://readhub.cn/topic/8uhYtweH8ov</link>
+      <guid isPermaLink="false">urn:md5:35e549b3df4ebc04@readhub.cn</guid>
+      <pubDate>Mon, 13 Jul 2026 03:21:54 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">西部黄金：控股股东拟与新疆地矿投资集团整体合并&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhYtweH8ov"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>2 连板星网宇达：卫星通信业务与长征十号乙运载火箭海上回收技术突破不存在业务关联</title>
+      <link>https://readhub.cn/topic/8uhagwTIChU</link>
+      <guid isPermaLink="false">urn:md5:4cd750d797c7f456@readhub.cn</guid>
+      <pubDate>Mon, 13 Jul 2026 03:21:54 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">2 连板星网宇达：卫星通信业务与长征十号乙运载火箭海上回收技术突破不存在业务关联&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhagwTIChU"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>金山办公：WPS 已完成初步存储管理能力优化，开放体验版试用</title>
+      <link>https://readhub.cn/topic/8uhWP93CJI4</link>
+      <guid isPermaLink="false">urn:md5:6d38042864e30fe2@readhub.cn</guid>
+      <pubDate>Mon, 13 Jul 2026 03:21:54 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">金山办公：WPS 已完成初步存储管理能力优化，开放体验版试用&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhWP93CJI4"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>中国卫星：预计上半年业绩扭亏为盈</title>
+      <link>https://readhub.cn/topic/8uhX7Dy0Fwl</link>
+      <guid isPermaLink="false">urn:md5:87c47593076fc745@readhub.cn</guid>
+      <pubDate>Mon, 13 Jul 2026 03:21:54 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">中国卫星：预计上半年业绩扭亏为盈&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhX7Dy0Fwl"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>粤海饲料：预计上半年归母净利润同比增长 965.92%–1302.52%</title>
+      <link>https://readhub.cn/topic/8uhX7D3ngBy</link>
+      <guid isPermaLink="false">urn:md5:e44b2057336a8db4@readhub.cn</guid>
+      <pubDate>Mon, 13 Jul 2026 03:21:54 +0800</pubDate>
+      <author>ReadHub 热门</author>
+      <description xml:space="preserve">粤海饲料：预计上半年归母净利润同比增长 965.92%–1302.52%&lt;br/&gt;&lt;a href="https://readhub.cn/topic/8uhX7D3ngBy"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>
