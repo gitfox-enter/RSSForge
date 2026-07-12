@@ -360,6 +360,7 @@ sites:
     tier: low
     interval: 360
     fast_check: true
+    js_render: true  # 纯 JS 渲染，静态 HTML 无内容，必须 Playwright 渲染
 
   - url: "https://www.hxm5.com/"
     max_pages: 5
