@@ -1,9 +1,260 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
-  <ns0:title>慢慢买</ns0:title>
-  <ns0:link href="https://gitfox-enter.github.io/RSSForge/feeds/man-man-mai.xml" rel="self" type="application/atom+xml" />
-  <ns0:link href="https://www.manmanbuy.com/" rel="alternate" type="text/html" />
-  <ns0:id>https://gitfox-enter.github.io/RSSForge/feeds/man-man-mai.xml</ns0:id>
-  <ns0:updated>2026-07-13T00:28:52.498320+08:00</ns0:updated>
-  <ns0:subtitle>慢慢买 - no items yet</ns0:subtitle>
-</ns0:feed>
+<rss version="2.0">
+  <channel>
+    <title>慢慢买 - RSSForge</title>
+    <link>https://www.manmanbuy.com/</link>
+    <description>慢慢买 的 RSS 订阅源（由 RSSForge 生成）</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 13 Jul 2026 00:55:14 +0800</lastBuildDate>
+    <generator>RSSForge</generator>
+    <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
+    <ttl>120</ttl>
+    <image>
+      <url>https://gitfox-enter.github.io/RSSForge/icons/www-manmanbuy-com.ico</url>
+      <title>慢慢买</title>
+      <link>https://www.manmanbuy.com/</link>
+      <width>32</width>
+      <height>32</height>
+    </image>
+    <item>
+      <title>闭眼买：桂格 快煮纯燕麦片 1000g</title>
+      <link>https://cu.manmanbuy.com/discuxiao_573763701.aspx</link>
+      <guid isPermaLink="false">urn:md5:6f767d60794e2250@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">闭眼买：桂格 快煮纯燕麦片 1000g&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_573763701.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>闭眼买：当当网提分兽 小学数学母题解题技巧大全 人教版 举一反三专项训练</title>
+      <link>https://cu.manmanbuy.com/discuxiao_573046339.aspx</link>
+      <guid isPermaLink="false">urn:md5:de2a454a7e22bfdd@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">闭眼买：当当网提分兽 小学数学母题解题技巧大全 人教版 举一反三专项训练&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_573046339.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>闭眼买：DARLIE 好来 原黑人专研护龈牙膏 含氟抗口气清新 120g*4件（可任选）</title>
+      <link>https://cu.manmanbuy.com/discuxiao_571786681.aspx</link>
+      <guid isPermaLink="false">urn:md5:c72c355b425c7105@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">闭眼买：DARLIE 好来 原黑人专研护龈牙膏 含氟抗口气清新 120g*4件（可任选）&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_571786681.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>蕉月 一次性内裤女款无痕日抛裤 6条/2包 M</title>
+      <link>https://cu.manmanbuy.com/discuxiao_572964489.aspx</link>
+      <guid isPermaLink="false">urn:md5:15b4ee19ac64b166@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">蕉月 一次性内裤女款无痕日抛裤 6条/2包 M&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_572964489.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>洛斯达 PD20W C to Lightning 快充数据线 白色 1.5m</title>
+      <link>https://cu.manmanbuy.com/discuxiao_573778065.aspx</link>
+      <guid isPermaLink="false">urn:md5:8dba83fcff6b7446@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">洛斯达 PD20W C to Lightning 快充数据线 白色 1.5m&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_573778065.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>大希地 早餐大全! 酥香牛肉馅饼 520g/12个  任选6</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574135027.aspx</link>
+      <guid isPermaLink="false">urn:md5:ba00ebb79714d814@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">大希地 早餐大全! 酥香牛肉馅饼 520g/12个  任选6&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574135027.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>再降价：京东PLUS会员12个月年卡京典卡 直充续费</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574271973.aspx</link>
+      <guid isPermaLink="false">urn:md5:c4d5ce5d3698a146@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">再降价：京东PLUS会员12个月年卡京典卡 直充续费&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574271973.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>森马 Semir 男士纯棉衬衫、T恤 *2件</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574220637.aspx</link>
+      <guid isPermaLink="false">urn:md5:2f7f9086d88e23a0@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">森马 Semir 男士纯棉衬衫、T恤 *2件&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574220637.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>京东超市 进入弹窗可领0.5元超市卡（每日可领）</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574289486.aspx</link>
+      <guid isPermaLink="false">urn:md5:61a9effd19e8a4eb@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">京东超市 进入弹窗可领0.5元超市卡（每日可领）&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574289486.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>闭眼买：迪士尼童装 纯棉短袖T恤 2026夏款 粉蓝 140码</title>
+      <link>https://cu.manmanbuy.com/discuxiao_573759706.aspx</link>
+      <guid isPermaLink="false">urn:md5:9fdb43d33251fb2b@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">闭眼买：迪士尼童装 纯棉短袖T恤 2026夏款 粉蓝 140码&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_573759706.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>再降价: 骆驼 户外折叠椅 钓鱼写生沙滩躺椅 × 2件</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574184480.aspx</link>
+      <guid isPermaLink="false">urn:md5:a921664fdc6cbbdb@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">再降价: 骆驼 户外折叠椅 钓鱼写生沙滩躺椅 × 2件&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574184480.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>蒙牛 纯牛奶 250ml×21包 一箱装</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574343612.aspx</link>
+      <guid isPermaLink="false">urn:md5:6549f41f0bc2c5ee@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">蒙牛 纯牛奶 250ml×21包 一箱装&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574343612.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>京东 惊喜大转盘天天抽红包 最高88元</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574220409.aspx</link>
+      <guid isPermaLink="false">urn:md5:e6366734ad2616ee@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">京东 惊喜大转盘天天抽红包 最高88元&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574220409.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>361° 飞翼 男运动鞋 2026春季新款 回弹缓震透气跑步休闲鞋</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574261746.aspx</link>
+      <guid isPermaLink="false">urn:md5:68b90526036214f9@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">361° 飞翼 男运动鞋 2026春季新款 回弹缓震透气跑步休闲鞋&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574261746.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>洽洽 花生五香味 400g *2</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574336263.aspx</link>
+      <guid isPermaLink="false">urn:md5:82eaacfcffe0f631@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">洽洽 花生五香味 400g *2&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574336263.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>日系亚麻杏色男士亨利领短袖衬衫 肌理感不透肤 5XL</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574235733.aspx</link>
+      <guid isPermaLink="false">urn:md5:25b0faeecf3fc905@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">日系亚麻杏色男士亨利领短袖衬衫 肌理感不透肤 5XL&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574235733.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>再降价：汉武御 丝路酒泉 浓香型白酒 52度 150ml</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574250420.aspx</link>
+      <guid isPermaLink="false">urn:md5:14f4972ddbc2366e@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">再降价：汉武御 丝路酒泉 浓香型白酒 52度 150ml&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574250420.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>薛记炒货 烤鲜奶脆 4袋果干484g *9件任选</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574253450.aspx</link>
+      <guid isPermaLink="false">urn:md5:b5ae465a4155d941@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">薛记炒货 烤鲜奶脆 4袋果干484g *9件任选&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574253450.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>雀巢 8次方冰淇淋 脆皮雪糕86g 任选10件</title>
+      <link>https://cu.manmanbuy.com/discuxiao_572491673.aspx</link>
+      <guid isPermaLink="false">urn:md5:37d87525402bc0bb@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">雀巢 8次方冰淇淋 脆皮雪糕86g 任选10件&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_572491673.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>欧迪芬 Ordifen 无痕美背V领胸罩 *2件任选</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574251002.aspx</link>
+      <guid isPermaLink="false">urn:md5:700d8b179a87eb73@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">欧迪芬 Ordifen 无痕美背V领胸罩 *2件任选&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574251002.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>plus会员 首购：德力西电气 充电式抽水泵 浇菜洗车灌溉 2电4缸 续航王 22米管</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574339361.aspx</link>
+      <guid isPermaLink="false">urn:md5:549f9b82e4d82341@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">plus会员 首购：德力西电气 充电式抽水泵 浇菜洗车灌溉 2电4缸 续航王 22米管&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574339361.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>薛记炒货 海苔夹心脆片 香芋片 4袋果干484g *9件任选</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574252790.aspx</link>
+      <guid isPermaLink="false">urn:md5:02829f2acaba8d75@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">薛记炒货 海苔夹心脆片 香芋片 4袋果干484g *9件任选&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574252790.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>独束大码女装【自由假期】时尚套装莱赛尔天丝气质上衣短裤两件套 云朵白（短裤） 2XL （尺码：4）</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574218665.aspx</link>
+      <guid isPermaLink="false">urn:md5:3dbfd3e4c3ad9423@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">独束大码女装【自由假期】时尚套装莱赛尔天丝气质上衣短裤两件套 云朵白（短裤） 2XL （尺码：4）&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574218665.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>京东PLUS：半亩花田 氨基酸洁面慕斯 洗面奶 乳米酵控油</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574213542.aspx</link>
+      <guid isPermaLink="false">urn:md5:e021d462d1b1bd78@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">京东PLUS：半亩花田 氨基酸洁面慕斯 洗面奶 乳米酵控油&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574213542.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>旺旺 碎冰冰 家庭装 78ml×20支 1.56L 4种口味</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574301704.aspx</link>
+      <guid isPermaLink="false">urn:md5:1ddff67aa98349c3@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">旺旺 碎冰冰 家庭装 78ml×20支 1.56L 4种口味&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574301704.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>康师傅 特别特 0油炸面饼 泡面 烧汁雪花牛肉面 尝鲜1桶</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574231234.aspx</link>
+      <guid isPermaLink="false">urn:md5:12dbbebe0aa7af42@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">康师傅 特别特 0油炸面饼 泡面 烧汁雪花牛肉面 尝鲜1桶&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574231234.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>瑜伽垫  防滑静音 风信紫 180×60cm 4mm</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574272342.aspx</link>
+      <guid isPermaLink="false">urn:md5:4724eb361cc1c6ea@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">瑜伽垫  防滑静音 风信紫 180×60cm 4mm&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574272342.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>闭眼买：云南麒麟瓜 西瓜 新鲜采摘 产地直发 5-6斤</title>
+      <link>https://cu.manmanbuy.com/discuxiao_573687007.aspx</link>
+      <guid isPermaLink="false">urn:md5:030416b6e2f5aeb9@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">闭眼买：云南麒麟瓜 西瓜 新鲜采摘 产地直发 5-6斤&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_573687007.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>海南钦蜜9号黄金百香果 启鸿 40个装（30-45g）</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574274778.aspx</link>
+      <guid isPermaLink="false">urn:md5:f7b9fd55aac24e7f@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">海南钦蜜9号黄金百香果 启鸿 40个装（30-45g）&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574274778.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>限地区、10点，再降价：超威 电蚊香液 雨后薄荷 3瓶1器</title>
+      <link>https://cu.manmanbuy.com/discuxiao_574209830.aspx</link>
+      <guid isPermaLink="false">urn:md5:457bb3fbad342ade@cu.manmanbuy.com</guid>
+      <pubDate>Mon, 13 Jul 2026 00:52:57 +0800</pubDate>
+      <author>慢慢买</author>
+      <description xml:space="preserve">限地区、10点，再降价：超威 电蚊香液 雨后薄荷 3瓶1器&lt;br/&gt;&lt;a href="https://cu.manmanbuy.com/discuxiao_574209830.aspx"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+  </channel>
+</rss>
