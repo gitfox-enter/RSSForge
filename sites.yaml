@@ -65,7 +65,7 @@ sites:
     interval: 30
     parser: readhub
 
-  # - url: "https://xzba.cc/"  # 新赚吧 - 游戏论坛，非线报，已移除                # Xin ZhuanBa
+  - url: "https://xzba.cc/"                # Xin ZhuanBa
     max_pages: 3
     name: 新赚吧
     tier: high

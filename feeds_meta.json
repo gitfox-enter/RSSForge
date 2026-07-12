@@ -340,5 +340,14 @@
     "icon": "https://www.zuankeba.cn/favicon.ico",
     "site_url": "https://www.zuankeba.cn/",
     "items_hash": "76948c1c087ea21b1d075ae7d7e16b79"
+  },
+  "新赚吧": {
+    "interval": 30,
+    "freq_label": "每30分钟",
+    "count": 0,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xin-zhuan-ba.xml",
+    "icon": "https://xzba.cc/favicon.ico",
+    "site_url": "https://xzba.cc/",
+    "items_hash": ""
   }
 }
