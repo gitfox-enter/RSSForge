@@ -42,15 +42,15 @@ def _feed_has_entries(filepath: str) -> bool:
     try:
         tree = ET.parse(filepath)
         root = tree.getroot()
-        # Atom: <entry>
+        # Atom: <entry> (direct child of <feed>)
         ns = {'atom': 'http://www.w3.org/2005/Atom'}
         entries = root.findall('atom:entry', ns)
         if not entries:
             entries = root.findall('entry')
         if entries:
             return True
-        # RSS 2.0: <item>
-        items = root.findall('item')
+        # RSS 2.0: <item> lives inside <channel>, so search recursively
+        items = root.findall('.//item')
         return len(items) > 0
     except Exception:
         return False

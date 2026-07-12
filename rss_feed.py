@@ -577,29 +577,6 @@ def generate_all_feeds() -> Dict[str, int]:
                 os.remove(old_path)
                 print(f"  Cleaned stale feed: {f}")
 
-    # ---- Generate empty placeholder feeds for sites with no data ----
-    _NS = 'http://www.w3.org/2005/Atom'
-    tz = timezone(timedelta(hours=8))
-    now_iso = datetime.now(tz).isoformat()
-    for url, name in SOURCE_NAME_MAP.items():
-        sn = _safe_filename(name)
-        filepath = os.path.join(FEEDS_DIR, f"{sn}.xml")
-        if os.path.exists(filepath):
-            continue  # already generated with items or placeholder
-        # Generate empty Atom feed placeholder
-        feed_url = f"{SITE_URL}{FEEDS_URL_PATH}/{sn}.xml"
-        root = ET.Element(f'{{{_NS}}}feed')
-        ET.SubElement(root, f'{{{_NS}}}title').text = _sanitize_xml(name)
-        ET.SubElement(root, f'{{{_NS}}}link', href=feed_url, rel='self', type='application/atom+xml')
-        ET.SubElement(root, f'{{{_NS}}}link', href=url, rel='alternate', type='text/html')
-        ET.SubElement(root, f'{{{_NS}}}id').text = feed_url
-        ET.SubElement(root, f'{{{_NS}}}updated').text = now_iso
-        ET.SubElement(root, f'{{{_NS}}}subtitle').text = _sanitize_xml(f'{name} - no items yet')
-        tree = ET.ElementTree(root)
-        ET.indent(tree, space='  ')
-        _write_feed(root, filepath)
-        print(f"  Generated empty placeholder: {sn}.xml")
-
     # 删除 public/icons/ 中含中文的旧图标文件
     if os.path.isdir(ICONS_DIR):
         _chinese_re = re.compile(r'[\u4e00-\u9fff]')
@@ -626,9 +603,11 @@ def _generate_feeds_meta(stats: Dict, by_source: Dict[str, List[Dict]]) -> None:
     meta = {}
     
     for url, name in SOURCE_NAME_MAP.items():
-        # 跳过无数据的站点
+        # 跳过无数据的站点（不写入 meta，避免空 feed 出现在索引/OPML）
         site_items = by_source.get(name, [])
         items_count = len(site_items)
+        if items_count == 0:
+            continue
 
         safe_name = _safe_filename(name)
         interval = SITE_INTERVALS.get(url, 30)
