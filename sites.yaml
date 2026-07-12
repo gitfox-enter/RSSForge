@@ -76,6 +76,7 @@ sites:
     name: H6线报
     tier: high
     interval: 30
+    js_render: true  # SPA，当前 Feed 内容为导航/资源聚合，非实际线报文章
 
   - url: "https://yangmao.wang/"           # YangMao Wang
     max_pages: 3
@@ -342,13 +343,11 @@ sites:
     fast_check: true
     rss_feed: "https://www.appmiu.com/feed"
 
-  - url: "https://yrxq.xliangxi.vip/"      # YinRuan XingQiu
-    max_pages: 5
-    name: 银软星球
-    tier: low
-    interval: 360
-    fast_check: true
-    js_render: true           # SPA 无静态链接,需 JS 渲染
+  # === 死站：JS渲染后Feed仍为空，疑似网站已关闭 ===
+  # - url: "https://yrxq.xliangxi.vip/"      # YinRuan XingQiu
+  #   name: 银软星球
+  #   js_render: true
+  #   reason: "启用 JS 渲染后 Feed 仅 2 条且均为导航内容，网站可能已关闭"
 
   - url: "https://blog.xianbao.art/"        # YangMao Qun
     max_pages: 5
@@ -433,3 +432,8 @@ dead_sites:
     reason: "域名已停用，原 Feed 公告迁移至 www.huodong8.com"
     confirmed_at: "2026-07-12"
     test_result: "Feed 首条即为迁移公告"
+
+  "https://yrxq.xliangxi.vip/":
+    reason: "启用 JS 渲染后 Feed 仅 2 条且均为导航内容，网站可能已关闭"
+    confirmed_at: "2026-07-12"
+    test_result: "JS 渲染后 Feed 内容为空/导航，仅 2 条"
