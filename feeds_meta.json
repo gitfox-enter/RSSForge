@@ -44,15 +44,6 @@
     "site_url": "https://v1.xianbao.net/",
     "items_hash": "ce0c852de4838729d2f1d9a7f7ec9d9a"
   },
-  "小角落": {
-    "interval": 20,
-    "freq_label": "每20分钟",
-    "count": 0,
-    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xiao-jiao-luo.xml",
-    "icon": "https://yangmao.19970709.xyz/favicon.ico",
-    "site_url": "https://yangmao.19970709.xyz/",
-    "items_hash": ""
-  },
   "ReadHub 热门": {
     "interval": 30,
     "freq_label": "每30分钟",
@@ -134,15 +125,6 @@
     "site_url": "https://www.iqnew.com/",
     "items_hash": "6b8b7037c9641567bf95710694199abb"
   },
-  "007羊毛党": {
-    "interval": 30,
-    "freq_label": "每30分钟",
-    "count": 0,
-    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/007-yang-mao-dang.xml",
-    "icon": "https://www.007ymd.com/favicon.ico",
-    "site_url": "https://www.007ymd.com/",
-    "items_hash": ""
-  },
   "12345线报": {
     "interval": 30,
     "freq_label": "每30分钟",
@@ -167,7 +149,7 @@
     "count": 0,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/huo-dong-5.xml",
     "icon": "https://www.huodong5.com/favicon.ico",
-    "site_url": "https://www.huodong5.com/",
+    "site_url": "https://www.huodong8.com/",
     "items_hash": ""
   },
   "天天赚": {
@@ -278,15 +260,6 @@
     "site_url": "https://www.thosefree.com/",
     "items_hash": ""
   },
-  "佛系软件": {
-    "interval": 240,
-    "freq_label": "每4小时",
-    "count": 0,
-    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/fo-xi-ruan-jian.xml",
-    "icon": "https://www.foxirj.com/favicon.ico",
-    "site_url": "https://www.foxirj.com/",
-    "items_hash": ""
-  },
   "反斗限免": {
     "interval": 240,
     "freq_label": "每4小时",
@@ -321,15 +294,6 @@
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/kai-xin-zhuan.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/www-kxdao-net.ico",
     "site_url": "https://www.kxdao.net/forum-42-1.html",
-    "items_hash": ""
-  },
-  "51卡农": {
-    "interval": 60,
-    "freq_label": "每小时",
-    "count": 0,
-    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/51-ka-nong.xml",
-    "icon": "https://gitfox-enter.github.io/RSSForge/icons/www-51kanong-com.ico",
-    "site_url": "https://www.51kanong.com/",
     "items_hash": ""
   },
   "IT之家": {
@@ -368,15 +332,6 @@
     "site_url": "https://www.fy6b.com/",
     "items_hash": "9b943bea4ec593df3cbe665e03ae17b9"
   },
-  "免恶魔": {
-    "interval": 360,
-    "freq_label": "每6小时",
-    "count": 95,
-    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/mian-e-mo.xml",
-    "icon": "https://www.mefcl.com/favicon.ico",
-    "site_url": "https://www.mefcl.com/",
-    "items_hash": "ba0d396a8509159b945f52e9b363b752"
-  },
   "APP喵": {
     "interval": 360,
     "freq_label": "每6小时",
@@ -385,15 +340,6 @@
     "icon": "https://www.appmiu.com/favicon.ico",
     "site_url": "https://www.appmiu.com/",
     "items_hash": "f3f58f1430e322b6df21654f64ef6980"
-  },
-  "银软星球": {
-    "interval": 360,
-    "freq_label": "每6小时",
-    "count": 0,
-    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/yin-ruan-xing-qiu.xml",
-    "icon": "https://yrxq.xliangxi.vip/favicon.ico",
-    "site_url": "https://yrxq.xliangxi.vip/",
-    "items_hash": ""
   },
   "羊毛群": {
     "interval": 30,
