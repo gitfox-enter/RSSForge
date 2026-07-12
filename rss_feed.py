@@ -45,6 +45,17 @@ except ImportError:
     get_source_name = lambda url: url
     get_site_tier = lambda url: 'high'
 
+# 如果 SOURCE_NAME_MAP 仍然为空（crawler 依赖缺失），直接读 sites.yaml
+if not SOURCE_NAME_MAP:
+    try:
+        import yaml
+        yaml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sites.yaml")
+        with open(yaml_path, encoding="utf-8") as f:
+            cfg = yaml.safe_load(f) or {}
+        SOURCE_NAME_MAP = {s["url"]: s["name"] for s in cfg.get("sites", []) if "name" in s}
+    except Exception:
+        pass  # 保持空字典
+
 # XML 1.0 不允许的控制字符和 Unicode 代理对
 _INVALID_XML_RE = re.compile(
     '[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x84\x86-\x9f\ud800-\udfff\ufffe\uffff]'
@@ -271,22 +282,22 @@ def _build_atom_feed(
             summary_el.set('type', 'text')
 
         # 构建 <content>：始终包含有意义的文本
+        # 修复：去掉 html_escape()，由 ET 自动转义
         if summary:
-            html_content = '<p>' + html_escape(summary) + '</p>'
+            html_content = f'<p>{summary}</p>'
             if url:
-                html_content += f'<p><a href="{html_escape(url)}">查看原文 →</a></p>'
+                html_content += f'<p><a href="{url}">查看原文 →</a></p>'
         elif title_text:
-            # 没有 summary 时，用标题作为 content 正文
-            html_content = '<p>' + html_escape(title_text) + '</p>'
+            html_content = f'<p>{title_text}</p>'
             if url:
-                html_content += f'<p><a href="{html_escape(url)}">查看原文 →</a></p>'
+                html_content += f'<p><a href="{url}">查看原文 →</a></p>'
         elif url:
-            html_content = f'<p><a href="{html_escape(url)}">查看原文 →</a></p>'
+            html_content = f'<p><a href="{url}">查看原文 →</a></p>'
         else:
             html_content = '<p>暂无内容</p>'
 
         content_el = ET.SubElement(entry, f'{{{NS}}}content')
-        content_el.text = _sanitize_xml(html_content)
+        content_el.text = html_content
         content_el.set('type', 'html')
 
         if category:
@@ -405,22 +416,23 @@ def _build_rss2_feed(
             ET.SubElement(entry, 'author').text = site_name
 
         # 描述（summary + content 合并）
+        # 修复：去掉 html_escape()，由 ET 自动转义一次即可。
+        # html_escape() 会把 < 转为 &lt;，ET 写入时再转 & → &amp;lt;，
+        # 导致阅读器看到纯文本 &lt;br/&gt; 而非渲染后的换行。
+        # 现在：ET 自动将 < 转 &lt;，阅读器解析后还原为 HTML，正常渲染。
         summary = item.get('summary', '')
         if summary:
-            html_content = html_escape(summary)
-            if url:
-                html_content += f'<br/><a href="{html_escape(url)}">查看原文 →</a>'
+            html_content = f'{summary}<br/><a href="{url}">查看原文 →</a>' if url else summary
         elif title_text:
-            html_content = html_escape(title_text)
-            if url:
-                html_content += f'<br/><a href="{html_escape(url)}">查看原文 →</a>'
+            html_content = f'{title_text}<br/><a href="{url}">查看原文 →</a>' if url else title_text
         elif url:
-            html_content = f'<a href="{html_escape(url)}">查看原文 →</a>'
+            html_content = f'<a href="{url}">查看原文 →</a>'
         else:
             html_content = '暂无内容'
 
         desc_el = ET.SubElement(entry, 'description')
         desc_el.text = html_content
+        desc_el.set('type', 'html')  # 明确标记为 HTML，阅读器会渲染而非显示纯文本
         desc_el.set('xml:space', 'preserve')
 
     return rss
