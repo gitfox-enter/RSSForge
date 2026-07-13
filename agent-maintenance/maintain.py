@@ -294,11 +294,19 @@ def ensure_alert_issue(report_md, health):
                 break
 
     body = report_md + f"\n\n---\n*自动维护引擎 · 健康率 {health['health_ratio']*100:.1f}%*"
+
+    # 标签容错：确保标签存在，缺失则尝试创建（忽略失败）
+    labels = ["maintenance", "automated"]
+    import subprocess as _sp
+    for lbl in labels:
+        _sp.run(["gh", "label", "create", lbl, "--description", "RSSForge 自动维护引擎",
+                   "--color", "0E8A16"], capture_output=True, text=True)
+
     if issue_num:
         r = _run_gh(["edit", issue_num, "--body", body])
         print(f"[issue] 已更新 Issue #{issue_num}" if r.returncode == 0 else f"[issue] 更新失败: {r.stderr[:120]}")
         return r.returncode == 0
-    r = _run_gh(["create", "--title", ISSUE_TITLE, "--body", body, "--label", "maintenance,automated"])
+    r = _run_gh(["create", "--title", ISSUE_TITLE, "--body", body, "--label", ",".join(labels)])
     print(f"[issue] 创建结果: {r.stdout.strip() or r.stderr[:120]}")
     return r.returncode == 0
 
