@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Diagnose zero-content RSS sources."""
+import os
 import urllib.request, re, json
 
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
@@ -76,7 +77,9 @@ for name, url in sources:
         result['reason'] = str(type(e).__name__)
     results.append(result)
 
-with open('/home/node/.openclaw/workspace-agent-606489db/rssforge-maintain/diagnose_results.json', 'w') as f:
+# 输出到仓库根目录（原脚本写死到已废弃的 openclaw 外部路径，会导致写入失败）
+out_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'diagnose_results.json')
+with open(out_path, 'w') as f:
     json.dump(results, f, ensure_ascii=False, indent=2)
 
 for r in results:
