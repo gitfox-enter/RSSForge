@@ -434,31 +434,45 @@ def run(mode, do_network):
 
 
 def commit_and_push(fixed_urls, moved_dead):
-    import subprocess
+    import subprocess, time
     if os.getenv("GITHUB_ACTIONS") != "true":
         print("[git] 非 Actions 环境，跳过提交")
         return
     subprocess.run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], check=False)
     subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=False)
-    files = ["feeds_meta.json", "sites.yaml", "agent-maintenance/logs/", "agent-maintenance/weekly-report_*.md"]
-    subprocess.run(["git", "add", "-u", *files], check=False)
-    # 也加入新增的周报文件
+    # 仅暂存本引擎管理的文件（feeds_meta / sites.yaml / 报告），
+    # 避免误碰 crawl / fast_check 负责的 items.json / docs/feeds 等
+    subprocess.run(["git", "add", "-u", "feeds_meta.json", "sites.yaml"], check=False)
     subprocess.run(["git", "add", "agent-maintenance/"], check=False)
-    msg = (f"maintain: 自动维护 — 补全 {fixed_urls} 个 url、迁移 {moved_dead} 个硬死站 "
-            f"({datetime.now(timezone(timedelta(hours=8))).strftime('%Y-%m-%d %H:%M')})")
-    rc = subprocess.run(["git", "diff", "--staged", "--quiet"], check=False).returncode
-    if rc != 0:
-        subprocess.run(["git", "commit", "-m", msg], check=False)
-        for _ in range(5):
-            subprocess.run(["git", "pull", "--no-rebase", "--no-commit", "origin", "main"], check=False)
-            if subprocess.run(["git", "push", "origin", "main"], check=False).returncode == 0:
-                print("[git] 已提交并推送")
-                return
-            import time
-            time.sleep(5)
-        print("[git] 推送失败（已达重试上限）")
-    else:
+    if subprocess.run(["git", "diff", "--staged", "--quiet"], check=False).returncode == 0:
         print("[git] 无变更需提交")
+        return
+    msg = (f"maintain(deep): 自动维护 — 补全 {fixed_urls} 个 url、迁移 {moved_dead} 个硬死站 "
+            f"({datetime.now(timezone(timedelta(hours=8))).strftime('%Y-%m-%d %H:%M')})")
+    subprocess.run(["git", "commit", "-m", msg], check=False)
+
+    # 与每 15 分钟自动提交的 fast_check 存在并发窗口，用合并 + 冲突解决保证推送成功
+    OUR_FILES = {"feeds_meta.json", "sites.yaml"}
+    for _ in range(6):
+        subprocess.run(["git", "rebase", "--abort"], check=False)
+        subprocess.run(["git", "merge", "--abort"], check=False)
+        subprocess.run(["git", "pull", "--no-rebase", "--no-commit", "origin", "main"], check=False)
+        # 解决冲突：本引擎管理的文件保留本地（已补全的 url / 已迁移的死站），其余取远端
+        conflicts = subprocess.run(
+            ["git", "diff", "--name-only", "--diff-filter=U"],
+            capture_output=True, text=True, check=False,
+        ).stdout.split()
+        if conflicts:
+            for f in conflicts:
+                pick = "--ours" if f in OUR_FILES else "--theirs"
+                subprocess.run(["git", "checkout", pick, f], check=False)
+                subprocess.run(["git", "add", f], check=False)
+            subprocess.run(["git", "commit", "--no-edit"], check=False)
+        if subprocess.run(["git", "push", "origin", "main"], check=False).returncode == 0:
+            print("[git] 已提交并推送")
+            return
+        time.sleep(5)
+    print("[git] 推送失败（已达重试上限）")
 
 
 def self_test():
