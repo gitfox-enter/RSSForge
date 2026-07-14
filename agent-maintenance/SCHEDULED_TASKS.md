@@ -1,8 +1,14 @@
 # RSSForge 实时定时任务架构
 
 > 作为项目全权维护者设计的定时任务系统。目标：把**维护/诊断/告警层**从已废弃的
-> 外部 openclaw 环境彻底搬回 GitHub Actions（平台无关、环境重启不丢），与已有的
-> **喂数据层**（crawl / fast_check / freshness-watchdog）拼成完整的「采集 → 健康 → 自愈」闭环。
+> 外部 openclaw 环境彻底搬回，由 **agent 自己的定时任务**（automation-task-manager 调度，
+> 触发时唤醒 agent 自主研判+执行）来驱动，与已有的 **喂数据层**（crawl / fast_check /
+> freshness-watchdog，跑在 GitHub Actions 上）拼成完整的「采集 → 健康 → 自愈」闭环。
+>
+> ⚠️ **排程权归属**：定时任务的"智能层"由 agent 自己的 3 个 automation 任务拥有
+> （每日巡检 / 每周深度维护三审 / 每周新源发现）。原先多加的两个 GitHub Actions
+> workflow（`health-monitor.yml` / `weekly-maintenance.yml`）已**删除**，避免与 agent 任务双头排程。
+> 本仓库内的 `agent-maintenance/maintain.py` 维护引擎保留——agent 任务克隆仓库后直接调用它。
 
 ---
 
