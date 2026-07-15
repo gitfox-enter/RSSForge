@@ -985,17 +985,24 @@ def git_commit_if_changed() -> bool:
 # ============================================================
 
 def load_run_log() -> List[Dict[str, Any]]:
-    """加载历史运行日志"""
+    """加载历史运行日志
+
+    单行 JSON 损坏时只跳过该行，不丢弃已成功加载的全部历史
+    （修复 #123：原 `except Exception: pass` 会在任意一行损坏时清空整个 run_log，
+    导致「连续失败告警」永不触发）。
+    """
     log: List[Dict[str, Any]] = []
     if os.path.exists(RUN_LOG_FILE):
-        try:
-            with open(RUN_LOG_FILE, 'r', encoding='utf-8') as f:
-                for line in f:
-                    line = line.strip()
-                    if line:
-                        log.append(json.loads(line))
-        except Exception:
-            pass
+        with open(RUN_LOG_FILE, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    log.append(json.loads(line))
+                except json.JSONDecodeError:
+                    logger.warning("[RunLog] 跳过损坏的日志行")
+                    continue
     return log
 
 

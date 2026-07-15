@@ -454,7 +454,8 @@ async def main() -> None:
                 timeout=10,
             )
             if result.returncode == 0:
-                # Push with retry
+                # Push with retry（修复 #117：pull 失败不再盲目 push；
+                # 冲突前先 abort 遗留 rebase，指数退避，三次失败则回退 origin/main）
                 for attempt in range(3):
                     push_result = subprocess.run(
                         ["git", "push", "origin", "main"],
@@ -464,14 +465,32 @@ async def main() -> None:
                     if push_result.returncode == 0:
                         logger.info("[Git] 已推送")
                         break
-                    time.sleep(3)
+                    # 任何遗留的 rebase 先中止，避免工作区卡在冲突态
                     subprocess.run(
-                        ["git", "pull", "--rebase", "--strategy-option=theirs", "origin", "main"],
+                        ["git", "rebase", "--abort"],
+                        capture_output=True,
+                        timeout=10,
+                    )
+                    time.sleep(3 * (attempt + 1))  # 指数退避
+                    pull_result = subprocess.run(
+                        ["git", "pull", "--rebase", "origin", "main"],
                         capture_output=True,
                         timeout=30,
                     )
+                    if pull_result.returncode != 0:
+                        subprocess.run(
+                            ["git", "rebase", "--abort"],
+                            capture_output=True,
+                            timeout=10,
+                        )
                 else:
-                    logger.warning("[Git] 推送失败")
+                    # 三次均失败：回退到远端状态，避免脏工作区影响后续 workflow
+                    subprocess.run(
+                        ["git", "reset", "--hard", "origin/main"],
+                        capture_output=True,
+                        timeout=10,
+                    )
+                    logger.error("[Git] 推送失败，已重置到 origin/main")
             else:
                 logger.info("[Git] 无变更需要提交")
         except Exception as e:
