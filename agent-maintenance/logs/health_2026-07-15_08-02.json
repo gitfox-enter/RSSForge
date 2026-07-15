@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T08:04:19.650070+08:00",
+  "generated_at": "2026-07-15T08:02:04.867091+08:00",
   "health": {
     "active_sites": 42,
     "dead_sites": 14,
@@ -73,7 +73,7 @@
       "status": "CONN_TIMEOUT",
       "code": 0,
       "size": 0,
-      "reason": "TLS/SSL connection has been closed (EOF) (_ssl.c:992)",
+      "reason": "_ssl.c:975: The handshake operation timed out",
       "name": "果核剥壳"
     }
   ],
@@ -83,7 +83,7 @@
       "url": "https://xianbaomi.com/",
       "status": "OK",
       "code": 200,
-      "size": 12843,
+      "size": 12842,
       "name": "线报迷"
     },
     "https://yangmao.19970709.xyz/": {
@@ -97,14 +97,14 @@
       "url": "https://readhub.cn/hot",
       "status": "OK",
       "code": 200,
-      "size": 141969,
+      "size": 141970,
       "name": "ReadHub 热门"
     },
     "https://www.h6room.com/": {
       "url": "https://www.h6room.com/",
       "status": "OK",
       "code": 200,
-      "size": 152091,
+      "size": 152077,
       "name": "H6线报"
     },
     "https://yangmao.wang/": {
@@ -167,7 +167,7 @@
       "url": "https://www.manmanbuy.com/",
       "status": "OK",
       "code": 200,
-      "size": 331939,
+      "size": 331943,
       "name": "慢慢买"
     },
     "https://www.bacaoo.com/": {
@@ -189,7 +189,7 @@
       "status": "CONN_TIMEOUT",
       "code": 0,
       "size": 0,
-      "reason": "TLS/SSL connection has been closed (EOF) (_ssl.c:992)",
+      "reason": "_ssl.c:975: The handshake operation timed out",
       "name": "果核剥壳"
     },
     "https://www.423down.com/": {

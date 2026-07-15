@@ -143,12 +143,6 @@ sites:
   name: 优惠线报
   tier: medium
   interval: 60
-- url: https://www.ghxi.com/
-  max_pages: 5
-  name: 果核剥壳
-  tier: low
-  interval: 360
-  parser: ghxi
 - url: https://www.423down.com/
   max_pages: 5
   name: 423Down
@@ -328,3 +322,8 @@ dead_sites:
     test_result: '[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure
       (_ssl.c:1016)'
     name: 新赚吧
+  https://www.ghxi.com/:
+    reason: 自动维护引擎判定为硬死站（CONN_TIMEOUT）
+    confirmed_at: '2026-07-15'
+    test_result: TLS/SSL connection has been closed (EOF) (_ssl.c:992)
+    name: 果核剥壳
