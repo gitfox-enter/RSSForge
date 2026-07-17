@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-generate_feeds_index.py — v2
-RSSForge 订阅源目录生成器
+generate_feeds_index.py — v3
+RSSForge 订阅源目录生成器（成果展示版）
 改进：
-  - tier 分类标签（线报羊毛 / 优惠资讯 / 软件工具）
-  - 更新频率 + 收录条目数显示
-  - 深色模式支持
-  - 桌面表格 + 移动端卡片双布局
-  - 活跃源徽章
+  - 全新 Hero：徽章 + 大标题 + 价值主张 + 多镜像 OPML 入口
+  - 悬浮统计条（5 项，玻璃拟态卡片，跨越 Hero 边界）
+  - 订阅源改为卡片网格（非密集表格），更适合成果展示
+  - 分类标签 + 名称/网址搜索过滤
+  - 深色模式 / 响应式 / 桌面+移动双布局
 """
 import json, os, textwrap, re, glob, yaml
 from datetime import datetime, timezone, timedelta
@@ -27,18 +27,13 @@ TIER_LABELS = {
 }
 # 补充：site_url / name 中含关键词 → tier 覆盖
 TIER_OVERRIDE_PATTERNS = [
-    # 软件/工具类（域名）
     (r"ghxi\.com|423down\.com|appinn\.com|lsapk\.com|thosefree\.com|foxirj\.com|apprcn\.com|iplaysoft\.com"
      r"|appmiu|foxirj|sycx\.com|枫音|mefcl|免恶魔|APP喵|鸭先知|yxzhi",
      "low"),
-    # 优惠/比价/省钱类
     (r"manmanbuy|baicaio|bacaoo|yxssp|优惠|白菜|拔草|省", "medium"),
-    # 社区/豆瓣/论坛/科技资讯类
     (r"douban\.com|kxdao\.net|51kanong|iqnew|readhub|huodong|huifabu|yin-ruan|银软",
      "medium"),
-    # IT科技/新闻类
     (r"ithome\.com|10000yun", "medium"),
-    # 线报/羊毛/薅羊毛/赚（高频）
     (r"线报|羊毛|赚|zuankeba|zhuankeba|赚客吧|yangmao|我不找|汇发", "high"),
 ]
 
@@ -77,27 +72,11 @@ def get_name(slug, meta_name=None):
     return NAME_MAP.get(slug, slug)
 
 # ─────────────────────────────────────────────
-# 3a. 加载 blacklist
-# ─────────────────────────────────────────────
-def load_blacklist():
-    path = os.path.join(os.path.dirname(__file__) or '.', 'blacklist.json')
-    try:
-        with open(path, encoding='utf-8') as f:
-            data = json.load(f)
-        return json.dumps(data.get('blacklist', []), ensure_ascii=False)
-    except Exception:
-        return '[]'
-
-
-# ─────────────────────────────────────────────
-# 3. 加载 feeds_meta
+# 3. 加载 feeds_meta（权威：已发布的 feed 文件）
 # ─────────────────────────────────────────────
 def load_meta():
     """从 docs/feeds/*.xml 读取【已发布】的 feed（权威源），
-    解析名称/站点/图标/条目数，并按 tier 推断分类。
-    这样计数随实际发布的 feed 文件自愈，不再依赖不完整的
-    feeds_meta.json（它只跟踪已爬取成功的源，会漏掉部分活跃源）。"""
-    # 频率映射（来自 sites.yaml 的 interval，单位分钟）
+    解析名称/站点/图标/条目数，并按 tier 推断分类。"""
     freq_map = {}
     try:
         _sites = yaml.safe_load(open("sites.yaml", encoding="utf-8")).get("sites", [])
@@ -113,7 +92,6 @@ def load_meta():
                     freq_map["name:" + str(_n)] = _lab
     except Exception:
         pass
-    # feeds_meta（已有 freq_label 优先）
     try:
         _fm = json.load(open("feeds_meta.json", encoding="utf-8"))
     except Exception:
@@ -140,7 +118,6 @@ def load_meta():
         count = txt.count("<item>") + txt.count("<entry>")
         tier = guess_tier(site_url, name)
         emoji, label = TIER_LABELS.get(tier, TIER_LABELS["unknown"])
-        # 频率：feeds_meta > sites.yaml interval
         freq = ""
         for k, v in _fm.items():
             if v.get("name") == name or k == slug:
@@ -162,289 +139,241 @@ def load_meta():
 def css():
     return textwrap.dedent('''
     :root {
-      --bg: #f4f5f7;
+      --bg: #f6f8fa;
       --surface: #ffffff;
-      --border: #e1e4e8;
-      --text: #24292f;
-      --text-muted: #57606a;
-      --accent: #16a34a;
-      --accent-dark: #14532d;
-      --tag-bg-h: #fff1f0;  --tag-color-h: #cf222e;   /* high / 线报羊毛 */
-      --tag-bg-m: #fff7ed;  --tag-color-m: #bc4c00;   /* medium / 优惠资讯 */
-      --tag-bg-l: #f0fdf4;  --tag-color-l: #15803d;   /* low / 软件工具 */
-      --tag-bg-u: #f6f8fa;  --tag-color-u: #57606a;   /* unknown */
-      --hover-bg: #e8f0fe;
-      --even-bg: #f6f8fa;
-      --header-bg: linear-gradient(135deg,#16a34a,#14532d);
+      --border: #e6e9ee;
+      --text: #1f2328;
+      --text-muted: #656d76;
+      --accent: #1a7f37;
+      --accent-2: #2da44e;
+      --accent-soft: #dafbe1;
+      --tag-bg-h:#ffeef0; --tag-color-h:#cf222e;
+      --tag-bg-m:#fff3e6; --tag-color-m:#bc4c00;
+      --tag-bg-l:#eaf6ec; --tag-color-l:#1a7f37;
+      --tag-bg-u:#f0f2f5; --tag-color-u:#656d76;
+      --hover-bg:#f0f7ff;
+      --shadow: 0 1px 3px rgba(27,31,36,.08), 0 1px 2px rgba(27,31,36,.06);
+      --shadow-lg: 0 10px 30px rgba(27,31,36,.14);
+      --radius: 14px;
+      --hero-grad: linear-gradient(135deg,#1a7f37 0%, #11632b 55%, #0c4a20 100%);
     }
     [data-theme="dark"] {
-      --bg: #0d1117;
+      --bg: #010409;
       --surface: #161b22;
       --border: #30363d;
-      --text: #c9d1d9;
+      --text: #e6edf3;
       --text-muted: #8b949e;
       --accent: #3fb950;
-      --accent-dark: #238636;
-      --tag-bg-h: #3d1a1c;  --tag-color-h: #ff7b72;
-      --tag-bg-m: #3d2a0a;  --tag-color-m: #ffa657;
-      --tag-bg-l: #1a3d1e;  --tag-color-l: #56d364;
-      --tag-bg-u: #21262d;  --tag-color-u: #8b949e;
-      --hover-bg: #1f2d3d;
-      --even-bg: #161b22;
+      --accent-2: #2ea043;
+      --accent-soft: #122d1c;
+      --tag-bg-h:#3d1a1c; --tag-color-h:#ff7b72;
+      --tag-bg-m:#3d2a0a; --tag-color-m:#ffa657;
+      --tag-bg-l:#1a3d1e; --tag-color-l:#56d364;
+      --tag-bg-u:#21262d; --tag-color-u:#8b949e;
+      --hover-bg:#1f2d3d;
+      --shadow: 0 1px 3px rgba(0,0,0,.4);
+      --shadow-lg: 0 10px 30px rgba(0,0,0,.6);
+      --hero-grad: linear-gradient(135deg,#0d4423 0%, #0a331a 55%, #062012 100%);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: -apple-system,"Segoe UI",Roboto,"Noto Sans SC",sans-serif;
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans SC","PingFang SC",sans-serif;
       background:var(--bg); color:var(--text); line-height:1.6;
+      -webkit-font-smoothing:antialiased;
     }
     a { color:var(--accent); text-decoration:none; }
     a:hover { text-decoration:underline; }
 
-    /* ── Header ── */
-    header {
-      background:var(--header-bg);
-      color:#fff; padding:36px 24px 28px; text-align:center;
-    }
-    header h1 { font-size:30px; font-weight:800; letter-spacing:-.5px; margin-bottom:4px; }
-    header .subtitle { font-size:13px; opacity:.8; margin-bottom:20px; }
-    .stats { display:flex; justify-content:center; gap:32px; margin-bottom:20px; flex-wrap:wrap; }
-    .stat { text-align:center; }
-    .stat-value { font-size:26px; font-weight:700; }
-    .stat-label { font-size:12px; opacity:.75; }
-    .opml-bar { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
-    .opml-btn {
-      display:inline-block; padding:7px 16px; border-radius:18px;
-      background:rgba(255,255,255,.18); color:#fff; font-size:13px; font-weight:500;
-      transition:background .2s;
-    }
-    .opml-btn:hover { background:rgba(255,255,255,.3); text-decoration:none; color:#fff; }
-
     /* ── Theme toggle ── */
     .theme-toggle {
-      position:fixed; top:14px; right:16px; z-index:100;
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:8px; padding:6px 10px; cursor:pointer; font-size:16px;
-      box-shadow:0 1px 4px rgba(0,0,0,.15);
+      position:fixed; top:14px; right:16px; z-index:200;
+      background:rgba(255,255,255,.85); border:1px solid var(--border);
+      border-radius:10px; padding:6px 10px; cursor:pointer; font-size:16px;
+      box-shadow:0 1px 4px rgba(0,0,0,.15); backdrop-filter:blur(6px);
     }
-    .theme-toggle:hover { opacity:.8; }
+    .theme-toggle:hover { opacity:.85; }
+
+    /* ── Hero ── */
+    .hero {
+      position:relative; background:var(--hero-grad); color:#fff;
+      padding:60px 24px 96px; text-align:center; overflow:hidden;
+    }
+    .hero::before {
+      content:""; position:absolute; inset:0;
+      background-image: radial-gradient(rgba(255,255,255,.10) 1.5px, transparent 1.5px);
+      background-size:24px 24px; opacity:.5;
+    }
+    .hero::after {
+      content:""; position:absolute; left:0; right:0; bottom:0; height:80px;
+      background:linear-gradient(to bottom, transparent, var(--bg));
+    }
+    .hero-inner { position:relative; max-width:780px; margin:0 auto; z-index:2; }
+    .badge {
+      display:inline-block; padding:5px 15px; border-radius:999px;
+      background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.28);
+      font-size:12px; font-weight:600; margin-bottom:18px; backdrop-filter:blur(4px);
+      letter-spacing:.3px;
+    }
+    .hero h1 {
+      font-size:46px; font-weight:800; letter-spacing:-1.2px;
+      margin-bottom:10px; line-height:1.1;
+    }
+    .hero .tagline { font-size:16px; opacity:.92; margin-bottom:26px; font-weight:500; }
+    .opml-bar { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    .opml-btn {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:9px 18px; border-radius:10px;
+      background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.30);
+      color:#fff; font-size:13px; font-weight:600; transition:all .2s; backdrop-filter:blur(4px);
+    }
+    .opml-btn:hover { background:rgba(255,255,255,.32); color:#fff; text-decoration:none; transform:translateY(-1px); }
+
+    /* ── Stats strip (overlaps hero) ── */
+    .stats-strip {
+      position:relative; z-index:5;
+      max-width:1040px; margin:-58px auto 0; padding:0 16px;
+      display:grid; grid-template-columns:repeat(5,1fr); gap:14px;
+    }
+    .stat-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); padding:18px 10px; text-align:center;
+      box-shadow:var(--shadow-lg);
+    }
+    .stat-value { font-size:25px; font-weight:800; color:var(--text); line-height:1.1; }
+    .stat-value.last { font-size:18px; letter-spacing:-.3px; }
+    .stat-label { font-size:12px; color:var(--text-muted); margin-top:4px; }
 
     /* ── Container ── */
-    .container { max-width:1100px; margin:0 auto; padding:24px 16px; }
+    .container { max-width:1100px; margin:0 auto; padding:36px 16px 24px; }
 
-    /* ── Category tabs ── */
-    .cat-tabs { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+    /* ── Section heading ── */
+    .section-head { display:flex; align-items:baseline; gap:10px; margin:8px 0 16px; }
+    .section-head h2 { font-size:19px; font-weight:800; letter-spacing:-.3px; }
+    .section-head .sub { font-size:13px; color:var(--text-muted); }
+
+    /* ── About card ── */
+    .about {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); padding:20px 22px; margin-bottom:26px;
+      box-shadow:var(--shadow);
+    }
+    .about p { font-size:13.5px; color:var(--text-muted); line-height:1.75; }
+    .about .features { list-style:none; margin:14px 0 0; display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .about .features li {
+      position:relative; font-size:13px; color:var(--text); background:var(--bg);
+      border:1px solid var(--border); border-radius:10px; padding:10px 12px 10px 44px;
+    }
+    .about .features li::before {
+      content:attr(data-num); position:absolute; left:10px; top:10px;
+      width:24px; height:24px; border-radius:50%;
+      background:var(--accent-soft); color:var(--accent);
+      display:flex; align-items:center; justify-content:center;
+      font-size:11px; font-weight:800;
+    }
+    .about .features b { color:var(--accent); }
+
+    /* ── Toolbar: category tabs + search ── */
+    .toolbar { display:flex; gap:12px; margin-bottom:18px; flex-wrap:wrap; align-items:center; }
+    .cat-tabs { display:flex; gap:8px; flex-wrap:wrap; }
     .cat-tab {
-      padding:5px 14px; border-radius:16px; font-size:12px; font-weight:600;
+      padding:6px 15px; border-radius:999px; font-size:12.5px; font-weight:600;
       cursor:pointer; border:1.5px solid var(--border);
-      background:var(--surface); color:var(--text-muted);
-      transition:all .15s;
+      background:var(--surface); color:var(--text-muted); transition:all .15s;
     }
     .cat-tab:hover, .cat-tab.active {
-      border-color:var(--accent); color:var(--accent); background:var(--surface);
+      border-color:var(--accent); color:var(--accent); background:var(--accent-soft);
     }
-
-    /* ── Filter bar ── */
-    .filter-bar { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
-    .filter-bar label { font-size:13px; color:var(--text-muted); }
-    .filter-bar input {
-      padding:7px 12px; border:1px solid var(--border); border-radius:8px;
-      font-size:13px; width:220px; background:var(--surface); color:var(--text);
+    .search-box { margin-left:auto; position:relative; }
+    .search-box input {
+      padding:8px 14px 8px 34px; border:1px solid var(--border); border-radius:10px;
+      font-size:13px; width:240px; background:var(--surface); color:var(--text);
     }
-    .filter-bar input:focus { outline:2px solid var(--accent); border-color:var(--accent); }
-    .filter-bar .count-hint { font-size:12px; color:var(--text-muted); margin-left:auto; }
-
-    /* ── Table ── */
-    .table-wrap { background:var(--surface); border-radius:12px;
-                  box-shadow:0 1px 4px rgba(0,0,0,.08); overflow:hidden; }
-    table { width:100%; border-collapse:collapse; font-size:13px; }
-    thead { position:sticky; top:0; z-index:1; }
-    thead th {
-      background:var(--bg); color:var(--text-muted); font-weight:600;
-      text-align:left; padding:10px 12px; border-bottom:2px solid var(--border);
-      white-space:nowrap; cursor:pointer; user-select:none; font-size:12px;
+    .search-box input:focus { outline:2px solid var(--accent); border-color:var(--accent); }
+    .search-box::before {
+      content:"🔍"; position:absolute; left:11px; top:50%; transform:translateY(-50%);
+      font-size:13px; opacity:.6;
     }
-    thead th:hover { color:var(--text); }
-    tbody tr { border-bottom:1px solid var(--border); transition:background .12s; }
-    tbody tr:nth-child(even) { background:var(--even-bg); }
-    tbody tr:hover { background:var(--hover-bg); }
-    tbody tr[data-hidden="true"] { display:none; }
-    tbody td { padding:10px 12px; vertical-align:middle; }
-    td.num { color:var(--text-muted); font-size:12px; text-align:center; width:36px; }
+    .count-hint { font-size:12.5px; color:var(--text-muted); width:100%; margin-top:2px; }
 
-    /* Site name cell */
-    td.title { min-width:130px; }
-    .title-wrap { display:flex; align-items:center; gap:6px; }
-    .title-name { font-weight:600; color:var(--text); font-size:13px; }
-    .title-name a { color:var(--text); }
-    .title-name a:hover { color:var(--accent); text-decoration:none; }
+    /* ── Feed grid ── */
+    .feed-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:14px; }
+    .feed-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); padding:16px; box-shadow:var(--shadow);
+      display:flex; flex-direction:column; gap:11px;
+      transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .feed-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); border-color:var(--accent); }
+    .card-head { display:flex; align-items:center; gap:11px; }
+    .favicon-img { width:34px; height:34px; border-radius:9px; object-fit:contain; background:#fff; flex:none; }
+    .favicon-placeholder {
+      width:34px; height:34px; border-radius:9px; background:var(--bg);
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:14px; flex:none;
+    }
+    .card-title { flex:1; min-width:0; }
+    .card-name { font-weight:700; font-size:14.5px; color:var(--text); line-height:1.3; }
+    .card-name a { color:var(--text); }
+    .card-name a:hover { color:var(--accent); text-decoration:none; }
+    .card-site { font-size:11px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .card-site a { color:var(--text-muted); font-size:11px; }
+    .card-site a:hover { color:var(--accent); }
 
-    /* Category tag */
     .cat-tag {
-      display:inline-flex; align-items:center; gap:3px;
-      padding:2px 7px; border-radius:10px; font-size:11px; font-weight:600;
+      display:inline-flex; align-items:center; gap:3px; flex:none;
+      padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700;
     }
     .cat-tag.high   { background:var(--tag-bg-h); color:var(--tag-color-h); }
     .cat-tag.medium { background:var(--tag-bg-m); color:var(--tag-color-m); }
     .cat-tag.low    { background:var(--tag-bg-l); color:var(--tag-color-l); }
     .cat-tag.unknown{ background:var(--tag-bg-u); color:var(--tag-color-u); }
 
-    /* Favicon */
-    td.favicon { width:28px; text-align:center; padding:4px 8px !important; }
-    .favicon-img {
-      width:18px; height:18px; border-radius:4px; object-fit:contain;
-      background:#fff;
-    }
-    .favicon-placeholder {
-      width:18px; height:18px; border-radius:4px;
-      background:var(--bg); display:inline-block;
-    }
+    .card-meta { font-size:12px; color:var(--text-muted); display:flex; gap:12px; align-items:center; }
+    .card-meta .count.has-items { color:var(--accent); font-weight:600; }
+    .card-meta .dot { width:3px; height:3px; border-radius:50%; background:var(--text-muted); opacity:.5; }
 
-    /* Site URL */
-    td.site { max-width:150px; }
-    td.site a {
-      color:var(--text-muted); font-size:12px;
-      overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;
+    .card-feeds { display:flex; gap:7px; flex-wrap:wrap; margin-top:auto; }
+    .card-feeds a {
+      display:inline-flex; align-items:center; gap:4px;
+      padding:5px 11px; border-radius:8px; font-size:11.5px; font-weight:700;
+      transition:transform .12s, opacity .12s;
     }
-    td.site a:hover { color:var(--accent); }
+    .card-feeds a.official { background:var(--accent-soft); color:var(--accent); }
+    .card-feeds a.ghfast   { background:#e7f0ff; color:#1d4ed8; }
+    .card-feeds a.jsdelivr { background:#f6e9ff; color:#7e22ce; }
+    [data-theme="dark"] .card-feeds a.ghfast   { background:#16294a; color:#79c0ff; }
+    [data-theme="dark"] .card-feeds a.jsdelivr { background:#2c1640; color:#d2a8ff; }
+    .card-feeds a:hover { text-decoration:none; transform:translateY(-1px); opacity:.88; }
 
-    /* Feed links */
-    td.feed a {
-      display:inline-block; padding:3px 8px; border-radius:5px;
-      font-size:11px; font-weight:600; white-space:nowrap; margin-right:3px; margin-top:2px;
-    }
-    td.feed a.official { background:#dcfce7; color:#15803d; }
-    td.feed a.ghfast   { background:#dbeafe; color:#1d4ed8; }
-    td.feed a.jsdelivr { background:#fae8ff; color:#7e22ce; }
-    [data-theme="dark"] td.feed a.official { background:#1a3d1e; color:#56d364; }
-    [data-theme="dark"] td.feed a.ghfast   { background:#1a2d4a; color:#79c0ff; }
-    [data-theme="dark"] td.feed a.jsdelivr { background:#3d1a4a; color:#d2a8ff; }
-    td.feed a:hover { opacity:.75; text-decoration:none; }
-
-    /* Meta: freq + count */
-    td.meta { white-space:nowrap; font-size:12px; color:var(--text-muted); }
-    td.meta .freq { display:block; }
-    td.meta .count { display:block; }
-    td.meta .count.has-items { color:var(--accent); font-weight:600; }
-    td.meta .count.no-items  { color:var(--text-muted); }
-
-    /* Hot badge */
-    .hot-badge { color:#f97316; font-size:11px; }
-
-    /* Footer */
-    footer {
-      text-align:center; padding:24px 16px; font-size:12px;
-      color:var(--text-muted); border-top:1px solid var(--border);
-    }
-    footer a { color:var(--accent); }
-
-    /* ── Mobile cards ── */
-    @media (max-width:640px) {
-      .table-wrap { overflow:visible; }
-      table, thead, tbody, tr, td { display:block; }
-      thead { display:none; }
-      tbody tr { padding:12px 14px; border-radius:10px; margin-bottom:8px;
-                 box-shadow:0 1px 3px rgba(0,0,0,.06); }
-      tbody tr:nth-child(even) { background:var(--surface); }
-      tbody td { padding:2px 0; border:none; }
-      td.num { display:none; }
-      td.favicon { display:inline-block; margin-right:8px; vertical-align:middle; }
-      td.title { display:inline; }
-      .title-wrap { display:inline-flex; align-items:center; gap:6px; }
-      td.site, td.feed, td.meta { margin-top:6px; }
-      td.feed a { padding:4px 8px; }
-      .cat-tag { font-size:10px; }
-      .filter-bar input { width:160px; }
-      header h1 { font-size:24px; }
-    }
-
-    @media (max-width:768px) {
-      table { min-width:unset; }
-    }
-
-    /* ── Blacklist Section ── */
-    #blacklist-section {
-      margin: 40px auto;
-      max-width: 900px;
-      padding: 0 16px;
-    }
-    #blacklist-section h2 {
-      font-size: 16px;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      user-select: none;
-    }
-    #blacklist-section h2:hover { color: var(--text); }
-    #blacklist-toggle {
-      font-size: 12px;
-      background: var(--border);
-      border: none;
-      border-radius: 10px;
-      padding: 2px 10px;
-      cursor: pointer;
-      color: var(--text-muted);
-      font-family: inherit;
-    }
-    #blacklist-toggle:hover { background: var(--hover); }
-    #blacklist-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 10px;
-    }
-    #blacklist-list.collapsed { display: none; }
-    .bl-item {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px;
-    }
-    .bl-domain {
-      font-family: monospace;
-      font-size: 12px;
-      color: var(--accent);
-      word-break: break-all;
-      margin-bottom: 4px;
-    }
-    .bl-reason { color: var(--text-muted); font-size: 12px; line-height: 1.4; }
-    .bl-tag {
-      display: inline-block;
-      font-size: 10px;
-      padding: 1px 6px;
-      border-radius: 4px;
-      margin-top: 5px;
-      background: var(--border);
-      color: var(--text-muted);
-    }
-
-    /* ── Tagline ── */
-    header .tagline { font-size:14px; opacity:.92; margin-bottom:6px; font-weight:500; }
-
-    /* ── Stat: last update ── */
-    .stat-value.last { font-size:19px; letter-spacing:-.3px; }
-
-    /* ── About card ── */
-    .about {
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:12px; padding:18px 20px; margin-bottom:18px;
-      box-shadow:0 1px 4px rgba(0,0,0,.06);
-    }
-    .about h2 { font-size:15px; margin-bottom:8px; }
-    .about p { font-size:13px; color:var(--text-muted); line-height:1.7; }
-    .about .features { list-style:none; margin:10px 0 0; display:grid; gap:7px; }
-    .about .features li { font-size:13px; color:var(--text); }
-    .about .features b { color:var(--accent); }
+    .empty-hint { display:none; text-align:center; color:var(--text-muted); padding:40px 0; font-size:14px; }
 
     /* ── Footer ── */
-    footer .footer-pitch { font-weight:600; color:var(--text); margin-bottom:6px; }
-    footer .footer-note { font-size:11px; opacity:.7; margin-top:6px; }
+    footer {
+      text-align:center; padding:32px 16px; font-size:12.5px;
+      color:var(--text-muted); border-top:1px solid var(--border); margin-top:24px;
+    }
+    footer .footer-pitch { font-weight:700; color:var(--text); margin-bottom:8px; font-size:13.5px; }
+    footer .footer-links a { margin:0 6px; }
+    footer .footer-note { font-size:11.5px; opacity:.75; margin-top:8px; }
+
+    /* ── Mobile ── */
+    @media (max-width:768px) {
+      .stats-strip { grid-template-columns:repeat(3,1fr); gap:10px; }
+      .hero { padding:48px 18px 84px; }
+      .hero h1 { font-size:34px; }
+      .about .features { grid-template-columns:1fr; }
+      .search-box { width:100%; }
+      .search-box input { width:100%; }
+      .toolbar { gap:10px; }
+      .feed-grid { grid-template-columns:1fr; }
+    }
+    @media (max-width:430px) {
+      .stats-strip { grid-template-columns:repeat(2,1fr); }
+    }
     ''')
 
 # ─────────────────────────────────────────────
-# 5. 行生成
+# 5. 卡片生成
 # ─────────────────────────────────────────────
 def favicon_url(s):
     icon = s.get("icon", "")
@@ -456,7 +385,7 @@ def favicon_url(s):
         return f"https://{domain}/favicon.ico"
     return ""
 
-def build_row(i, s):
+def build_card(s):
     slug     = s["slug"]
     name     = s["name"]
     site_url = s.get("site_url", "")
@@ -473,57 +402,63 @@ def build_row(i, s):
     m1       = f"{GHFAST_BASE}/feeds/{fname}"
     m2       = f"{JSDELIVR_BASE}/feeds/{fname}"
 
-    hot_tag  = ' <span class="hot-badge" title="已有收录内容">🔥</span>' if count > 0 else ""
+    # 域名（卡片副标题）
+    domain = site_url.replace("https://","").replace("http://","").split("/")[0] if site_url else ""
 
+    # favicon
     icon_html = (
         f'<img class="favicon-img" src="{icon_url}" alt="" loading="lazy" '
-        f'onerror="this.style.opacity=.2;this.onerror=null">'
-        if icon_url else '<span class="favicon-placeholder"></span>'
+        f'onerror="this.style.opacity=.15;this.onerror=null">'
+        if icon_url else '<span class="favicon-placeholder">📡</span>'
     )
 
-    count_cls  = "has-items" if count > 0 else "no-items"
-    count_disp = f'{count:,}' if count > 0 else "—"
+    count_cls  = "has-items" if count > 0 else ""
+    count_disp = f'{count:,}' if count > 0 else "暂无"
+
+    site_line = (
+        f'<div class="card-site"><a href="{site_url}" target="_blank" rel="noopener">{domain}</a></div>'
+        if domain else '<div class="card-site">—</div>'
+    )
 
     return (
-        f'<tr data-cat="{tier}">'
-        f'<td class="num">{i}</td>'
-        f'<td class="favicon">{icon_html}</td>'
-        f'<td class="title">'
-        f'<div class="title-wrap">'
-        f'<span class="title-name"><a href="{site_url}" target="_blank">{name}</a></span>{hot_tag}'
+        f'<article class="feed-card" data-cat="{tier}" '
+        f'data-name="{name.lower()}" data-site="{domain.lower()}">'
+        f'<div class="card-head">'
+        f'{icon_html}'
+        f'<div class="card-title">'
+        f'<div class="card-name"><a href="{site_url}" target="_blank" rel="noopener">{name}</a></div>'
+        f'{site_line}'
         f'</div>'
-        f'</td>'
-        f'<td class="site"><a href="{site_url}" target="_blank">{site_url}</a></td>'
-        f'<td class="feed">'
-        f'<a class="official" href="{official}" target="_blank">官方</a>'
-        f'<a class="ghfast"   href="{m1}"       target="_blank">ghfast</a>'
-        f'<a class="jsdelivr" href="{m2}"       target="_blank">CDN</a>'
-        f'</td>'
-        f'<td class="meta">'
+        f'<span class="cat-tag {tier}" title="{tier_lbl}">{emoji} {tier_lbl}</span>'
+        f'</div>'
+        f'<div class="card-meta">'
+        f'<span class="count {count_cls}">收录 {count_disp}</span>'
+        f'<span class="dot"></span>'
         f'<span class="freq">{freq}</span>'
-        f'<span class="count {count_cls}">收录 {count_disp} 条</span>'
-        f'</td>'
-        f'<td><span class="cat-tag {tier}" title="{tier_lbl}">{emoji} {tier_lbl}</span></td>'
-        f'</tr>'
+        f'</div>'
+        f'<div class="card-feeds">'
+        f'<a class="official" href="{official}" target="_blank" rel="noopener">官方</a>'
+        f'<a class="ghfast"   href="{m1}"       target="_blank" rel="noopener">ghfast</a>'
+        f'<a class="jsdelivr" href="{m2}"       target="_blank" rel="noopener">CDN</a>'
+        f'</div>'
+        f'</article>'
     )
 
 # ─────────────────────────────────────────────
 # 6. HTML 生成
 # ─────────────────────────────────────────────
-def gen_html(meta, blacklist_json='[]', last_crawl=""):
+def gen_html(meta, last_crawl=""):
     from datetime import datetime, timezone, timedelta
     tz  = timezone(timedelta(hours=8))
     now = datetime.now(tz).strftime("%Y-%m-%d %H:%M")
     n   = len(meta)
-    has_items   = sum(1 for s in meta if s.get("count", 0) > 0)
     high_cnt    = sum(1 for s in meta if s.get("tier") == "high")
     medium_cnt  = sum(1 for s in meta if s.get("tier") == "medium")
     low_cnt     = sum(1 for s in meta if s.get("tier") == "low")
-    # 收录条目总数 + 真实最近爬取时间（取 crawl_status.json 的 last_run）
     total_items = sum(int(s.get("count", 0) or 0) for s in meta)
     lc = last_crawl or now
     last_disp = lc[5:16] if len(lc) >= 16 else lc
-    # 动态分类标签：跳过数量为 0 的分类（如已清空的「软件工具」）
+
     def _tab(cat, label, cnt):
         if not cnt:
             return ""
@@ -534,8 +469,7 @@ def gen_html(meta, blacklist_json='[]', last_crawl=""):
                 _tab("low", "📦 软件工具", low_cnt)]
     cat_tabs_html = "\n        ".join(t for t in cat_tabs if t)
 
-    rows_html = "\n".join(build_row(i, s) for i, s in enumerate(meta, 1))
-    bl_json = blacklist_json if blacklist_json else '[]'
+    cards_html = "\n      ".join(build_card(s) for s in meta)
 
     tmpl = f'''\
     <!DOCTYPE html>
@@ -543,8 +477,8 @@ def gen_html(meta, blacklist_json='[]', last_crawl=""):
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>RSSForge - 订阅源目录</title>
-      <meta name="description" content="RSSForge 订阅源目录，共收录 {n} 个订阅源，支持官方/ghfast/jsDelivr 多镜像。">
+      <title>RSSForge · 订阅源目录</title>
+      <meta name="description" content="RSSForge 自动化聚合 {n} 个线报 / 羊毛 / 优惠 RSS，支持官方 / ghfast / jsDelivr 多镜像一键订阅。">
       <link rel="alternate" type="application/rss+xml" title="RSSForge OPML" href="{BASE}/opml.xml">
       <link rel="alternate" type="application/rss+xml" title="RSSForge (ghfast)" href="{GHFAST_BASE}/opml.ghfast.xml">
       <link rel="alternate" type="application/rss+xml" title="RSSForge (jsDelivr)" href="{JSDELIVR_BASE}/opml.jsdelivr.xml">
@@ -554,84 +488,70 @@ def gen_html(meta, blacklist_json='[]', last_crawl=""):
 
     <button class="theme-toggle" onclick="toggleTheme()" title="切换深色模式" id="themeBtn">🌙</button>
 
-    <header>
-      <h1>📡 RSSForge</h1>
-      <p class="tagline">聚合全网线报 · 羊毛 · 优惠 RSS，自动更新，多镜像一键订阅</p>
-      <p class="subtitle">订阅源目录 &middot; {now}</p>
-      <div class="stats">
-        <div class="stat"><div class="stat-value">{n}</div><div class="stat-label">订阅源</div></div>
-        <div class="stat"><div class="stat-value">{total_items:,}</div><div class="stat-label">收录条目</div></div>
-        <div class="stat"><div class="stat-value">{high_cnt}</div><div class="stat-label">线报羊毛</div></div>
-        <div class="stat"><div class="stat-value">{medium_cnt}</div><div class="stat-label">优惠资讯</div></div>
-        <div class="stat"><div class="stat-value last">{last_disp}</div><div class="stat-label">最近更新</div></div>
-      </div>
-      <div class="opml-bar">
-        <a class="opml-btn" href="{BASE}/opml.xml">📥 官方 OPML</a>
-        <a class="opml-btn" href="{GHFAST_BASE}/opml.ghfast.xml">🚀 ghfast 镜像</a>
-        <a class="opml-btn" href="{JSDELIVR_BASE}/opml.jsdelivr.xml">📦 jsDelivr CDN</a>
+    <header class="hero">
+      <div class="hero-inner">
+        <span class="badge">GitHub Actions 自动聚合</span>
+        <h1>RSSForge</h1>
+        <p class="tagline">聚合全网线报 · 羊毛 · 优惠 RSS，自动更新，多镜像一键订阅</p>
+        <div class="opml-bar">
+          <a class="opml-btn" href="{BASE}/opml.xml">📥 官方 OPML</a>
+          <a class="opml-btn" href="{GHFAST_BASE}/opml.ghfast.xml">🚀 ghfast 镜像</a>
+          <a class="opml-btn" href="{JSDELIVR_BASE}/opml.jsdelivr.xml">📦 jsDelivr CDN</a>
+        </div>
       </div>
     </header>
 
+    <div class="stats-strip">
+      <div class="stat-card"><div class="stat-value">{n}</div><div class="stat-label">订阅源</div></div>
+      <div class="stat-card"><div class="stat-value">{total_items:,}</div><div class="stat-label">收录条目</div></div>
+      <div class="stat-card"><div class="stat-value">{high_cnt}</div><div class="stat-label">线报羊毛</div></div>
+      <div class="stat-card"><div class="stat-value">{medium_cnt}</div><div class="stat-label">优惠资讯</div></div>
+      <div class="stat-card"><div class="stat-value last">{last_disp}</div><div class="stat-label">最近更新</div></div>
+    </div>
+
     <div class="container">
-      <!-- Category tabs -->
-      <div class="cat-tabs" id="catTabs">
-        <span class="cat-tab active" data-cat="all" onclick="filterCat('all')">全部 ({n})</span>
-        {cat_tabs_html}
-      </div>
 
-      <!-- Search -->
-      <div class="filter-bar">
-        <label>🔍</label>
-        <input type="text" id="searchInput" placeholder="搜索站点名称或网址…" oninput="applyFilters()">
-        <span class="count-hint" id="countHint">共 {n} 个订阅源</span>
-      </div>
-
-      <!-- About -->
       <div class="about">
-        <h2>关于 RSSForge</h2>
-        <p>自动化 RSS 聚合项目：定时抓取多个线报 / 羊毛 / 优惠站点，统一生成标准 RSS 与 OPML，并部署到 GitHub Pages。一份 OPML 即可把全部源导入任意阅读器，无需逐个订阅。</p>
-        <ul class="features">
-          <li>🔀 <b>多镜像</b>：官方 / ghfast / jsDelivr 三端同步，国内也可稳定访问</li>
-          <li>⏱ <b>自动更新</b>：按站点频率定时爬取，内容持续刷新</li>
-          <li>🔍 <b>客户端筛选</b>：支持名称 / 网址搜索与分类切换</li>
-        </ul>
+        <p><b>RSSForge</b> 是一个自动化 RSS 聚合项目：定时抓取多个线报 / 羊毛 / 优惠站点，统一生成标准 RSS 与 OPML，并部署到 GitHub Pages。一份 OPML 即可把全部源导入任意阅读器，无需逐个订阅。</p>
+        <ol class="features">
+          <li data-num="01"><b>多镜像</b>：官方 / ghfast / jsDelivr 三端同步，国内也可稳定访问</li>
+          <li data-num="02"><b>自动更新</b>：按站点频率定时爬取，内容持续刷新</li>
+          <li data-num="03"><b>一键订阅</b>：复制任一 OPML，在阅读器中导入即可</li>
+        </ol>
       </div>
 
-      <!-- Table -->
-      <div class="table-wrap">
-        <table id="feedTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th></th>
-              <th onclick="sortTable(2)">站点名称 ▾</th>
-              <th onclick="sortTable(3)">网址 ▾</th>
-              <th>订阅链接</th>
-              <th>更新频率 / 条目</th>
-              <th onclick="sortTable(6)">分类 ▾</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows_html}
-          </tbody>
-        </table>
+      <div class="section-head">
+        <h2>订阅源目录</h2>
+        <span class="sub">共 {n} 个 · 点击分类或搜索筛选</span>
       </div>
+
+      <div class="toolbar">
+        <div class="cat-tabs" id="catTabs">
+          <span class="cat-tab active" data-cat="all" onclick="filterCat('all')">全部 ({n})</span>
+          {cat_tabs_html}
+        </div>
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="搜索站点名称或网址…" oninput="applyFilters()">
+        </div>
+        <span class="count-hint" id="countHint">当前显示 {n} 个订阅源</span>
+      </div>
+
+      <div class="feed-grid" id="feedGrid">
+        {cards_html}
+      </div>
+      <p class="empty-hint" id="emptyHint">没有匹配的订阅源，换个关键词试试 🔍</p>
+
     </div>
 
     <footer>
-      <p class="footer-pitch">RSSForge &middot; 自动化 RSS 聚合与多镜像分发</p>
-      <p>
-         <a href="https://github.com/gitfox-enter/RSSForge" target="_blank">⭐ GitHub</a> &middot;
-         <a href="{BASE}/opml.xml" target="_blank">📥 下载 OPML</a> &middot;
-         <a href="https://github.com/gitfox-enter/RSSForge/issues/new/choose" target="_blank">提交新源</a>
+      <p class="footer-pitch">RSSForge · 自动化 RSS 聚合与多镜像分发</p>
+      <p class="footer-links">
+         <a href="https://github.com/gitfox-enter/RSSForge" target="_blank" rel="noopener">⭐ GitHub</a> &middot;
+         <a href="{BASE}/opml.xml" target="_blank" rel="noopener">📥 下载 OPML</a> &middot;
+         <a href="https://github.com/gitfox-enter/RSSForge/issues/new/choose" target="_blank" rel="noopener">提交新源</a>
       </p>
       <p class="footer-note">订阅方式：复制上方任一 OPML 链接，在阅读器中「导入 / 添加订阅源」即可。</p>
     </footer>
-
-    <div id="blacklist-section">
-      <h2 onclick="toggleBlacklist()">🚫 已屏蔽站点 <button id="blacklist-toggle">展开</button></h2>
-      <div id="blacklist-list" class="collapsed"></div>
-    </div>
 
     <script>
     // ── Theme ──
@@ -650,9 +570,8 @@ def gen_html(meta, blacklist_json='[]', last_crawl=""):
       }}
     }})();
 
-    // ── Category filter ──
+    // ── Category filter + search ──
     var currentCat = 'all';
-
     function filterCat(cat) {{
       currentCat = cat;
       document.querySelectorAll('.cat-tab').forEach(function(el) {{
@@ -660,69 +579,22 @@ def gen_html(meta, blacklist_json='[]', last_crawl=""):
       }});
       applyFilters();
     }}
-
-    // ── Search ──
     function applyFilters() {{
       var q = document.getElementById('searchInput').value.trim().toLowerCase();
-      var rows = document.querySelectorAll('#feedTable tbody tr');
+      var cards = document.querySelectorAll('#feedGrid .feed-card');
       var visible = 0;
-      rows.forEach(function(tr) {{
-        var cat   = tr.getAttribute('data-cat');
-        var title = tr.cells[2].textContent.toLowerCase();
-        var site  = tr.cells[3].textContent.toLowerCase();
+      cards.forEach(function(c) {{
+        var cat   = c.getAttribute('data-cat');
+        var name  = c.getAttribute('data-name') || '';
+        var site  = c.getAttribute('data-site') || '';
         var show  = (currentCat === 'all' || cat === currentCat)
-                  && (!q || title.includes(q) || site.includes(q));
-        tr.setAttribute('data-hidden', show ? 'false' : 'true');
+                  && (!q || name.includes(q) || site.includes(q));
+        c.style.display = show ? '' : 'none';
         if (show) visible++;
       }});
-      document.getElementById('countHint').textContent = '当前 ' + visible + ' 个';
+      document.getElementById('countHint').textContent = '当前显示 ' + visible + ' 个订阅源';
+      document.getElementById('emptyHint').style.display = visible ? 'none' : 'block';
     }}
-
-    // ── Sort ──
-    function sortTable(col) {{
-      var tb  = document.querySelector('#feedTable tbody');
-      var dir = tb.getAttribute('data-dir') === 'asc' ? 'desc' : 'asc';
-      tb.setAttribute('data-dir', dir);
-      var rows = Array.from(tb.rows);
-      rows.sort(function(a, b) {{
-        var va = a.cells[col].textContent.trim();
-        var vb = b.cells[col].textContent.trim();
-        if (!isNaN(va) && !isNaN(vb)) {{ va = +va; vb = +vb; }}
-        return dir === 'asc' ? (va > vb ? 1 : -1) : (va > vb ? -1 : 1);
-      }});
-      rows.forEach(function(r) {{ tb.appendChild(r); }});
-    }}
-
-    // ── Favicon lazy ──
-    document.querySelectorAll('.favicon-img').forEach(function(img) {{
-      if (!img.src || img.src.endsWith('/favicon.ico')) return;
-    }});
-
-    // ── Blacklist ──
-    var BLACKLIST = {bl_json};
-    var blExpanded = false;
-    function toggleBlacklist() {{
-      blExpanded = !blExpanded;
-      var list = document.getElementById('blacklist-list');
-      var btn  = document.getElementById('blacklist-toggle');
-      list.classList.toggle('collapsed', !blExpanded);
-      btn.textContent = blExpanded ? '收起' : '展开';
-    }}
-    function renderBlacklist() {{
-      var list = document.getElementById('blacklist-list');
-      if (!list) return;
-      var frag = document.createDocumentFragment();
-      BLACKLIST.forEach(function(item) {{
-        var div = document.createElement('div');
-        div.className = 'bl-item';
-        div.innerHTML = '<div class="bl-domain">' + item.domain + '</div>' +
-          '<div class="bl-reason">' + item.reason + '</div>' +
-          '<span class="bl-tag">' + item.category + '</span>';
-        frag.appendChild(div);
-      }});
-      list.appendChild(frag);
-    }}
-    renderBlacklist();
     </script>
     </body>
     </html>
@@ -741,18 +613,15 @@ def load_last_crawl():
     except Exception:
         return ""
 
-
 def main():
     meta = load_meta()
-    blacklist_json = load_blacklist()
     last_crawl = load_last_crawl()
-    html = gen_html(meta, blacklist_json, last_crawl=last_crawl)
+    html = gen_html(meta, last_crawl=last_crawl)
     os.makedirs("docs", exist_ok=True)
     out = "docs/index.html"
     with open(out, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"  ✅ {out}  ({len(meta)} feeds, {len(html):,} bytes)")
-    # Also write the generated version marker
     with open("docs/version.txt", "w") as f:
         from datetime import datetime, timezone, timedelta
         tz = timezone(timedelta(hours=8))
