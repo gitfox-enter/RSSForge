@@ -5,7 +5,7 @@
     <link>https://news.ixbk.net/</link>
     <description>线报酷 的 RSS 订阅源（由 RSSForge 生成）</description>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 17 Jul 2026 20:43:10 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 17 Jul 2026 20:57:00 +0800</lastBuildDate>
     <generator>RSSForge</generator>
     <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
     <ttl>15</ttl>
@@ -20,7 +20,7 @@
       <title>我的关注</title>
       <link>https://news.ixbk.net/category-guanzhu1/</link>
       <guid isPermaLink="false">urn:md5:a51e44454d45b121@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">我的关注&lt;br/&gt;&lt;a href="https://news.ixbk.net/category-guanzhu1/"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
@@ -28,7 +28,7 @@
       <title>豆瓣线报</title>
       <link>https://news.ixbk.net/category-douban/</link>
       <guid isPermaLink="false">urn:md5:781b0ba88a03be0b@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">豆瓣线报&lt;br/&gt;&lt;a href="https://news.ixbk.net/category-douban/"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
@@ -36,15 +36,23 @@
       <title>豆瓣热帖</title>
       <link>https://news.ixbk.net/douban-hot.html</link>
       <guid isPermaLink="false">urn:md5:e5bd3f546373d4d4@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">豆瓣热帖&lt;br/&gt;&lt;a href="https://news.ixbk.net/douban-hot.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>微博线报</title>
+      <link>https://news.ixbk.net/category-weibo/</link>
+      <guid isPermaLink="false">urn:md5:37a868158c1f95bd@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
+      <author>线报酷</author>
+      <description type="html" xml:space="preserve">微博线报&lt;br/&gt;&lt;a href="https://news.ixbk.net/category-weibo/"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
       <title>微博超话</title>
       <link>https://news.ixbk.net/category-weibo-chaohua/</link>
       <guid isPermaLink="false">urn:md5:1b3c567c75f0c839@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">微博超话&lt;br/&gt;&lt;a href="https://news.ixbk.net/category-weibo-chaohua/"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
@@ -52,7 +60,7 @@
       <title>微博热帖</title>
       <link>https://news.ixbk.net/weibo-hot.html</link>
       <guid isPermaLink="false">urn:md5:86e1cb4ed81e1048@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">微博热帖&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo-hot.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
@@ -60,281 +68,273 @@
       <title>好单线报</title>
       <link>https://news.ixbk.net/category-haodan/</link>
       <guid isPermaLink="false">urn:md5:ad0515d472a82f12@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">好单线报&lt;br/&gt;&lt;a href="https://news.ixbk.net/category-haodan/"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>WxPusher APP 获取线报酷实时推送</title>
-      <link>https://news.ixbk.net/jiaocheng/5320529.html</link>
-      <guid isPermaLink="false">urn:md5:98a9969785f4588c@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>注册用户可筛选首页分类</title>
+      <link>https://news.ixbk.net/gonggao/5535689.html</link>
+      <guid isPermaLink="false">urn:md5:ed8d1cd70c54a8d8@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">WxPusher APP 获取线报酷实时推送&lt;br/&gt;&lt;a href="https://news.ixbk.net/jiaocheng/5320529.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">注册用户可筛选首页分类&lt;br/&gt;&lt;a href="https://news.ixbk.net/gonggao/5535689.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>立白旗下洁多芬香氛洗衣液4斤 9.9元</title>
-      <link>https://news.ixbk.net/haodan/6648993.html</link>
-      <guid isPermaLink="false">urn:md5:2ac04acca0d9a338@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>巴布豆菠萝裤尿不湿任选4件 23元</title>
+      <link>https://news.ixbk.net/haodan/6649102.html</link>
+      <guid isPermaLink="false">urn:md5:4825cab238198a14@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">立白旗下洁多芬香氛洗衣液4斤 9.9元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648993.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">巴布豆菠萝裤尿不湿任选4件 23元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649102.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>喜欢盲盒的姐妹 爱慕</title>
-      <link>https://news.ixbk.net/weibo-chaohua/6648992.html</link>
-      <guid isPermaLink="false">urn:md5:e09e47ac24ccd068@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>旁氏米粹泡泡洗面奶氨基酸洁面泡沫160ml 14.3元</title>
+      <link>https://news.ixbk.net/weibo/6649099.html</link>
+      <guid isPermaLink="false">urn:md5:2180e29d1d8f7826@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">喜欢盲盒的姐妹 爱慕&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo-chaohua/6648992.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">旁氏米粹泡泡洗面奶氨基酸洁面泡沫160ml 14.3元&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6649099.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>阳光瓶维生素d3 2000iu360粒*2（单瓶82）</title>
-      <link>https://news.ixbk.net/douban-maizu/6648987.html</link>
-      <guid isPermaLink="false">urn:md5:721cbec522e1d002@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>清风亲肤悬挂式抽纸4层250抽10提 25.9元</title>
+      <link>https://news.ixbk.net/weibo/6649100.html</link>
+      <guid isPermaLink="false">urn:md5:a62ed5297a70e4ee@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">阳光瓶维生素d3 2000iu360粒*2（单瓶82）&lt;br/&gt;&lt;a href="https://news.ixbk.net/douban-maizu/6648987.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">清风亲肤悬挂式抽纸4层250抽10提 25.9元&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6649100.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>好吃好吃😋</title>
-      <link>https://news.ixbk.net/weibo-chaohua/6648991.html</link>
-      <guid isPermaLink="false">urn:md5:a30adde78951fe74@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>bebebus小风车睡袋 131元</title>
+      <link>https://news.ixbk.net/haodan/6649094.html</link>
+      <guid isPermaLink="false">urn:md5:32d67796161887b7@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">好吃好吃😋&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo-chaohua/6648991.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">bebebus小风车睡袋 131元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649094.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>赤峰黄小米100g*4袋 3.1元，汾都香七色米1000g 6.99元</title>
-      <link>https://news.ixbk.net/haodan/6648988.html</link>
-      <guid isPermaLink="false">urn:md5:7d2af443b6d56c00@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>乔丹夏季网面透气板鞋 39元</title>
+      <link>https://news.ixbk.net/haodan/6649097.html</link>
+      <guid isPermaLink="false">urn:md5:e1936b10b3566b8d@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">赤峰黄小米100g*4袋 3.1元，汾都香七色米1000g 6.99元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648988.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">乔丹夏季网面透气板鞋 39元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649097.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>美特斯邦威印花短袖 31元</title>
-      <link>https://news.ixbk.net/haodan/6648990.html</link>
-      <guid isPermaLink="false">urn:md5:614c76a52af86740@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>海龟爸爸防晒喷雾2瓶 69元</title>
+      <link>https://news.ixbk.net/haodan/6649096.html</link>
+      <guid isPermaLink="false">urn:md5:e251df49d463fade@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">美特斯邦威印花短袖 31元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648990.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">海龟爸爸防晒喷雾2瓶 69元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649096.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>allforpaws宠物用品旗舰店afp混合猫砂咖啡渣膨润土除臭 129元</title>
-      <link>https://news.ixbk.net/haodan/6648989.html</link>
-      <guid isPermaLink="false">urn:md5:7a74b49f1385bd05@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>安踏童装男童速干裤 33元</title>
+      <link>https://news.ixbk.net/haodan/6649095.html</link>
+      <guid isPermaLink="false">urn:md5:742299c41dae84b4@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">allforpaws宠物用品旗舰店afp混合猫砂咖啡渣膨润土除臭 129元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648989.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">安踏童装男童速干裤 33元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649095.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>森马男女印花T恤合集拍3件 78.6元</title>
-      <link>https://news.ixbk.net/haodan/6648985.html</link>
-      <guid isPermaLink="false">urn:md5:3ac222c1a18a457a@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>pidan木薯豆腐猫砂2.4kg*8 87元</title>
+      <link>https://news.ixbk.net/haodan/6649093.html</link>
+      <guid isPermaLink="false">urn:md5:3d5fd62b13555d61@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">森马男女印花T恤合集拍3件 78.6元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648985.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">pidan木薯豆腐猫砂2.4kg*8 87元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649093.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>牛肉丸 5元</title>
-      <link>https://news.ixbk.net/haodan/6648986.html</link>
-      <guid isPermaLink="false">urn:md5:0dfc15364f88733c@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>猴头菇益生菌2g*20条/盒*3盒 5元</title>
+      <link>https://news.ixbk.net/haodan/6649092.html</link>
+      <guid isPermaLink="false">urn:md5:f26ee210e494ebe3@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">牛肉丸 5元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648986.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">猴头菇益生菌2g*20条/盒*3盒 5元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649092.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>国际 童年时光ChildLife 入会下拉领299-20券 过金币 紫锥菊滴剂</title>
-      <link>https://news.ixbk.net/weibo/6648983.html</link>
-      <guid isPermaLink="false">urn:md5:8c2fdbc1c7f07d8e@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>帝优美扫振全自动电动牙刷礼盒 36元</title>
+      <link>https://news.ixbk.net/haodan/6649090.html</link>
+      <guid isPermaLink="false">urn:md5:05b589c5b34df6d7@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">国际 童年时光ChildLife 入会下拉领299-20券 过金币 紫锥菊滴剂&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6648983.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">帝优美扫振全自动电动牙刷礼盒 36元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649090.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>牛肉丸 潮汕正宗牛肉丸手打潮州汕头特产纯手工无添加牛筋丸子火锅食材</title>
-      <link>https://news.ixbk.net/weibo/6648984.html</link>
-      <guid isPermaLink="false">urn:md5:dcbfb0aeaf2e5759@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>互邦电动轮椅智能全自动超轻折叠 430元</title>
+      <link>https://news.ixbk.net/weibo/6649091.html</link>
+      <guid isPermaLink="false">urn:md5:06757efb7a08c8e1@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">牛肉丸 潮汕正宗牛肉丸手打潮州汕头特产纯手工无添加牛筋丸子火锅食材&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6648984.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">互邦电动轮椅智能全自动超轻折叠 430元&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6649091.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>翔去捡肥皂了</title>
-      <link>https://news.ixbk.net/zuankeba/6648982.html</link>
-      <guid isPermaLink="false">urn:md5:fdc07667c1bd699d@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>花园新疆牧场纯牛奶200g*10盒*3箱 58.9元</title>
+      <link>https://news.ixbk.net/haodan/6649088.html</link>
+      <guid isPermaLink="false">urn:md5:3fc7834dc8031b1c@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">翔去捡肥皂了&lt;br/&gt;&lt;a href="https://news.ixbk.net/zuankeba/6648982.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">花园新疆牧场纯牛奶200g*10盒*3箱 58.9元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649088.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>黄天鹅可生食鸡蛋20枚 1.2元/枚</title>
-      <link>https://news.ixbk.net/haodan/6648980.html</link>
-      <guid isPermaLink="false">urn:md5:fa13fa94faabfe3a@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>鸿星尔克女童运动短袖 25元</title>
+      <link>https://news.ixbk.net/haodan/6649087.html</link>
+      <guid isPermaLink="false">urn:md5:427206c9c20f3062@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">黄天鹅可生食鸡蛋20枚 1.2元/枚&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648980.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">鸿星尔克女童运动短袖 25元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649087.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>薇尔卫生巾任选拍12件 30.3元</title>
-      <link>https://news.ixbk.net/haodan/6648978.html</link>
-      <guid isPermaLink="false">urn:md5:c2370aebc9306968@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>红豆薏米水12瓶 29元</title>
+      <link>https://news.ixbk.net/weibo/6649089.html</link>
+      <guid isPermaLink="false">urn:md5:825036ce82b9ea7b@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">薇尔卫生巾任选拍12件 30.3元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648978.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">红豆薏米水12瓶 29元&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6649089.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>官栈中国礼物全家福礼盒1230g/盒 124元</title>
-      <link>https://news.ixbk.net/haodan/6648975.html</link>
-      <guid isPermaLink="false">urn:md5:89c7f0c38bb5071a@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>MissWiss凉感阔腿裤弯刀裤 59.9元</title>
+      <link>https://news.ixbk.net/weibo/6649084.html</link>
+      <guid isPermaLink="false">urn:md5:07a96f91f0dcc4d3@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">官栈中国礼物全家福礼盒1230g/盒 124元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648975.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">MissWiss凉感阔腿裤弯刀裤 59.9元&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6649084.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>逮虾记九五纯纯虾滑100g*8袋 66.9元</title>
-      <link>https://news.ixbk.net/weibo/6648976.html</link>
-      <guid isPermaLink="false">urn:md5:7ac3829c3298cb02@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>老管家香氛爆炸盐1000g 16.7元</title>
+      <link>https://news.ixbk.net/haodan/6649086.html</link>
+      <guid isPermaLink="false">urn:md5:1dc8853545f5c650@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">逮虾记九五纯纯虾滑100g*8袋 66.9元&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6648976.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">老管家香氛爆炸盐1000g 16.7元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649086.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>九阳多功能空气炸锅6L 130元</title>
-      <link>https://news.ixbk.net/haodan/6648974.html</link>
-      <guid isPermaLink="false">urn:md5:7ec27f1b46b2a582@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>精华水 NCCU玻尿酸水乳精华三效合一控油补水清爽型可湿敷油皮敏感肌可用</title>
+      <link>https://news.ixbk.net/weibo/6649082.html</link>
+      <guid isPermaLink="false">urn:md5:b3c234198a2cd62d@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">九阳多功能空气炸锅6L 130元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648974.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">精华水 NCCU玻尿酸水乳精华三效合一控油补水清爽型可湿敷油皮敏感肌可用&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6649082.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>ChildLife童年时光有机D3滴剂 22.25元</title>
-      <link>https://news.ixbk.net/weibo/6648971.html</link>
-      <guid isPermaLink="false">urn:md5:72a51a00e992bafc@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>华住多品牌酒店1晚通兑劵 109元</title>
+      <link>https://news.ixbk.net/haodan/6649085.html</link>
+      <guid isPermaLink="false">urn:md5:caee32c4e23f1fae@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">ChildLife童年时光有机D3滴剂 22.25元&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6648971.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">华住多品牌酒店1晚通兑劵 109元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649085.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>护颈枕家居零压力成人 17元</title>
-      <link>https://news.ixbk.net/haodan/6648973.html</link>
-      <guid isPermaLink="false">urn:md5:289022bee2406fc7@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>芬腾无痕内衣 34.9元，芬腾一片式无钢圈内衣 34.9元</title>
+      <link>https://news.ixbk.net/haodan/6649083.html</link>
+      <guid isPermaLink="false">urn:md5:af161d1d15661a9b@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">护颈枕家居零压力成人 17元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648973.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">芬腾无痕内衣 34.9元，芬腾一片式无钢圈内衣 34.9元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649083.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>音响 18元</title>
-      <link>https://news.ixbk.net/weibo/6648972.html</link>
-      <guid isPermaLink="false">urn:md5:392254414634bf7a@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>1速燕麦片 5元</title>
+      <link>https://news.ixbk.net/haodan/6649081.html</link>
+      <guid isPermaLink="false">urn:md5:d88ee74f977e104d@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">音响 18元&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6648972.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">1速燕麦片 5元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649081.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>酸奶算好价吗</title>
-      <link>https://news.ixbk.net/weibo-chaohua/6648967.html</link>
-      <guid isPermaLink="false">urn:md5:d6ef3e3a10005185@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>米蓓尔蓝绷带面膜50g*2 44.5元</title>
+      <link>https://news.ixbk.net/haodan/6649079.html</link>
+      <guid isPermaLink="false">urn:md5:e78838d28ff9cc55@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">酸奶算好价吗&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo-chaohua/6648967.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">米蓓尔蓝绷带面膜50g*2 44.5元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649079.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>瑞幸咖啡液32杯拍两盒 86.7元</title>
-      <link>https://news.ixbk.net/haodan/6648970.html</link>
-      <guid isPermaLink="false">urn:md5:fd7cd7c899af38eb@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>麻辣王子辣味解馋盒550g 22元</title>
+      <link>https://news.ixbk.net/haodan/6649080.html</link>
+      <guid isPermaLink="false">urn:md5:ede42c9f2caf3c2a@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">瑞幸咖啡液32杯拍两盒 86.7元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648970.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">麻辣王子辣味解馋盒550g 22元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649080.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>刚需可随手买买电池 1.9元</title>
-      <link>https://news.ixbk.net/weibo/6648968.html</link>
-      <guid isPermaLink="false">urn:md5:e1b0aef2389c1150@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>宝弘金盏花止痒膏30g 38.6元</title>
+      <link>https://news.ixbk.net/haodan/6649078.html</link>
+      <guid isPermaLink="false">urn:md5:75528ec3770beaac@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">刚需可随手买买电池 1.9元&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6648968.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">宝弘金盏花止痒膏30g 38.6元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649078.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>逸阳九分耐皱防晒纸片阔腿裤 69.23元</title>
-      <link>https://news.ixbk.net/weibo/6648969.html</link>
-      <guid isPermaLink="false">urn:md5:770dded3602e88c0@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>新鲜麒麟西瓜净重4-6斤含赠拍1含赠共2个 18.8元</title>
+      <link>https://news.ixbk.net/haodan/6649077.html</link>
+      <guid isPermaLink="false">urn:md5:5a7f87206b2c04a6@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">逸阳九分耐皱防晒纸片阔腿裤 69.23元&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6648969.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">新鲜麒麟西瓜净重4-6斤含赠拍1含赠共2个 18.8元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649077.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>丽婴房儿童夏季防蚊裤 18.41元，丽婴房儿童速干弯刀裤 23.01元</title>
-      <link>https://news.ixbk.net/haodan/6648966.html</link>
-      <guid isPermaLink="false">urn:md5:f9fdef8923fa6aa0@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>肌肤之玥洁面膏净采洁面膏125mL*2清爽型赠四部曲尝鲜礼精华3ml 824元</title>
+      <link>https://news.ixbk.net/haodan/6649076.html</link>
+      <guid isPermaLink="false">urn:md5:a0f2c7232bbce28e@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">丽婴房儿童夏季防蚊裤 18.41元，丽婴房儿童速干弯刀裤 23.01元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648966.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">肌肤之玥洁面膏净采洁面膏125mL*2清爽型赠四部曲尝鲜礼精华3ml 824元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649076.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>汉达7号电池4支装 0.1元</title>
-      <link>https://news.ixbk.net/haodan/6648965.html</link>
-      <guid isPermaLink="false">urn:md5:3345846f5ea49cf1@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>燕麦片 BabyKeep海盐咸味奇亚籽燕麦片早餐即食冲饮无添加蔗糖低脂独立装</title>
+      <link>https://news.ixbk.net/weibo/6649075.html</link>
+      <guid isPermaLink="false">urn:md5:bc83aa3750d8d586@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">汉达7号电池4支装 0.1元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648965.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">燕麦片 BabyKeep海盐咸味奇亚籽燕麦片早餐即食冲饮无添加蔗糖低脂独立装&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6649075.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>好丽友巧克力派榴莲派Q蒂多款6枚任选4盒 28元</title>
-      <link>https://news.ixbk.net/haodan/6648964.html</link>
-      <guid isPermaLink="false">urn:md5:4a0a8be768f5d5f1@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>半边天生脉饮党参口服液10支*6盒 拍6件 52元</title>
+      <link>https://news.ixbk.net/haodan/6649074.html</link>
+      <guid isPermaLink="false">urn:md5:785b54a117c97263@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">好丽友巧克力派榴莲派Q蒂多款6枚任选4盒 28元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648964.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">半边天生脉饮党参口服液10支*6盒 拍6件 52元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649074.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>Gap纯棉字母印花lT恤 49元，Gap美式印花圆领短袖 59.4元</title>
-      <link>https://news.ixbk.net/haodan/6648962.html</link>
-      <guid isPermaLink="false">urn:md5:5c1079c5d03aab36@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>Onitsuka Tiger鬼塚虎粉色复古轻便运动休闲鞋 600元</title>
+      <link>https://news.ixbk.net/haodan/6649073.html</link>
+      <guid isPermaLink="false">urn:md5:3a8df52ebc37a534@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">Gap纯棉字母印花lT恤 49元，Gap美式印花圆领短袖 59.4元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648962.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">Onitsuka Tiger鬼塚虎粉色复古轻便运动休闲鞋 600元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649073.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>学生高清数码相机 8.3元</title>
-      <link>https://news.ixbk.net/weibo/6648963.html</link>
-      <guid isPermaLink="false">urn:md5:ad4eadff92cea99d@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>La Chapeele拉夏羽绒服平湖店时尚羽绒服潮冬季新款外套 99元</title>
+      <link>https://news.ixbk.net/haodan/6649072.html</link>
+      <guid isPermaLink="false">urn:md5:daff34b3b92e270a@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">学生高清数码相机 8.3元&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6648963.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">La Chapeele拉夏羽绒服平湖店时尚羽绒服潮冬季新款外套 99元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649072.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>旅舍经济酒店1晚通兑劵 18元</title>
-      <link>https://news.ixbk.net/haodan/6648961.html</link>
-      <guid isPermaLink="false">urn:md5:0ecf9fe2e1a65e9d@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>怡宝焰焙丝滑澳白咖啡饮料180ml*24罐 39.9元</title>
+      <link>https://news.ixbk.net/haodan/6649071.html</link>
+      <guid isPermaLink="false">urn:md5:bae018b324d40365@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">旅舍经济酒店1晚通兑劵 18元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648961.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">怡宝焰焙丝滑澳白咖啡饮料180ml*24罐 39.9元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649071.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>贝亲PPSU双把手彩绘奶瓶330ml 104.7元</title>
-      <link>https://news.ixbk.net/haodan/6648960.html</link>
-      <guid isPermaLink="false">urn:md5:5f492dd22a71098a@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>好价 速来 2件8折 第一个xs9 第二个xs16 凑200-25</title>
+      <link>https://news.ixbk.net/weibo-chaohua/6649068.html</link>
+      <guid isPermaLink="false">urn:md5:524a2d1ba27f8055@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">贝亲PPSU双把手彩绘奶瓶330ml 104.7元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648960.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">好价 速来 2件8折 第一个xs9 第二个xs16 凑200-25&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo-chaohua/6649068.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>百利无谷三文鱼猫粮10磅 217元</title>
-      <link>https://news.ixbk.net/haodan/6648959.html</link>
-      <guid isPermaLink="false">urn:md5:16609a8ff0927e9b@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
+      <title>肌肤之钥黑管隔离霜37ml 171.9元</title>
+      <link>https://news.ixbk.net/haodan/6649070.html</link>
+      <guid isPermaLink="false">urn:md5:ed563cf98e11dcce@news.ixbk.net</guid>
+      <pubDate>Fri, 17 Jul 2026 20:55:54 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">百利无谷三文鱼猫粮10磅 217元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6648959.html"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>调研乱填就行感兴趣看看 V打开</title>
-      <link>https://news.ixbk.net/weibo/6648957.html</link>
-      <guid isPermaLink="false">urn:md5:af34a05c67e37429@news.ixbk.net</guid>
-      <pubDate>Fri, 17 Jul 2026 20:41:55 +0800</pubDate>
-      <author>线报酷</author>
-      <description type="html" xml:space="preserve">调研乱填就行感兴趣看看 V打开&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6648957.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">肌肤之钥黑管隔离霜37ml 171.9元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6649070.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
       <title>UNNY防晒喷雾120ml拍2瓶 37.2元</title>
