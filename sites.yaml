@@ -1,10 +1,4 @@
 sites:
-- url: https://news.ixbk.fun/
-  max_pages: 3
-  name: 线报酷
-  tier: high
-  interval: 15
-  fast_check: true
 - url: https://news.ixbk.net/
   max_pages: 3
   name: 线报酷
@@ -36,13 +30,6 @@ sites:
   tier: high
   interval: 20
   fast_check: true
-- url: https://yangmao.19970709.xyz/
-  max_pages: 3
-  name: 小角落
-  tier: high
-  interval: 20
-  parser: yangmao19970709
-  js_render: true
 - url: https://readhub.cn/hot
   max_pages: 1
   name: ReadHub 热门
@@ -90,11 +77,6 @@ sites:
   tier: high
   interval: 20
   fast_check: true
-- url: https://www.007ymd.com/
-  max_pages: 3
-  name: 007羊毛党
-  tier: high
-  interval: 30
 - url: https://www.12345pro.com/
   max_pages: 3
   name: 12345线报
@@ -149,14 +131,6 @@ sites:
   tier: medium
   interval: 120
   js_render: true
-- url: https://www.51kanong.com/
-- url: https://www.yxzhi.com/
-  max_pages: 5
-  name: 鸭先知
-  tier: low
-  interval: 360
-  fast_check: true
-  rss_feed: https://www.yxzhi.com/feed
 - url: https://blog.xianbao.art/
   max_pages: 5
   name: 羊毛群

@@ -12,10 +12,8 @@
         "www.zhuanyes.com": 0.771,
         "www.yangmaodang.club": 3.224,
         "www.iqnew.com": 1.242,
-        "www.yxzhi.com": 2.906,
         "www.zuankeba.cn": 1.977,
         "www.wycad.com": 3.073,
-        "news.ixbk.fun": 1.976,
         "www.12345pro.com": 4.783,
         "yangmao.wang": 5.706,
         "www.yxssp.com": 5.111,
@@ -74,18 +72,6 @@
       "error": "内容已更新"
     },
     {
-      "url": "https://www.yxzhi.com/",
-      "name": "鸭先知",
-      "status": "ok",
-      "error": "首次监控"
-    },
-    {
-      "url": "https://www.51kanong.com/",
-      "name": null,
-      "status": "skip",
-      "error": "死站: 启用 JS 渲染后 Feed 仍为空，网站可能已关闭 RSS 输出"
-    },
-    {
       "url": "https://www.zuankeba.cn/",
       "name": "赚客吧",
       "status": "ok",
@@ -104,12 +90,6 @@
       "error": "内容已更新"
     },
     {
-      "url": "https://news.ixbk.fun/",
-      "name": "线报酷",
-      "status": "ok",
-      "error": "内容已更新"
-    },
-    {
       "url": "https://www.h6room.com/",
       "name": "H6线报",
       "status": "ok",
@@ -122,22 +102,10 @@
       "error": "内容已更新"
     },
     {
-      "url": "https://www.007ymd.com/",
-      "name": "007羊毛党",
-      "status": "skip",
-      "error": "死站: DNS/连接失败 - 域名无法解析"
-    },
-    {
       "url": "https://yangmao.wang/",
       "name": "羊毛王",
       "status": "ok",
       "error": "无更新"
-    },
-    {
-      "url": "https://yangmao.19970709.xyz/",
-      "name": "小角落",
-      "status": "skip",
-      "error": "robots.txt 禁止爬取"
     },
     {
       "url": "https://readhub.cn/hot",
