@@ -9,7 +9,7 @@ RSSForge 订阅源目录生成器
   - 桌面表格 + 移动端卡片双布局
   - 活跃源徽章
 """
-import json, os, textwrap, re
+import json, os, textwrap, re, glob, yaml
 from datetime import datetime, timezone, timedelta
 
 BASE = "https://gitfox-enter.github.io/RSSForge"
@@ -93,19 +93,68 @@ def load_blacklist():
 # 3. 加载 feeds_meta
 # ─────────────────────────────────────────────
 def load_meta():
-    with open("feeds_meta.json", encoding="utf-8") as f:
-        raw = json.load(f)
-    result = []
-    for slug, info in raw.items():
-        info = dict(info)
-        info["slug"] = slug
-        info["name"] = get_name(slug, info.get("name"))
-        info["tier"] = guess_tier(info.get("site_url", ""), slug)
-        emoji, label = TIER_LABELS.get(info["tier"], TIER_LABELS["unknown"])
-        info["tier_emoji"] = emoji
-        info["tier_label"] = label
-        result.append(info)
-    return result
+    """从 docs/feeds/*.xml 读取【已发布】的 feed（权威源），
+    解析名称/站点/图标/条目数，并按 tier 推断分类。
+    这样计数随实际发布的 feed 文件自愈，不再依赖不完整的
+    feeds_meta.json（它只跟踪已爬取成功的源，会漏掉部分活跃源）。"""
+    # 频率映射（来自 sites.yaml 的 interval，单位分钟）
+    freq_map = {}
+    try:
+        _sites = yaml.safe_load(open("sites.yaml", encoding="utf-8")).get("sites", [])
+        for _s in _sites:
+            _u = (_s.get("url") or "").rstrip("/").lower()
+            _n = _s.get("name")
+            _iv = _s.get("interval")
+            if _iv:
+                _lab = f"每{_iv // 60}小时" if _iv % 60 == 0 else f"每{_iv}分钟"
+                if _u:
+                    freq_map[_u] = _lab
+                if _n:
+                    freq_map["name:" + str(_n)] = _lab
+    except Exception:
+        pass
+    # feeds_meta（已有 freq_label 优先）
+    try:
+        _fm = json.load(open("feeds_meta.json", encoding="utf-8"))
+    except Exception:
+        _fm = {}
+
+    results = []
+    for path in sorted(glob.glob(os.path.join("docs", "feeds", "*.xml"))):
+        slug = os.path.splitext(os.path.basename(path))[0]
+        try:
+            txt = open(path, encoding="utf-8", errors="ignore").read()
+        except Exception:
+            continue
+        ch = txt.split("</channel>")[0] if "</channel>" in txt else txt
+        tm = re.search(r"<title>(.*?)</title>", ch, re.S)
+        lm = re.search(r"<link>(.*?)</link>", ch, re.S)
+        im = re.search(r"<image>.*?<url>(.*?)</url>", ch, re.S)
+        name = (tm.group(1).replace(" - RSSForge", "").strip()
+                if tm else slug)
+        site_url = lm.group(1).strip() if lm else ""
+        icon = im.group(1).strip() if im else ""
+        if not icon and site_url:
+            domain = site_url.replace("https://", "").replace("http://", "").split("/")[0]
+            icon = f"https://{domain}/favicon.ico"
+        count = txt.count("<item>") + txt.count("<entry>")
+        tier = guess_tier(site_url, name)
+        emoji, label = TIER_LABELS.get(tier, TIER_LABELS["unknown"])
+        # 频率：feeds_meta > sites.yaml interval
+        freq = ""
+        for k, v in _fm.items():
+            if v.get("name") == name or k == slug:
+                freq = v.get("freq_label") or ""
+                break
+        if not freq:
+            freq = (freq_map.get(site_url.rstrip("/").lower())
+                    or freq_map.get("name:" + str(name)) or "—")
+        results.append({
+            "slug": slug, "name": name, "site_url": site_url,
+            "icon": icon, "tier": tier, "tier_emoji": emoji,
+            "tier_label": label, "count": count, "freq_label": freq,
+        })
+    return results
 
 # ─────────────────────────────────────────────
 # 4. CSS
