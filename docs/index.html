@@ -267,6 +267,28 @@ footer a { color:var(--accent); }
   background: var(--border);
   color: var(--text-muted);
 }
+
+/* ── Tagline ── */
+header .tagline { font-size:14px; opacity:.92; margin-bottom:6px; font-weight:500; }
+
+/* ── Stat: last update ── */
+.stat-value.last { font-size:19px; letter-spacing:-.3px; }
+
+/* ── About card ── */
+.about {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:18px 20px; margin-bottom:18px;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.about h2 { font-size:15px; margin-bottom:8px; }
+.about p { font-size:13px; color:var(--text-muted); line-height:1.7; }
+.about .features { list-style:none; margin:10px 0 0; display:grid; gap:7px; }
+.about .features li { font-size:13px; color:var(--text); }
+.about .features b { color:var(--accent); }
+
+/* ── Footer ── */
+footer .footer-pitch { font-weight:600; color:var(--text); margin-bottom:6px; }
+footer .footer-note { font-size:11px; opacity:.7; margin-top:6px; }
 </style>
     </head>
     <body>
@@ -275,13 +297,14 @@ footer a { color:var(--accent); }
 
     <header>
       <h1>📡 RSSForge</h1>
-      <p class="subtitle">订阅源目录 &middot; 2026-07-17 19:38</p>
+      <p class="tagline">聚合全网线报 · 羊毛 · 优惠 RSS，自动更新，多镜像一键订阅</p>
+      <p class="subtitle">订阅源目录 &middot; 2026-07-17 19:41</p>
       <div class="stats">
         <div class="stat"><div class="stat-value">26</div><div class="stat-label">订阅源</div></div>
-        <div class="stat"><div class="stat-value">26</div><div class="stat-label">活跃源</div></div>
+        <div class="stat"><div class="stat-value">5,418</div><div class="stat-label">收录条目</div></div>
         <div class="stat"><div class="stat-value">17</div><div class="stat-label">线报羊毛</div></div>
         <div class="stat"><div class="stat-value">9</div><div class="stat-label">优惠资讯</div></div>
-        <div class="stat"><div class="stat-value">0</div><div class="stat-label">软件工具</div></div>
+        <div class="stat"><div class="stat-value last">07-17 19:41</div><div class="stat-label">最近更新</div></div>
       </div>
       <div class="opml-bar">
         <a class="opml-btn" href="https://gitfox-enter.github.io/RSSForge/opml.xml">📥 官方 OPML</a>
@@ -293,10 +316,9 @@ footer a { color:var(--accent); }
     <div class="container">
       <!-- Category tabs -->
       <div class="cat-tabs" id="catTabs">
-        <span class="cat-tab active" data-cat="all" onclick="filterCat('all')">全部</span>
-        <span class="cat-tab" data-cat="high"   onclick="filterCat('high')">🔥 线报羊毛 (17)</span>
+        <span class="cat-tab active" data-cat="all" onclick="filterCat('all')">全部 (26)</span>
+        <span class="cat-tab" data-cat="high" onclick="filterCat('high')">🔥 线报羊毛 (17)</span>
         <span class="cat-tab" data-cat="medium" onclick="filterCat('medium')">📰 优惠资讯 (9)</span>
-        <span class="cat-tab" data-cat="low"    onclick="filterCat('low')">📦 软件工具 (0)</span>
       </div>
 
       <!-- Search -->
@@ -304,6 +326,17 @@ footer a { color:var(--accent); }
         <label>🔍</label>
         <input type="text" id="searchInput" placeholder="搜索站点名称或网址…" oninput="applyFilters()">
         <span class="count-hint" id="countHint">共 26 个订阅源</span>
+      </div>
+
+      <!-- About -->
+      <div class="about">
+        <h2>关于 RSSForge</h2>
+        <p>自动化 RSS 聚合项目：定时抓取多个线报 / 羊毛 / 优惠站点，统一生成标准 RSS 与 OPML，并部署到 GitHub Pages。一份 OPML 即可把全部源导入任意阅读器，无需逐个订阅。</p>
+        <ul class="features">
+          <li>🔀 <b>多镜像</b>：官方 / ghfast / jsDelivr 三端同步，国内也可稳定访问</li>
+          <li>⏱ <b>自动更新</b>：按站点频率定时爬取，内容持续刷新</li>
+          <li>🔍 <b>客户端筛选</b>：支持名称 / 网址搜索与分类切换</li>
+        </ul>
       </div>
 
       <!-- Table -->
@@ -353,10 +386,13 @@ footer a { color:var(--accent); }
     </div>
 
     <footer>
-      <p>RSSForge &middot; 共收录 <strong>26</strong> 个订阅源 &middot;
-         <a href="https://github.com/gitfox-enter/RSSForge" target="_blank">⭐ 在 GitHub 上查看</a> &middot;
-         <a href="https://github.com/gitfox-enter/RSSForge/issues/new/choose" target="_blank">提交新的订阅源</a>
+      <p class="footer-pitch">RSSForge &middot; 自动化 RSS 聚合与多镜像分发</p>
+      <p>
+         <a href="https://github.com/gitfox-enter/RSSForge" target="_blank">⭐ GitHub</a> &middot;
+         <a href="https://gitfox-enter.github.io/RSSForge/opml.xml" target="_blank">📥 下载 OPML</a> &middot;
+         <a href="https://github.com/gitfox-enter/RSSForge/issues/new/choose" target="_blank">提交新源</a>
       </p>
+      <p class="footer-note">订阅方式：复制上方任一 OPML 链接，在阅读器中「导入 / 添加订阅源」即可。</p>
     </footer>
 
     <div id="blacklist-section">

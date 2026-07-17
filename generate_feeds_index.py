@@ -419,6 +419,28 @@ def css():
       background: var(--border);
       color: var(--text-muted);
     }
+
+    /* ── Tagline ── */
+    header .tagline { font-size:14px; opacity:.92; margin-bottom:6px; font-weight:500; }
+
+    /* ── Stat: last update ── */
+    .stat-value.last { font-size:19px; letter-spacing:-.3px; }
+
+    /* ── About card ── */
+    .about {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:12px; padding:18px 20px; margin-bottom:18px;
+      box-shadow:0 1px 4px rgba(0,0,0,.06);
+    }
+    .about h2 { font-size:15px; margin-bottom:8px; }
+    .about p { font-size:13px; color:var(--text-muted); line-height:1.7; }
+    .about .features { list-style:none; margin:10px 0 0; display:grid; gap:7px; }
+    .about .features li { font-size:13px; color:var(--text); }
+    .about .features b { color:var(--accent); }
+
+    /* ── Footer ── */
+    footer .footer-pitch { font-weight:600; color:var(--text); margin-bottom:6px; }
+    footer .footer-note { font-size:11px; opacity:.7; margin-top:6px; }
     ''')
 
 # ─────────────────────────────────────────────
@@ -488,7 +510,7 @@ def build_row(i, s):
 # ─────────────────────────────────────────────
 # 6. HTML 生成
 # ─────────────────────────────────────────────
-def gen_html(meta, blacklist_json='[]'):
+def gen_html(meta, blacklist_json='[]', last_crawl=""):
     from datetime import datetime, timezone, timedelta
     tz  = timezone(timedelta(hours=8))
     now = datetime.now(tz).strftime("%Y-%m-%d %H:%M")
@@ -497,6 +519,20 @@ def gen_html(meta, blacklist_json='[]'):
     high_cnt    = sum(1 for s in meta if s.get("tier") == "high")
     medium_cnt  = sum(1 for s in meta if s.get("tier") == "medium")
     low_cnt     = sum(1 for s in meta if s.get("tier") == "low")
+    # 收录条目总数 + 真实最近爬取时间（取 crawl_status.json 的 last_run）
+    total_items = sum(int(s.get("count", 0) or 0) for s in meta)
+    lc = last_crawl or now
+    last_disp = lc[5:16] if len(lc) >= 16 else lc
+    # 动态分类标签：跳过数量为 0 的分类（如已清空的「软件工具」）
+    def _tab(cat, label, cnt):
+        if not cnt:
+            return ""
+        return (f'<span class="cat-tab" data-cat="{cat}" '
+                f'onclick="filterCat(\'{cat}\')">{label} ({cnt})</span>')
+    cat_tabs = [_tab("high", "🔥 线报羊毛", high_cnt),
+                _tab("medium", "📰 优惠资讯", medium_cnt),
+                _tab("low", "📦 软件工具", low_cnt)]
+    cat_tabs_html = "\n        ".join(t for t in cat_tabs if t)
 
     rows_html = "\n".join(build_row(i, s) for i, s in enumerate(meta, 1))
     bl_json = blacklist_json if blacklist_json else '[]'
@@ -520,13 +556,14 @@ def gen_html(meta, blacklist_json='[]'):
 
     <header>
       <h1>📡 RSSForge</h1>
+      <p class="tagline">聚合全网线报 · 羊毛 · 优惠 RSS，自动更新，多镜像一键订阅</p>
       <p class="subtitle">订阅源目录 &middot; {now}</p>
       <div class="stats">
         <div class="stat"><div class="stat-value">{n}</div><div class="stat-label">订阅源</div></div>
-        <div class="stat"><div class="stat-value">{has_items}</div><div class="stat-label">活跃源</div></div>
+        <div class="stat"><div class="stat-value">{total_items:,}</div><div class="stat-label">收录条目</div></div>
         <div class="stat"><div class="stat-value">{high_cnt}</div><div class="stat-label">线报羊毛</div></div>
         <div class="stat"><div class="stat-value">{medium_cnt}</div><div class="stat-label">优惠资讯</div></div>
-        <div class="stat"><div class="stat-value">{low_cnt}</div><div class="stat-label">软件工具</div></div>
+        <div class="stat"><div class="stat-value last">{last_disp}</div><div class="stat-label">最近更新</div></div>
       </div>
       <div class="opml-bar">
         <a class="opml-btn" href="{BASE}/opml.xml">📥 官方 OPML</a>
@@ -538,10 +575,8 @@ def gen_html(meta, blacklist_json='[]'):
     <div class="container">
       <!-- Category tabs -->
       <div class="cat-tabs" id="catTabs">
-        <span class="cat-tab active" data-cat="all" onclick="filterCat('all')">全部</span>
-        <span class="cat-tab" data-cat="high"   onclick="filterCat('high')">🔥 线报羊毛 ({high_cnt})</span>
-        <span class="cat-tab" data-cat="medium" onclick="filterCat('medium')">📰 优惠资讯 ({medium_cnt})</span>
-        <span class="cat-tab" data-cat="low"    onclick="filterCat('low')">📦 软件工具 ({low_cnt})</span>
+        <span class="cat-tab active" data-cat="all" onclick="filterCat('all')">全部 ({n})</span>
+        {cat_tabs_html}
       </div>
 
       <!-- Search -->
@@ -549,6 +584,17 @@ def gen_html(meta, blacklist_json='[]'):
         <label>🔍</label>
         <input type="text" id="searchInput" placeholder="搜索站点名称或网址…" oninput="applyFilters()">
         <span class="count-hint" id="countHint">共 {n} 个订阅源</span>
+      </div>
+
+      <!-- About -->
+      <div class="about">
+        <h2>关于 RSSForge</h2>
+        <p>自动化 RSS 聚合项目：定时抓取多个线报 / 羊毛 / 优惠站点，统一生成标准 RSS 与 OPML，并部署到 GitHub Pages。一份 OPML 即可把全部源导入任意阅读器，无需逐个订阅。</p>
+        <ul class="features">
+          <li>🔀 <b>多镜像</b>：官方 / ghfast / jsDelivr 三端同步，国内也可稳定访问</li>
+          <li>⏱ <b>自动更新</b>：按站点频率定时爬取，内容持续刷新</li>
+          <li>🔍 <b>客户端筛选</b>：支持名称 / 网址搜索与分类切换</li>
+        </ul>
       </div>
 
       <!-- Table -->
@@ -573,10 +619,13 @@ def gen_html(meta, blacklist_json='[]'):
     </div>
 
     <footer>
-      <p>RSSForge &middot; 共收录 <strong>{n}</strong> 个订阅源 &middot;
-         <a href="https://github.com/gitfox-enter/RSSForge" target="_blank">⭐ 在 GitHub 上查看</a> &middot;
-         <a href="https://github.com/gitfox-enter/RSSForge/issues/new/choose" target="_blank">提交新的订阅源</a>
+      <p class="footer-pitch">RSSForge &middot; 自动化 RSS 聚合与多镜像分发</p>
+      <p>
+         <a href="https://github.com/gitfox-enter/RSSForge" target="_blank">⭐ GitHub</a> &middot;
+         <a href="{BASE}/opml.xml" target="_blank">📥 下载 OPML</a> &middot;
+         <a href="https://github.com/gitfox-enter/RSSForge/issues/new/choose" target="_blank">提交新源</a>
       </p>
+      <p class="footer-note">订阅方式：复制上方任一 OPML 链接，在阅读器中「导入 / 添加订阅源」即可。</p>
     </footer>
 
     <div id="blacklist-section">
@@ -683,10 +732,21 @@ def gen_html(meta, blacklist_json='[]'):
 # ─────────────────────────────────────────────
 # 7. 入口
 # ─────────────────────────────────────────────
+def load_last_crawl():
+    """读取 crawl_status.json 的 last_run.check_time（真实最近爬取时间）。"""
+    try:
+        with open("crawl_status.json", encoding="utf-8") as f:
+            d = json.load(f)
+        return d.get("last_run", {}).get("check_time") or ""
+    except Exception:
+        return ""
+
+
 def main():
     meta = load_meta()
     blacklist_json = load_blacklist()
-    html = gen_html(meta, blacklist_json)
+    last_crawl = load_last_crawl()
+    html = gen_html(meta, blacklist_json, last_crawl=last_crawl)
     os.makedirs("docs", exist_ok=True)
     out = "docs/index.html"
     with open(out, "w", encoding="utf-8") as f:
