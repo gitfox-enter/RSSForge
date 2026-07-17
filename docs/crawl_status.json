@@ -12,7 +12,6 @@
         "www.zhuanyes.com": 0.771,
         "www.yangmaodang.club": 3.224,
         "www.iqnew.com": 1.242,
-        "www.appmiu.com": 0.797,
         "www.yxzhi.com": 2.906,
         "www.zuankeba.cn": 1.977,
         "www.wycad.com": 3.073,
@@ -25,7 +24,6 @@
         "www.bacaoo.com": 2.624,
         "blog.xianbao.art": 1.975,
         "www.manmanbuy.com": 1.425,
-        "www.ithome.com": 1.016,
         "cu.manmanbuy.com": 7.817,
         "b1.ymxianbao.cn": 2.448,
         "m.hybase.com": 1.798
@@ -124,12 +122,6 @@
       "error": "内容已更新"
     },
     {
-      "url": "https://www.fy6b.com/",
-      "name": "枫音应用",
-      "status": "ok",
-      "error": "首次监控"
-    },
-    {
       "url": "https://www.007ymd.com/",
       "name": "007羊毛党",
       "status": "skip",
@@ -190,12 +182,6 @@
       "error": "内容已更新"
     },
     {
-      "url": "https://www.appmiu.com/",
-      "name": "APP喵",
-      "status": "ok",
-      "error": "首次监控"
-    },
-    {
       "url": "https://blog.xianbao.art/",
       "name": "羊毛群",
       "status": "ok",
@@ -222,12 +208,6 @@
     {
       "url": "https://m.hybase.com/",
       "name": "好赚网",
-      "status": "ok",
-      "error": "内容已更新"
-    },
-    {
-      "url": "https://www.ithome.com/zt/xijiayi",
-      "name": "IT之家",
       "status": "ok",
       "error": "内容已更新"
     },

@@ -150,11 +150,6 @@ sites:
   interval: 120
   js_render: true
 - url: https://www.51kanong.com/
-- url: https://www.ithome.com/zt/xijiayi
-  max_pages: 5
-  name: IT之家
-  tier: medium
-  interval: 120
 - url: https://www.yxzhi.com/
   max_pages: 5
   name: 鸭先知
@@ -162,20 +157,6 @@ sites:
   interval: 360
   fast_check: true
   rss_feed: https://www.yxzhi.com/feed
-- url: https://www.fy6b.com/
-  max_pages: 5
-  name: 枫音应用
-  tier: low
-  interval: 360
-  fast_check: true
-  js_render: true
-- url: https://www.appmiu.com/
-  max_pages: 5
-  name: APP喵
-  tier: low
-  interval: 360
-  fast_check: true
-  rss_feed: https://www.appmiu.com/feed
 - url: https://blog.xianbao.art/
   max_pages: 5
   name: 羊毛群
