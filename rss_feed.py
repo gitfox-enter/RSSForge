@@ -172,7 +172,7 @@ def _build_atom_feed(
     from html import escape as html_escape
 
     # 限制每个 feed 最多保留最近 N 条，防止无限增长
-    MAX_FEED_ITEMS = 1000
+    MAX_FEED_ITEMS = 2000
     items = items[:MAX_FEED_ITEMS]
 
     NS = 'http://www.w3.org/2005/Atom'
@@ -344,7 +344,7 @@ def _build_rss2_feed(
     from html import escape as html_escape
     from email.utils import formatdate
 
-    MAX_FEED_ITEMS = 1000
+    MAX_FEED_ITEMS = 2000
     items = items[:MAX_FEED_ITEMS]
 
     # RSS 2.0 根元素
@@ -523,13 +523,12 @@ def generate_all_feeds() -> Dict[str, int]:
         # 获取该站点的数据
         site_items = by_source.get(site_name, [])
         
-        # 跳过空 feed：不生成无数据的 feed 文件 (fix #1)
+        # 跳过空 feed：无数据的源不重新生成，但【保留】已有的 feed 文件
+        # （不再删除，避免某个源在爬虫窗口内未被抓取时其 feed 被误清空）
         if not site_items:
             stats['feeds_empty_skipped'] += 1
-            # 如果之前存在旧的空 feed 文件，删除它
             if os.path.exists(filename):
-                os.remove(filename)
-                print(f"  ✗ {site_name}: 移除旧的空 feed")
+                print(f"  ○ {site_name}: 暂无新数据，保留现有 feed")
             else:
                 print(f"  ○ {site_name}: 暂无数据，跳过")
             continue
@@ -561,21 +560,20 @@ def generate_all_feeds() -> Dict[str, int]:
         else:
             stats['feeds_skipped'] += 1
 
-    # ---- Clean up stale feed files ----
-    # Only remove .xml files that are NOT in the current site list at all
-    # (e.g. removed from sites.yaml). Keep files for sites with no data.
+    # ---- 保留历史 feed 文件（不再删除）----
+    # 旧逻辑会删除所有不在当前 SOURCE_NAME_MAP 里的 .xml 文件，
+    # 但部分历史 feed（如 12345-xian-bao、ReadHub-re-men、yang-mao-* 等）
+    # 当前无数据却仍被用户订阅，直接删除会丢失。改为只统计、不删除，
+    # 由「无数据保留现有 feed」逻辑兜底。
     if os.path.isdir(FEEDS_DIR):
         all_expected = set()
         for site_url_key, name in url_to_name.items():
             all_expected.add(_safe_filename(name) + '.xml')
-        # Also keep files for sites in SOURCE_NAME_MAP that have no items
         for url, name in SOURCE_NAME_MAP.items():
             all_expected.add(_safe_filename(name) + '.xml')
         for f in os.listdir(FEEDS_DIR):
             if f.endswith('.xml') and f not in all_expected:
-                old_path = os.path.join(FEEDS_DIR, f)
-                os.remove(old_path)
-                print(f"  Cleaned stale feed: {f}")
+                print(f"  ○ 历史 feed 保留（当前无数据）: {f}")
 
     # 删除 public/icons/ 中含中文的旧图标文件
     if os.path.isdir(ICONS_DIR):

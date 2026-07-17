@@ -272,7 +272,7 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
     """
     将本轮新抓取的线报合并到全量数据库中（按 URL 去重 + 模糊标题去重）
     新条目插入到列表头部（最新的在前面）
-    保留最近 7 天的数据（按 time 字段，无数量上限）
+    保留最近 60 天的数据（按 time 字段，无数量上限）
     
     多源聚合：同一模糊标题的线报只保留最早出现的版本，
     但在 item 中记录所有来源（sources 列表），便于前端展示"多源"标识。
@@ -332,13 +332,14 @@ def merge_items_into_db(new_item_list: List[Dict[str, str]], check_time: str) ->
     if fresh_items:
         db['items'] = fresh_items + db['items']
 
-    # 保留最近 7 天的数据
+    # 保留最近 60 天的数据（原 7 天过小，导致每个源的 feed 只能累积几天的内容、
+    # 单源条目数长期停留在「几十个」，无法喂满 1000 上限）
     # 清理规则（满足任一即保留）：
-    #   1. 条目的 time 字段（发布时间）在 7 天内
-    #   2. 条目的 first_seen_at（首次入库时间）在 3 天内
-    #      → 目的是保护首次添加站点时的历史内容不受 7 天窗口影响
-    cutoff_time = (get_beijing_time() - timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
-    cutoff_first_seen = (get_beijing_time() - timedelta(days=3)).strftime("%Y-%m-%d %H:%M:%S")
+    #   1. 条目的 time 字段（发布时间）在 60 天内
+    #   2. 条目的 first_seen_at（首次入库时间）在 30 天内
+    #      → 目的是保护首次添加站点时的历史内容不受窗口影响
+    cutoff_time = (get_beijing_time() - timedelta(days=60)).strftime("%Y-%m-%d %H:%M:%S")
+    cutoff_first_seen = (get_beijing_time() - timedelta(days=30)).strftime("%Y-%m-%d %H:%M:%S")
     original_count = len(db['items'])
     db['items'] = [
         item for item in db['items']
