@@ -2,87 +2,77 @@
 """
 Generate multi-mirror OPML files for RSSForge.
 
-Read feeds_meta.json and generate 3 sets of URLs per feed:
-  1. Official (github.io)
-  2. ghfast.top mirror
-  3. jsDelivr CDN mirror
+复用 opml_generator 的 feed 枚举（docs/feeds/*.xml + feeds_meta.json），
+使镜像 OPML 与主 opml.xml 列出【同一份完整 feed 清单】（含当前无数据、
+但被保留的历史 feed），而不是只列 feeds_meta.json 里的 10 个数据源。
 
-Output 3 OPML files to docs/ directory.
-Usage: python generate_opml_mirrors.py
+输出 4 个 OPML 文件到 docs/：
+  - docs/opml.official.xml  (github.io 官方)
+  - docs/opml.ghfast.xml    (ghfast.top 镜像)
+  - docs/opml.jsdelivr.xml  (jsDelivr CDN 镜像)
+  - docs/opml.xml           (主文件，= official 版)
 """
-
-import json
-import re
-import xml.etree.ElementTree as ET
 import os
-
+import xml.etree.ElementTree as ET
+from opml_generator import _load_feeds, _load_project_feed
 
 BASE = "https://gitfox-enter.github.io/RSSForge"
-RAW  = "https://raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs"
 
 MIRRORS = {
     "official": (
         "RSSForge Feeds",
         f"{BASE}/feeds/{{slug}}.xml",
-        f"{BASE}/opml.xml",
     ),
     "ghfast": (
         "RSSForge Feeds (ghfast)",
         "https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/feeds/{slug}.xml",
-        "https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.xml",
     ),
     "jsdelivr": (
         "RSSForge Feeds (jsDelivr)",
         "https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/feeds/{slug}.xml",
-        "https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.xml",
     ),
 }
 
 
-def slug_from_url(feed_url: str) -> str:
-    m = re.search(r"/feeds/([^/]+)\.xml", feed_url)
-    return m.group(1) if m else ""
-
-
-def build_opml(title: str, feed_tpl: str, meta: dict) -> ET.Element:
-    opml = ET.Element("opml", version="2.0")
-    head = ET.SubElement(opml, "head")
+def build_opml(title: str, feed_tpl: str, feeds: list) -> ET.Element:
+    root = ET.Element("opml", version="2.0")
+    head = ET.SubElement(root, "head")
     ET.SubElement(head, "title").text = title
     ET.SubElement(head, "ownerName").text = "RSSForge"
-    body = ET.SubElement(opml, "body")
-
-    for name, info in meta.items():
-        slug = slug_from_url(info["feed_url"])
-        if not slug:
-            continue
+    body = ET.SubElement(root, "body")
+    for feed in feeds:
+        slug = feed["slug"]
         o = ET.SubElement(body, "outline")
         o.set("type", "rss")
-        o.set("text", name)
-        o.set("title", name)
+        o.set("text", feed["name"])
+        o.set("title", feed["name"])
         o.set("xmlUrl", feed_tpl.format(slug=slug))
-        o.set("htmlUrl", info.get("site_url", ""))
-        desc = info.get("description", "")
-        if desc:
-            o.set("description", desc)
-    return opml
+        if feed.get("html_url"):
+            o.set("htmlUrl", feed["html_url"])
+        if feed.get("icon"):
+            o.set("iconUrl", feed["icon"])
+    return root
 
 
 def main():
-    with open("feeds_meta.json", "r", encoding="utf-8") as f:
-        meta = json.load(f)
+    # 复用主生成器的枚举逻辑，保证清单与 opml.xml 完全一致
+    feeds = _load_feeds()
+    project = _load_project_feed()
+    if project:
+        feeds.insert(0, project)
 
     os.makedirs("docs", exist_ok=True)
 
-    for key, (title, feed_tpl, _) in MIRRORS.items():
-        root = build_opml(title, feed_tpl, meta)
+    for key, (title, feed_tpl) in MIRRORS.items():
+        root = build_opml(title, feed_tpl, feeds)
         path = f"docs/opml.{key}.xml"
         ET.ElementTree(root).write(path, encoding="utf-8", xml_declaration=True)
-        print(f"  ✓ {path}  ({len(meta)} feeds)")
+        print(f"  ✓ {path}  ({len(feeds)} feeds)")
 
-    # Main opml.xml = official version
-    root = build_opml("RSSForge Feeds", f"{BASE}/feeds/{{slug}}.xml", meta)
+    # 主 opml.xml = official 版（与 opml_generator.py 输出一致）
+    root = build_opml("RSSForge Feeds", f"{BASE}/feeds/{{slug}}.xml", feeds)
     ET.ElementTree(root).write("docs/opml.xml", encoding="utf-8", xml_declaration=True)
-    print(f"  ✓ docs/opml.xml (main file)")
+    print(f"  ✓ docs/opml.xml (main file, {len(feeds)} feeds)")
 
 
 if __name__ == "__main__":
