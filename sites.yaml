@@ -83,11 +83,6 @@ sites:
   name: 天天赚
   tier: high
   interval: 30
-- url: https://www.wycad.com/
-  max_pages: 3
-  name: 我不找
-  tier: medium
-  interval: 60
 - url: https://www.manmanbuy.com/
   max_pages: 5
   name: 慢慢买
