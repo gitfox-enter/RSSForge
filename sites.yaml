@@ -105,11 +105,6 @@ sites:
   name: 拔草哦
   tier: medium
   interval: 60
-- url: https://www.yxssp.com/
-  max_pages: 5
-  name: 优惠线报
-  tier: medium
-  interval: 60
 - url: https://www.douban.com/group/711811/
   max_pages: 10
   name: 开心赚
