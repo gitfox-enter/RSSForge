@@ -5,7 +5,7 @@
     <link>https://cjx8.com/</link>
     <description>超级线报 的 RSS 订阅源（由 RSSForge 生成）</description>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 18 Jul 2026 18:58:53 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 18 Jul 2026 19:29:52 +0800</lastBuildDate>
     <generator>RSSForge</generator>
     <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
     <ttl>20</ttl>
@@ -17,260 +17,20 @@
       <height>32</height>
     </image>
     <item>
-      <title>红包活动</title>
-      <link>https://cjx8.com/huodong?cat=index</link>
-      <guid isPermaLink="false">urn:md5:7f3c4e105c0a99cc@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">红包活动&lt;br/&gt;&lt;a href="https://cjx8.com/huodong?cat=index"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>京东活动</title>
-      <link>https://cjx8.com/huodong?cat=jd</link>
-      <guid isPermaLink="false">urn:md5:18e91bbe8bf7d6f5@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">京东活动&lt;br/&gt;&lt;a href="https://cjx8.com/huodong?cat=jd"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>淘宝活动</title>
-      <link>https://cjx8.com/huodong?cat=taobao</link>
-      <guid isPermaLink="false">urn:md5:4b250a1cc6bc4ccd@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">淘宝活动&lt;br/&gt;&lt;a href="https://cjx8.com/huodong?cat=taobao"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>关于本站</title>
-      <link>https://cjx8.com/about?cat=about</link>
-      <guid isPermaLink="false">urn:md5:13e5a9445937f342@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">关于本站&lt;br/&gt;&lt;a href="https://cjx8.com/about?cat=about"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>线报Q群</title>
-      <link>https://cjx8.com/about?cat=group</link>
-      <guid isPermaLink="false">urn:md5:8ea63e1ad54784f9@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">线报Q群&lt;br/&gt;&lt;a href="https://cjx8.com/about?cat=group"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>更新记录</title>
-      <link>https://cjx8.com/about?cat=changelog</link>
-      <guid isPermaLink="false">urn:md5:c47cf10df6a08a4f@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">更新记录&lt;br/&gt;&lt;a href="https://cjx8.com/about?cat=changelog"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>免责声明</title>
-      <link>https://cjx8.com/about?cat=disclaimer</link>
-      <guid isPermaLink="false">urn:md5:9ae5a3a25d1b17df@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">免责声明&lt;br/&gt;&lt;a href="https://cjx8.com/about?cat=disclaimer"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>联系我们</title>
-      <link>https://cjx8.com/about?cat=concat</link>
-      <guid isPermaLink="false">urn:md5:a845682b4fe870ee@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">联系我们&lt;br/&gt;&lt;a href="https://cjx8.com/about?cat=concat"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>推送配置</title>
-      <link>https://cjx8.com/setting?cat=notify</link>
-      <guid isPermaLink="false">urn:md5:bb6396e7fd4943fb@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">推送配置&lt;br/&gt;&lt;a href="https://cjx8.com/setting?cat=notify"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>推送文档</title>
-      <link>https://cjx8.com/page?key=notify-index</link>
-      <guid isPermaLink="false">urn:md5:6810ba613c7c7fd3@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">推送文档&lt;br/&gt;&lt;a href="https://cjx8.com/page?key=notify-index"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>钉钉推送</title>
-      <link>https://cjx8.com/page?key=notify-dingtalk</link>
-      <guid isPermaLink="false">urn:md5:9b617d024104aa37@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">钉钉推送&lt;br/&gt;&lt;a href="https://cjx8.com/page?key=notify-dingtalk"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>飞书推送</title>
-      <link>https://cjx8.com/page?key=notify-feishu</link>
-      <guid isPermaLink="false">urn:md5:ddff073d9ac3bc96@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">飞书推送&lt;br/&gt;&lt;a href="https://cjx8.com/page?key=notify-feishu"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>留言反馈</title>
-      <link>https://cjx8.com/feedback</link>
-      <guid isPermaLink="false">urn:md5:e2954c47e5e49e41@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">留言反馈&lt;br/&gt;&lt;a href="https://cjx8.com/feedback"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>友情链接</title>
-      <link>https://cjx8.com/friend</link>
-      <guid isPermaLink="false">urn:md5:00ebe63ed2f9e04e@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">友情链接&lt;br/&gt;&lt;a href="https://cjx8.com/friend"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>全部线报</title>
-      <link>https://cjx8.com/?cat=0</link>
-      <guid isPermaLink="false">urn:md5:2a87eb2df8281cf5@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">全部线报&lt;br/&gt;&lt;a href="https://cjx8.com/?cat=0"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>豆瓣买组</title>
-      <link>https://cjx8.com/?cat=9</link>
-      <guid isPermaLink="false">urn:md5:927cd0a0034c6147@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">豆瓣买组&lt;br/&gt;&lt;a href="https://cjx8.com/?cat=9"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>豆瓣拼组</title>
-      <link>https://cjx8.com/?cat=3</link>
-      <guid isPermaLink="false">urn:md5:1358bde13adb0e2b@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">豆瓣拼组&lt;br/&gt;&lt;a href="https://cjx8.com/?cat=3"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>佩奇线报</title>
-      <link>https://cjx8.com/?cat=4</link>
-      <guid isPermaLink="false">urn:md5:1826cc5abcedcccb@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">佩奇线报&lt;br/&gt;&lt;a href="https://cjx8.com/?cat=4"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>小屁屁找</title>
-      <link>https://cjx8.com/?cat=5</link>
-      <guid isPermaLink="false">urn:md5:6db0ccfd41b56e51@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">小屁屁找&lt;br/&gt;&lt;a href="https://cjx8.com/?cat=5"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>妖娆本娆</title>
-      <link>https://cjx8.com/?cat=17</link>
-      <guid isPermaLink="false">urn:md5:755057eb82dbf402@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">妖娆本娆&lt;br/&gt;&lt;a href="https://cjx8.com/?cat=17"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>买canmake眼线胶笔28一支，最低到手15元2分钟前0</title>
-      <link>https://cjx8.com/post/1857848</link>
-      <guid isPermaLink="false">urn:md5:0a2c7de40e77fa7a@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">买canmake眼线胶笔28一支，最低到手15元2分钟前0&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857848"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>好泸州老窖六年窖52度6瓶297.5元+迪卡侬登山包2分钟前0淘宝</title>
-      <link>https://cjx8.com/post/1857847</link>
-      <guid isPermaLink="false">urn:md5:1a34afce5d97d756@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">好泸州老窖六年窖52度6瓶297.5元+迪卡侬登山包2分钟前0淘宝&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857847"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>光洽洽瓜子仁组合20袋15.9+花生组合35袋19.92分钟前0京东</title>
-      <link>https://cjx8.com/post/1857846</link>
-      <guid isPermaLink="false">urn:md5:b2f267fffe52a130@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">光洽洽瓜子仁组合20袋15.9+花生组合35袋19.92分钟前0京东&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857846"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>丐京东整点抢29-20券，8-23点横幅活动，10:30/11:30/16:30可领5-4券2分钟前0京东</title>
-      <link>https://cjx8.com/post/1857845</link>
-      <guid isPermaLink="false">urn:md5:3acaf70e33a8c431@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">丐京东整点抢29-20券，8-23点横幅活动，10:30/11:30/16:30可领5-4券2分钟前0京东&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857845"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>牙GNC儿童液体钙镁锌维生素D3赖氨酸30条*4拍3件72.39送1件3分钟前4京东</title>
-      <link>https://cjx8.com/post/1857844</link>
-      <guid isPermaLink="false">urn:md5:eeba5a2bbe6cd6bc@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">牙GNC儿童液体钙镁锌维生素D3赖氨酸30条*4拍3件72.39送1件3分钟前4京东&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857844"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>奇本迪垃圾袋60只 抽绳加厚 黑色45*50cm 优惠价2.9元4分钟前7京东</title>
-      <link>https://cjx8.com/post/1857841</link>
-      <guid isPermaLink="false">urn:md5:c4fdd43ee62f14ea@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">奇本迪垃圾袋60只 抽绳加厚 黑色45*50cm 优惠价2.9元4分钟前7京东&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857841"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>好维达湿厕纸60片*6包，拍3件，每件14.52元5分钟前0京东</title>
-      <link>https://cjx8.com/post/1857843</link>
-      <guid isPermaLink="false">urn:md5:98da7890c39b7c5a@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">好维达湿厕纸60片*6包，拍3件，每件14.52元5分钟前0京东&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857843"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>丐11/13/15/17/19点抢500雪王币兑换1万份新品免单 7.18截止5分钟前0</title>
-      <link>https://cjx8.com/post/1857840</link>
-      <guid isPermaLink="false">urn:md5:bd19b005c871a4a1@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">丐11/13/15/17/19点抢500雪王币兑换1万份新品免单 7.18截止5分钟前0&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857840"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>光禾泱泱婴幼儿稻鸭原生米饼16g 原味4.3.9返2卡5分钟前0京东</title>
-      <link>https://cjx8.com/post/1857842</link>
-      <guid isPermaLink="false">urn:md5:7226ba2847e97cac@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">光禾泱泱婴幼儿稻鸭原生米饼16g 原味4.3.9返2卡5分钟前0京东&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857842"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>好禾泱泱婴幼儿稻鸭原生米饼16g 原价4元立减3.98反2卡6分钟前0京东</title>
+      <title>好禾泱泱婴幼儿稻鸭原生米饼16g 原价4元立减3.98反2卡2026-07-18 18:51:160京东丐饿了么慢必赔超时免单，淘宝闪购美食券31-302026-07-18 18:51:050淘宝</title>
       <link>https://cjx8.com/post/1857839</link>
       <guid isPermaLink="false">urn:md5:c5419d34ba3916b3@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
+      <pubDate>Sat, 18 Jul 2026 19:29:33 +0800</pubDate>
       <author>超级线报</author>
-      <description type="html" xml:space="preserve">好禾泱泱婴幼儿稻鸭原生米饼16g 原价4元立减3.98反2卡6分钟前0京东&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857839"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">好禾泱泱婴幼儿稻鸭原生米饼16g 原价4元立减3.98反2卡2026-07-18 18:51:160京东丐饿了么慢必赔超时免单，淘宝闪购美食券31-302026-07-18 18:51:050淘宝&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857839"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>丐饿了么慢必赔超时免单，淘宝闪购美食券31-307分钟前0淘宝</title>
+      <title>丐饿了么慢必赔超时免单，淘宝闪购美食券31-302026-07-18 18:51:050淘宝</title>
       <link>https://cjx8.com/post/1857838</link>
       <guid isPermaLink="false">urn:md5:783162d1cea455bc@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
+      <pubDate>Sat, 18 Jul 2026 19:29:33 +0800</pubDate>
       <author>超级线报</author>
-      <description type="html" xml:space="preserve">丐饿了么慢必赔超时免单，淘宝闪购美食券31-307分钟前0淘宝&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857838"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>好猫超：元气森林无甜原味苏打水330ml*24罐 88vip 17.46元，领3元福袋7分钟前0淘宝</title>
-      <link>https://cjx8.com/post/1857837</link>
-      <guid isPermaLink="false">urn:md5:5602d87c0ab8d524@cjx8.com</guid>
-      <pubDate>Sat, 18 Jul 2026 18:57:45 +0800</pubDate>
-      <author>超级线报</author>
-      <description type="html" xml:space="preserve">好猫超：元气森林无甜原味苏打水330ml*24罐 88vip 17.46元，领3元福袋7分钟前0淘宝&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857837"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">丐饿了么慢必赔超时免单，淘宝闪购美食券31-302026-07-18 18:51:050淘宝&lt;br/&gt;&lt;a href="https://cjx8.com/post/1857838"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
       <title>夕三得利无糖乌龙茶500ml*15瓶，凑45-49元2026-07-18 17:38:372淘宝白拼多多一默冰淇淋PRO夏凉被150*200cm 2色可选 80元2026-07-18 17:37:111拼多多</title>
