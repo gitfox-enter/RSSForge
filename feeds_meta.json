@@ -35,6 +35,15 @@
     "site_url": "https://v1.xianbao.net/",
     "items_hash": "03ed840cad58af9cadf604891380254a"
   },
+  "羊毛党": {
+    "interval": 30,
+    "freq_label": "每30分钟",
+    "count": 45,
+    "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/yang-mao-dang.xml",
+    "icon": "https://www.yangmaodang.club/favicon.ico",
+    "site_url": "https://www.yangmaodang.club/articles/",
+    "items_hash": "b89027326654984e48c0111853e2dc8b"
+  },
   "超级线报": {
     "interval": 20,
     "freq_label": "每20分钟",

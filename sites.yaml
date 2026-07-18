@@ -47,11 +47,13 @@ sites:
   name: 羊毛王
   tier: high
   interval: 30
-- url: https://www.yangmaodang.club/
+- url: https://www.yangmaodang.club/articles/
   max_pages: 3
   name: 羊毛党
   tier: high
   interval: 30
+  # 来源页即「最新羊毛」分类页（aria-current="page"），只列羊毛 deal，
+  # 不再用根域名（根页混入了 /things/ 产品评测，且只抽得 6 条）
 - url: https://b1.ymxianbao.cn/
   max_pages: 3
   name: 羊毛线报
