@@ -977,6 +977,70 @@ def parse_iehou_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]
 
 
 # ---------------------------------------------------------------------------
+# 3b. cjx8.com - 超级线报 (通用提取 + 排除 /about 导航页)
+# ---------------------------------------------------------------------------
+def parse_cjx8_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """超级线报 (cjx8.com) - 通用提取 + 过滤 /about 导航页。
+
+    通用解析会把「关于本站/免责声明/联系我们」等 /about?cat=* 导航页
+    当成条目；本解析器在通用结果之上只排除 /about 导航页，保留真实文章。
+    """
+    from crawler.parsers.rss_parsers import extract_article_items
+    items = extract_article_items(soup, base_url)
+    out: List[Dict[str, str]] = []
+    seen: Set[str] = set()
+    for it in items:
+        url = it.get('url', '')
+        # 排除站点导航页（/about?cat=about|group|changelog|disclaimer|contact ...）
+        if re.search(r'/about(\?|$)', url):
+            continue
+        if url in seen:
+            continue
+        seen.add(url)
+        out.append(it)
+    return out[:30]
+
+
+# ---------------------------------------------------------------------------
+# 3c. zuankeba.cn - 赚客吧 (通用提取 + 排除广告/外链/排行榜页)
+# ---------------------------------------------------------------------------
+def parse_zuankeba_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """赚客吧 (zuankeba.cn) - 通用提取 + 过滤广告/外链/排行榜页。
+
+    通用解析会把「广告流量卡平台/广告VIP交流群」等广告外链、
+    以及「今日好评排行」/index.php?sort= 排行榜页当成条目；
+    本解析器在通用结果之上排除广告标题、外站链接与排行页，保留真实文章。
+    """
+    from crawler.parsers.rss_parsers import extract_article_items
+    from urllib.parse import urlparse as _urlparse
+    items = extract_article_items(soup, base_url)
+    base_host = (_urlparse(base_url).hostname or '').lower()
+    out: List[Dict[str, str]] = []
+    seen: Set[str] = set()
+    for it in items:
+        text = it.get('text', '')
+        url = it.get('url', '')
+        # 排除广告（标题以「广告」开头）
+        if text.startswith('广告'):
+            continue
+        # 排除外站链接（仅保留本站域名）
+        try:
+            host = (_urlparse(url).hostname or '').lower()
+        except Exception:
+            host = ''
+        if base_host and host and host != base_host:
+            continue
+        # 排除排行榜等列表页
+        if re.search(r'/index\.php\?sort=', url, re.I):
+            continue
+        if url in seen:
+            continue
+        seen.add(url)
+        out.append(it)
+    return out[:30]
+
+
+# ---------------------------------------------------------------------------
 # 4. xianbaomi.com - 线报迷 (Z-Blog)
 # ---------------------------------------------------------------------------
 # HTML structure:

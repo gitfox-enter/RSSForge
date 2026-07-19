@@ -33,6 +33,7 @@ from crawler.parsers.deal_sites import (
     parse_haodanku_items, parse_hybase_items, parse_huodong5_items,
     parse_yangmaodang_items, parse_xianbaomi_items, parse_yangmao_wang_items,
     parse_iehou_items,
+    parse_cjx8_items, parse_zuankeba_items,
     parse_iqnew_items, parse_51kanong_items, parse_ymxianbao_items,
     parse_linejia_items, parse_10000yun_items, parse_yangmao_19970709_items,
     parse_manmanbuy_items, parse_ym2cc_items, parse_xianbao_art_items,
@@ -59,6 +60,7 @@ PARSER_REGISTRY: Dict[str, Tuple[Any, Optional[Any]]] = {
     'xzba.cc':           (parse_xzba_items,          None),
     'free.apprcn.com':   (parse_apprcn_items,        None),
     'kxdao.net':         (parse_discuz_items,         None),
+    'v1.xianbao.net':   (parse_discuz_items,         None),  # 线报网 (Discuz 论坛)
     'yxssp.com':         (parse_yxssp_items,          None),
     'daydayzhuan.com':   (parse_daydayzhuan_items,   None),
     '007ymd.com':        (parse_007ymd_items,         None),
@@ -88,6 +90,8 @@ PARSER_REGISTRY: Dict[str, Tuple[Any, Optional[Any]]] = {
     'yangmao.19970709.xyz': (parse_yangmao_19970709_items, None),
     'xianbao.art':         (parse_xianbao_art_items,    None),
     'blog.xianbao.art':    (parse_xianbao_art_items,    None),
+    'cjx8.com':           (parse_cjx8_items,           None),  # 超级线报
+    'zuankeba.cn':        (parse_zuankeba_items,        None),  # 赚客吧
 }
 
 
