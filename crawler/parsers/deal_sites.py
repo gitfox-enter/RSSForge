@@ -1041,6 +1041,84 @@ def parse_zuankeba_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, s
 
 
 # ---------------------------------------------------------------------------
+# 3d. news.ixbk.net - 线报酷 (通用提取 + 仅留真实文章详情页)
+# ---------------------------------------------------------------------------
+def parse_ixbk_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """线报酷 (news.ixbk.net) - 通用提取 + 过滤分类/板块/外站噪音。
+
+    通用解析会把「葫芦侠三楼 / 豆瓣线报 / 微博超话」等 /category-* 分类页、
+    顶部 /xxx-hot.html 热度页、/forum.php 以及外站引流链接当成条目；
+    本解析器在通用结果之上只保留 /栏目/数字.html 真实文章详情页（好单/微博/
+    赚客吧/小嘀咕/豆瓣拼组 等），剔除一切导航与分类噪音。
+    """
+    from crawler.parsers.rss_parsers import extract_article_items
+    from urllib.parse import urlparse as _urlparse
+    items = extract_article_items(soup, base_url)
+    base_host = (_urlparse(base_url).hostname or '').lower()
+    out: List[Dict[str, str]] = []
+    seen: Set[str] = set()
+    for it in items:
+        url = it.get('url', '') or ''
+        if not url:
+            continue
+        u = _urlparse(url)
+        host = (u.hostname or '').lower()
+        path = (u.path or '').lower()
+        # 仅保留「/栏目/数字.html」真实文章详情页
+        if not re.search(r'^/[A-Za-z0-9_-]+/\d+\.html$', path):
+            continue
+        # 仅保留 ixbk 同族域名（news.ixbk.net / news.ixbk.fun 镜像），
+        # 排除 at8.fun 等外站引流垃圾
+        if base_host and host:
+            if not (host == base_host
+                    or host.endswith('.ixbk.net')
+                    or host.endswith('.ixbk.fun')):
+                continue
+        if url in seen:
+            continue
+        seen.add(url)
+        out.append(it)
+    return out[:50]
+
+
+# ---------------------------------------------------------------------------
+# 3e. zhuanyes.com/xianbao/ - 专业线报 (通用提取 + 仅留 /xianbao/数字.html)
+# ---------------------------------------------------------------------------
+def parse_zhuanyes_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """专业线报 (zhuanyes.com) - 通用提取 + 过滤论坛板块/外站噪音。
+
+    通用解析会把 /forum.php 论坛页、/xianbao/ 列表页、站根导航以及外站
+    Discuz 链接当成条目；本解析器在通用结果之上只保留 /xianbao/数字.html
+    真实线报文章，剔除一切导航与板块噪音。
+    """
+    from crawler.parsers.rss_parsers import extract_article_items
+    from urllib.parse import urlparse as _urlparse
+    items = extract_article_items(soup, base_url)
+    base_host = (_urlparse(base_url).hostname or '').lower()
+    out: List[Dict[str, str]] = []
+    seen: Set[str] = set()
+    for it in items:
+        url = it.get('url', '') or ''
+        if not url:
+            continue
+        u = _urlparse(url)
+        host = (u.hostname or '').lower()
+        path = (u.path or '').lower()
+        # 仅保留 /xianbao/数字.html 真实线报文章
+        if not re.search(r'^/xianbao/\d+\.html$', path):
+            continue
+        # 仅保留 zhuanyes 同族域名，排除外站链接
+        if base_host and host:
+            if not (host == base_host or host.endswith('.zhuanyes.com')):
+                continue
+        if url in seen:
+            continue
+        seen.add(url)
+        out.append(it)
+    return out[:50]
+
+
+# ---------------------------------------------------------------------------
 # 4. xianbaomi.com - 线报迷 (Z-Blog)
 # ---------------------------------------------------------------------------
 # HTML structure:

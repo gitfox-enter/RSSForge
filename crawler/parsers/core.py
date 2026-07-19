@@ -34,6 +34,7 @@ from crawler.parsers.deal_sites import (
     parse_yangmaodang_items, parse_xianbaomi_items, parse_yangmao_wang_items,
     parse_iehou_items,
     parse_cjx8_items, parse_zuankeba_items,
+    parse_ixbk_items, parse_zhuanyes_items,
     parse_iqnew_items, parse_51kanong_items, parse_ymxianbao_items,
     parse_linejia_items, parse_10000yun_items, parse_yangmao_19970709_items,
     parse_manmanbuy_items, parse_ym2cc_items, parse_xianbao_art_items,
@@ -92,6 +93,10 @@ PARSER_REGISTRY: Dict[str, Tuple[Any, Optional[Any]]] = {
     'blog.xianbao.art':    (parse_xianbao_art_items,    None),
     'cjx8.com':           (parse_cjx8_items,           None),  # 超级线报
     'zuankeba.cn':        (parse_zuankeba_items,        None),  # 赚客吧
+    'news.ixbk.net':      (parse_ixbk_items,           None),  # 线报酷
+    'ixbk.net':           (parse_ixbk_items,           None),  # 线报酷 (裸域)
+    'www.zhuanyes.com':   (parse_zhuanyes_items,       None),  # 专业线报
+    'zhuanyes.com':       (parse_zhuanyes_items,       None),  # 专业线报 (裸域)
 }
 
 
