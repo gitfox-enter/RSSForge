@@ -112,6 +112,13 @@ sites:
   tier: high
   interval: 30
   fast_check: true
+- url: https://iehou.com/
+  max_pages: 5
+  name: 网猴线报
+  tier: low
+  interval: 360
+  fast_check: true
+  js_render: true
 - url: https://www.hxm5.com/
   max_pages: 5
   name: 线报屋

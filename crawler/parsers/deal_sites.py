@@ -933,6 +933,50 @@ def parse_yangmaodang_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str
 
 
 # ---------------------------------------------------------------------------
+# 3b. iehou.com - 网猴线报
+# ---------------------------------------------------------------------------
+# HTML structure:
+#   - Article entries: a[href=".../xianbao-数字.htm"] —— 真实羊毛文章，
+#                       标题在 <a> 的 title 属性或可见文本中（均为正确中文 deal 描述）
+#   - Pagination:    a[href=".../index-数字.htm"]（如 index-23072.htm = 第23072页归档页，
+#                       页内无任何 xianbao-* 文章链接，仅含分页链接）
+#   - Navigation:     a[href="iehou.com/"] 站根、/about/、/category/ 等
+# URL patterns:  xianbao-数字.htm（文章） vs index-数字.htm（分页/归档）
+# 通用解析会把 index-23072.htm 这种分页页误当成文章（标题取成页码「...23072」），
+# 并把站根导航（网猴线报→站根、活动线报→站根）当成条目，导致 feed 充满编号噪音。
+# 本解析器只收 xianbao-*.htm 真实文章，排除分页/导航/站根。
+def parse_iehou_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """网猴线报 (iehou.com) - 提取羊毛线报文章条目。
+
+    只收 xianbao-数字.htm 真实文章（标题为正确的中文 deal 描述），
+    排除 index-数字.htm 分页归档页、站根导航、分类页等噪音。
+    """
+    from urllib.parse import urljoin
+    items: List[Dict[str, str]] = []
+    seen: Set[str] = set()
+    for a in soup.find_all('a', href=True):
+        href = a['href'].strip()
+        # 只收 xianbao-数字.htm 真实文章
+        if not re.search(r'iehou\.com/xianbao-\d+\.htm', href):
+            continue
+        url = urljoin(base_url, href)
+        if url in seen:
+            continue
+        seen.add(url)
+        # 标题：优先 title 属性，否则可见文本
+        title = (a.get('title') or a.get_text(strip=True) or '').strip()
+        if not title:
+            continue
+        # 排除站名/导航类无意义文本
+        if title in ('网猴线报', '活动线报', '最新线报'):
+            continue
+        items.append({'text': title, 'url': url})
+        if len(items) >= 30:
+            break
+    return items
+
+
+# ---------------------------------------------------------------------------
 # 4. xianbaomi.com - 线报迷 (Z-Blog)
 # ---------------------------------------------------------------------------
 # HTML structure:
