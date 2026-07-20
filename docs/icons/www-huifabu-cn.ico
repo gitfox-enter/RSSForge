@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">128494 条</span>
+      <span class="cnt" id="bc">128500 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -170,7 +170,32 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/141031.html" data-cat="haodan">
+                      <a class="r" href="/xiaodigu/141035.html" data-cat="xiaodigu">
+                    <span class="cat-badge" style="background:#00b894">嘀咕</span>
+          <div class="bd"><div class="tt"><span class="title-text">招行体验金红包</span>
+                    <span class="tm">07-21 07:43</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/141034.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">洁朗尼挂式抽绳垃圾袋90只 6.99元</span>
+                    <span class="tm">07-21 07:42</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/141033.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">得力加厚B5活页本60页 3.9元</span>
+                    <span class="tm">07-21 07:41</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/peiqi/141032.html" data-cat="peiqi">
+                    <span class="cat-badge" style="background:#fd79a8">佩奇</span>
+          <div class="bd"><div class="tt"><span class="title-text">早餐可以看看社裙或品.牌①淘宝闪购搜【8886】每天可领8-16大额虹包-②淘宝闪购搜【8883】每</span>
+                    <span class="cmt-badge">💬5</span>
+                    <span class="tm">07-21 07:40</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/141031.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">京鲜生西双版纳傣柚2粒装单果600-800g 19.45元</span>
                     <span class="tm">07-21 07:40</span></div></div>
@@ -747,30 +772,6 @@
                     <span class="tm">07-21 04:26</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/140934.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">雪莱雅成人软毛牙刷创新方孔宽头万毛牙刷家用1排白色款5支 10.1元</span>
-                    <span class="tm">07-21 04:26</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/140933.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">圣艾元云南本草祛螨包床上用健康草本去螨虫神器家用安心持久除螨包1盒共10包 14.9元</span>
-                    <span class="tm">07-21 04:26</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/140932.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">莲花0添加特级酱油500ml特级酿造生抽家用炒菜红烧凉拌调味瓶装 8.5元</span>
-                    <span class="tm">07-21 04:26</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/140931.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">秘地安全岛小样持久留香小众淡香水男女生便捷装2ml 9.9元</span>
-                    <span class="tm">07-21 04:25</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -811,7 +812,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 128494 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 128500 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
