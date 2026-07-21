@@ -1,0 +1,131 @@
+{
+  "generated_at": "2026-07-19T22:02:41.980203+08:00",
+  "health": {
+    "active_sites": 22,
+    "dead_sites": 15,
+    "working_feeds": 11,
+    "zero_content_active": 11,
+    "total_monitored": 37,
+    "health_ratio": 0.5,
+    "working_names": [
+      "专业线报",
+      "汇发部",
+      "爱Q社区",
+      "白菜哦",
+      "线报ICU",
+      "线报网",
+      "线报酷",
+      "网猴线报",
+      "羊毛党",
+      "赚客吧",
+      "超级线报"
+    ],
+    "zero_urls": [
+      "https://b1.ymxianbao.cn/",
+      "https://blog.xianbao.art/",
+      "https://www.12345pro.com/",
+      "https://www.bacaoo.com/",
+      "https://www.daydayzhuan.com/",
+      "https://www.douban.com/group/711811/",
+      "https://www.huodong8.com/",
+      "https://www.hxm5.com/",
+      "https://www.manmanbuy.com/",
+      "https://xianbaomi.com/",
+      "https://yangmao.wang/"
+    ]
+  },
+  "feeds_meta_missing_url": [
+    "线报酷",
+    "线报ICU",
+    "专业线报",
+    "线报网",
+    "羊毛党",
+    "超级线报",
+    "汇发部",
+    "爱Q社区",
+    "白菜哦",
+    "网猴线报",
+    "赚客吧"
+  ],
+  "hard_dead": [],
+  "soft_problems": [],
+  "diagnostics": {
+    "https://xianbaomi.com/": {
+      "url": "https://xianbaomi.com/",
+      "status": "OK",
+      "code": 200,
+      "size": 12842,
+      "name": "线报迷"
+    },
+    "https://yangmao.wang/": {
+      "url": "https://yangmao.wang/",
+      "status": "OK",
+      "code": 200,
+      "size": 28887,
+      "name": "羊毛王"
+    },
+    "https://b1.ymxianbao.cn/": {
+      "url": "https://b1.ymxianbao.cn/",
+      "status": "OK",
+      "code": 200,
+      "size": 16322,
+      "name": "羊毛线报"
+    },
+    "https://www.12345pro.com/": {
+      "url": "https://www.12345pro.com/",
+      "status": "OK",
+      "code": 200,
+      "size": 37003,
+      "name": "12345线报"
+    },
+    "https://www.huodong8.com/": {
+      "url": "https://www.huodong8.com/",
+      "status": "OK",
+      "code": 200,
+      "size": 94645,
+      "name": "活动5"
+    },
+    "https://www.daydayzhuan.com/": {
+      "url": "https://www.daydayzhuan.com/",
+      "status": "OK",
+      "code": 200,
+      "size": 34199,
+      "name": "天天赚"
+    },
+    "https://www.manmanbuy.com/": {
+      "url": "https://www.manmanbuy.com/",
+      "status": "OK",
+      "code": 200,
+      "size": 332504,
+      "name": "慢慢买"
+    },
+    "https://www.bacaoo.com/": {
+      "url": "https://www.bacaoo.com/",
+      "status": "OK",
+      "code": 200,
+      "size": 107403,
+      "name": "拔草哦"
+    },
+    "https://www.douban.com/group/711811/": {
+      "url": "https://www.douban.com/group/711811/",
+      "status": "OK",
+      "code": 200,
+      "size": 45832,
+      "name": "开心赚"
+    },
+    "https://blog.xianbao.art/": {
+      "url": "https://blog.xianbao.art/",
+      "status": "OK",
+      "code": 200,
+      "size": 14198,
+      "name": "羊毛群"
+    },
+    "https://www.hxm5.com/": {
+      "url": "https://www.hxm5.com/",
+      "status": "OK",
+      "code": 200,
+      "size": 25187,
+      "name": "线报屋"
+    }
+  }
+}

@@ -390,10 +390,11 @@ def is_junk(text: str) -> bool:
         return True
     if text.isdigit():
         return True
-    # Use set lookup for O(1) junk pattern checking (exact match)
+    # Substring match against junk patterns (fix #122: was exact == match,
+    # which almost never triggered for UI-chrome phrases like "阅读全文").
     clean = text.replace(" ", "")
     for junk_word in JUNK_PATTERNS:
-        if clean == junk_word:
+        if junk_word in clean:
             return True
     return False
 
