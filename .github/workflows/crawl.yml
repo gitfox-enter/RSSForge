@@ -220,16 +220,40 @@ jobs:
           echo "部署失败"
           exit 1
 
-      - name: 停滞检测
+      - name: 停滞检测 + 内容质量体检
         if: success()
+        env:
+          TZ: Asia/Shanghai
         run: |
-          # 检查本次 crawl 是否产出新内容
+          # 1) 原有停滞检测：本次 crawl 是否产出新内容
           LAST_COMMIT_MSG=$(git log -1 --pretty=%s 2>/dev/null || echo "no commit")
           echo "最新提交: $LAST_COMMIT_MSG"
           if echo "$LAST_COMMIT_MSG" | grep -qE "^(状态更新|自动部署)"; then
             echo "::warning title=停滞警告::本次未产出新 feed 内容，请查看 run_log.jsonl 检查各站点错误"
           else
             echo "有 feed 更新，状态正常"
+          fi
+
+          # 2) 内容质量体检（升级为「内容感知」）：扫描已发布 feed + 全库，
+          #    识别 fallback 误抓的分类/板块/导航垃圾 + 一致性核对。
+          #    仅做「检测+告警」，自动修复由 quality-guard 定时守卫负责。
+          pip install -q pyyaml >/dev/null 2>&1 || true
+          echo "--- 运行 quality_check.py（内容质量体检）---"
+          if python3 quality_check.py; then
+            echo "✅ 内容质量体检通过：无 TIER-1 垃圾且一致"
+          else
+            echo "::warning title=内容质量告警::发现 fallback 垃圾或一致性破坏，quality-guard 将自动修复；详见 quality_report.json"
+            # 列出需根治（无 parser）的脏源，便于人工/agent 加 parser
+            python3 - <<'PY'
+          try:
+              import json
+              r = json.load(open("quality_report.json", encoding="utf-8"))
+              pl = r.get("summary", {}).get("parserless_junk_sources", [])
+              if pl:
+                  print(f"::warning title=需加 parser 的脏源::{pl}（CI 会复发，需专用 parser 根治）")
+          except Exception:
+              pass
+          PY
           fi
 
       - name: 上传运行日志

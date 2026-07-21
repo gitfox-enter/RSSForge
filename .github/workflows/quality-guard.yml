@@ -1,0 +1,172 @@
+name: 质量守卫 (Quality Guard)
+
+# 内容质量定时守卫：把「检测预案」从「仅一致性」升级为「内容感知」。
+# 每 6 小时错峰运行一次（维护频率），自动：
+#   1) 运行 quality_check.py 做内容级体检（feed 输出 + 全库 + 一致性）；
+#   2) 发现 fallback 误抓的垃圾（/category、/forum*.php、/about、广告标题）则
+#      运行 quality_fix.py 自动清理全库垃圾 + 强制重生受影响 feed + 重建 OPML/index；
+#   3) 提交推送（复用 crawl 的数据文件 ours 策略，避免并发冲突吞掉清理结果）；
+#   4) 若脏源无专用 parser（CI 会复发），开汇总 Issue 提示加 parser 根治。
+# 无垃圾则整轮跳过，零提交噪声。
+on:
+  schedule:
+    # 每 6 小时 :17 分触发（错峰避开整点高峰，00:17/06:17/12:17/18:17）
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: quality-guard
+  cancel-in-progress: false
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      issues: write
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: 设置 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 安装轻量依赖
+        run: pip install -q pyyaml beautifulsoup4
+
+      - name: 配置 Git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: 内容质量体检
+        id: qc
+        run: |
+          set +e
+          python3 quality_check.py
+          code=$?
+          echo "qc_exit=$code" >> "$GITHUB_OUTPUT"
+          echo "体检退出码: $code"
+
+      - name: 自动修复（清理 + 重生 + 重建）
+        id: fix
+        if: ${{ steps.qc.outputs.qc_exit != '0' }}
+        run: |
+          set +e
+          echo "=== 发现内容垃圾，运行 quality_fix.py 自动修复 ==="
+          python3 quality_fix.py
+
+          # 仅暂存本守卫负责的产物（与 crawl/fast_check 互斥文件名策略一致）
+          git add -u items.json 2>/dev/null || true
+          git add -u docs/feeds/ docs/opml.xml docs/opml.*.xml docs/index.html docs/icons/ 2>/dev/null || true
+          git status
+          if git diff --staged --quiet 2>/dev/null; then
+            echo "无清理产物需提交"
+            exit 0
+          fi
+
+          COMMIT_MSG="质量守卫：自动清理 fallback 垃圾 @ $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
+          git commit -m "$COMMIT_MSG"
+
+          push_success=false
+          for i in 1 2 3 4 5; do
+            echo "=== Push attempt $i ==="
+            git rebase --abort 2>/dev/null || true
+            git merge --abort 2>/dev/null || true
+            git config pull.rebase false
+            git config merge.conflictstyle diff3
+            git pull --no-commit --no-rebase origin main || true
+            # 冲突时：数据文件（items.json/feeds/opml/index/icons）保留本守卫的「已清理」版本
+            if [ -f .git/MERGE_HEAD ]; then
+              git diff --name-only --diff-filter=U | while read conflict_file; do
+                case "$conflict_file" in
+                  items.json|docs/feeds/*|docs/opml.xml|docs/opml.*.xml|docs/index.html|docs/icons/*)
+                    echo "Data conflict: keeping our cleaned version of $conflict_file"
+                    git checkout --ours "$conflict_file" 2>/dev/null || git checkout --theirs "$conflict_file"
+                    ;;
+                  *)
+                    echo "Conflict in $conflict_file: accepting remote version"
+                    git checkout --theirs "$conflict_file"
+                    ;;
+                esac
+                git add "$conflict_file"
+              done
+              git commit -m "Merge origin/main (quality-guard auto-resolved)" || true
+            fi
+            if git push origin main --force-with-lease; then
+              push_success=true
+              break
+            fi
+            echo "Push attempt $i failed, waiting before retry..."
+            sleep 10
+          done
+          if [ "$push_success" = true ]; then
+            echo "✅ 清理已提交并推送"
+          else
+            echo "❌ 推送失败"
+            exit 1
+          fi
+
+      - name: 开 Issue（无 parser 的复发脏源需根治）
+        if: ${{ steps.qc.outputs.qc_exit != '0' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set +e
+          python3 - <<'PY'
+          import os, json, subprocess, sys
+          REPO = os.environ.get("REPO", "")
+          try:
+              r = json.load(open("quality_report.json", encoding="utf-8"))
+          except Exception as e:
+              print("读取 quality_report.json 失败:", e); sys.exit(0)
+          pl = r.get("summary", {}).get("parserless_junk_sources", [])
+          if not pl:
+              print("无「无 parser」复发脏源，跳过 Issue"); sys.exit(0)
+          # 汇总脏源 + 各自垃圾明细
+          lines = ["RSSForge 质量守卫发现以下源持续产生 fallback 垃圾，",
+                   "但它们**未注册专用 parser**，CI 每次重爬会复发。",
+                   "需为这些源添加专用 parser（仅留真实文章 URL）才能根治。",
+                   "",
+                   "## 需加 parser 的源", ""]
+          db = r.get("db_active", {})
+          for src in pl:
+              entry = db.get(src, {})
+              junk = entry.get("junk", [])
+              reasons = {}
+              for j in junk:
+                  reasons[j.get("reason", "?")] = reasons.get(j.get("reason", "?"), 0) + 1
+              detail = ", ".join(f"{k}×{v}" for k, v in reasons.items())
+              lines.append(f"- **{src}**（{entry.get('items', 0)} 条）: {detail}")
+              for j in junk[:3]:
+                  lines.append(f"    - `{j.get('url', '')}`")
+          lines += ["", "---", "此 Issue 由 quality-guard 定时守卫自动创建。",
+                     "修复方式参考已注册的 parse_ixbk_items / parse_zhuanyes_items。"]
+          body = "\n".join(lines)
+          title = f"质量告警：{len(pl)} 个源无 parser，持续产生垃圾"
+          # 避免重复开 Issue：同标题已存在则跳过
+          try:
+              out = subprocess.run(
+                  ["gh", "issue", "list", "--repo", REPO,
+                   "--search", title, "--json", "number", "--limit", "1"],
+                  capture_output=True, text=True)
+              if out.returncode == 0 and out.stdout.strip().strip("[]"):
+                  print("已存在相同标题 Issue，跳过"); sys.exit(0)
+          except Exception:
+              pass
+          subprocess.run(
+              ["gh", "issue", "create", "--repo", REPO,
+               "--title", title, "--body", body],
+              check=False)
+          print("已创建质量告警 Issue")
+          PY

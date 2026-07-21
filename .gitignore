@@ -52,3 +52,6 @@ public/css/app.css
 data/.gitkeep
 public/
 _site/
+
+# 内容质量体检报告 - 守卫流本地产物，不提交（避免时间戳噪声提交）
+quality_report.json
