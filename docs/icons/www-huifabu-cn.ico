@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">137193 条</span>
+      <span class="cnt" id="bc">137194 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -170,7 +170,13 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/145662.html" data-cat="haodan">
+                      <a class="r" href="/haodan/145663.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">SEIKO男女通用款石英手表SND系列 597元</span>
+                    <span class="tm">07-22 03:03</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/145662.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">达派德国真空封口机塑封机干湿两用赠真空袋 45.9元</span>
                     <span class="tm">07-22 02:47</span></div></div>
@@ -769,13 +775,6 @@
                     <span class="tm">07-22 01:12</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/mogu/145558.html" data-cat="mogu">
-                    <span class="cat-badge" style="background:#00b894">蘑菇</span>
-          <div class="bd"><div class="tt"><span class="title-text">🐶东 地区价白象方便面 新经典红烧牛肉面104g*5袋拍2件，每件6.48</span>
-                    <span class="cmt-badge">💬17</span>
-                    <span class="tm">07-22 01:11</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -816,7 +815,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 137193 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 137194 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
