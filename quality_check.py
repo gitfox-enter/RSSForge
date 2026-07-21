@@ -129,12 +129,25 @@ def load_sites():
 
 
 def registered_hosts():
-    """返回已注册专用 parser 的 host 集合（判断「无 parser 脏源」）。"""
+    """返回已注册专用 parser 的 host 集合（判断「无 parser 脏源」）。
+
+    不依赖导入 crawler 模块（Actions 轻量环境下导入易因缺依赖而失败，
+    导致误判「全部源都无 parser」）；改为**文本解析** core.py 的
+    PARSER_REGISTRY 键名（均为 host 字符串），零导入、处处可用。
+    """
+    p = os.path.join(ROOT, "crawler", "parsers", "core.py")
+    if not os.path.exists(p):
+        return set()
     try:
-        from crawler.parsers.core import PARSER_REGISTRY
-        return {h.lower() for h in PARSER_REGISTRY.keys()}
+        txt = open(p, encoding="utf-8").read()
     except Exception:
         return set()
+    # 匹配 PARSER_REGISTRY 中的 'host.name': 键（点分域名）
+    hosts = re.findall(
+        r"'((?:[A-Za-z0-9](?:[A-Za-z0-9\-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,})'\s*:",
+        txt,
+    )
+    return {h.lower() for h in hosts}
 
 
 def scan_feeds():
@@ -256,11 +269,15 @@ def main():
     inactive_sources = sorted(n for n, v in db_inactive.items() if v["junk"])
 
     # 无 parser 的脏源（需加专用 parser 才能根治复发）
+    # 注意：sites.yaml 的 host 可能带 www.（www.zuankeba.cn），
+    # 而 core.py 注册表常用裸域（zuankeba.cn）；比对时统一去 www. 前缀。
     parserless = []
     for src in db_junk_sources:
         host = sites_by_name.get(src, "")
-        if host and host not in reg_hosts:
-            parserless.append(src)
+        if host:
+            h = host.lower()
+            if h not in reg_hosts and h.replace("www.", "") not in reg_hosts:
+                parserless.append(src)
 
     ts = datetime.datetime.now(
         datetime.timezone(datetime.timedelta(hours=8))
