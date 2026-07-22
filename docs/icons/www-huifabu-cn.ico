@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">141627 条</span>
+      <span class="cnt" id="bc">141633 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,49 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/weibo/150095.html" data-cat="weibo">
+                      <a class="r" href="/haodan/150103.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">VSZE男女士香水90ml*3瓶 9.9元</span>
+                    <span class="tm">07-23 06:29</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/150102.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">霍尼韦尔7kW特斯拉专用充电桩AC1刷卡版家用充电桩含勘测服务 951.4元</span>
+                    <span class="tm">07-23 06:19</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/xiaodigu/150101.html" data-cat="xiaodigu">
+                    <span class="cat-badge" style="background:#00b894">嘀咕</span>
+          <div class="bd"><div class="tt"><span class="title-text">oppo遗忘之海10点抽奖</span>
+                    <span class="tm">07-23 06:18</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/150100.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">香山体重秤电子秤人体 19.9元</span>
+                    <span class="tm">07-23 06:17</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/150099.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">雅鹿袜子10A抑菌黑中筒5双 5.9元</span>
+                    <span class="tm">07-23 06:17</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/150098.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">京七猫粮5斤成猫粮鱼肉海洋鱼口味成猫专用全价天然爱心流浪救助2.5kg 9.07元</span>
+                    <span class="tm">07-23 06:17</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/150097.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">赫曼米勒人体工学椅4D扶手不带头枕碳黑色 2448.4元</span>
+                    <span class="tm">07-23 06:17</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/weibo/150095.html" data-cat="weibo">
                     <span class="cat-badge" style="background:#e84393">微博</span>
           <div class="bd"><div class="tt"><span class="title-text">弹外卖爆红包 有冷却时间 不弹就等一段时间 2 淘宝闪购App 原饿了么</span>
                     <span class="tm">07-23 06:03</span></div></div>
@@ -749,48 +791,6 @@
                     <span class="tm">07-22 23:13</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/149997.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">英氏护手霜 4.9元</span>
-                    <span class="tm">07-22 23:13</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/149994.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">得力强力棉纸双面胶带12卷 9.9元</span>
-                    <span class="tm">07-22 23:12</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/weibo/149995.html" data-cat="weibo">
-                    <span class="cat-badge" style="background:#e84393">微博</span>
-          <div class="bd"><div class="tt"><span class="title-text">阪织屋男士超薄冰丝内裤4条 29.8元，MissWiss冰氧伞兵裤薄款登山速干裤 63.9元</span>
-                    <span class="tm">07-22 23:11</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/149993.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">豫园红汇山楂卷500g 9.6元</span>
-                    <span class="tm">07-22 23:11</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/weibo/149992.html" data-cat="weibo">
-                    <span class="cat-badge" style="background:#e84393">微博</span>
-          <div class="bd"><div class="tt"><span class="title-text">力士植萃精油香氛沐浴露750ml 21.36元</span>
-                    <span class="tm">07-22 23:11</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/149991.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">得宝手帕纸4层7张*36包 14.9元</span>
-                    <span class="tm">07-22 23:11</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/149990.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">红豆纯棉女内裤7条 39.9元</span>
-                    <span class="tm">07-22 23:11</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -844,7 +844,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 141627 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 141633 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
