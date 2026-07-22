@@ -10,8 +10,8 @@ name: 质量守卫 (Quality Guard)
 # 无垃圾则整轮跳过，零提交噪声。
 on:
   schedule:
-    # 每 6 小时 :17 分触发（错峰避开整点高峰，00:17/06:17/12:17/18:17）
-    - cron: '17 */6 * * *'
+    # 每小时 :17 分触发（错峰避开整点高峰）
+    - cron: '17 * * * *'
   workflow_dispatch:
 
 concurrency:
