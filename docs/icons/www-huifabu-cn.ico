@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">146311 条</span>
+      <span class="cnt" id="bc">146313 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,25 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/154780.html" data-cat="haodan">
+                      <a class="r" href="/haodan/154783.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">华凌神机二代pro大1.5匹冷暖挂机KFR-35GW/N8HE1Ⅱ 1497.45元</span>
+                    <span class="tm">07-24 06:42</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/154782.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">高洁丝日夜用全周期任选系列任选10件 49元</span>
+                    <span class="tm">07-24 06:39</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/154781.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">茅记精酿啤酒德式小麦原浆白啤酒整箱330ml*6礼品礼盒 9.9元</span>
+                    <span class="tm">07-24 06:34</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/154780.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">小牛凯西菲力牛排10片赠10根烤肠意面*1 69.9元</span>
                     <span class="tm">07-24 06:29</span></div></div>
@@ -445,7 +463,7 @@
                 <a class="r" href="/gaibang/154735.html" data-cat="gaibang">
                     <span class="cat-badge" style="background:#6c5ce7">丐帮</span>
           <div class="bd"><div class="tt"><span class="title-text">⏰8点 建行去领 baodi1 有大</span>
-                    <span class="cmt-badge">💬3</span>
+                    <span class="cmt-badge">💬5</span>
                     <span class="tm">07-24 02:59</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -464,7 +482,7 @@
                 <a class="r" href="/mogu/154732.html" data-cat="mogu">
                     <span class="cat-badge" style="background:#00b894">蘑菇</span>
           <div class="bd"><div class="tt"><span class="title-text">试用CANIS FAMILIARIS布多格澳洲原瓶进口红酒 750ml 如图选项，29.9返29卡</span>
-                    <span class="cmt-badge">💬45</span>
+                    <span class="cmt-badge">💬46</span>
                     <span class="tm">07-24 02:51</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -570,7 +588,7 @@
                 <a class="r" href="/mogu/154715.html" data-cat="mogu">
                     <span class="cat-badge" style="background:#00b894">蘑菇</span>
           <div class="bd"><div class="tt"><span class="title-text">反馈，佰恩氏金银花苹果汁 200ml*12瓶，搜6限时券凑后同价</span>
-                    <span class="cmt-badge">💬9</span>
+                    <span class="cmt-badge">💬10</span>
                     <span class="tm">07-24 02:26</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -766,26 +784,6 @@
                     <span class="tm">07-24 01:59</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/kanong/154689.html" data-cat="kanong">
-                    <span class="cat-badge" style="background:#0984e3">卡农</span>
-          <div class="bd"><div class="tt"><span class="title-text">遗忘之海oppo手机游戏中心的还有包</span>
-                    <span class="cmt-badge">💬3</span>
-                    <span class="tm">07-24 01:56</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/mogu/154681.html" data-cat="mogu">
-                    <span class="cat-badge" style="background:#00b894">蘑菇</span>
-          <div class="bd"><div class="tt"><span class="title-text">🐶东 看需200-20黑五券</span>
-                    <span class="cmt-badge">💬7</span>
-                    <span class="tm">07-24 01:53</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/154680.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">沪上任选6件 13.9元</span>
-                    <span class="tm">07-24 01:51</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -839,7 +837,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 146311 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 146313 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
