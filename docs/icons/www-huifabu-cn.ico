@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">151690 条</span>
+      <span class="cnt" id="bc">151691 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,13 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/160952.html" data-cat="haodan">
+                      <a class="r" href="/haodan/160953.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">万豪希尔顿洲际酒店中高端全国3次通兑卡 233元，万豪希尔顿洲际酒店中高端全国3次通兑卡 699元</span>
+                    <span class="tm">07-25 05:04</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/160952.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">力诚加钙蟹柳原味500g袋装 82.73元</span>
                     <span class="tm">07-25 04:40</span></div></div>
@@ -777,12 +783,6 @@
                     <span class="tm">07-25 02:05</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/160853.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">意林杂志2026年1-16期2024年/2023年过刊清仓合订本官方旗舰店初高中生青少年作文素材读者</span>
-                    <span class="tm">07-25 02:03</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -836,7 +836,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 151690 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 151691 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
