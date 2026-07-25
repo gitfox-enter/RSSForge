@@ -1,7 +1,7 @@
 name: 质量守卫 (Quality Guard)
 
 # 内容质量定时守卫：把「检测预案」从「仅一致性」升级为「内容感知」。
-# 每 6 小时错峰运行一次（维护频率），自动：
+# 每小时 :17 分错峰运行（维护频率，用户 2026-07-22 要求从每6h升级为每小时），自动：
 #   1) 运行 quality_check.py 做内容级体检（feed 输出 + 全库 + 一致性）；
 #   2) 发现 fallback 误抓的垃圾（/category、/forum*.php、/about、广告标题）则
 #      运行 quality_fix.py 自动清理全库垃圾 + 强制重生受影响 feed + 重建 OPML/index；
