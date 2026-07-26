@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">161468 条</span>
+      <span class="cnt" id="bc">161472 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,31 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/170730.html" data-cat="haodan">
+                      <a class="r" href="/weibochaohua/170734.html" data-cat="weibochaohua">
+                    <span class="cat-badge" style="background:#e74c3c">超话</span>
+          <div class="bd"><div class="tt"><span class="title-text">试试</span>
+                    <span class="tm">07-27 06:53</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/zuankeba/170733.html" data-cat="zuankeba">
+                    <span class="cat-badge" style="background:#e67e22">赚吧</span>
+          <div class="bd"><div class="tt"><span class="title-text">上次拼多多那个药收到了</span>
+                    <span class="tm">07-27 06:52</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/xinzuanba/170732.html" data-cat="xinzuanba">
+                    <span class="cat-badge" style="background:#e67e22">新赚</span>
+          <div class="bd"><div class="tt"><span class="title-text">招行 红包，早毛</span>
+                    <span class="tm">07-27 06:51</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/170731.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">茶花家用便携随手杯410ml 2件 12.8元</span>
+                    <span class="tm">07-27 06:50</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/170730.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">马大姐酒心巧克力518g 约39颗 喜糖伴手礼 14.96元</span>
                     <span class="tm">07-27 06:43</span></div></div>
@@ -688,7 +712,7 @@
                 <a class="r" href="/gaibang/170635.html" data-cat="gaibang">
                     <span class="cat-badge" style="background:#6c5ce7">丐帮</span>
           <div class="bd"><div class="tt"><span class="title-text">⏰8点/12点//17点试试抽奶茶咔 丐友淘宝扫或闪购搜：3966 (0cn0giLFV9y)/ A</span>
-                    <span class="cmt-badge">💬1</span>
+                    <span class="cmt-badge">💬2</span>
                     <span class="tm">07-27 01:43</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -754,30 +778,6 @@
                     <span class="tm">07-27 01:34</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/170624.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">岭境春山乳桦白桦树原汁250ml×6瓶 12.58元</span>
-                    <span class="tm">07-27 01:34</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/170623.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">吉列5层刀片男士剃须刀1刀架1刀头 29.9元</span>
-                    <span class="tm">07-27 01:34</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/170622.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">磊科 S5G 5口千兆交换机 29.9元</span>
-                    <span class="tm">07-27 01:34</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/170621.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">冷酸灵防菌抗敏牙膏清凉薄荷180g 3.9元</span>
-                    <span class="tm">07-27 01:34</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -831,7 +831,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 161468 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 161472 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
