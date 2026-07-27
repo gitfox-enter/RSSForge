@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">163230 条</span>
+      <span class="cnt" id="bc">163242 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,80 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/xiaodigu/172491.html" data-cat="xiaodigu">
+                      <a class="r" href="/haodan/172504.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">小熊煮蛋器家用蒸蛋器 35元</span>
+                    <span class="tm">07-27 16:47</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/172503.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">九阳0氟0涂层压力锅5升 157.9元</span>
+                    <span class="tm">07-27 16:47</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/weibo/172501.html" data-cat="weibo">
+                    <span class="cat-badge" style="background:#e84393">微博</span>
+          <div class="bd"><div class="tt"><span class="title-text">薇诺娜 马齿苋舒缓喷雾150ml 43 右上角 .叠桃金币抵扣</span>
+                    <span class="tm">07-27 16:46</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/weibo/172500.html" data-cat="weibo">
+                    <span class="cat-badge" style="background:#e84393">微博</span>
+          <div class="bd"><div class="tt"><span class="title-text">鹏昌富硒无抗鹌鹑蛋60枚+鸡蛋6枚 22.81元</span>
+                    <span class="tm">07-27 16:46</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/iqnew/172493.html" data-cat="iqnew">
+                    <span class="cat-badge" style="background:#6c5ce7">爱Q</span>
+          <div class="bd"><div class="tt"><span class="title-text">快手领18元无门槛通用券 部分号可领取</span>
+                    <span class="tm">07-27 16:39</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/douban/172499.html" data-cat="douban">
+                    <span class="cat-badge" style="background:#2ecc71">豆瓣</span>
+          <div class="bd"><div class="tt"><span class="title-text">影石Insta360 Ace Pro 2双电送内存卡马克马奎斯限定2370</span>
+                    <span class="cmt-badge">💬7</span>
+                    <span class="tm">07-27 16:34</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/iqnew/172494.html" data-cat="iqnew">
+                    <span class="cat-badge" style="background:#6c5ce7">爱Q</span>
+          <div class="bd"><div class="tt"><span class="title-text">京东为苏超助力抽奖 亲测0.01元海澜之家T恤</span>
+                    <span class="tm">07-27 16:23</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/weibo/172502.html" data-cat="weibo">
+                    <span class="cat-badge" style="background:#e84393">微博</span>
+          <div class="bd"><div class="tt"><span class="title-text">小米AI眼镜自辨</span>
+                    <span class="tm">07-27 16:00</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/iqnew/172495.html" data-cat="iqnew">
+                    <span class="cat-badge" style="background:#6c5ce7">爱Q</span>
+          <div class="bd"><div class="tt"><span class="title-text">小米视频打卡拿好礼 反馈66元现金秒到</span>
+                    <span class="tm">07-27 15:43</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/iqnew/172496.html" data-cat="iqnew">
+                    <span class="cat-badge" style="background:#6c5ce7">爱Q</span>
+          <div class="bd"><div class="tt"><span class="title-text">大众点评必吃节抽现金/实物 亲测0.66元秒到</span>
+                    <span class="tm">07-27 15:14</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/iqnew/172497.html" data-cat="iqnew">
+                    <span class="cat-badge" style="background:#6c5ce7">爱Q</span>
+          <div class="bd"><div class="tt"><span class="title-text">交行基会多多 完成任务领2-42元微信立减金</span>
+                    <span class="tm">07-27 14:43</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/iqnew/172498.html" data-cat="iqnew">
+                    <span class="cat-badge" style="background:#6c5ce7">爱Q</span>
+          <div class="bd"><div class="tt"><span class="title-text">同程旅行领5元支付宝立减券 酒店/机票等场景使用</span>
+                    <span class="tm">07-27 14:39</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/xiaodigu/172491.html" data-cat="xiaodigu">
                     <span class="cat-badge" style="background:#00b894">嘀咕</span>
           <div class="bd"><div class="tt"><span class="title-text">淘宝 乐动力</span>
                     <span class="tm">07-27 14:29</span></div></div>
@@ -714,81 +787,6 @@
                     <span class="tm">07-27 14:05</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/mogu/172402.html" data-cat="mogu">
-                    <span class="cat-badge" style="background:#00b894">蘑菇</span>
-          <div class="bd"><div class="tt"><span class="title-text">🐶东2-1全品券  网页链接 甘源牌爆椒咸蛋黄味糯米锅巴102g</span>
-                    <span class="cmt-badge">💬63</span>
-                    <span class="tm">07-27 14:04</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/172399.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">总统淡味黄油卷1kg法国进口动物黄油 76.64元</span>
-                    <span class="tm">07-27 14:04</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/172398.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">荣耀 X80Pro Max 11000mAh大电池 5G智能手机 1699.15元</span>
-                    <span class="tm">07-27 14:04</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/172397.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">香山京东联名款电子厨房秤0.1g/5kg 109元</span>
-                    <span class="tm">07-27 14:04</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/172396.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">华硕 RT-BE86U 双频6800M 家用万兆Mesh路由器 Wi-Fi 7黑色 单个装</span>
-                    <span class="tm">07-27 14:04</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/weibo/172395.html" data-cat="weibo">
-                    <span class="cat-badge" style="background:#e84393">微博</span>
-          <div class="bd"><div class="tt"><span class="title-text">安井火锅丸子鱼丸烧烤关东煮火锅食材240g鱼豆腐*1袋等任选6件 58元</span>
-                    <span class="tm">07-27 14:04</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/xiaodigu/172393.html" data-cat="xiaodigu">
-                    <span class="cat-badge" style="background:#00b894">嘀咕</span>
-          <div class="bd"><div class="tt"><span class="title-text">大众点评 天天领红包</span>
-                    <span class="tm">07-27 14:04</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/172391.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">官栈即食花胶轻享装38g*8瓶 花胶羹150g*2碗 89元</span>
-                    <span class="tm">07-27 14:03</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/mogu/172392.html" data-cat="mogu">
-                    <span class="cat-badge" style="background:#00b894">蘑菇</span>
-          <div class="bd"><div class="tt"><span class="title-text">降价，现在【8.92】</span>
-                    <span class="cmt-badge">💬64</span>
-                    <span class="tm">07-27 14:02</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/mogu/172388.html" data-cat="mogu">
-                    <span class="cat-badge" style="background:#00b894">蘑菇</span>
-          <div class="bd"><div class="tt"><span class="title-text">🐱超猫超臻选玉米油5L*4桶，领券+礼金</span>
-                    <span class="cmt-badge">💬9</span>
-                    <span class="tm">07-27 14:02</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/weibo/172394.html" data-cat="weibo">
-                    <span class="cat-badge" style="background:#e84393">微博</span>
-          <div class="bd"><div class="tt"><span class="title-text">部分随机弹店铺🧧忦更低 需如图1去金币页加車 凑単可退</span>
-                    <span class="tm">07-27 14:02</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/172390.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">vip金币100福袋拍1件 97元</span>
-                    <span class="tm">07-27 14:02</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -842,7 +840,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 163230 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 163242 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
