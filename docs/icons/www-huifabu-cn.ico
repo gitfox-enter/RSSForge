@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">165692 条</span>
+      <span class="cnt" id="bc">165694 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -516,6 +516,7 @@
                 <a class="r" href="/weibo/174902.html" data-cat="weibo">
                     <span class="cat-badge" style="background:#e84393">微博</span>
           <div class="bd"><div class="tt"><span class="title-text">睡了不到两小时起来泄洪是几个意思 我真不中了 睡正酣被一大泡佳酿憋醒</span>
+                    <span class="cmt-badge">💬4</span>
                     <span class="tm">07-28 04:03</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -684,7 +685,7 @@
                 <a class="r" href="/mogu/174862.html" data-cat="mogu">
                     <span class="cat-badge" style="background:#00b894">蘑菇</span>
           <div class="bd"><div class="tt"><span class="title-text">🐶东广西8折消费券 网页链接 京鲜生 阳光玫瑰 净重2.8-3.3斤 单果8-10g【8.92】</span>
-                    <span class="cmt-badge">💬18</span>
+                    <span class="cmt-badge">💬22</span>
                     <span class="tm">07-28 02:41</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -827,7 +828,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 165692 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 165694 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
