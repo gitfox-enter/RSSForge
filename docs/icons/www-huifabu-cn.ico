@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">165630 条</span>
+      <span class="cnt" id="bc">165636 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,13 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/174897.html" data-cat="haodan">
+                      <a class="r" href="/weibochaohua/174898.html" data-cat="weibochaohua">
+                    <span class="cat-badge" style="background:#e74c3c">超话</span>
+          <div class="bd"><div class="tt"><span class="title-text">还需要小推车么 看号</span>
+                    <span class="tm">07-28 03:42</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/174897.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">恬舒盒装抽取式抹布吸水超细纤维厨房洗碗布一次性百洁布懒人抽式抹布灰色20*20*20抽 9.9元</span>
                     <span class="tm">07-28 03:39</span></div></div>
@@ -416,7 +422,7 @@
                 <a class="r" href="/mogu/174858.html" data-cat="mogu">
                     <span class="cat-badge" style="background:#00b894">蘑菇</span>
           <div class="bd"><div class="tt"><span class="title-text">看需，过金币宝迪妮 一次性雨衣长款全身，【0.93】</span>
-                    <span class="cmt-badge">💬13</span>
+                    <span class="cmt-badge">💬14</span>
                     <span class="tm">07-28 02:36</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -772,12 +778,6 @@
                     <span class="tm">07-28 01:26</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/174798.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">氧心果冻胶字母肩带内衣拍2件 59.9元</span>
-                    <span class="tm">07-28 01:26</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -831,7 +831,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 165630 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 165636 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
