@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">165641 条</span>
+      <span class="cnt" id="bc">165656 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -827,7 +827,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 165641 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 165656 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
