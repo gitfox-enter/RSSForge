@@ -3101,11 +3101,14 @@ async function autoLoadDefaultFeeds() {
 
 function init() {
  try {
-  loadState(); if (!state.categories.length) state.categories = [...DEFAULT_CATEGORIES]; applyTheme();
+  loadState();
+  if (!state.categories.length) state.categories = [...DEFAULT_CATEGORIES];
+  applyTheme();
   applyDynamicColor();
+  // 自动加载默认订阅源
+  autoLoadDefaultFeeds();
   renderAll(); applyLang(); startAutoRefresh();
-  if (state.launchSync && Object.keys(state.feeds).length > 0) refreshAllFeeds(true).then(() => renderAll());
-  else if (Object.keys(state.feeds).length > 0) refreshAllFeeds(true).then(() => renderAll());
+  if (Object.keys(state.feeds).length > 0) refreshAllFeeds(true).then(() => renderAll());
   window.addEventListener('hashchange', handleRoute); handleRoute();
   setupSwipeMarkRead();
   setupScrollMarkRead();
