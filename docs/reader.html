@@ -2430,22 +2430,22 @@ function setTheme(theme) { state.theme = theme; applyTheme(); saveState(); close
 
 // FEED FETCHING
 async function fetchFeed(feedUrl, silent) {
-  const proxies = getProxyList();
+  const FALLBACK_PROXY = 'https://api.allorigins.win/raw?url=';
   let lastErr;
-  // 检查是否有可用代理(DIRECT 或自定义)
-  const hasProxy = proxies.some(p => p === 'DIRECT' || (p && p.length > 0));
-  if (!hasProxy || proxies.length === 0) {
-    throw new Error('未配置代理。请在设置中添加自定义 CORS 代理,或使用 RSSHub 等服务');
-  }
-  for (const base of proxies) {
-    try {
-      const proxyUrl = buildProxyUrl(base, feedUrl);
-      const r = await fetch(proxyUrl, { headers: { 'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*' }, signal: AbortSignal.timeout(15000) });
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return parseFeed(await r.text(), feedUrl);
-    } catch (e) { lastErr = e; }
-  }
-  throw new Error('无法访问此订阅源。建议:1) 在设置中配置自定义代理;2) 使用 RSSHub 生成订阅地址');
+  // 1. 先尝试 DIRECT（同源，GitHub Pages → GitHub Pages）
+  try {
+    const r = await fetch(feedUrl, { headers: { 'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*' }, signal: AbortSignal.timeout(8000) });
+    if (r.ok) return parseFeed(await r.text(), feedUrl);
+    lastErr = new Error('HTTP ' + r.status);
+  } catch (e) { lastErr = e; }
+  // 2. DIRECT 失败，自动切换到 AllOrigins 代理（国内可用）
+  try {
+    const proxyUrl = FALLBACK_PROXY + encodeURIComponent(feedUrl);
+    const r = await fetch(proxyUrl, { headers: { 'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*' }, signal: AbortSignal.timeout(15000) });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return parseFeed(await r.text(), feedUrl);
+  } catch (e) { lastErr = e; }
+  throw lastErr || new Error('无法访问此订阅源');
 }
 function parseFeed(xmlText, feedUrl) {
   if (xmlText.charCodeAt(0) === 0xFEFF) xmlText = xmlText.slice(1);
