@@ -100,6 +100,14 @@ a:hover { text-decoration:underline; }
   background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.32);
   color:#fff; font-size:13px; font-weight:600; transition:all .2s; backdrop-filter:blur(4px);
 }
+
+.reader-btn {
+  background: #fff3e0 !important;
+  border-color: #e65100 !important;
+  color: #e65100 !important;
+  font-weight: 700;
+}
+.reader-btn:hover { background: #ffe0b2 !important; }
 .opml-btn:hover { background:rgba(255,255,255,.32); color:#fff; text-decoration:none; transform:translateY(-2px); }
 
 /* Stats strip */
@@ -256,6 +264,7 @@ footer .footer-note { font-size:12px; opacity:.75; margin-top:8px; }
         <h1>RSSForge</h1>
         <p class="tagline">聚合全网线报 · 羊毛 · 优惠 RSS，自动更新，多镜像一键订阅</p>
         <div class="opml-bar">
+          <a class="opml-btn reader-btn" href="reader.html">📖 在线阅读器</a>
           <a class="opml-btn" href="https://gitfox-enter.github.io/RSSForge/opml.xml">📥 官方 OPML</a>
           <a class="opml-btn" href="https://ghfast.top/raw.githubusercontent.com/gitfox-enter/RSSForge/main/docs/opml.ghfast.xml">🚀 ghfast 镜像</a>
           <a class="opml-btn" href="https://cdn.jsdelivr.net/gh/gitfox-enter/RSSForge@main/docs/opml.jsdelivr.xml">📦 jsDelivr CDN</a>
