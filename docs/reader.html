@@ -3117,7 +3117,24 @@ function init() {
   // 自动加载默认订阅源
   autoLoadDefaultFeeds();
   renderAll(); applyLang(); startAutoRefresh();
-  if (Object.keys(state.feeds).length > 0) refreshAllFeeds(false).then(r => { if (r.completed === 0 && r.total > 0) { $('news-articles').innerHTML = `<div class='empty-state'><div class='empty-state-icon'><svg style='width:48px'><use href='#icon-rss'/></svg></div><div class='empty-state-title'>网络不给力</div><div class='empty-state-desc'>订阅源请求全部失败，已切换到代理模式，请稍后手动刷新</div></div>`; $('news-loading').style.display='none'; } renderAll(); });
+  if (Object.keys(state.feeds).length > 0) {
+    $('news-loading').style.display = 'flex';
+    refreshAllFeeds(false).then(r => {
+      $('news-loading').style.display = 'none';
+      if (r.completed === 0 && r.total > 0) {
+        // All feeds failed - show retry button
+        $('news-articles').innerHTML = `<div class='empty-state' style='text-align:center;padding:40px 20px'>
+          <div class='empty-state-icon'><svg style='width:64px;height:64px;opacity:0.3'><use href='#icon-rss'/></svg></div>
+          <div class='empty-state-title' style='font-size:18px;margin:16px 0'>网络连接失败</div>
+          <div class='empty-state-desc' style='margin-bottom:20px'>无法访问 GitHub Pages，请检查网络或使用科学上网</div>
+          <button class='btn-primary' onclick='location.reload()' style='background:#4CAF50;color:#fff;border:0;padding:10px 24px;border-radius:20px;font-size:14px;cursor:pointer'>重新加载</button>
+        </div>`;
+      } else if (r.completed > 0) {
+        toast('成功加载 ' + r.completed + '/' + r.total + ' 个订阅源');
+        renderAll();
+      }
+    });
+  };
   window.addEventListener('hashchange', handleRoute); handleRoute();
   setupSwipeMarkRead();
   setupScrollMarkRead();
