@@ -3095,7 +3095,16 @@ async function autoLoadDefaultFeeds() {
   }
   if (added > 0) {
     saveState();
-    toast('已自动加载 ' + added + ' 个订阅源');
+    toast('已添加 ' + added + ' 个订阅源，正在加载文章...');
+    // 立即尝试刷新（会走代理）
+    refreshAllFeeds(false).then(r => {
+      if (r.completed > 0) {
+        toast('成功加载 ' + r.completed + '/' + r.total + ' 个订阅源');
+        renderAll();
+      } else {
+        toast('网络连接失败，请手动刷新重试');
+      }
+    });
   }
 }
 
