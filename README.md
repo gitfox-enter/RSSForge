@@ -143,3 +143,9 @@ RSSForge 生成的 RSS 订阅源，现在可以直接在网页中阅读！
 
 > 阅读器源码位于 [`reader/`](reader/) 目录，由 GitHub Actions 自动更新。
 
+---
+
+## 🚀 在线阅读
+
+直接打开 [RSSForge 阅读器](https://gitfox-enter.github.io/RSSForge/)，粘贴任意 RSS 链接即可阅读！📖
+

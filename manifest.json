@@ -1,40 +1,26 @@
 {
-  "name": "RSSForge · 万物皆可 RSS",
-  "short_name": "RSSForge",
-  "description": "基于 GitHub Actions 的免费 RSS 订阅源生成器，给任何网站生成 RSS，无服务器、零成本、可持续更新。",
-  "start_url": "./",
+  "name": "FeedForge",
+  "short_name": "FeedForge",
+  "description": "极简 RSS 阅读器 - Material Design 3 风格，支持主题切换、分类管理",
+  "start_url": "/feedforge/",
+  "scope": "/feedforge/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#e91e8e",
-  "orientation": "any",
-  "categories": ["utilities", "news"],
+  "orientation": "portrait-primary",
+  "background_color": "#fffbff",
+  "theme_color": "#f5593d",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192'%3E%3Crect width='192' height='192' rx='32' fill='%23f5593d'/%3E%3Cpath d='M48 64h96v12H48zm0 26h72v12H48zm0 26h96v12H48z' fill='white'/%3E%3Ccircle cx='144' cy='116' r='24' fill='white' opacity='0.3'/%3E%3C/svg%3E",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/svg+xml"
     },
     {
-      "src": "icon-512.png",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512'%3E%3Crect width='512' height='512' rx='64' fill='%23f5593d'/%3E%3Cpath d='M128 160h256v32H128zm0 64h192v32H128zm0 64h256v32H128z' fill='white'/%3E%3Ccircle cx='384' cy='288' r='64' fill='white' opacity='0.3'/%3E%3C/svg%3E",
       "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "favicon.svg",
-      "sizes": "any",
       "type": "image/svg+xml"
     }
   ],
-  "shortcuts": [
-    {
-      "name": "订阅源列表",
-      "url": "./",
-      "description": "查看所有可用订阅源"
-    },
-    {
-      "name": "OPML 订阅包",
-      "url": "./opml.xml",
-      "description": "下载 OPML 文件批量订阅"
-    }
-  ]
+  "categories": ["news", "productivity"],
+  "lang": "zh-CN",
+  "dir": "ltr"
 }
