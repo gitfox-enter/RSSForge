@@ -2434,7 +2434,7 @@ async function fetchFeed(feedUrl, silent) {
   let lastErr;
   // 1. 先尝试 DIRECT（同源，GitHub Pages → GitHub Pages）
   try {
-    const r = await fetch(feedUrl, { headers: { 'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*' }, signal: AbortSignal.timeout(8000) });
+    const r = await fetch(feedUrl, { headers: { 'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*' }, signal: AbortSignal.timeout(12000) });
     if (r.ok) return parseFeed(await r.text(), feedUrl);
     lastErr = new Error('HTTP ' + r.status);
   } catch (e) { lastErr = e; }
@@ -2471,7 +2471,7 @@ async function discoverFeedOnPage(websiteUrl) {
   for (const path of AUTO_DISCOVER_PATHS) {
     try {
       const testUrl = websiteUrl.replace(/\/$/, '') + path;
-      const r = await fetch(firstProxyUrl(testUrl), { headers: { 'Accept': 'application/rss+xml, application/atom+xml, */*' }, signal: AbortSignal.timeout(8000) });
+      const r = await fetch(firstProxyUrl(testUrl), { headers: { 'Accept': 'application/rss+xml, application/atom+xml, */*' }, signal: AbortSignal.timeout(12000) });
       if (r.ok) { const text = await r.text(); if (text.includes('<rss') || text.includes('<feed') || text.includes('<atom')) return parseFeed(text, testUrl); }
     } catch (e) {}
   }
@@ -3108,7 +3108,7 @@ function init() {
   // 自动加载默认订阅源
   autoLoadDefaultFeeds();
   renderAll(); applyLang(); startAutoRefresh();
-  if (Object.keys(state.feeds).length > 0) refreshAllFeeds(true).then(() => renderAll());
+  if (Object.keys(state.feeds).length > 0) refreshAllFeeds(false).then(r => { if (r.completed === 0 && r.total > 0) { $('news-articles').innerHTML = `<div class='empty-state'><div class='empty-state-icon'><svg style='width:48px'><use href='#icon-rss'/></svg></div><div class='empty-state-title'>网络不给力</div><div class='empty-state-desc'>订阅源请求全部失败，已切换到代理模式，请稍后手动刷新</div></div>`; $('news-loading').style.display='none'; } renderAll(); });
   window.addEventListener('hashchange', handleRoute); handleRoute();
   setupSwipeMarkRead();
   setupScrollMarkRead();
@@ -3472,7 +3472,7 @@ $('feed-category-select')?.addEventListener('change', (e) => {
 
 // Auto refresh
 let autoRefreshTimer = null;
-function startAutoRefresh() { if (autoRefreshTimer) { clearInterval(autoRefreshTimer); autoRefreshTimer = null; } const mins = Number(state.autoRefresh) || 0; if (mins <= 0) return; autoRefreshTimer = setInterval(() => { if (document.hidden) return; refreshAllFeeds(true).then(() => renderAll()); }, mins * 60000); }
+function startAutoRefresh() { if (autoRefreshTimer) { clearInterval(autoRefreshTimer); autoRefreshTimer = null; } const mins = Number(state.autoRefresh) || 0; if (mins <= 0) return; autoRefreshTimer = setInterval(() => { if (document.hidden) return; refreshAllFeeds(false).then(r => { if (r.completed === 0 && r.total > 0) { $('news-articles').innerHTML = `<div class='empty-state'><div class='empty-state-icon'><svg style='width:48px'><use href='#icon-rss'/></svg></div><div class='empty-state-title'>网络不给力</div><div class='empty-state-desc'>订阅源请求全部失败，已切换到代理模式，请稍后手动刷新</div></div>`; $('news-loading').style.display='none'; } renderAll(); }); }, mins * 60000); }
 
 // ===== i18n =====
 const I18N = {
