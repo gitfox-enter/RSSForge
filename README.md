@@ -149,3 +149,11 @@ RSSForge 生成的 RSS 订阅源，现在可以直接在网页中阅读！
 
 直接打开 [RSSForge 阅读器](https://gitfox-enter.github.io/RSSForge/)，粘贴任意 RSS 链接即可阅读！📖
 
+---
+
+## 🚀 在线阅读
+
+打开 [RSSForge 阅读器](https://gitfox-enter.github.io/RSSForge/)，粘贴 RSS 链接即可阅读！📖
+
+> 内置阅读器已替代旧版订阅页，可直接浏览所有生成的 RSS 内容。
+
