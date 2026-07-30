@@ -2612,7 +2612,8 @@ async function confirmEditFeed() {
     await addFeedByUrl(pendingEditFeedUrl, false, category, title);
     closeEditFeed();
     closeAddFeed();
-    renderAll();
+    autoLoadDefaultFeeds();
+  renderAll();
     refreshAllFeeds(false).then(() => renderAll());
   } catch(e) {
     toast(t('添加失败') + ': ' + e.message);
@@ -3071,6 +3072,31 @@ function markAllRead() {
   let count = 0;
   Object.values(state.feeds).forEach(feed => { (feed.items || []).forEach(article => { if (!state.readIds.has(article.id)) { state.readIds.add(article.id); count++; } }); });
   saveState(); renderNews($('news-search').value); toast(count > 0 ? '已将 ' + count + ' 篇文章标记为已读' : '没有未读文章');
+}
+
+const DEFAULT_FEEDS = [{"title": "线报酷", "url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ku.xml", "icon": "https://news.ixbk.net/favicon.ico", "siteUrl": "https://news.ixbk.net/", "category": ""}, {"title": "线报ICU", "url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ICU.xml", "icon": "https://xianbao.icu/favicon.ico", "siteUrl": "https://xianbao.icu/", "category": ""}, {"title": "专业线报", "url": "https://gitfox-enter.github.io/RSSForge/feeds/zhuan-ye-xian-bao.xml", "icon": "https://gitfox-enter.github.io/RSSForge/icons/www-zhuanyes-com.ico", "siteUrl": "https://www.zhuanyes.com/xianbao/", "category": ""}, {"title": "线报网", "url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wang.xml", "icon": "https://gitfox-enter.github.io/RSSForge/icons/v1-xianbao-net.ico", "siteUrl": "https://v1.xianbao.net/", "category": ""}, {"title": "羊毛党", "url": "https://gitfox-enter.github.io/RSSForge/feeds/yang-mao-dang.xml", "icon": "https://www.yangmaodang.club/favicon.ico", "siteUrl": "https://www.yangmaodang.club/articles/", "category": ""}, {"title": "超级线报", "url": "https://gitfox-enter.github.io/RSSForge/feeds/chao-ji-xian-bao.xml", "icon": "https://cjx8.com/favicon.ico", "siteUrl": "https://cjx8.com/", "category": ""}, {"title": "汇发部", "url": "https://gitfox-enter.github.io/RSSForge/feeds/hui-fa-bu.xml", "icon": "https://gitfox-enter.github.io/RSSForge/icons/www-huifabu-cn.ico", "siteUrl": "https://www.huifabu.cn/", "category": ""}, {"title": "爱Q社区", "url": "https://gitfox-enter.github.io/RSSForge/feeds/ai-Q-she-qu.xml", "icon": "https://www.iqnew.com/favicon.ico", "siteUrl": "https://www.iqnew.com/", "category": ""}, {"title": "白菜哦", "url": "https://gitfox-enter.github.io/RSSForge/feeds/bai-cai-o.xml", "icon": "https://www.baicaio.com/favicon.ico", "siteUrl": "https://www.baicaio.com/", "category": ""}, {"title": "网猴线报", "url": "https://gitfox-enter.github.io/RSSForge/feeds/wang-hou-xian-bao.xml", "icon": "https://iehou.com/favicon.ico", "siteUrl": "https://iehou.com/", "category": ""}, {"title": "赚客吧", "url": "https://gitfox-enter.github.io/RSSForge/feeds/zhuan-ke-ba.xml", "icon": "https://www.zuankeba.cn/favicon.ico", "siteUrl": "https://www.zuankeba.cn/", "category": ""}];
+const AUTO_LOAD_KEY = 'rssforge_autoloaded_v1';
+
+async function autoLoadDefaultFeeds() {
+  if (localStorage.getItem(AUTO_LOAD_KEY)) return;
+  localStorage.setItem(AUTO_LOAD_KEY, '1');
+  let added = 0;
+  for (const feed of DEFAULT_FEEDS) {
+    if (!state.feeds[feed.url]) {
+      state.feeds[feed.url] = {
+        url: feed.url,
+        title: feed.title || feed.url,
+        icon: feed.icon || '',
+        siteUrl: feed.siteUrl || '',
+        category: feed.category || ''
+      };
+      added++;
+    }
+  }
+  if (added > 0) {
+    saveState();
+    toast('已自动加载 ' + added + ' 个订阅源');
+  }
 }
 
 function init() {
