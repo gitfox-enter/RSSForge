@@ -529,6 +529,7 @@ def gen_html(meta, last_crawl=""):
         <h1>RSSForge</h1>
         <p class="tagline">聚合全网线报 · 羊毛 · 优惠 RSS，自动更新，多镜像一键订阅</p>
         <div class="opml-bar">
+          <a class="opml-btn reader-btn" href="reader.html">📖 在线阅读器</a>
           <a class="opml-btn" href="{BASE}/opml.xml">📥 官方 OPML</a>
           <a class="opml-btn" href="{GHFAST_BASE}/opml.ghfast.xml">🚀 ghfast 镜像</a>
           <a class="opml-btn" href="{JSDELIVR_BASE}/opml.jsdelivr.xml">📦 jsDelivr CDN</a>
@@ -660,7 +661,16 @@ def main():
         from datetime import datetime, timezone, timedelta
         tz = timezone(timedelta(hours=8))
         f.write(datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S CST\n"))
-        f.write(f"feeds: {len(meta)}\n")
+        f.write(f"feeds: {len(meta)
+.reader-btn {
+  background: #fff3e0 !important;
+  border-color: #e65100 !important;
+  color: #e65100 !important;
+  font-weight: 700;
+}
+.reader-btn:hover {
+  background: #ffe0b2 !important;
+}}\n")
 
 if __name__ == "__main__":
     main()
