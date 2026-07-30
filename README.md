@@ -132,3 +132,14 @@ Any PR that adds a blacklisted site will be automatically rejected by CI.
 ## License
 
 MIT
+
+---
+
+## 📖 feedforge - 在线 RSS 阅读器
+
+RSSForge 生成的 RSS 订阅源，现在可以直接在网页中阅读！
+
+**访问方式：** 将订阅源 URL 填入下方输入框，或直接访问 `/{username}.github.io/reader/` 路径（需部署后）。
+
+> 阅读器源码位于 [`reader/`](reader/) 目录，由 GitHub Actions 自动更新。
+
