@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">194665 条</span>
+      <span class="cnt" id="bc">194667 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,19 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/202838.html" data-cat="haodan">
+                      <a class="r" href="/haodan/202840.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">佳沛新西兰绿奇异果2粒单果约89-103g 4.9元</span>
+                    <span class="tm">08-02 02:46</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/202839.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">VANCESTIN重力眼罩睡觉专用 25.9元</span>
+                    <span class="tm">08-02 02:46</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/202838.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">全友多功能曲奇沙发床 897.6元</span>
                     <span class="tm">08-02 02:31</span></div></div>
@@ -228,6 +240,7 @@
                 <a class="r" href="/gaibang/202829.html" data-cat="gaibang">
                     <span class="cat-badge" style="background:#6c5ce7">丐帮</span>
           <div class="bd"><div class="tt"><span class="title-text">⏰8点/12点//17点试试抽奶茶咔 丐友淘宝扫或闪购搜：3966 (zGwUgwbB3TF)/ A</span>
+                    <span class="cmt-badge">💬1</span>
                     <span class="tm">08-02 02:18</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -586,7 +599,7 @@
                 <a class="r" href="/peiqi/202770.html" data-cat="peiqi">
                     <span class="cat-badge" style="background:#fd79a8">佩奇</span>
           <div class="bd"><div class="tt"><span class="title-text">早起记得领10-15等叠加虹包 淘宝扫 三四线城市试试 很多还有6-1/6-4/6-5等叠加 - 1</span>
-                    <span class="cmt-badge">💬31</span>
+                    <span class="cmt-badge">💬32</span>
                     <span class="tm">08-02 01:19</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -769,18 +782,6 @@
                     <span class="tm">08-02 01:07</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/202740.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">花王日本花王进口大白牙膏含氟亮白牙齿防蛀去黄渍护龈口气清新 11.31元</span>
-                    <span class="tm">08-02 01:06</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/weibochaohua/202738.html" data-cat="weibochaohua">
-                    <span class="cat-badge" style="background:#e74c3c">超话</span>
-          <div class="bd"><div class="tt"><span class="title-text">牛奶🥛 4.0 12+ 3.8 10+</span>
-                    <span class="tm">08-02 01:05</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -834,7 +835,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 194665 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 194667 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
