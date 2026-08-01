@@ -647,7 +647,7 @@ async def fetch_page_content_async(
 
     # === RSS 优先站点：绕过主页反爬（403/慢）=== 
     for domain, feed_url in RSS_FIRST_SITES.items():
-        if domain in url:
+        if urlparse(url).hostname and (urlparse(url).hostname == domain or urlparse(url).hostname.endswith('.' + domain)):
             logger.info("RSS 优先抓取: %s", url, extra={'site': url, 'event': 'rss_direct'})
             start_time = time.time()
             rss_items = await fetch_rss_feed_async(session, feed_url)
