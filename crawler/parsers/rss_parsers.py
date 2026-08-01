@@ -355,7 +355,6 @@ async def _fetch_ghxi_rss_fallback(session) -> List[Dict[str, str]]:
             feed_url,
             headers=headers,
             timeout=aiohttp.ClientTimeout(total=60),
-            ssl=False,
         ) as resp:
             if resp.status == 200:
                 content = await resp.read()
