@@ -1565,11 +1565,10 @@ def _handle_signal(signum, frame):
     _shutdown_requested = True
     logger.info("收到停止信号，将在当前任务完成后优雅退出")
 
-signal.signal(signal.SIGTERM, _handle_signal)
-signal.signal(signal.SIGINT, _handle_signal)
-
-
 if __name__ == "__main__":
+    # 注册信号处理器（仅在直接运行脚本时生效，不干扰测试框架）
+    signal.signal(signal.SIGTERM, _handle_signal)
+    signal.signal(signal.SIGINT, _handle_signal)
     try:
         asyncio.run(main_async())
     except KeyboardInterrupt:
