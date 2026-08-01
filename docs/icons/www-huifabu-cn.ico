@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">194667 条</span>
+      <span class="cnt" id="bc">194668 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -426,6 +426,12 @@
                     <span class="tm">08-02 01:35</span></div></div>
           <span class="ar">›</span>
         </a>
+                <a class="r" href="/douban/202841.html" data-cat="douban">
+                    <span class="cat-badge" style="background:#2ecc71">豆瓣</span>
+          <div class="bd"><div class="tt"><span class="title-text">皇家85g湿粮一袋3-4r左右</span>
+                    <span class="tm">08-02 01:33</span></div></div>
+          <span class="ar">›</span>
+        </a>
                 <a class="r" href="/haodan/202798.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">欧鑫芬衣柜家用卧室全实木推拉门出租房用儿童衣橱简易收纳柜子 440.3元</span>
@@ -599,7 +605,7 @@
                 <a class="r" href="/peiqi/202770.html" data-cat="peiqi">
                     <span class="cat-badge" style="background:#fd79a8">佩奇</span>
           <div class="bd"><div class="tt"><span class="title-text">早起记得领10-15等叠加虹包 淘宝扫 三四线城市试试 很多还有6-1/6-4/6-5等叠加 - 1</span>
-                    <span class="cmt-badge">💬32</span>
+                    <span class="cmt-badge">💬37</span>
                     <span class="tm">08-02 01:19</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -776,12 +782,6 @@
                     <span class="tm">08-02 01:07</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/202741.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">乐比叮婴儿驱蚊喷雾100ml/瓶 19.8元，乐比驱蚊水 19.8元</span>
-                    <span class="tm">08-02 01:07</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -835,7 +835,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 194667 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 194668 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
