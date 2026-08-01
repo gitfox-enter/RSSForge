@@ -74,8 +74,8 @@ jobs:
           # 使用排他性文件名策略：仅 commit crawl workflow 负责的文件
           # 核心状态文件（git add -u 仅修改已跟踪的文件）
           git add -u crawl_status.json items.json items_latest.json scheduler_state.json run_log.jsonl hash_record.txt notified_items.json adaptive_tiers.json 2>/dev/null || true
-          # Per-site feeds 目录（docs/feeds/ 中的文件由 rss_feed.py 直接生成到 docs/feeds/）
-          git add docs/feeds/ 2>/dev/null || true
+          # Per-site feeds 目录（docs/feeds/* 中的文件由 rss_feed.py 直接生成到 docs/feeds/*）
+          git add docs/feeds/* 2>/dev/null || true
           # 订阅源目录页面
           git add -u docs/index.html 2>/dev/null || true
           # OPML 和 icons（直接输出到 docs/ 下）
@@ -91,9 +91,9 @@ jobs:
 
           # 检查是否有新内容
           HAS_NEW_CONTENT=false
-          if git diff --staged --name-only | grep -q "feeds/"; then
+          if git diff --staged --name-only | grep -q "feeds/*"; then
             HAS_NEW_CONTENT=true
-            FEED_COUNT=$(git diff --staged --name-only | grep -c "feeds/" || echo "0")
+            FEED_COUNT=$(git diff --staged --name-only | grep -c "feeds/*" || echo "0")
             COMMIT_MSG="自动更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S') | 新增 ${FEED_COUNT} 个 feed"
           elif git diff --staged --name-only | grep -q "feeds_meta.json"; then
             HAS_NEW_CONTENT=true
@@ -138,7 +138,7 @@ jobs:
               git diff --name-only --diff-filter=U | while read conflict_file; do
                 # Prefer local (our crawler) version for data files, else accept theirs
                 case "$conflict_file" in
-                  items.json|items_latest.json|run_log.jsonl|feeds/|feeds_meta.json)
+                  items.json|items_latest.json|run_log.jsonl|feeds/*|feeds_meta.json)
                     echo "Data conflict: keeping our crawler version of $conflict_file"
                     git checkout --ours "$conflict_file" 2>/dev/null || git checkout --theirs "$conflict_file"
                     ;;
@@ -157,7 +157,7 @@ jobs:
               if [ -f .git/MERGE_HEAD ]; then
                 git diff --name-only --diff-filter=U | while read conflict_file; do
                   case "$conflict_file" in
-                    items.json|items_latest.json|run_log.jsonl|feeds/|feeds_meta.json)
+                    items.json|items_latest.json|run_log.jsonl|feeds/*|feeds_meta.json)
                       echo "Data conflict: keeping our crawler version of $conflict_file"
                       git checkout --ours "$conflict_file" 2>/dev/null || git checkout --theirs "$conflict_file"
                       ;;
@@ -192,7 +192,7 @@ jobs:
         run: |
           set -e
           
-          # feeds/OPML/icons 已由各脚本直接输出到 docs/ 目录下
+          # feeds/*OPML/icons 已由各脚本直接输出到 docs/ 目录下
           # 仅需复制 crawl_status.json 供状态页使用
           cp crawl_status.json docs/ 2>/dev/null || true
           
