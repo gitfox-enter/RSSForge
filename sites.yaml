@@ -102,7 +102,7 @@ sites:
   interval: 60
 - url: https://www.douban.com/group/711811/
   max_pages: 10
-  name: 开心赚
+  name: 豆瓣小组
   tier: medium
   interval: 120
   js_render: true
