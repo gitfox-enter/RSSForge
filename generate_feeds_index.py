@@ -661,16 +661,7 @@ def main():
         from datetime import datetime, timezone, timedelta
         tz = timezone(timedelta(hours=8))
         f.write(datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S CST\n"))
-        f.write(f"feeds: {len(meta)
-.reader-btn {
-  background: #fff3e0 !important;
-  border-color: #e65100 !important;
-  color: #e65100 !important;
-  font-weight: 700;
-}
-.reader-btn:hover {
-  background: #ffe0b2 !important;
-}}\n")
+        f.write(f"feeds: {len(meta)}\n")
 
 if __name__ == "__main__":
     main()
