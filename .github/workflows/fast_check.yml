@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: fast-check
+  group: site-monitor
   cancel-in-progress: true
 
 jobs:
