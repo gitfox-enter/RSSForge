@@ -317,7 +317,6 @@ async def fetch_ghxi_items_async(session) -> List[Dict[str, str]]:
                 api_url,
                 headers=headers,
                 timeout=aiohttp.ClientTimeout(total=60),
-                ssl=False,
             ) as resp:
                 if resp.status == 200:
                     posts = await resp.json()
