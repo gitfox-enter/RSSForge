@@ -274,6 +274,7 @@ class TestGetSourceName(unittest.TestCase):
             "豆瓣小组",
         )
 
+    @unittest.skip("kxdao.net no longer in sources.yaml (moved to dead_sites)")
     def test_url_with_forum_path(self):
         self.assertEqual(
             crawl.get_source_name(
@@ -2991,6 +2992,7 @@ class TestParseYmxianbaoItems(unittest.TestCase):
 class TestNeedsPlaywright(unittest.TestCase):
     """Tests for crawl._needs_playwright()."""
 
+    @unittest.skip("kxdao.net no longer in sources.yaml (moved to dead_sites)")
     def test_js_render_site_detected(self):
         self.assertTrue(crawl._needs_playwright("https://www.kxdao.net/forum-42-1.html"))
 
@@ -3005,8 +3007,12 @@ class TestNeedsPlaywright(unittest.TestCase):
 
     def test_js_render_set_contents(self):
         """Verify JS_RENDER_SITES has expected entries (dead sites removed)."""
-        self.assertIn('kxdao.net', crawl.JS_RENDER_SITES)
-        self.assertIn('51kanong.com', crawl.JS_RENDER_SITES)
+        # kxdao.net and 51kanong.com are now in dead_sites, not in JS_RENDER_SITES
+        self.assertNotIn('kxdao.net', crawl.JS_RENDER_SITES)
+        self.assertNotIn('51kanong.com', crawl.JS_RENDER_SITES)
+        # Verify active JS-render sites are still present
+        self.assertIn('hxm5.com', crawl.JS_RENDER_SITES)
+        self.assertIn('jikei.top', crawl.JS_RENDER_SITES)
         # 死站不应在 JS_RENDER_SITES 中（避免 Playwright 先于死站检查）
         self.assertNotIn('907k.cn', crawl.JS_RENDER_SITES)
         self.assertNotIn('xiaodigu.com', crawl.JS_RENDER_SITES)
@@ -3033,7 +3039,7 @@ class TestDeadSites(unittest.TestCase):
     """Tests for DEAD_SITES blacklist and is_dead_site()."""
 
     def test_dead_sites_count(self):
-        self.assertEqual(len(crawl.DEAD_SITES), 8)
+        self.assertEqual(len(crawl.DEAD_SITES), 15)
 
     def test_dead_site_detected(self):
         self.assertIsNotNone(crawl.is_dead_site("https://907k.cn/"))
