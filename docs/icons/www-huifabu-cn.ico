@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">199488 条</span>
+      <span class="cnt" id="bc">199491 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,25 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/207661.html" data-cat="haodan">
+                      <a class="r" href="/haodan/207664.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">韩束舒缓透润面膜补水保湿紧致抗皱提亮 实付16.87元</span>
+                    <span class="tm">08-03 03:42</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/207663.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">布鲁可积木人布布鲁鲁可可菜博士单盒版本随机发货 4.9元，飞鹤奶粉企微专享试喝 29.9元</span>
+                    <span class="tm">08-03 03:38</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/207662.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">金牌厨柜吸盘挂钩免打孔304不锈钢强力承重无痕拆卸厨房浴室门后挂衣钩 13.9元</span>
+                    <span class="tm">08-03 03:38</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/207661.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">华清宫温泉水精华喷雾补水保湿舒缓敏感肌可用妆前喷雾300ml 12.9元</span>
                     <span class="tm">08-03 03:16</span></div></div>
@@ -518,7 +536,7 @@
                 <a class="r" href="/peiqi/207601.html" data-cat="peiqi">
                     <span class="cat-badge" style="background:#fd79a8">佩奇</span>
           <div class="bd"><div class="tt"><span class="title-text">早起记得领10-15等叠加虹包 淘宝扫 三四线城市试试 很多还有6-1/6-4/6-5等叠加 👉</span>
-                    <span class="cmt-badge">💬51</span>
+                    <span class="cmt-badge">💬53</span>
                     <span class="tm">08-03 01:24</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -762,25 +780,6 @@
                     <span class="tm">08-03 01:02</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/kanong/207563.html" data-cat="kanong">
-                    <span class="cat-badge" style="background:#0984e3">卡农</span>
-          <div class="bd"><div class="tt"><span class="title-text">平安搜索ETF大赛每周一抽奖</span>
-                    <span class="cmt-badge">💬1</span>
-                    <span class="tm">08-03 01:02</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/207562.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">超能焕彩新生护色温和洗衣液11斤 37.9元</span>
-                    <span class="tm">08-03 01:02</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/207561.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">啃馋你海盐味烤爆蛋10个 8.8元</span>
-                    <span class="tm">08-03 01:02</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -834,7 +833,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 199488 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 199491 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
