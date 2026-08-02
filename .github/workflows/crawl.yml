@@ -22,6 +22,7 @@ jobs:
       TZ: Asia/Shanghai
     permissions:
       contents: write
+      workflows: write
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
