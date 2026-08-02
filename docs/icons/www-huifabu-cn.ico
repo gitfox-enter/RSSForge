@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">199491 条</span>
+      <span class="cnt" id="bc">199500 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,61 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/207664.html" data-cat="haodan">
+                      <a class="r" href="/douban/207673.html" data-cat="douban">
+                    <span class="cat-badge" style="background:#2ecc71">豆瓣</span>
+          <div class="bd"><div class="tt"><span class="title-text">刷券杨先生芡实糕7.71/三盒</span>
+                    <span class="tm">08-03 05:04</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/207672.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">威猛先生洁厕剂松木清香900g*2洁厕灵洁厕液马桶清洁除垢 16.9元</span>
+                    <span class="tm">08-03 04:48</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/207671.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">绿联100W快充Type-C数据线白色Type-C Type-C 100W PVC 5A 17.8元</span>
+                    <span class="tm">08-03 04:46</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/xiaodigu/207670.html" data-cat="xiaodigu">
+                    <span class="cat-badge" style="background:#00b894">嘀咕</span>
+          <div class="bd"><div class="tt"><span class="title-text">10.</span>
+                    <span class="tm">08-03 04:41</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/xiaodigu/207669.html" data-cat="xiaodigu">
+                    <span class="cat-badge" style="background:#00b894">嘀咕</span>
+          <div class="bd"><div class="tt"><span class="title-text">继续</span>
+                    <span class="tm">08-03 04:40</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/207668.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">小猿学练机S1墨水屏AI学习机平板小学到高中课程同步全科全年龄段含笔芯 919元</span>
+                    <span class="tm">08-03 04:18</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/207667.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">MOTLOTLR国通对讲机耳机对讲机耳麦k头通用 15.8元</span>
+                    <span class="tm">08-03 04:10</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/207666.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">荣耀手表X5i OLED窄边大屏21天续航全天候健康监测智能手表蓝牙通话国家补贴星光白 129元</span>
+                    <span class="tm">08-03 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/207665.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">飞利浦VTR5170专业小巧便携录音笔一键录音高清智能语音转文本16G 79元</span>
+                    <span class="tm">08-03 03:56</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/207664.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">韩束舒缓透润面膜补水保湿紧致抗皱提亮 实付16.87元</span>
                     <span class="tm">08-03 03:42</span></div></div>
@@ -222,7 +276,7 @@
                 <a class="r" href="/gaibang/207656.html" data-cat="gaibang">
                     <span class="cat-badge" style="background:#6c5ce7">丐帮</span>
           <div class="bd"><div class="tt"><span class="title-text">早点睡吧晚安，预测哈10点美团搜刘美含或朱珠 （个人觉得后面有，仅仅猜测） 或者10点去vb话题 上</span>
-                    <span class="cmt-badge">💬1</span>
+                    <span class="cmt-badge">💬2</span>
                     <span class="tm">08-03 03:12</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -536,7 +590,7 @@
                 <a class="r" href="/peiqi/207601.html" data-cat="peiqi">
                     <span class="cat-badge" style="background:#fd79a8">佩奇</span>
           <div class="bd"><div class="tt"><span class="title-text">早起记得领10-15等叠加虹包 淘宝扫 三四线城市试试 很多还有6-1/6-4/6-5等叠加 👉</span>
-                    <span class="cmt-badge">💬53</span>
+                    <span class="cmt-badge">💬54</span>
                     <span class="tm">08-03 01:24</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -722,64 +776,6 @@
                     <span class="tm">08-03 01:07</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/207570.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">莉婕花王莉婕Liese植物精粹泡沫染发剂显白雾霾棕 28.23元</span>
-                    <span class="tm">08-03 01:07</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/gaibang/207571.html" data-cat="gaibang">
-                    <span class="cat-badge" style="background:#6c5ce7">丐帮</span>
-          <div class="bd"><div class="tt"><span class="title-text">补了爱回收早上报名了记得去投 投三个塑料瓶以上 有18奶茶券 附近有爱回收的看看 先报名 投三个塑料</span>
-                    <span class="cmt-badge">💬8</span>
-                    <span class="tm">08-03 01:06</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/zuankeba/207569.html" data-cat="zuankeba">
-                    <span class="cat-badge" style="background:#e67e22">赚吧</span>
-          <div class="bd"><div class="tt"><span class="title-text">微信摇一摇绝对有水</span>
-                    <span class="cmt-badge">💬2</span>
-                    <span class="tm">08-03 01:06</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/weibo/207568.html" data-cat="weibo">
-                    <span class="cat-badge" style="background:#e84393">微博</span>
-          <div class="bd"><div class="tt"><span class="title-text">达芙妮清仓特卖 59元</span>
-                    <span class="tm">08-03 01:06</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/peiqi/207567.html" data-cat="peiqi">
-                    <span class="cat-badge" style="background:#fd79a8">佩奇</span>
-          <div class="bd"><div class="tt"><span class="title-text">补了 爱回收有的看看 先报名投塑料瓶 24小时内完成 有18-18奶茶券 8.7生效</span>
-                    <span class="cmt-badge">💬61</span>
-                    <span class="tm">08-03 01:05</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/207566.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">飞猪锦江酒店卷 59元</span>
-                    <span class="tm">08-03 01:04</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/207565.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">全季华住万店通兑卷 159元</span>
-                    <span class="tm">08-03 01:04</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/207564.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">飞猪如家酒店1晚卷 89元</span>
-                    <span class="tm">08-03 01:04</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/gaibang/207560.html" data-cat="gaibang">
-                    <span class="cat-badge" style="background:#6c5ce7">丐帮</span>
-          <div class="bd"><div class="tt"><span class="title-text">‼2.6/斤立白洗衣液  立白 小苍兰 洗衣液套装14斤 如图下拉详情领8拍下💰37</span>
-                    <span class="cmt-badge">💬4</span>
-                    <span class="tm">08-03 01:02</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -833,7 +829,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 199491 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 199500 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
