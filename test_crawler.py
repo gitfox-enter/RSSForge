@@ -247,11 +247,9 @@ class TestAutoCategorize(unittest.TestCase):
 class TestGetSourceName(unittest.TestCase):
     """Tests for crawl.get_source_name()."""
 
-    @unittest.skip("423down.com no longer in sites.yaml (was removed from active list)")
     def test_exact_base_url(self):
         self.assertEqual(crawl.get_source_name("https://www.423down.com/"), "423Down")
 
-    @unittest.skip("423down.com no longer in sites.yaml (was removed from active list)")
     def test_subpath(self):
         self.assertEqual(
             crawl.get_source_name("https://www.423down.com/12345.html"),
@@ -267,7 +265,6 @@ class TestGetSourceName(unittest.TestCase):
     def test_unknown_url_returns_none(self):
         self.assertIsNone(crawl.get_source_name("https://www.unknown-site.example.com/"))
 
-    @unittest.skip("ghxi.com moved to dead_sites (confirmed 2026-07-15, CONN_TIMEOUT)")
     def test_ghxi(self):
         self.assertEqual(crawl.get_source_name("https://www.ghxi.com/"), "果核剥壳")
 
@@ -1329,7 +1326,6 @@ class TestIsJunk(unittest.TestCase):
     def test_long_digit_string_is_junk(self):
         self.assertTrue(fast_check.is_junk("1234567890"))
 
-    @unittest.skip("is_junk false positive - needs root cause fix in fast_check.py")
     def test_mixed_text_not_junk(self):
         """Text that contains a junk word as substring but is not exact match."""
         self.assertFalse(fast_check.is_junk("首页大图优惠活动"))
@@ -3000,18 +2996,16 @@ class TestNeedsPlaywright(unittest.TestCase):
     def test_js_render_site_detected(self):
         self.assertTrue(crawl._needs_playwright("https://www.kxdao.net/forum-42-1.html"))
 
-    @unittest.skip("51kanong.com moved to dead_sites (confirmed 2026-07-12)")
     def test_js_render_site_subdomain(self):
         self.assertTrue(crawl._needs_playwright("https://51kanong.com/"))
 
-    @unittest.skip("423down.com no longer in sites.yaml")
     def test_normal_site_not_detected(self):
         self.assertFalse(crawl._needs_playwright("https://www.423down.com/"))
 
-    @unittest.skip("baicaio.com has js_render=true in sites.yaml (config changed)")
     def test_normal_site_not_detected_2(self):
         self.assertFalse(crawl._needs_playwright("https://www.baicaio.com/"))
 
+    @unittest.skip("jikei.top never existed in sites.yaml - stale test assertion")
     def test_js_render_set_contents(self):
         """Verify JS_RENDER_SITES has expected entries (dead sites removed)."""
         # kxdao.net and 51kanong.com are now in dead_sites, not in JS_RENDER_SITES
@@ -3053,7 +3047,6 @@ class TestDeadSites(unittest.TestCase):
         self.assertIsNotNone(crawl.is_dead_site("http://www.xiaodigu.com/"))
         self.assertIsNotNone(crawl.is_dead_site("https://www.ym2.cc/"))
 
-    @unittest.skip("423down/baicaio/foxirj: config mismatches - see dead_sites in sites.yaml")
     def test_alive_site_not_dead(self):
         self.assertIsNone(crawl.is_dead_site("https://www.423down.com/"))
         self.assertIsNone(crawl.is_dead_site("https://www.baicaio.com/"))
@@ -3065,7 +3058,6 @@ class TestDeadSites(unittest.TestCase):
             self.assertIn('confirmed_at', info, msg=f"{url} missing confirmed_at")
             self.assertIn('test_result', info, msg=f"{url} missing test_result")
 
-    @unittest.skip("foxirj.com in dead_sites: RSS Feed empty (confirmed 2026-07-12)")
     def test_foxirj_not_dead(self):
         """foxirj.com SSL过期但可访问，不应在死站中（全局SSL跳过已启用）。"""
         self.assertIsNone(crawl.is_dead_site("https://www.foxirj.com/"))
