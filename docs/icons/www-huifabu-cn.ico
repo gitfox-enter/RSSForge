@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">205530 条</span>
+      <span class="cnt" id="bc">205535 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,37 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/213702.html" data-cat="haodan">
+                      <a class="r" href="/haodan/213708.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">晋典零添加山西陈醋150ml×2 2.6元</span>
+                    <span class="tm">08-04 05:17</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/213707.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">佳沛新西兰空运红奇异果6粒装单果80-103g 18.9元</span>
+                    <span class="tm">08-04 05:11</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/213706.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">魅蓝男士三合一洗发水沐浴露洁面古龙香氛洗头洗脸洗澡蔚蓝沐浴露1瓶装*500nl 14.87元</span>
+                    <span class="tm">08-04 05:11</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/213705.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">誉品书皮自粘透明磨砂包书膜全套30张大中小 10.77元</span>
+                    <span class="tm">08-04 05:11</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/213704.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">芥末鸟lyc137艾草蚊香棒60g 15.9元</span>
+                    <span class="tm">08-04 05:11</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/213702.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">东芝小白露风冷电压力锅5L 4-8人高压锅家用IH锁鲜0排气纯钛0涂层陶瓷双胆PC-50MXVC</span>
                     <span class="tm">08-04 04:41</span></div></div>
@@ -746,36 +776,6 @@
                     <span class="tm">08-04 01:31</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/213607.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">疯狂小狗冻干夹心狗粮泰迪比熊中小型幼成犬通用南瓜山药鸡50g 1元</span>
-                    <span class="tm">08-04 01:31</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/213606.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">飞鹤星飞帆卓睿婴幼儿配方奶粉2段 23.9元</span>
-                    <span class="tm">08-04 01:31</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/213605.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">果天赐西梅鲜果5斤16-25g 15.8元</span>
-                    <span class="tm">08-04 01:29</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/213604.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">谷小酒纯粮固态发酵白酒光瓶装浓香型42度 14元</span>
-                    <span class="tm">08-04 01:29</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/213603.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">梅林油浸金枪鱼肉罐头100g 1元</span>
-                    <span class="tm">08-04 01:29</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -829,7 +829,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 205530 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 205535 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
