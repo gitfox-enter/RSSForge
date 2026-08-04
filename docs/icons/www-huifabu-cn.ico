@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">197635 条</span>
+      <span class="cnt" id="bc">197649 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,85 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/219995.html" data-cat="haodan">
+                      <a class="r" href="/douban/220009.html" data-cat="douban">
+                    <span class="cat-badge" style="background:#2ecc71">豆瓣</span>
+          <div class="bd"><div class="tt"><span class="title-text">🍠茶百道惊喜盒子有水</span>
+                    <span class="tm">08-05 04:07</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/220008.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">巴布豆菠萝裤量贩装拉拉裤XXXXL码60片 下5件 117.6元</span>
+                    <span class="tm">08-05 04:02</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/220007.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">西麦高锌高钙牛奶燕麦片300g袋装 17.9元</span>
+                    <span class="tm">08-05 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/220006.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">百事可乐碳酸汽水200ml*10罐迷你罐原味装 7.18元</span>
+                    <span class="tm">08-05 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/220005.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">武夷山大红袍乌龙茶武夷岩茶洲茶肉桂花果一级茶叶和润品鉴8.3g*2泡中轻火盒装 9.9元</span>
+                    <span class="tm">08-05 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/220004.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">巴麗岛电解质水椰子水饮料 15.9元</span>
+                    <span class="tm">08-05 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/220003.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">西麦低脂玉米片160g 13.2元</span>
+                    <span class="tm">08-05 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/220002.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">桂格独立小包装即食代餐食品 8.9元</span>
+                    <span class="tm">08-05 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/220001.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">水溶C100柠檬西柚味复合果汁饮料西柚味250ml*6瓶 13.99元</span>
+                    <span class="tm">08-05 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/220000.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">桂格奇亚籽混合即食麦片420g 14.9元</span>
+                    <span class="tm">08-05 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/219999.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">狮峰牌感德龙馨铁观音64g 17元</span>
+                    <span class="tm">08-05 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/219998.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">笑为鲜老冰棍电解质气泡水果汁饮料夏季饮品老冰棍气泡水320ml*6罐 10.98元</span>
+                    <span class="tm">08-05 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/douban/219997.html" data-cat="douban">
+                    <span class="cat-badge" style="background:#2ecc71">豆瓣</span>
+          <div class="bd"><div class="tt"><span class="title-text">tangle扭扭乐2.96简单车</span>
+                    <span class="tm">08-05 03:59</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/219995.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">白象大骨面方便面整箱5袋375g多口味混合 7.1元</span>
                     <span class="tm">08-05 03:46</span></div></div>
@@ -700,85 +778,6 @@
                     <span class="tm">08-05 01:48</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/219907.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">荣耀300Ultra 5G手机12GB+512GB墨岩黑 2056.15元</span>
-                    <span class="tm">08-05 01:48</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/219906.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">厨邦酱油生抽酱油1.88kg 6.9元</span>
-                    <span class="tm">08-05 01:48</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/219905.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">青节儿童学习桌子书桌大白桌家用可升降课桌青年写字椅 492.15元</span>
-                    <span class="tm">08-05 01:48</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/219899.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">七鲜多果肉草莓果酱160g 5.26元</span>
-                    <span class="tm">08-05 01:48</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/mogu/219898.html" data-cat="mogu">
-                    <span class="cat-badge" style="background:#00b894">蘑菇</span>
-          <div class="bd"><div class="tt"><span class="title-text">🐶东 卤门家族猪肉干棒椒麻味28g/罐每件3.32</span>
-                    <span class="cmt-badge">💬5</span>
-                    <span class="tm">08-05 01:47</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/219904.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">诺小嘉礼盒装2026款防水往复式电动剃须刀 15元</span>
-                    <span class="tm">08-05 01:47</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/219903.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">KUMPOO休闲百搭连帽卫衣长裤套装 38.9元</span>
-                    <span class="tm">08-05 01:47</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/219902.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">Apple AirPods 4主动降噪款 半入耳式真无线蓝牙耳机 白色 无线充电 Type-C</span>
-                    <span class="tm">08-05 01:47</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/219901.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">BIGME B7Pro彩色墨水屏智能办公本7英寸4G通话电纸书阅读器 1711.99元</span>
-                    <span class="tm">08-05 01:47</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/219900.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">洋河天之蓝52度礼盒绵柔浓香白酒自营2018版 477元</span>
-                    <span class="tm">08-05 01:47</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/219897.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">ARMANI beauty寄情系列清新自然淡香持久男士香水 130.15元</span>
-                    <span class="tm">08-05 01:47</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/219896.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">育才YCX-21006可升降儿童学习椅 198.05元</span>
-                    <span class="tm">08-05 01:47</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/gaibang/219895.html" data-cat="gaibang">
-                    <span class="cat-badge" style="background:#6c5ce7">丐帮</span>
-          <div class="bd"><div class="tt"><span class="title-text">🍚饭点 淘宝闪购外卖三叠加 — 领了千问，记得这样子三叠加 闪购🧧商家券➕千问吱附抵扣 — 1️⃣淘</span>
-                    <span class="tm">08-05 01:46</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -832,7 +831,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 197635 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 197649 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
