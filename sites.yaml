@@ -132,6 +132,34 @@ sites:
   tier: high
   interval: 30
   fast_check: true
+
+  # ===== 新增科技/创业类 RSS 源（2026-08-05） =====
+  # 说明：以下站点均为标准 RSS Feed，走 parse_rss_feed 通用解析器，无需新增 parser
+
+  # 36氪 - 科技/创业深度报道，RSS 稳定可访问
+- url: https://36kr.com/
+  name: 36氪
+  tier: high
+  interval: 30
+  parser: rss
+  rss_feed: https://www.36kr.com/feed
+
+  # 爱范儿 - 科技产品/互联网原创，RSS 稳定
+- url: https://www.ifanr.com/
+  name: 爱范儿
+  tier: medium
+  interval: 60
+  parser: rss
+  rss_feed: https://www.ifanr.com/feed
+
+  # 少数派 - 数字生活/效率工具，补充来源多元化
+- url: https://sspai.com/
+  name: 少数派
+  tier: medium
+  interval: 60
+  parser: rss
+  rss_feed: https://sspai.com/feed
+
 dead_sites:
   https://www.007ymd.com/:
     reason: DNS/连接失败 - 域名无法解析
@@ -196,3 +224,4 @@ dead_sites:
     confirmed_at: '2026-07-15'
     test_result: TLS/SSL connection has been closed (EOF) (_ssl.c:992)
     name: 果核剥壳
+
