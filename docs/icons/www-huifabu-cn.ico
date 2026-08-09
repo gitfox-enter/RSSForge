@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">225475 条</span>
+      <span class="cnt" id="bc">225476 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,13 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/249248.html" data-cat="haodan">
+                      <a class="r" href="/weibochaohua/249249.html" data-cat="weibochaohua">
+                    <span class="cat-badge" style="background:#e74c3c">超话</span>
+          <div class="bd"><div class="tt"><span class="title-text">买来试试 返2.3</span>
+                    <span class="tm">08-10 02:37</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/249248.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">滴露洗衣机6合1强效清洗剂上新混香3瓶 54.7元</span>
                     <span class="tm">08-10 02:31</span></div></div>
@@ -265,6 +271,7 @@
                 <a class="r" href="/kanong/249245.html" data-cat="kanong">
                     <span class="cat-badge" style="background:#0984e3">卡农</span>
           <div class="bd"><div class="tt"><span class="title-text">苹果用户，抖音账号多的，你们去设置中心解绑抖音支付，然 ...</span>
+                    <span class="cmt-badge">💬1</span>
                     <span class="tm">08-10 02:07</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -307,7 +314,7 @@
                 <a class="r" href="/kanong/249229.html" data-cat="kanong">
                     <span class="cat-badge" style="background:#0984e3">卡农</span>
           <div class="bd"><div class="tt"><span class="title-text">领取成功，卡8秒前点，设置每秒10次</span>
-                    <span class="cmt-badge">💬4</span>
+                    <span class="cmt-badge">💬5</span>
                     <span class="tm">08-10 02:02</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -662,7 +669,7 @@
                 <a class="r" href="/peiqi/249159.html" data-cat="peiqi">
                     <span class="cat-badge" style="background:#fd79a8">佩奇</span>
           <div class="bd"><div class="tt"><span class="title-text">早起记得领10-15等叠加虹包 淘宝扫 三四线城市试试 很多还有6-1/6-4/6-5等叠加 👉</span>
-                    <span class="cmt-badge">💬30</span>
+                    <span class="cmt-badge">💬32</span>
                     <span class="tm">08-10 01:23</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -778,13 +785,6 @@
                     <span class="tm">08-10 01:13</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/mogu/249138.html" data-cat="mogu">
-                    <span class="cat-badge" style="background:#00b894">蘑菇</span>
-          <div class="bd"><div class="tt"><span class="title-text">📍酒店特惠券包</span>
-                    <span class="cmt-badge">💬6</span>
-                    <span class="tm">08-10 01:10</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -838,7 +838,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 225475 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 225476 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
