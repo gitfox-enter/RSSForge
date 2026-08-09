@@ -97,5 +97,32 @@
     "icon": "https://www.zuankeba.cn/favicon.ico",
     "site_url": "https://www.zuankeba.cn/",
     "items_hash": "0b010ae94c73b4d288a23e67ec3c4a40"
+  },
+  "36氪": {
+    "interval": 30,
+    "freq_label": "每30分钟",
+    "count": 0,
+    "feed_url": "https://www.36kr.com/feed",
+    "icon": "https://36kr.com/favicon.ico",
+    "site_url": "https://36kr.com/",
+    "items_hash": "pending"
+  },
+  "爱范儿": {
+    "interval": 60,
+    "freq_label": "每小时",
+    "count": 0,
+    "feed_url": "https://www.ifanr.com/feed",
+    "icon": "https://www.ifanr.com/favicon.ico",
+    "site_url": "https://www.ifanr.com/",
+    "items_hash": "pending"
+  },
+  "少数派": {
+    "interval": 60,
+    "freq_label": "每小时",
+    "count": 0,
+    "feed_url": "https://sspai.com/feed",
+    "icon": "https://sspai.com/favicon.ico",
+    "site_url": "https://sspai.com/",
+    "items_hash": "pending"
   }
 }
