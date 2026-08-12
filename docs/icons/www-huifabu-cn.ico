@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">253078 条</span>
+      <span class="cnt" id="bc">253079 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,19 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/266635.html" data-cat="haodan">
+                      <a class="r" href="/weibochaohua/266637.html" data-cat="weibochaohua">
+                    <span class="cat-badge" style="background:#e74c3c">超话</span>
+          <div class="bd"><div class="tt"><span class="title-text">xs3 xs5 15➖3 zf➖1</span>
+                    <span class="tm">08-13 02:37</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/266636.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">米良品家用特氟龙煤气灶防油垫2片装 9.9元</span>
+                    <span class="tm">08-13 02:34</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/266635.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">花田美芙丁腈手套洗碗家务厨房耐用食品级加厚防水橡胶冬加绒刷碗清洁专用 12.8元</span>
                     <span class="tm">08-13 02:16</span></div></div>
@@ -768,18 +780,6 @@
                     <span class="tm">08-13 01:06</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/douban/266527.html" data-cat="douban">
-                    <span class="cat-badge" style="background:#2ecc71">豆瓣</span>
-          <div class="bd"><div class="tt"><span class="title-text">欧莱雅生姜洗发水81.33元1720ml</span>
-                    <span class="tm">08-13 01:06</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/266526.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">京鲜生山东蒙阴黄金毛蟠桃4.5斤大果单果140g 24.9元</span>
-                    <span class="tm">08-13 01:05</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -833,7 +833,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 253078 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 253079 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
