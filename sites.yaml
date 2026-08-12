@@ -160,6 +160,33 @@ sites:
   parser: rss
   rss_feed: https://sspai.com/feed
 
+  # ===== 新增科技/创业类 RSS 源（2026-08-12 第2批）=====
+  # 说明：以下站点均为标准 RSS，走 parse_rss_feed，无需新增 parser
+
+  # 阮一峰的网络日志 - 经典技术随笔/编程/互联网分析，原创性极高
+- url: https://www.ruanyifeng.com/
+  name: 阮一峰的网络日志
+  tier: medium
+  interval: 360
+  parser: rss
+  rss_feed: https://www.ruanyifeng.com/blog/atom.xml
+
+  # 美团技术团队 - 美团工程实践/架构/开源，高质量技术博客
+- url: https://tech.meituan.com/
+  name: 美团技术团队
+  tier: medium
+  interval: 360
+  parser: rss
+  rss_feed: https://tech.meituan.com/rss.xml
+
+  # 极客公园 - 科技产品/互联网创业/新趋势，与36氪互补覆盖更广
+- url: https://www.geekpark.net/
+  name: 极客公园
+  tier: medium
+  interval: 60
+  parser: rss
+  rss_feed: https://www.geekpark.net/rss
+
 dead_sites:
   https://www.007ymd.com/:
     reason: DNS/连接失败 - 域名无法解析
