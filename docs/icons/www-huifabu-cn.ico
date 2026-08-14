@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">266236 条</span>
+      <span class="cnt" id="bc">266237 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,25 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/279794.html" data-cat="haodan">
+                      <a class="r" href="/douban/279797.html" data-cat="douban">
+                    <span class="cat-badge" style="background:#2ecc71">豆瓣</span>
+          <div class="bd"><div class="tt"><span class="title-text">十月稻田特级五常大米4/斤</span>
+                    <span class="tm">08-15 04:04</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/279796.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">asahi朝日超爽生黄啤罐装500ml×15罐 66.03元</span>
+                    <span class="tm">08-15 04:04</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/279795.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">爱国者录音笔R3315C 8G 55元</span>
+                    <span class="tm">08-15 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/279794.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">爱国者录音笔R6933plus 16G专业录音器一键录音设备录音笔转文字会议记录学习培训采访炫黑</span>
                     <span class="tm">08-15 03:56</span></div></div>
@@ -760,24 +778,6 @@
                     <span class="tm">08-15 01:40</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/279697.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">樱姿娜玻尿酸抗菌保暖内衣套装 34.9元</span>
-                    <span class="tm">08-15 01:39</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/279696.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">面粉10斤 14元</span>
-                    <span class="tm">08-15 01:37</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/279695.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">全国经济连锁酒店1晚 169元</span>
-                    <span class="tm">08-15 01:37</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -831,7 +831,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 266236 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 266237 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
