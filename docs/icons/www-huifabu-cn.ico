@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">266310 条</span>
+      <span class="cnt" id="bc">266312 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,19 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/279867.html" data-cat="haodan">
+                      <a class="r" href="/haodan/279871.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">蒙牛纯甄甜橙酸牛奶100g*20袋 24.9元</span>
+                    <span class="tm">08-15 06:49</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/279870.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">盼盼乳酸菌饮料100ml×4 1.9元</span>
+                    <span class="tm">08-15 06:46</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/279867.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">沫檬地板清洁剂500ml*3瓶 下单赠抹布海绵擦 19.9元</span>
                     <span class="tm">08-15 06:39</span></div></div>
@@ -759,18 +771,6 @@
                     <span class="tm">08-15 02:46</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/279769.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">手工针织向日葵玫瑰花束盆栽超大号含礼袋灯串 6.2元</span>
-                    <span class="tm">08-15 02:46</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/279768.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">恬嘉果业丹东冰点草莓红颜草莓新鲜99奶油草莓罐头零添加冰冻草莓400g1盒装常规红盒款 11.9元</span>
-                    <span class="tm">08-15 02:45</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -824,7 +824,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 266310 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 266312 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
