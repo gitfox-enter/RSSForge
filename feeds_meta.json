@@ -2,11 +2,11 @@
   "线报酷": {
     "interval": 15,
     "freq_label": "每15分钟",
-    "count": 31236,
+    "count": 31270,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-ku.xml",
     "icon": "https://news.ixbk.net/favicon.ico",
     "site_url": "https://news.ixbk.net/",
-    "items_hash": "99c053fabba79511be92fdfdae1baf39"
+    "items_hash": "52ce91aab582976708326779ac25133b"
   },
   "线报ICU": {
     "interval": 15,
@@ -24,7 +24,7 @@
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/zhuan-ye-xian-bao.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/www-zhuanyes-com.ico",
     "site_url": "https://www.zhuanyes.com/xianbao/",
-    "items_hash": "401bd4137847ac4abea6e76fc1d85cd9"
+    "items_hash": "1b13e1dee8d7bd80be3b1a519e71be70"
   },
   "线报网": {
     "interval": 20,
@@ -33,7 +33,7 @@
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/xian-bao-wang.xml",
     "icon": "https://gitfox-enter.github.io/RSSForge/icons/v1-xianbao-net.ico",
     "site_url": "https://v1.xianbao.net/",
-    "items_hash": "bc1f10f78af65d7a0580e24f62a7ba47"
+    "items_hash": "94d66ebf319364753147bff99e9ef1ea"
   },
   "羊毛党": {
     "interval": 30,
@@ -47,18 +47,18 @@
   "超级线报": {
     "interval": 20,
     "freq_label": "每20分钟",
-    "count": 712,
+    "count": 713,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/chao-ji-xian-bao.xml",
     "icon": "https://cjx8.com/favicon.ico",
     "site_url": "https://cjx8.com/",
-    "items_hash": "09ea969e6bd5c7838aac32256436d958"
+    "items_hash": "a5a8f7a9721581fc546cd7596941be27"
   },
   "汇发部": {
     "interval": 20,
     "freq_label": "每20分钟",
     "count": 32361,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/hui-fa-bu.xml",
-    "icon": "https://gitfox-enter.github.io/RSSForge/icons/www-huifabu-cn.ico",
+    "icon": "https://www.huifabu.cn/favicon.ico",
     "site_url": "https://www.huifabu.cn/",
     "items_hash": "47ecffee173cbac8d5ab7b0f9e23ae31"
   },
@@ -92,10 +92,10 @@
   "赚客吧": {
     "interval": 30,
     "freq_label": "每30分钟",
-    "count": 2044,
+    "count": 2045,
     "feed_url": "https://gitfox-enter.github.io/RSSForge/feeds/zhuan-ke-ba.xml",
     "icon": "https://www.zuankeba.cn/favicon.ico",
     "site_url": "https://www.zuankeba.cn/",
-    "items_hash": "6bff538944198299dcb542d7fbdeeb5a"
+    "items_hash": "38a0ca4860ebdf85efaecf8fe41a4472"
   }
 }
