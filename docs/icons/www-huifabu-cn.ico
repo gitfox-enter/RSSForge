@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">266280 条</span>
+      <span class="cnt" id="bc">266285 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,37 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/279837.html" data-cat="haodan">
+                      <a class="r" href="/haodan/279842.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">京世泽山西蜜脆桃净重4.5斤单果150g+新鲜水果 12.87元</span>
+                    <span class="tm">08-15 05:29</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/279841.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">百钻吉利丁粉尝鲜装10g*2袋 6.8元</span>
+                    <span class="tm">08-15 05:29</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/279840.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">初中必读正版名著十二本朝花夕拾鲁迅原著西游记红星照耀中国红岩简爱唐诗三百首初一初二初三课外海底两万里</span>
+                    <span class="tm">08-15 05:29</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/279839.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">春雨实验班提优大考卷一年级上人教版语文 12.9元</span>
+                    <span class="tm">08-15 05:29</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/279838.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">纽曼16G高清录音笔H8精英版 38元</span>
+                    <span class="tm">08-15 05:25</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/279837.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">下饭菜香辣海带丝开袋即食整箱小包装凉拌菜整箱包邮16克16克*10包 1.10元</span>
                     <span class="tm">08-15 05:19</span></div></div>
@@ -742,37 +772,6 @@
                     <span class="tm">08-15 02:16</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/279742.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">荣耀X5i双向蓝牙通话星光白智能手表 188.81元</span>
-                    <span class="tm">08-15 02:16</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/279741.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">百帝王小麦白啤酒500ml*24听整箱 129.6元</span>
-                    <span class="tm">08-15 02:16</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/279740.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">康夫F9Pro高速负离子电吹风 199.66元</span>
-                    <span class="tm">08-15 02:16</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/mogu/279739.html" data-cat="mogu">
-                    <span class="cat-badge" style="background:#00b894">蘑菇</span>
-          <div class="bd"><div class="tt"><span class="title-text">🐶东plus 200-25券</span>
-                    <span class="cmt-badge">💬20</span>
-                    <span class="tm">08-15 02:09</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/279738.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">马奇新新柠檬黄油夹心饼干627g 19.9元</span>
-                    <span class="tm">08-15 02:09</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -826,7 +825,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 266280 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 266285 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
