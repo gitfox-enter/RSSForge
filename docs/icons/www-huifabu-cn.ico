@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">266223 条</span>
+      <span class="cnt" id="bc">266225 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,25 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/weibochaohua/279780.html" data-cat="weibochaohua">
+                      <a class="r" href="/haodan/279783.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">洁柔有芯卷纸黑Face4层140克*30卷 67.9元</span>
+                    <span class="tm">08-15 03:29</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/279782.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">不多言老式椰蓉奶油面包500g1箱10包 14.9元</span>
+                    <span class="tm">08-15 03:19</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/279781.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">双色欧雅纸白色+白色20张/包*3件 0.7元</span>
+                    <span class="tm">08-15 03:16</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/weibochaohua/279780.html" data-cat="weibochaohua">
                     <span class="cat-badge" style="background:#e74c3c">超话</span>
           <div class="bd"><div class="tt"><span class="title-text">整点一搜就掉</span>
                     <span class="tm">08-15 03:03</span></div></div>
@@ -421,7 +439,7 @@
                 <a class="r" href="/mogu/279739.html" data-cat="mogu">
                     <span class="cat-badge" style="background:#00b894">蘑菇</span>
           <div class="bd"><div class="tt"><span class="title-text">🐶东plus 200-25券</span>
-                    <span class="cmt-badge">💬17</span>
+                    <span class="cmt-badge">💬19</span>
                     <span class="tm">08-15 02:09</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -536,6 +554,7 @@
                 <a class="r" href="/gaibang/279720.html" data-cat="gaibang">
                     <span class="cat-badge" style="background:#6c5ce7">丐帮</span>
           <div class="bd"><div class="tt"><span class="title-text">好想来忽略现在没了等下次补</span>
+                    <span class="cmt-badge">💬2</span>
                     <span class="tm">08-15 01:50</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -759,24 +778,6 @@
                     <span class="tm">08-15 01:31</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/279683.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">海尔自营洗衣机 2233元</span>
-                    <span class="tm">08-15 01:31</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/279682.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">香之派多味翅尖450g/袋 15.9元</span>
-                    <span class="tm">08-15 01:30</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/279681.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">釉下彩蝴蝶结四碗四勺 8.99元</span>
-                    <span class="tm">08-15 01:29</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -830,7 +831,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 266223 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 266225 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
