@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">272680 条</span>
+      <span class="cnt" id="bc">272681 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,19 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/xiaodigu/286237.html" data-cat="xiaodigu">
+                      <a class="r" href="/haodan/286239.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">贝览得beautyblend一次性洗脸巾抽取式洁面巾棉柔巾干湿两用90g特厚珍珠纹10包装</span>
+                    <span class="tm">08-16 04:31</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/286238.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">乐事经典原味40g 12件 25.8元</span>
+                    <span class="tm">08-16 04:19</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/xiaodigu/286237.html" data-cat="xiaodigu">
                     <span class="cat-badge" style="background:#00b894">嘀咕</span>
           <div class="bd"><div class="tt"><span class="title-text">上次唐派签到送的哪个功夫猫半夜上50+了</span>
                     <span class="tm">08-16 04:18</span></div></div>
@@ -761,18 +773,6 @@
                     <span class="tm">08-16 01:44</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/weibochaohua/286124.html" data-cat="weibochaohua">
-                    <span class="cat-badge" style="background:#e74c3c">超话</span>
-          <div class="bd"><div class="tt"><span class="title-text">抽奖有万达优惠券</span>
-                    <span class="tm">08-16 01:43</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/286122.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">五谷磨房核桃芝麻黑豆粉428*2罐 五谷伴侣280g 礼品袋 69.8元</span>
-                    <span class="tm">08-16 01:42</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -826,7 +826,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 272680 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 272681 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
