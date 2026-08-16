@@ -55,13 +55,9 @@ jobs:
           set +e
 
           # 使用排他性文件名策略：仅 commit fast_check workflow 负责的文件
-          # feeds_meta.json 由 fast_check 单独管理（避免与 crawl 并发冲突）
           git add -u feeds_meta.json 2>/dev/null || true
-          # docs/feeds/ 目录（rss_feed.py 直接输出到 docs/feeds/）
           git add docs/feeds/ 2>/dev/null || true
-          # 调度器状态和日志
           git add -u scheduler_state.json fast_log.jsonl 2>/dev/null || true
-          # OPML 和 icons 由 fast_check 更新（直接在 docs/ 下）
           git add -u docs/opml.xml docs/opml.*.xml docs/icons/ 2>/dev/null || true
 
           git status
@@ -70,7 +66,6 @@ jobs:
             exit 0
           fi
 
-          # 检查是否有新内容
           if git diff --staged --name-only | grep -q "feed.xml\|adaptive_tiers.json"; then
             COMMIT_MSG="快速更新: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
           else
@@ -78,19 +73,19 @@ jobs:
           fi
 
           git commit -m "$COMMIT_MSG"
+
+          # Pull rebase with autostash to handle concurrent pushes
           push_success=false
           for i in 1 2 3 4 5; do
             echo "=== Push attempt $i ==="
-            git rebase --abort 2>/dev/null || true
-            git pull --no-commit origin main
-            rebase_rc=$?
-            if [ $rebase_rc -ne 0 ]; then
-              echo "Rebase had conflicts, attempting auto-resolution..."
+            git pull --rebase origin main --autostash || true
+            # Handle conflicts: fast_check is authoritative for feeds data
+            if git diff --name-only --diff-filter=U | grep -q .; then
               git diff --name-only --diff-filter=U | while read conflict_file; do
                 case "$conflict_file" in
-                  items.json|items_latest.json|run_log.jsonl|feeds/|feeds_meta.json)
-                    echo "Data conflict: keeping our fast_check version of $conflict_file"
-                    git checkout --ours "$conflict_file" 2>/dev/null || git checkout --theirs "$conflict_file"
+                  docs/feeds/*|feeds_meta.json|items*.json|run_log.jsonl|adaptive_tiers.json)
+                    echo "Conflict in $conflict_file: keeping fast_check local version"
+                    git checkout --ours "$conflict_file" 2>/dev/null
                     ;;
                   *)
                     echo "Conflict in $conflict_file: accepting remote version"
@@ -99,15 +94,15 @@ jobs:
                 esac
                 git add "$conflict_file"
               done
-              git rebase --abort 2>/dev/null || true
-              git merge origin/main --no-edit
+              git rebase --continue 2>/dev/null || true
             fi
-            if git push origin main; then
+            if git push --force-with-lease origin main; then
               push_success=true
+              echo "Push succeeded"
               break
             fi
             echo "Push attempt $i failed, waiting before retry..."
-            sleep 2
+            sleep 3
           done
           if [ "$push_success" = true ]; then
             echo "Changes committed and pushed successfully"
@@ -115,11 +110,3 @@ jobs:
             echo "All push attempts failed"
             exit 1
           fi
-
-      - name: 停滞报警
-        if: success()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-        run: |
-          python3 .github/scripts/stale_alert.py
