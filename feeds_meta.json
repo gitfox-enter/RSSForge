@@ -97,5 +97,113 @@
     "icon": "https://www.zuankeba.cn/favicon.ico",
     "site_url": "https://www.zuankeba.cn/",
     "items_hash": "bd45d62a4beaec0b0d8cbb2b026cd789"
+  },
+  "36氪": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "feed_url": "https://www.36kr.com/feed",
+    "site_url": "https://36kr.com/"
+  },
+  "爱范儿": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "feed_url": "https://www.ifanr.com/feed",
+    "site_url": "https://www.ifanr.com/"
+  },
+  "少数派": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "feed_url": "https://sspai.com/feed",
+    "site_url": "https://sspai.com/"
+  },
+  "阮一峰的网络日志": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "feed_url": "https://www.ruanyifeng.com/blog/atom.xml",
+    "site_url": "https://www.ruanyifeng.com/"
+  },
+  "美团技术团队": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "feed_url": "https://tech.meituan.com/rss.xml",
+    "site_url": "https://tech.meituan.com/"
+  },
+  "极客公园": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "feed_url": "https://www.geekpark.net/rss",
+    "site_url": "https://www.geekpark.net/"
+  },
+  "线报迷": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "site_url": "https://xianbaomi.com/"
+  },
+  "羊毛王": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "site_url": "https://yangmao.wang/"
+  },
+  "羊毛线报": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "site_url": "https://b1.ymxianbao.cn/"
+  },
+  "12345线报": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "site_url": "https://www.12345pro.com/"
+  },
+  "活动5": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "site_url": "https://www.huodong8.com/"
+  },
+  "天天赚": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "site_url": "https://www.daydayzhuan.com/"
+  },
+  "慢慢买": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "site_url": "https://www.manmanbuy.com/"
+  },
+  "拔草哦": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "site_url": "https://www.bacaoo.com/"
+  },
+  "豆瓣小组": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "site_url": "https://www.douban.com/group/711811/"
+  },
+  "羊毛群": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "site_url": "https://blog.xianbao.art/"
+  },
+  "线报屋": {
+    "count": 0,
+    "interval": 360,
+    "freq_label": "未知",
+    "site_url": "https://www.hxm5.com/"
   }
 }
