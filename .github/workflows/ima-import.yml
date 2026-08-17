@@ -21,7 +21,7 @@ env:
 
 jobs:
   import:
-    if: ${{ github.event.inputs.enable_import == 'true' || github.event.inputs.enable_import == '' && env.ENABLE_IMA_IMPORT == 'true' }}
+    if: ${{ github.event.inputs.enable_import == 'true' || github.event.inputs.enable_import == '' && vars.ENABLE_IMA_IMPORT == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: 检出仓库
