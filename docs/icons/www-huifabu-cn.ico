@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">279922 条</span>
+      <span class="cnt" id="bc">279928 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,37 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/298046.html" data-cat="haodan">
+                      <a class="r" href="/haodan/298051.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">芬腾反重力提拉无痕字母文胸2条 39.9元</span>
+                    <span class="tm">08-18 06:46</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/298050.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">膏药贴骨贴风湿止痛膏通用腿关节膏正品发热膏膝盖贴肩膀筋骨10贴 1.01元</span>
+                    <span class="tm">08-18 06:45</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/298049.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">手帕纸10包送京东洗车和1L机油 9.99元</span>
+                    <span class="tm">08-18 06:41</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/298048.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">温氏老母鸡肉片米粉900g 买2件 69.9元</span>
+                    <span class="tm">08-18 06:40</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/weibo/298047.html" data-cat="weibo">
+                    <span class="cat-badge" style="background:#e84393">微博</span>
+          <div class="bd"><div class="tt"><span class="title-text">2 淘宝App-淘宝闪购搜 656888 1毛钱买吃货卡 吃货卡再膨胀 3</span>
+                    <span class="tm">08-18 06:40</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/298046.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">温氏老母鸡肉片米粉900g 买2件 69.9元</span>
                     <span class="tm">08-18 06:40</span></div></div>
@@ -741,36 +771,6 @@
                     <span class="tm">08-18 02:40</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/297949.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">葵花牌药业三黄片24片 6.8元</span>
-                    <span class="tm">08-18 02:40</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297948.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">白云山701跌打镇痛膏白云山何济公8贴/盒 19元</span>
-                    <span class="tm">08-18 02:40</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297947.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">力克舒藿香正气口服液合剂不含酒精藿香正气水老牌子官方旗舰店批发正品 6.9元</span>
-                    <span class="tm">08-18 02:40</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297946.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">佛慈六味地黄丸200丸 18.9元</span>
-                    <span class="tm">08-18 02:40</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/zuankeba/297944.html" data-cat="zuankeba">
-                    <span class="cat-badge" style="background:#e67e22">赚吧</span>
-          <div class="bd"><div class="tt"><span class="title-text">周黑鸭5盒39任选</span>
-                    <span class="tm">08-18 02:40</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -824,7 +824,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 279922 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 279928 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
