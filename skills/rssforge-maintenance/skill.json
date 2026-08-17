@@ -56,7 +56,7 @@
 
   "schedule": {
     "daily_monitor": {
-      "cron": "5 7,12,18,23 * * *",
+      "cron": "5 7,28,18,23 * * *",
       "timezone": "Asia/Shanghai",
       "task": "python3 scripts/monitor_enhanced.py --pat $GITHUB_PAT",
       "description": "Daily quality check (4x per day)"
@@ -86,13 +86,13 @@
   },
 
   "metrics": {
-    "current_health_ratio": 25,
-    "target_health_ratio": 90,
-    "total_sites": 48,
-    "healthy_sites": 12,
-    "zero_count_sites": 36
+    "current_health_ratio": 100,
+    "target_health_ratio": 100,
+    "total_sites": 28,
+    "healthy_sites": 28,
+    "zero_count_sites": 0
   },
 
-  "last_updated": "2026-07-11T16:45:00+08:00",
+  "last_updated": "2026-08-17T16:45:00+08:00",
   "status": "production"
 }
