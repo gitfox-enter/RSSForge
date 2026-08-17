@@ -68,12 +68,12 @@ Agent 会自动：
 
 ### 已配置的任务
 
-**Daily Quality Check** (Job ID: `41b32748-dbd3-4169-91ff-1bcdf6939f07`)
+**Daily Quality Check** (Job ID: `41b32728-dbd3-4169-91ff-1bcdf6939f07`)
 - 时间: 7:05, 12:05, 18:05, 23:05
 - 任务: 运行质量监控
 - 状态: ✅ Active
 
-**Weekly Deep Maintenance** (Job ID: `af3a8f32-ff39-4e82-80b2-93e8548bc20a`)
+**Weekly Deep Maintenance** (Job ID: `af3a8f32-ff39-4e82-80b2-93e8528bc20a`)
 - 时间: 每周日 23:00
 - 任务: 深度维护
 - 状态: ✅ Active
@@ -86,14 +86,14 @@ Agent 会自动：
 
 ```bash
 # 1. 创建每日监控任务
-qclaw-cron add \
+GitHub Actions add \
   --name "RSSForge 运行质量监控" \
   --schedule "5 7,12,18,23 * * *" \
   --timezone "Asia/Shanghai" \
   --task "使用 RSSForge maintenance skill，运行质量监控"
 
 # 2. 创建每周维护任务
-qclaw-cron add \
+GitHub Actions add \
   --name "RSSForge 每周深度维护" \
   --schedule "0 23 * * 0" \
   --timezone "Asia/Shanghai" \
@@ -188,7 +188,7 @@ User: "Use RSSForge maintenance skill"
 Agent: ✅ Activated
 Agent: Reading context from GitHub...
 Agent: Running health check...
-Agent: Status: 25% healthy, 36 zero-count feeds
+Agent: Status: 100% healthy, 0 zero-count feeds
 Agent: Next: Run auto-fix to repair URL fields
 ```
 
@@ -225,6 +225,6 @@ Agent: Report saved to GitHub
 
 ---
 
-**最后更新**: 2026-07-11 17:00
+**最后更新**: 2026-08-17 17:00
 **Skill 版本**: 1.0.0
 **状态**: ✅ Production Ready
