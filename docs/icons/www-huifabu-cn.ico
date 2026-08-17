@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">279895 条</span>
+      <span class="cnt" id="bc">279898 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,19 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/weibochaohua/298018.html" data-cat="weibochaohua">
+                      <a class="r" href="/haodan/298021.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">家家宜超净薰衣草香洗衣粉家庭装大袋批发 手洗机洗低泡易漂持久留香</span>
+                    <span class="tm">08-18 05:31</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/298020.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">手工编织红玫瑰针织花束 渐变粉玫瑰+4泡芙花束+透明手提袋 7.63元</span>
+                    <span class="tm">08-18 05:31</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/weibochaohua/298018.html" data-cat="weibochaohua">
                     <span class="cat-badge" style="background:#e74c3c">超话</span>
           <div class="bd"><div class="tt"><span class="title-text">开学季 原来真的卡20分</span>
                     <span class="tm">08-18 05:20</span></div></div>
@@ -760,18 +772,6 @@
                     <span class="tm">08-18 02:14</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/weibochaohua/297918.html" data-cat="weibochaohua">
-                    <span class="cat-badge" style="background:#e74c3c">超话</span>
-          <div class="bd"><div class="tt"><span class="title-text">分享图片</span>
-                    <span class="tm">08-18 02:12</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297917.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">猫人男士冰丝无痕薄款内裤3条 19.9元</span>
-                    <span class="tm">08-18 02:12</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -825,7 +825,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 279895 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 279898 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
