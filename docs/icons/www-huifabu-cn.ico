@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">279811 条</span>
+      <span class="cnt" id="bc">279818 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,19 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/zuankeba/297941.html" data-cat="zuankeba">
+                      <a class="r" href="/haodan/297943.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">倍舒特透气日夜组合卫生巾任选10包 送20片日用卫生巾 22.1元</span>
+                    <span class="tm">08-18 02:37</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/zuankeba/297942.html" data-cat="zuankeba">
+                    <span class="cat-badge" style="background:#e67e22">赚吧</span>
+          <div class="bd"><div class="tt"><span class="title-text">1买50个诺宁创可贴</span>
+                    <span class="tm">08-18 02:37</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/zuankeba/297941.html" data-cat="zuankeba">
                     <span class="cat-badge" style="background:#e67e22">赚吧</span>
           <div class="bd"><div class="tt"><span class="title-text">速度，五粮液2瓶199</span>
                     <span class="tm">08-18 02:34</span></div></div>
@@ -671,7 +683,7 @@
                 <a class="r" href="/peiqi/297854.html" data-cat="peiqi">
                     <span class="cat-badge" style="background:#fd79a8">佩奇</span>
           <div class="bd"><div class="tt"><span class="title-text">七夕简单一些汇总 先看一下 今明两天 美团应该都有水 记得邀好友进群 一起上车 #公众号:头号百晓生</span>
-                    <span class="cmt-badge">💬39</span>
+                    <span class="cmt-badge">💬40</span>
                     <span class="tm">08-18 01:31</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -767,18 +779,6 @@
                     <span class="tm">08-18 01:22</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/297838.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">套尺+圆规六件套共2套 4.99元，星星笔袋蓝色共2个 6.39元</span>
-                    <span class="tm">08-18 01:21</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297837.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">网易严选管道疏通剂4条叠金币 14.6元</span>
-                    <span class="tm">08-18 01:21</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -832,7 +832,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 279811 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 279818 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
