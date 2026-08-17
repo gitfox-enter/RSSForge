@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">279890 条</span>
+      <span class="cnt" id="bc">279895 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,37 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/298013.html" data-cat="haodan">
+                      <a class="r" href="/weibochaohua/298018.html" data-cat="weibochaohua">
+                    <span class="cat-badge" style="background:#e74c3c">超话</span>
+          <div class="bd"><div class="tt"><span class="title-text">开学季 原来真的卡20分</span>
+                    <span class="tm">08-18 05:20</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/298017.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">特大号厄瓜多尔海水王牌大虾40/50 3斤原装礼盒 59.8元</span>
+                    <span class="tm">08-18 05:16</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/298016.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">戴可思儿童洗发水沐浴露二合一500ml*2瓶装 35.00元</span>
+                    <span class="tm">08-18 05:11</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/xinzuanba/298015.html" data-cat="xinzuanba">
+                    <span class="cat-badge" style="background:#e67e22">新赚</span>
+          <div class="bd"><div class="tt"><span class="title-text">工行北京任务 风物集 多2换1</span>
+                    <span class="tm">08-18 05:10</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/298014.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">不锈钢汤锅家用特厚蒸锅一体电磁炉煲汤炖锅煮粥锅燃气双耳锅24CM带盖组合加厚底 5.01元</span>
+                    <span class="tm">08-18 05:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/298013.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">开源保丰铝箔装黄糯玉米250g*8支 13.9元</span>
                     <span class="tm">08-18 04:51</span></div></div>
@@ -742,36 +772,6 @@
                     <span class="tm">08-18 02:12</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/297916.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">奥妙芦荟除菌洗洁精组合1.5kg 橙花洗洁精500g 19.9元</span>
-                    <span class="tm">08-18 02:11</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297915.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">洁多芬香氛除菌洗衣液5kg*2瓶 49.90元</span>
-                    <span class="tm">08-18 02:11</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/weibochaohua/297914.html" data-cat="weibochaohua">
-                    <span class="cat-badge" style="background:#e74c3c">超话</span>
-          <div class="bd"><div class="tt"><span class="title-text">mgp不掉的 下个整点可以试试海蓝之谜奇迹晚霜</span>
-                    <span class="tm">08-18 02:04</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297912.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">倍思100W快充氮化镓快充充电器 73.9元</span>
-                    <span class="tm">08-18 02:01</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297911.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">iQOO vivo iQOO 15Ultra 16GB+512GB 2077(黑色)冰穹散热风扇</span>
-                    <span class="tm">08-18 02:01</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -825,7 +825,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 279890 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 279895 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
