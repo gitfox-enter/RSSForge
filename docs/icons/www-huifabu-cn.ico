@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">279851 条</span>
+      <span class="cnt" id="bc">279861 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,37 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/297980.html" data-cat="haodan">
+                      <a class="r" href="/haodan/297985.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">漫花100抽干湿两用底部抽洗脸巾2提 14.9元</span>
+                    <span class="tm">08-18 03:51</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/xiaodigu/297984.html" data-cat="xiaodigu">
+                    <span class="cat-badge" style="background:#00b894">嘀咕</span>
+          <div class="bd"><div class="tt"><span class="title-text">最新小程序掘金 没有任何硬性要求</span>
+                    <span class="tm">08-18 03:42</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/297983.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">天士力柴胡舒肝丸官方正品浓缩理气疏肝疏肝理气药房颗粒疏肝解郁 19.8元</span>
+                    <span class="tm">08-18 03:42</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/297982.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">金口馨浓替硝唑含漱液200ml 10.1元</span>
+                    <span class="tm">08-18 03:42</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/297981.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">南峰黄芪精口服液官方旗舰店正品补气血补气养血女生黄氏精调理 13.14元</span>
+                    <span class="tm">08-18 03:42</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/297980.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">健之佳昆中药清肺化痰丸9g*9丸 12元</span>
                     <span class="tm">08-18 03:41</span></div></div>
@@ -744,36 +774,6 @@
                     <span class="tm">08-18 01:44</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/297880.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">界面医疗一次性医用碘伏棉棒酒精脱脂棉签伤口宝宝婴儿脐带消毒液 5.9元</span>
-                    <span class="tm">08-18 01:44</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297879.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">昆中药清肺化痰丸8袋 17.4元</span>
-                    <span class="tm">08-18 01:44</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297878.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">明康欣阿达帕林凝胶膏正品医用官方旗舰店去黑头祛痘药膏青少年 8.47元</span>
-                    <span class="tm">08-18 01:44</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297877.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">太极藿香正气口服液10ml*10支/盒 14.5元</span>
-                    <span class="tm">08-18 01:44</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297876.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">乐唯诗玻璃碗早餐碗6寸 7.95元</span>
-                    <span class="tm">08-18 01:44</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -827,7 +827,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 279851 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 279861 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
