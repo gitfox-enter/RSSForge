@@ -256,6 +256,19 @@ jobs:
           PY
           fi
 
+      - name: 导入 ima 知识库（增量）
+        if: success()
+        env:
+          IMA_CLIENT_ID: ${{ secrets.IMA_CLIENT_ID }}
+          IMA_API_KEY: ${{ secrets.IMA_API_KEY }}
+          IMA_KB_ID: ${{ secrets.IMA_KB_ID }}
+          IMA_DEFAULT_FOLDER_ID: ${{ secrets.IMA_DEFAULT_FOLDER_ID }}
+          MAX_ITEMS: "200"
+          DAYS: "30"
+        run: |
+          pip install -q pyyaml 2>/dev/null || true
+          python ima_import_workflow.py
+
       - name: 上传运行日志
         uses: actions/upload-artifact@v4
         if: always()
@@ -263,4 +276,3 @@ jobs:
           name: run-log-${{ github.run_number }}
           path: run_log.jsonl
           retention-days: 30
-
