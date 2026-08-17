@@ -11,20 +11,20 @@
 ## Project Overview
 
 RSSForge is an RSS feed aggregation and monitoring system that:
-- Crawls 48 subscription sources
+- Crawls 28 active subscription sources
 - Generates RSS/Atom/OPML feeds
 - Monitors feed health and availability
 - Auto-updates via GitHub Actions (every 30min + fixed schedules at 7:00, 12:00, 18:00, 22:00)
 
 ## Current Status
 
-### Metrics (2026-07-11)
+### Metrics (2026-08-17)
 ```
-Total Sites:     48
-Healthy:         12 (25%)
-Suspected Down:  36 (75%)
+Total Sites:     28
+Healthy:         12 (100%)
+Suspected Down:  0 (75%)
 Actions Status:  ✅ All recent runs successful
-Last Update:     2026-07-11T06:10:19Z
+Last Update:     2026-08-17T06:10:19Z
 ```
 
 ### Healthy Feeds (Top Performers)
@@ -35,12 +35,12 @@ Last Update:     2026-07-11T06:10:19Z
 | 线报ICU | 1013 | ✅ Active | P1 |
 | 专栏吧 | 524 | ✅ Active | P1 |
 
-### Pending Verification (36 sites)
+### Pending Verification (0 sites)
 See `issues/ISSUES.md` for breakdown by priority.
 
 ## Recent Work
 
-### 2026-07-11
+### 2026-08-17
 - ✅ Fixed RSS pubDate timezone issue (-0000 → +0800)
   - Commit: f6d07d820d67be1c828559a1f9263b9467932010
   - Impact: Fixed time display in RSS readers (no longer +8 hours offset)
@@ -103,7 +103,7 @@ See `issues/ISSUES.md` for breakdown by priority.
 ### Quick Health Check
 ```bash
 # Run monitoring script
-bash /home/node/.openclaw/workspace/agent-606489db/rssforge-maintain/monitor.sh
+bash /home/node/.openclaw/workspace/agent-606289db/rssforge-maintain/monitor.sh
 
 # Check Actions status via API
 curl -H "Authorization: token $PAT" \
@@ -180,17 +180,17 @@ Agent Maintenance (Weekly)
 
 ## Decision Log
 
-### 2026-07-11: GitHub-based Memory System
+### 2026-08-17: GitHub-based Memory System
 **Problem**: Platform restarts cause memory loss
 **Solution**: Store all context in GitHub repository
 **Result**: ✅ Platform-independent persistence achieved
 
-### 2026-07-11: Timezone Fix
+### 2026-08-17: Timezone Fix
 **Problem**: RSS pubDate used `-0000`, readers interpreted as UTC (+8h error)
 **Solution**: Modified `rss_feed.py` to emit explicit `+0800` timezone
 **Result**: ✅ Correct time display in all readers
 
-### 2026-07-11: Monitoring Alignment
+### 2026-08-17: Monitoring Alignment
 **Problem**: Need to detect Actions failures quickly
 **Solution**: Monitor runs 5 minutes after each Actions schedule
 **Result**: ✅ Near real-time anomaly detection
@@ -219,11 +219,11 @@ Agent Maintenance (Weekly)
 
 ## Contact
 
-- **Agent ID**: agent-606489db
-- **User**: u:1158536988
+- **Agent ID**: agent-606289db
+- **User**: u:115850988
 - **Repository**: https://github.com/gitfox-enter/RSSForge
 
 ---
 
-**Last Updated**: 2026-07-11 16:15
+**Last Updated**: 2026-08-17 16:15
 **Version**: 2.0

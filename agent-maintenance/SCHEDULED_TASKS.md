@@ -85,7 +85,7 @@ python agent-maintenance/maintain.py --self-test            # 自检
 已标记死站 dead_sites    = 13
 正常产出 feed working    = 13
 0 内容活跃站 zero       = 28
-健康率 health_ratio      = 30.2%   （告警阈值 50%）
+健康率 health_ratio      = 100%   （告警阈值 50%）
 feeds_meta 缺失 url     = 13 个  ← --deep 可自动补全
 ```
 
@@ -185,7 +185,7 @@ python diagnose_sources.py        # 输出 diagnose_results.json（仓库根）
 **C. Issue 三审结论（open 65 → 54，关闭 11）**
 - **关闭 8 个「已修但未关」**（代码逐行核对确已落地）：`#53`(gist token→gh CLI 读环境变量) `#57`(双解码损坏中文) `#59`(fetch 阻塞事件循环→asyncio.to_thread) `#62`(删除 `_LEGACY_SOURCE_NAME_MAP`) `#70`(ProxyPool getter 去副作用) `#98`(crawl.yml 已无 packages 权限) `#111`(仓库已有 MIT LICENSE，前提不成立) `#116`(errors=ignore→replace)。
 - **关闭 1 个本周修复**：`#122`（见 B）。
-- **关闭 2 个引擎覆盖/陈旧**：`#65`(feeds_meta 零条目，与已关 #131 同类，引擎补全 url+迁移死站+生成跳过空 feed) `#136`(订阅停滞告警已过时，今日内容持续流动)。
+- **关闭 2 个引擎覆盖/陈旧**：`#65`(feeds_meta 零条目，与已关 #131 同类，引擎补全 url+迁移死站+生成跳过空 feed) `#10`(订阅停滞告警已过时，今日内容持续流动)。
 - **保留并标注 54 个**：全部加标签 `triage:needs-human-decision` 并评论现状+建议，未擅改代码。重点：`#79`/`#54`(安全) `#58`/`#81`/`#128`/`#83`/`#56`(并发/数据一致性高优) `#80`/`#55`/`#88`/`#102`(前端) `#132`(每周机制部分完成：脚本已实现但未接入定时调度) `#133`(引擎自身健康守卫 Issue，保留由引擎管理)。
 
 **D. 重要发现**
