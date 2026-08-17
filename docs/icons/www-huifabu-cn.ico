@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">279861 条</span>
+      <span class="cnt" id="bc">279866 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,31 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/297985.html" data-cat="haodan">
+                      <a class="r" href="/haodan/297989.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">猫太子分段式包书皮10张16K/中号保护套磨砂透明自粘一二三年级防滑书套小学生初高中包书纸</span>
+                    <span class="tm">08-18 04:11</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/xinzuanba/297988.html" data-cat="xinzuanba">
+                    <span class="cat-badge" style="background:#e67e22">新赚</span>
+          <div class="bd"><div class="tt"><span class="title-text">招行 红包，早毛</span>
+                    <span class="tm">08-18 04:07</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/297987.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">吟山红五香香料调料组合八角50g+桂皮60g+香叶25g 14.9元</span>
+                    <span class="tm">08-18 04:01</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/xiaodigu/297986.html" data-cat="xiaodigu">
+                    <span class="cat-badge" style="background:#00b894">嘀咕</span>
+          <div class="bd"><div class="tt"><span class="title-text">睡觉 在不睡猝死了{</span>
+                    <span class="tm">08-18 03:51</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/297985.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">漫花100抽干湿两用底部抽洗脸巾2提 14.9元</span>
                     <span class="tm">08-18 03:51</span></div></div>
@@ -750,30 +774,6 @@
                     <span class="tm">08-18 01:45</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/297884.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">皮炎平999软膏复方醋酸地塞米松乳膏三九皮炎平软膏止痒药膏 12.8元</span>
-                    <span class="tm">08-18 01:45</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297883.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">川石红霉素膏软膏 12.8元</span>
-                    <span class="tm">08-18 01:45</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297882.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">丽芙甲硝唑凝胶祛痘消炎甲硝锉壬二酸凝胶15 9.5元</span>
-                    <span class="tm">08-18 01:45</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/297881.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">葵花蒲地蓝消炎片40片 6.8元</span>
-                    <span class="tm">08-18 01:44</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -827,7 +827,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 279861 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 279866 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
