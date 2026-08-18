@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">285952 条</span>
+      <span class="cnt" id="bc">285953 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,13 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/zuankeba/304075.html" data-cat="zuankeba">
+                      <a class="r" href="/zuankeba/304076.html" data-cat="zuankeba">
+                    <span class="cat-badge" style="background:#e67e22">赚吧</span>
+          <div class="bd"><div class="tt"><span class="title-text">速度 神价汽车无骨雨刷2副10r</span>
+                    <span class="tm">08-19 05:33</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/zuankeba/304075.html" data-cat="zuankeba">
                     <span class="cat-badge" style="background:#e67e22">赚吧</span>
           <div class="bd"><div class="tt"><span class="title-text">速度 美团鲜花88-88有水</span>
                     <span class="tm">08-19 05:16</span></div></div>
@@ -759,19 +765,13 @@
                 <a class="r" href="/peiqi/303976.html" data-cat="peiqi">
                     <span class="cat-badge" style="background:#fd79a8">佩奇</span>
           <div class="bd"><div class="tt"><span class="title-text">【七夕专场 0亓奶茶活d大汇总】白天新推文 还会更新很多活d❗蹲好群里会发 可以先看看推文⬇️</span>
-                    <span class="cmt-badge">💬24</span>
+                    <span class="cmt-badge">💬32</span>
                     <span class="tm">08-19 01:51</span></div></div>
           <span class="ar">›</span>
         </a>
                 <a class="r" href="/haodan/303978.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">羽感超薄颗粒玻尿酸避孕套任选4件 16.6元</span>
-                    <span class="tm">08-19 01:51</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/haodan/303977.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">巴拉巴拉儿童羽绒服 119.9元</span>
                     <span class="tm">08-19 01:51</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -828,7 +828,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 285952 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 285953 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
