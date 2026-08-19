@@ -11,7 +11,7 @@ name: 质量守卫 (Quality Guard)
 on:
   schedule:
     # 每小时 :17 分触发（错峰避开整点高峰）
-    - cron: '17 * * * *'
+    - cron: '17 */3 * * *'
   workflow_dispatch:
 
 concurrency:
