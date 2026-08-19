@@ -5,7 +5,7 @@ name: Freshness Watchdog
 # 使用 GitHub 内置 GITHUB_TOKEN，无需外部 PAT，即使 agent 离线也能独立运行。
 on:
   schedule:
-    - cron: '*/20 * * * *'
+    - cron: '0 */2 * * *'
   workflow_dispatch:
 
 permissions:
