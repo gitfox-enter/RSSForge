@@ -61,7 +61,7 @@
     <div class="header-right" role="toolbar">
       <div class="countdown" id="countdown"><span id="cdNum">20</span>s</div>
       <span class="live">自动更新</span>
-      <span class="cnt" id="bc">301240 条</span>
+      <span class="cnt" id="bc">301242 条</span>
       <button class="theme-btn" id="searchBtn" title="搜索">🔍</button>
       <button class="theme-btn" id="themeBtn" title="主题">☾</button>
             <button class="auth-btn auth-register" id="registerBtn">注册</button>
@@ -171,7 +171,25 @@
 <main class="main-wrap" role="main">
   <div class="main-left">
     <div class="lst" id="lst" role="feed">
-                      <a class="r" href="/haodan/319363.html" data-cat="haodan">
+                      <a class="r" href="/weibochaohua/319366.html" data-cat="weibochaohua">
+                    <span class="cat-badge" style="background:#e74c3c">超话</span>
+          <div class="bd"><div class="tt"><span class="title-text">都想吃 期待</span>
+                    <span class="tm">08-21 05:54</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/weibochaohua/319365.html" data-cat="weibochaohua">
+                    <span class="cat-badge" style="background:#e74c3c">超话</span>
+          <div class="bd"><div class="tt"><span class="title-text">🐶md sh儿童肠 💰17.7 🍚12.88</span>
+                    <span class="tm">08-21 05:51</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/319364.html" data-cat="haodan">
+                    <span class="cat-badge" style="background:#27ae60">好单</span>
+          <div class="bd"><div class="tt"><span class="title-text">周黑鸭甜辣卤鸭锁骨150g任选5盒 39.90元</span>
+                    <span class="tm">08-21 05:50</span></div></div>
+          <span class="ar">›</span>
+        </a>
+                <a class="r" href="/haodan/319363.html" data-cat="haodan">
                     <span class="cat-badge" style="background:#27ae60">好单</span>
           <div class="bd"><div class="tt"><span class="title-text">冷酸灵泵式直立式海洋薄荷经典极地白海洋薄荷130g*3支 赠30g*3支 32.80元</span>
                     <span class="tm">08-21 05:40</span></div></div>
@@ -685,7 +703,7 @@
                 <a class="r" href="/gaibang/319273.html" data-cat="gaibang">
                     <span class="cat-badge" style="background:#6c5ce7">丐帮</span>
           <div class="bd"><div class="tt"><span class="title-text">重视蜜雪昨天买过的今天还能买 现在很多门店开始下架了 早点买 — 今天的蜜雪好像不止5单限制  反馈</span>
-                    <span class="cmt-badge">💬1</span>
+                    <span class="cmt-badge">💬2</span>
                     <span class="tm">08-21 02:06</span></div></div>
           <span class="ar">›</span>
         </a>
@@ -762,25 +780,6 @@
                     <span class="tm">08-21 02:01</span></div></div>
           <span class="ar">›</span>
         </a>
-                <a class="r" href="/haodan/319260.html" data-cat="haodan">
-                    <span class="cat-badge" style="background:#27ae60">好单</span>
-          <div class="bd"><div class="tt"><span class="title-text">高爷家猫粮成猫幼猫鲜蒸猫粮鸡肉配养健康鲜猫粮试吃尝鲜 6.9元</span>
-                    <span class="tm">08-21 02:01</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/gaibang/319257.html" data-cat="gaibang">
-                    <span class="cat-badge" style="background:#6c5ce7">丐帮</span>
-          <div class="bd"><div class="tt"><span class="title-text">吃夜宵的看看 范围超级广 和随机18.8门槛 - ①淘宝-闪购搜：0888 (vzsxgwW9Ful</span>
-                    <span class="tm">08-21 01:58</span></div></div>
-          <span class="ar">›</span>
-        </a>
-                <a class="r" href="/mogu/319256.html" data-cat="mogu">
-                    <span class="cat-badge" style="background:#00b894">蘑菇</span>
-          <div class="bd"><div class="tt"><span class="title-text">🐶东200-20黑五券</span>
-                    <span class="cmt-badge">💬19</span>
-                    <span class="tm">08-21 01:57</span></div></div>
-          <span class="ar">›</span>
-        </a>
                   </div>
     <div class="pager" id="pager"></div>
   </div>
@@ -834,7 +833,7 @@
 <a href="/trap/content-protection" style="color:transparent;font-size:1px">优惠线报薅羊毛数据采集检测</a>
 </div>
 <footer class="foot" role="contentinfo">
-  <div>线报迷 · 每20秒自动更新 · 共 301240 篇</div>
+  <div>线报迷 · 每20秒自动更新 · 共 301242 篇</div>
   <div style="margin:4px 0"><a href="https://news.xianbao.fan" target="_blank" rel="noopener">线报迷</a></div>
   <div class="icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">鲁ICP备2025186661号-1</a> | <img src="https://new.xianbao.fan/api/ico_mps.png" style="vertical-align:middle;width:20px;height:20px" /><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37091102000950" target="_blank">鲁公网安备37091102000950号</a></div>
 </footer>
