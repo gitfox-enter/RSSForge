@@ -172,7 +172,7 @@ Keep RSSForge feeds healthy, accessible, and up-to-date through automated monito
 
 **Output**: Log file + console
 
-**Run**: 4x daily (cron)
+**Run**: 每 30 分钟（crawl.yml） + 每日主动巡检（维护 AI） (cron)
 
 ---
 
