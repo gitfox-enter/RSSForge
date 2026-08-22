@@ -135,7 +135,7 @@ MIT
 
 ---
 
-## 📖 feedforge - 在线 RSS 阅读器
+## 📖 feedforge — 在线 RSS 阅读器
 
 RSSForge 生成的 RSS 订阅源，现在可以直接在网页中阅读！
 
@@ -147,13 +147,43 @@ RSSForge 生成的 RSS 订阅源，现在可以直接在网页中阅读！
 
 ## 🚀 在线阅读
 
-直接打开 [RSSForge 阅读器](https://gitfox-enter.github.io/RSSForge/)，粘贴任意 RSS 链接即可阅读！📖
-
----
-
-## 🚀 在线阅读
-
 打开 [RSSForge 阅读器](https://gitfox-enter.github.io/RSSForge/)，粘贴 RSS 链接即可阅读！📖
 
 > 内置阅读器已替代旧版订阅页，可直接浏览所有生成的 RSS 内容。
 
+---
+
+## 🤖 ima 知识库集成
+
+RSSForge 支持将抓取的 RSS 内容自动导入 [ima 知识库](https://ima.qq.com/)，实现信息聚合与知识管理的一体化流程。
+
+### 配置方式
+
+1. 在仓库根目录创建 `config/sites_to_folders.yaml`，配置站点与 ima 知识库文件夹的映射关系：
+
+```yaml
+# config/sites_to_folders.yaml
+site_slug_1: folder_id_1
+site_slug_2: folder_id_2
+```
+
+2. 设置以下环境变量（GitHub Secrets）：
+   - `IMA_COOKIE` — ima 知识库的登录 Cookie
+   - `IMA_CSRF_TOKEN` — ima 知识库的 CSRF Token
+
+### 工作流程
+
+每次 RSS 抓取完成后，自动触发 `scripts/ima_import_workflow.py`：
+
+1. 读取 `items_latest.json` 中的最新 RSS 条目
+2. 根据 `sites_to_folders.yaml` 映射到对应 ima 文件夹
+3. 批量导入（10条/批，失败自动重试3次）
+4. 自动跳过已导入的条目（基于 MD5 去重）
+
+### 相关文件
+
+- `scripts/ima_import_workflow.py` — 主导入脚本
+- `config/sites_to_folders.yaml` — 文件夹映射配置
+- `config/sample.sites_to_folders.yaml` — 配置示例
+
+> 此功能为可选集成，不配置映射文件则不会触发 ima 导入。
