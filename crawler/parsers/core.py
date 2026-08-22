@@ -97,6 +97,10 @@ PARSER_REGISTRY: Dict[str, Tuple[Any, Optional[Any]]] = {
     'ixbk.net':           (parse_ixbk_items,           None),  # 线报酷 (裸域)
     'www.zhuanyes.com':   (parse_zhuanyes_items,       None),  # 专业线报
     'zhuanyes.com':       (parse_zhuanyes_items,       None),  # 专业线报 (裸域)
+    # === New sites (2026-08-22) ===
+    'gofans.cn':        (parse_gofans_items,    None),  # 果粉GoFans
+    'mergeek.com':      (parse_mergeek_items,   None),  # Mergeek
+    'zhesong.com':      (parse_zhesong_items,   None),  # 折送网
 }
 
 
