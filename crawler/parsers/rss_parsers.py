@@ -480,3 +480,32 @@ def extract_article_items(soup: BeautifulSoup, base_url: str = '') -> List[Dict[
 # ---------------------------------------------------------------------------
 # 1. 12345pro.com  (12345线报)
 # ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# gofans.cn / mergeek.com / zhesong.com  (2026-08-23 修复 NameError)
+# ---------------------------------------------------------------------------
+
+def parse_gofans_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """gofans.cn 果粉GoFans - Apple 相关限免/折扣聚合站
+    
+    通过 extract_article_items 通用解析器提取文章条目。
+    若后续需要专用逻辑（如识别 App Store 限免分类），可在此补充。
+    """
+    return extract_article_items(soup, base_url)
+
+
+def parse_mergeek_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """mergeek.com - App 开发者推广与限免聚合平台
+    
+    通过 extract_article_items 通用解析器提取文章条目。
+    """
+    return extract_article_items(soup, base_url)
+
+
+def parse_zhesong_items(soup: BeautifulSoup, base_url: str) -> List[Dict[str, str]]:
+    """zhesong.com 折送网 - 折扣/优惠券/省钱信息聚合
+    
+    通过 extract_article_items 通用解析器提取文章条目。
+    """
+    return extract_article_items(soup, base_url)
+
