@@ -136,14 +136,6 @@ sites:
   # ===== 新增科技/创业类 RSS 源（2026-08-05） =====
   # 说明：以下站点均为标准 RSS Feed，走 parse_rss_feed 通用解析器，无需新增 parser
 
-  # 36氪 - 科技/创业深度报道，RSS 稳定可访问
-- url: https://36kr.com/
-  name: 36氪
-  tier: high
-  interval: 30
-  parser: rss
-  rss_feed: https://www.36kr.com/feed
-
   # 爱范儿 - 科技产品/互联网原创，RSS 稳定
 - url: https://www.ifanr.com/
   name: 爱范儿
@@ -162,14 +154,6 @@ sites:
 
   # ===== 新增科技/创业类 RSS 源（2026-08-12 第2批）=====
   # 说明：以下站点均为标准 RSS，走 parse_rss_feed，无需新增 parser
-
-  # 阮一峰的网络日志 - 经典技术随笔/编程/互联网分析，原创性极高
-- url: https://www.ruanyifeng.com/
-  name: 阮一峰的网络日志
-  tier: medium
-  interval: 360
-  parser: rss
-  rss_feed: https://www.ruanyifeng.com/blog/atom.xml
 
   # 美团技术团队 - 美团工程实践/架构/开源，高质量技术博客
 - url: https://tech.meituan.com/
