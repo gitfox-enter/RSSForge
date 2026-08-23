@@ -114,27 +114,41 @@ def save_imported_urls(urls):
 
 
 def parse_pubdate(pubdate_str):
-    """解析 RFC 2822 日期字符串，返回 datetime 对象；失败返回 None"""
+    """解析日期字符串，返回带时区的 datetime；失败返回 None。
+    无时区的时间（如 engine 写入的 "2026-08-23 17:00:00"）按北京时间(UTC+8)处理。"""
     if not pubdate_str:
         return None
     try:
         import email.utils
         parsed = email.utils.parsedate_to_datetime(pubdate_str)
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone(timedelta(hours=8)))
         return parsed
     except Exception:
+        pass
+    for fmt in [
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%dT%H:%M:%S%z",
+        "%Y-%m-%dT%H:%M:%S",
+        "%a, %d %b %Y %H:%M:%S %z",
+    ]:
         try:
-            for fmt in [
-                "%a, %d %b %Y %H:%M:%S %z",
-                "%Y-%m-%dT%H:%M:%S%z",
-                "%Y-%m-%d %H:%M:%S",
-            ]:
-                try:
-                    return datetime.strptime(pubdate_str, fmt).replace(tzinfo=timezone.utc)
-                except ValueError:
-                    continue
-        except Exception:
-            pass
+            dt = datetime.strptime(pubdate_str, fmt)
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone(timedelta(hours=8)))
+            return dt
+        except ValueError:
+            continue
     return None
+
+
+def get_item_time_str(item):
+    """从条目中提取时间字符串（兼容 engine 的 time 字段与 RSS 的 pubDate 等）"""
+    for key in ("pubDate", "pub_date", "time", "date", "published", "updated"):
+        v = item.get(key)
+        if v:
+            return v
+    return ""
 
 
 def get_new_items(all_items, imported_urls, max_items=200, days=None):
@@ -143,6 +157,8 @@ def get_new_items(all_items, imported_urls, max_items=200, days=None):
     if days is not None and days > 0:
         cutoff = datetime.now(timezone.utc) - timedelta(days=days)
         log("时间过滤: 只保留最近 %d 天内的内容 (截止 %s)" % (days, cutoff.strftime("%Y-%m-%d %H:%M:%S")))
+    # 无日期条目的兜底窗口：首次入库超过 3 天的视为旧内容，不再导入
+    first_seen_cutoff = datetime.now(timezone.utc) - timedelta(days=3)
 
     skipped_old = 0
     skipped_no_date = 0
@@ -151,14 +167,16 @@ def get_new_items(all_items, imported_urls, max_items=200, days=None):
         if not url or url in imported_urls:
             continue
 
-        # 时间过滤：pubDate 无法解析的条目，按"过旧"处理，不再导入（避免几个月前的旧链接混入）
+        # 时间过滤：以 engine 的 time 字段（发布时间，无则取爬取时间）为准
         if cutoff is not None:
-            pubdate_str = item.get("pubDate", "")
-            item_date = parse_pubdate(pubdate_str)
+            item_date = parse_pubdate(get_item_time_str(item))
             if item_date is None:
-                skipped_no_date += 1
-                continue
-            if item_date < cutoff:
+                # 完全无日期：用首次入库时间兜底，超 3 天视为旧内容跳过
+                fs = parse_pubdate(item.get("first_seen_at", ""))
+                if fs is None or fs < first_seen_cutoff:
+                    skipped_no_date += 1
+                    continue
+            elif item_date < cutoff:
                 skipped_old += 1
                 continue
 
