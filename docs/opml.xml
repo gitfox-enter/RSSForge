@@ -8,7 +8,6 @@
   </head>
   <body>
     <outline type="rss" text="12345线报" title="12345线报" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/12345-xian-bao.xml" />
-    <outline type="rss" text="36氪" title="36氪" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/36-ke.xml" />
     <outline type="rss" text="kai-xin-zhuan" title="kai-xin-zhuan" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/kai-xin-zhuan.xml" />
     <outline type="rss" text="专业线报" title="专业线报" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/zhuan-ye-xian-bao.xml" htmlUrl="https://www.zhuanyes.com/xianbao/" iconUrl="https://gitfox-enter.github.io/RSSForge/icons/www-zhuanyes-com.ico" />
     <outline type="rss" text="天天赚" title="天天赚" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/tian-tian-zhuan.xml" />
@@ -35,6 +34,5 @@
     <outline type="rss" text="豆瓣小组" title="豆瓣小组" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/dou-ban-xiao-zu.xml" />
     <outline type="rss" text="赚客吧" title="赚客吧" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/zhuan-ke-ba.xml" htmlUrl="https://www.zuankeba.cn/" iconUrl="https://www.zuankeba.cn/favicon.ico" />
     <outline type="rss" text="超级线报" title="超级线报" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/chao-ji-xian-bao.xml" htmlUrl="https://cjx8.com/" iconUrl="https://cjx8.com/favicon.ico" />
-    <outline type="rss" text="阮一峰的网络日志" title="阮一峰的网络日志" xmlUrl="https://gitfox-enter.github.io/RSSForge/feeds/ruan-yi-feng-de-wang-luo-ri-zhi.xml" />
-  </body>
+    </body>
 </opml>
