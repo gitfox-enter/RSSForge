@@ -49,6 +49,9 @@ from crawler.parsers.forum_sites import (
 )
 from crawler.parsers.rss_parsers import (
     parse_rss_feed,
+    parse_gofans_items,
+    parse_mergeek_items,
+    parse_zhesong_items,
 )
 
 logger = logging.getLogger('crawl')
