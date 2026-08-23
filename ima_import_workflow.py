@@ -6,6 +6,9 @@ RSSForge -> ima 知识库导入工具
 在 crawler/engine 采集完成后，读取 items_latest.json 并通过 ima API 导入知识库。
 保留爬虫引擎的 hash_diff 增量机制，避免重复导入。
 支持按 pubDate 时间过滤（DAYS 环境变量）和最大导入条数限制（MAX_ITEMS 环境变量）。
+
+2026-08-23 变更：不再按站点分发到各自文件夹（sites_to_folders.yaml 不再使用），
+全部内容导入知识库下指定名称的子文件夹（默认 "2026"，可用 IMA_TARGET_FOLDER_NAME 覆盖）。
 """
 import json
 import os
@@ -20,10 +23,9 @@ BASE = "https://ima.qq.com/openapi/wiki/v1"
 CLIENT_ID = os.environ.get("IMA_CLIENT_ID")
 API_KEY = os.environ.get("IMA_API_KEY")
 DEFAULT_FOLDER_ID = os.environ.get("IMA_DEFAULT_FOLDER_ID", "")
+TARGET_FOLDER_NAME = os.environ.get("IMA_TARGET_FOLDER_NAME", "2026")
 LOG_FILE = os.environ.get("IMA_LOG_FILE", "ima_import.log")
 IMPORTED_URLS_FILE = "imported_urls.json"
-
-SITE_FOLDER_MAP = {}
 
 
 def log(msg):
@@ -35,25 +37,6 @@ def log(msg):
             f.write(line + "\n")
     except Exception:
         pass
-
-
-def load_site_folder_map():
-    global SITE_FOLDER_MAP
-    try:
-        if os.path.exists("sites_to_folders.yaml"):
-            import yaml
-            with open("sites_to_folders.yaml", encoding="utf-8") as f:
-                data = yaml.safe_load(f) or {}
-                SITE_FOLDER_MAP = data.get("folders", {})
-            log("已加载 %d 个站点文件夹映射" % len(SITE_FOLDER_MAP))
-        else:
-            log("sites_to_folders.yaml 不存在，将使用默认文件夹")
-    except Exception as e:
-        log("加载失败: %s" % e)
-
-
-def get_folder_id(site_name):
-    return SITE_FOLDER_MAP.get(site_name, DEFAULT_FOLDER_ID)
 
 
 def call_api(path, payload, timeout=120):
@@ -78,6 +61,41 @@ def call_api(path, payload, timeout=120):
         return {"code": e.code, "error": body}
     except Exception as e:
         return {"error": str(e)}
+
+
+def find_folder_by_name(kb_id, name):
+    """在知识库中查找指定名称的文件夹（media_type=99），返回 folder_id；找不到返回 None"""
+    # 方法1: search_knowledge 按名称搜索（推荐）
+    try:
+        res = call_api("/search_knowledge", {
+            "query": name,
+            "knowledge_base_id": kb_id,
+            "cursor": "",
+        }, timeout=60)
+        if res.get("code") == 0:
+            info_list = res.get("data", {}).get("info_list", []) or res.get("info_list", [])
+            for item in info_list:
+                if item.get("media_type") == 99 and item.get("title") == name:
+                    return item.get("media_id")
+    except Exception as e:
+        log("search_knowledge 查找失败: %s" % e)
+
+    # 方法2: get_knowledge_list 浏览根目录
+    try:
+        res = call_api("/get_knowledge_list", {
+            "knowledge_base_id": kb_id,
+            "cursor": "",
+            "limit": 50,
+        }, timeout=60)
+        if res.get("code") == 0:
+            kl = res.get("data", {}).get("knowledge_list", []) or res.get("knowledge_list", [])
+            for item in kl:
+                if item.get("media_type") == 99 and item.get("title") == name:
+                    return item.get("media_id")
+    except Exception as e:
+        log("get_knowledge_list 查找失败: %s" % e)
+
+    return None
 
 
 def load_imported_urls():
@@ -126,16 +144,22 @@ def get_new_items(all_items, imported_urls, max_items=200, days=None):
         cutoff = datetime.now(timezone.utc) - timedelta(days=days)
         log("时间过滤: 只保留最近 %d 天内的内容 (截止 %s)" % (days, cutoff.strftime("%Y-%m-%d %H:%M:%S")))
 
+    skipped_old = 0
+    skipped_no_date = 0
     for item in all_items:
         url = item.get("link", item.get("url", ""))
         if not url or url in imported_urls:
             continue
 
-        # 时间过滤
+        # 时间过滤：pubDate 无法解析的条目，按"过旧"处理，不再导入（避免几个月前的旧链接混入）
         if cutoff is not None:
             pubdate_str = item.get("pubDate", "")
             item_date = parse_pubdate(pubdate_str)
-            if item_date is not None and item_date < cutoff:
+            if item_date is None:
+                skipped_no_date += 1
+                continue
+            if item_date < cutoff:
+                skipped_old += 1
                 continue
 
         new_items.append(item)
@@ -143,11 +167,12 @@ def get_new_items(all_items, imported_urls, max_items=200, days=None):
             break
 
     if cutoff is not None:
-        log("时间过滤后: %d 条 (共 %d 条在时间范围内)" % (len(new_items), len(all_items)))
+        log("时间过滤后: %d 条新内容 (跳过旧内容 %d 条, 跳过无日期 %d 条, 共处理 %d 条)" % (
+            len(new_items), skipped_old, skipped_no_date, len(all_items)))
     return new_items
 
 
-def import_items(new_items):
+def import_items(new_items, folder_id):
     if not new_items:
         log("没有新内容需要导入")
         return 0, 0
@@ -156,59 +181,50 @@ def import_items(new_items):
     total_imported = 0
     total_failed = 0
 
-    by_folder = {}
-    for item in new_items:
-        source = item.get("source", item.get("site_name", ""))
-        folder_id = get_folder_id(source)
-        by_folder.setdefault(folder_id, []).append(item)
+    urls = [item.get("link", item.get("url", "")) for item in new_items]
+    log("导入文件夹 %s: %d 篇" % (folder_id or "知识库根目录", len(urls)))
 
-    for folder_id, items in by_folder.items():
-        urls = [item.get("link", item.get("url", "")) for item in items]
-        log("导入文件夹 %s: %d 篇" % (folder_id or "默认", len(items)))
+    for i in range(0, len(urls), 10):
+        batch = urls[i:i + 10]
+        payload = {
+            "knowledge_base_id": KB_ID,
+            "urls": batch,
+        }
+        if folder_id:
+            payload["folder_id"] = folder_id
+        res = call_api("/import_urls", payload, timeout=120)
 
-        for i in range(0, len(urls), 10):
-            batch = urls[i:i + 10]
-            res = call_api("/import_urls", {
-                "knowledge_base_id": KB_ID,
-                "folder_id": folder_id,
-                "urls": batch,
-            }, timeout=120)
-
-            if res.get("code") == 0:
-                results = res.get("data", {}).get("results", {})
-                for u in batch:
-                    r = results.get(u, {})
-                    if r.get("ret_code") == 0:
-                        total_imported += 1
-                        imported_urls.add(u)
-                    else:
-                        total_failed += 1
-                        log("  FAIL: %s -> %s" % (u, str(r)[:200]))
-            else:
-                ok = False
-                for attempt in range(1, 4):
-                    time.sleep(3)
-                    res = call_api("/import_urls", {
-                        "knowledge_base_id": KB_ID,
-                        "folder_id": folder_id,
-                        "urls": batch,
-                    }, timeout=120)
-                    if res.get("code") == 0:
-                        ok = True
-                        results = res.get("data", {}).get("results", {})
-                        for u in batch:
-                            r = results.get(u, {})
-                            if r.get("ret_code") == 0:
-                                total_imported += 1
-                                imported_urls.add(u)
-                            else:
-                                total_failed += 1
-                        break
-                if not ok:
-                    total_failed += len(batch)
-                    log("  BATCH FAILED: %s" % batch[0])
-            time.sleep(1.5)
-        log("  文件夹导入完成: %d 篇" % len(items))
+        if res.get("code") == 0:
+            results = res.get("data", {}).get("results", {})
+            for u in batch:
+                r = results.get(u, {})
+                if r.get("ret_code") == 0:
+                    total_imported += 1
+                    imported_urls.add(u)
+                else:
+                    total_failed += 1
+                    log("  FAIL: %s -> %s" % (u, str(r)[:200]))
+        else:
+            ok = False
+            for attempt in range(1, 4):
+                time.sleep(3)
+                res = call_api("/import_urls", payload, timeout=120)
+                if res.get("code") == 0:
+                    ok = True
+                    results = res.get("data", {}).get("results", {})
+                    for u in batch:
+                        r = results.get(u, {})
+                        if r.get("ret_code") == 0:
+                            total_imported += 1
+                            imported_urls.add(u)
+                        else:
+                            total_failed += 1
+                    break
+            if not ok:
+                total_failed += len(batch)
+                log("  BATCH FAILED: %s" % batch[0])
+        time.sleep(1.5)
+    log("  导入完成: 成功 %d, 失败 %d" % (total_imported, total_failed))
 
     save_imported_urls(imported_urls)
     return total_imported, total_failed
@@ -219,15 +235,26 @@ def main():
     log("RSSForge -> ima 知识库导入")
     log("=" * 60)
 
-    load_site_folder_map()
-
     # 读取环境变量
     max_items = int(os.environ.get("MAX_ITEMS", "200"))
     days = int(os.environ.get("DAYS", "0"))
     if days <= 0:
         days = None  # 不限时间
 
-    log("配置: MAX_ITEMS=%s, DAYS=%s" % (max_items, days or "不限"))
+    log("配置: MAX_ITEMS=%s, DAYS=%s, 目标文件夹='%s'" % (max_items, days or "不限", TARGET_FOLDER_NAME))
+
+    # 查找目标文件夹：优先用环境变量指定的 folder_id，否则按名称查找
+    target_folder_id = os.environ.get("IMA_TARGET_FOLDER_ID", "")
+    if not target_folder_id:
+        target_folder_id = find_folder_by_name(KB_ID, TARGET_FOLDER_NAME)
+        if target_folder_id:
+            log("已找到目标文件夹 '%s': %s" % (TARGET_FOLDER_NAME, target_folder_id))
+        else:
+            target_folder_id = DEFAULT_FOLDER_ID
+            log("警告: 未找到名为 '%s' 的文件夹，回退到默认文件夹 %s (若为空则导入知识库根目录)" % (
+                TARGET_FOLDER_NAME, target_folder_id or "根目录"))
+    else:
+        log("使用环境变量指定的目标文件夹: %s" % target_folder_id)
 
     items_file = "items_latest.json"
     if not os.path.exists(items_file):
@@ -253,7 +280,7 @@ def main():
     log("新内容: %d 条" % len(new_items))
 
     if new_items:
-        imported, failed = import_items(new_items)
+        imported, failed = import_items(new_items, target_folder_id)
         log("导入汇总: 成功 %d, 失败 %d" % (imported, failed))
     else:
         log("无新内容，跳过导入")
