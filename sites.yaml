@@ -136,14 +136,6 @@ sites:
   # ===== 新增科技/创业类 RSS 源（2026-08-05） =====
   # 说明：以下站点均为标准 RSS Feed，走 parse_rss_feed 通用解析器，无需新增 parser
 
-  # 爱范儿 - 科技产品/互联网原创，RSS 稳定
-- url: https://www.ifanr.com/
-  name: 爱范儿
-  tier: medium
-  interval: 60
-  parser: rss
-  rss_feed: https://www.ifanr.com/feed
-
   # 少数派 - 数字生活/效率工具，补充来源多元化
 - url: https://sspai.com/
   name: 少数派
@@ -154,14 +146,6 @@ sites:
 
   # ===== 新增科技/创业类 RSS 源（2026-08-12 第2批）=====
   # 说明：以下站点均为标准 RSS，走 parse_rss_feed，无需新增 parser
-
-  # 美团技术团队 - 美团工程实践/架构/开源，高质量技术博客
-- url: https://tech.meituan.com/
-  name: 美团技术团队
-  tier: medium
-  interval: 360
-  parser: rss
-  rss_feed: https://tech.meituan.com/rss.xml
 
   # 极客公园 - 科技产品/互联网创业/新趋势
 - url: https://www.geekpark.net/
