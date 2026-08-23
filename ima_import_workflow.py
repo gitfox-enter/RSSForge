@@ -152,7 +152,9 @@ def get_item_time_str(item):
 
 
 def get_new_items(all_items, imported_urls, max_items=200, days=None):
+    """返回 (new_items, seen_urls)：new_items 为待导入条目，seen_urls 为本轮处理过的全部 URL（含被过滤的）"""
     new_items = []
+    seen_urls = set()
     cutoff = None
     if days is not None and days > 0:
         cutoff = datetime.now(timezone.utc) - timedelta(days=days)
@@ -164,7 +166,10 @@ def get_new_items(all_items, imported_urls, max_items=200, days=None):
     skipped_no_date = 0
     for item in all_items:
         url = item.get("link", item.get("url", ""))
-        if not url or url in imported_urls:
+        if not url:
+            continue
+        seen_urls.add(url)
+        if url in imported_urls:
             continue
 
         # 时间过滤：以 engine 的 time 字段（发布时间，无则取爬取时间）为准
@@ -187,7 +192,34 @@ def get_new_items(all_items, imported_urls, max_items=200, days=None):
     if cutoff is not None:
         log("时间过滤后: %d 条新内容 (跳过旧内容 %d 条, 跳过无日期 %d 条, 共处理 %d 条)" % (
             len(new_items), skipped_old, skipped_no_date, len(all_items)))
-    return new_items
+    return new_items, seen_urls
+
+
+def push_imported_urls_if_changed():
+    """将 imported_urls.json 提交并推回仓库，保证下次运行可继续去重。
+    仅在 git 环境（CI）中执行，失败仅告警不阻塞。"""
+    try:
+        import subprocess
+        # 检查是否有变更
+        rc = subprocess.run(["git", "status", "--porcelain", IMPORTED_URLS_FILE],
+                            capture_output=True, text=True, timeout=30)
+        if rc.returncode != 0 or not rc.stdout.strip():
+            log("imported_urls.json 无变更，跳过 push")
+            return
+        # pull 再 push，避免并发冲突
+        subprocess.run(["git", "pull", "--rebase", "origin", "main"],
+                       capture_output=True, text=True, timeout=120)
+        subprocess.run(["git", "add", IMPORTED_URLS_FILE], capture_output=True, timeout=30)
+        subprocess.run(["git", "commit", "-m", "chore: 更新 imported_urls.json (ima 去重记录)"],
+                       capture_output=True, timeout=30)
+        prc = subprocess.run(["git", "push", "origin", "main"],
+                             capture_output=True, text=True, timeout=120)
+        if prc.returncode == 0:
+            log("imported_urls.json 已推回仓库 (%d 条记录)" % len(load_imported_urls()))
+        else:
+            log("警告: imported_urls.json push 失败: %s" % prc.stderr.strip()[-300:])
+    except Exception as e:
+        log("警告: imported_urls.json 持久化失败（不影响本次导入）: %s" % e)
 
 
 def import_items(new_items, folder_id):
@@ -283,6 +315,14 @@ def main():
         log("未找到数据文件，跳过导入")
         return
 
+    # 首次运行（imported_urls.json 不存在）时收紧时间窗口到 2 天：
+    # 历史从未做过 URL 去重，items_latest.json 里 60 天窗口的旧链接可能已被反复导入，
+    # 首轮只导入最近 2 天内被抓取的内容，避免再次灌入老文章。
+    first_run = not os.path.exists(IMPORTED_URLS_FILE)
+    if first_run and days is not None:
+        log("首次运行（无 imported_urls.json）：时间窗口收紧为 2 天，避免导入历史旧链接")
+        days = min(days, 2)
+
     with open(items_file, encoding="utf-8") as f:
         all_items = json.load(f)
 
@@ -294,14 +334,23 @@ def main():
     imported_urls = load_imported_urls()
     log("已有 %d 条已导入 URL 记录" % len(imported_urls))
 
-    new_items = get_new_items(all_items, imported_urls, max_items=max_items, days=days)
-    log("新内容: %d 条" % len(new_items))
+    new_items, seen_urls = get_new_items(all_items, imported_urls, max_items=max_items, days=days)
+    log("新内容: %d 条 (本轮处理 URL %d 条)" % (len(new_items), len(seen_urls)))
 
     if new_items:
         imported, failed = import_items(new_items, target_folder_id)
         log("导入汇总: 成功 %d, 失败 %d" % (imported, failed))
     else:
         log("无新内容，跳过导入")
+
+    # 首次运行（无历史去重记录）时：把所有见过的 URL 记入 imported_urls，
+    # 避免下轮把被时间过滤跳过的老文章 URL 再捞回来处理
+    if not os.path.exists(IMPORTED_URLS_FILE):
+        merged = load_imported_urls() | seen_urls
+        save_imported_urls(merged)
+        log("首次运行：已记录 %d 条 URL 去重基准" % len(merged))
+
+    push_imported_urls_if_changed()
 
     log("=" * 60)
 
