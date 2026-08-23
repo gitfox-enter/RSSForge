@@ -147,14 +147,6 @@ sites:
   # ===== 新增科技/创业类 RSS 源（2026-08-12 第2批）=====
   # 说明：以下站点均为标准 RSS，走 parse_rss_feed，无需新增 parser
 
-  # 极客公园 - 科技产品/互联网创业/新趋势
-- url: https://www.geekpark.net/
-  name: 极客公园
-  tier: medium
-  interval: 60
-  parser: rss
-  rss_feed: https://www.geekpark.net/rss
-
 dead_sites:
   https://www.007ymd.com/:
     reason: DNS/连接失败 - 域名无法解析
