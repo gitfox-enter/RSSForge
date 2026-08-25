@@ -8,7 +8,7 @@ RSSForge -> ima 知识库导入工具
 支持按 pubDate 时间过滤（DAYS 环境变量）和最大导入条数限制（MAX_ITEMS 环境变量）。
 
 2026-08-23 变更：不再按站点分发到各自文件夹（sites_to_folders.yaml 不再使用），
-全部内容导入知识库下指定名称的子文件夹（默认 "2026"，可用 IMA_TARGET_FOLDER_NAME 覆盖）。
+全部内容导入知识库下指定名称的子文件夹（默认 "2026."，可用 IMA_TARGET_FOLDER_NAME 覆盖）。默认知识库为「羊毛网站线报」（IMA_KB_ID 可覆盖）。
 
 2026-08-25 变更：
   1) 默认目标文件夹改为 "2026."（旧的 "2026" 文件夹请手动在 ima 中删除）。
@@ -24,7 +24,7 @@ import urllib.request
 import urllib.error
 from datetime import datetime, timezone, timedelta
 
-KB_ID = os.environ.get("IMA_KB_ID", "8UWnCJWk0DlQ15ppsKOIeyNofz8ZBOJVt7e9Taeu7bg=")
+KB_ID = os.environ.get("IMA_KB_ID", "Nq1Mwk9IL5jSjWWkpPPpOGqv3waXQm-Bv2RrnhrPW3s=")
 BASE = "https://ima.qq.com/openapi/wiki/v1"
 CLIENT_ID = os.environ.get("IMA_CLIENT_ID")
 API_KEY = os.environ.get("IMA_API_KEY")
