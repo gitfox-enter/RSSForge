@@ -9,9 +9,15 @@ RSSForge -> ima 知识库导入工具
 
 2026-08-23 变更：不再按站点分发到各自文件夹（sites_to_folders.yaml 不再使用），
 全部内容导入知识库下指定名称的子文件夹（默认 "2026"，可用 IMA_TARGET_FOLDER_NAME 覆盖）。
+
+2026-08-25 变更：
+  1) 默认目标文件夹改为 "2026."（旧的 "2026" 文件夹请手动在 ima 中删除）。
+  2) 新增 MIN_CONTENT_LEN 阈值（默认 200 字符）：剔除正文过短的"线报/优惠"类条目，
+     避免 ima 知识库因"内容太薄"导致解析失败。设 MIN_CONTENT_LEN=0 可关闭过滤。
 """
 import json
 import os
+import re
 import sys
 import time
 import urllib.request
@@ -23,9 +29,11 @@ BASE = "https://ima.qq.com/openapi/wiki/v1"
 CLIENT_ID = os.environ.get("IMA_CLIENT_ID")
 API_KEY = os.environ.get("IMA_API_KEY")
 DEFAULT_FOLDER_ID = os.environ.get("IMA_DEFAULT_FOLDER_ID", "")
-TARGET_FOLDER_NAME = os.environ.get("IMA_TARGET_FOLDER_NAME", "2026")
+TARGET_FOLDER_NAME = os.environ.get("IMA_TARGET_FOLDER_NAME", "2026.")
 LOG_FILE = os.environ.get("IMA_LOG_FILE", "ima_import.log")
 IMPORTED_URLS_FILE = "imported_urls.json"
+# 正文过短的条目（如纯线报/优惠）会被跳过，避免 ima 解析失败；设为 0 关闭过滤
+MIN_CONTENT_LEN = int(os.environ.get("MIN_CONTENT_LEN", "200"))
 
 
 def log(msg):
@@ -151,6 +159,15 @@ def get_item_time_str(item):
     return ""
 
 
+def _strip_html(text):
+    """去掉 HTML 标签 + 空白，返回纯文本（用于内容长度判断）"""
+    if not text:
+        return ""
+    s = re.sub(r"<[^>]+>", " ", str(text))
+    s = re.sub(r"\s+", "", s)
+    return s
+
+
 def get_new_items(all_items, imported_urls, max_items=200, days=None):
     """返回 (new_items, seen_urls)：new_items 为待导入条目，seen_urls 为本轮处理过的全部 URL（含被过滤的）"""
     new_items = []
@@ -164,6 +181,7 @@ def get_new_items(all_items, imported_urls, max_items=200, days=None):
 
     skipped_old = 0
     skipped_no_date = 0
+    skipped_thin = 0
     for item in all_items:
         url = item.get("link", item.get("url", ""))
         if not url:
@@ -185,13 +203,30 @@ def get_new_items(all_items, imported_urls, max_items=200, days=None):
                 skipped_old += 1
                 continue
 
+        # 内容长度过滤：剔除纯线报/优惠/超短内容（避免 ima 解析失败）
+        if MIN_CONTENT_LEN > 0:
+            desc = (
+                item.get("description")
+                or item.get("summary")
+                or item.get("content")
+                or item.get("content_text")
+                or ""
+            )
+            text_len = len(_strip_html(desc))
+            if text_len < MIN_CONTENT_LEN:
+                skipped_thin += 1
+                continue
+
         new_items.append(item)
         if len(new_items) >= max_items:
             break
 
     if cutoff is not None:
-        log("时间过滤后: %d 条新内容 (跳过旧内容 %d 条, 跳过无日期 %d 条, 共处理 %d 条)" % (
-            len(new_items), skipped_old, skipped_no_date, len(all_items)))
+        log("时间过滤后: %d 条新内容 (跳过旧内容 %d 条, 跳过无日期 %d 条, 跳过短内容 %d 条, 共处理 %d 条)" % (
+            len(new_items), skipped_old, skipped_no_date, skipped_thin, len(all_items)))
+    elif skipped_thin > 0:
+        log("内容过滤: 跳过短内容 %d 条 (阈值 %d 字符), 保留 %d 条" % (
+            skipped_thin, MIN_CONTENT_LEN, len(new_items)))
     return new_items, seen_urls
 
 
@@ -291,7 +326,8 @@ def main():
     if days <= 0:
         days = None  # 不限时间
 
-    log("配置: MAX_ITEMS=%s, DAYS=%s, 目标文件夹='%s'" % (max_items, days or "不限", TARGET_FOLDER_NAME))
+    log("配置: MAX_ITEMS=%s, DAYS=%s, 目标文件夹='%s', MIN_CONTENT_LEN=%d" % (
+        max_items, days or "不限", TARGET_FOLDER_NAME, MIN_CONTENT_LEN))
 
     # 查找目标文件夹：优先用环境变量指定的 folder_id，否则按名称查找
     target_folder_id = os.environ.get("IMA_TARGET_FOLDER_ID", "")
