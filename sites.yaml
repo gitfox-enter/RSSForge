@@ -1,5 +1,7 @@
 sites:
-- url: https://news.ixbk.net/
+# 原 news.ixbk.net 有反爬 JS 域名白名单，会把 ima 抓取器挡到 new.xianbao.fun 导致解析失败；
+# new.xianbao.fun 是同一站点(线报酷)的白名单镜像域名，ima 可正常解析（已实测）。
+- url: https://new.xianbao.fun/
   max_pages: 3
   name: 线报酷
   tier: high
