@@ -264,7 +264,7 @@ jobs:
           IMA_KB_ID: ${{ secrets.IMA_KB_ID }}
           IMA_DEFAULT_FOLDER_ID: ${{ secrets.IMA_DEFAULT_FOLDER_ID }}
           MAX_ITEMS: "200"
-          DAYS: "30"
+          DAYS: "2"
         run: |
           pip install -q pyyaml 2>/dev/null || true
           python ima_import_workflow.py
