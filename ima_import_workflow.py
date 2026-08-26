@@ -33,7 +33,7 @@ TARGET_FOLDER_NAME = os.environ.get("IMA_TARGET_FOLDER_NAME", "2026.")
 LOG_FILE = os.environ.get("IMA_LOG_FILE", "ima_import.log")
 IMPORTED_URLS_FILE = "imported_urls.json"
 # 正文过短的条目（如纯线报/优惠）会被跳过，避免 ima 解析失败；设为 0 关闭过滤
-MIN_CONTENT_LEN = int(os.environ.get("MIN_CONTENT_LEN", "200"))
+MIN_CONTENT_LEN = int(os.environ.get("MIN_CONTENT_LEN", "0"))
 
 
 def log(msg):
@@ -210,6 +210,7 @@ def get_new_items(all_items, imported_urls, max_items=200, days=None):
                 or item.get("summary")
                 or item.get("content")
                 or item.get("content_text")
+                or item.get("text")
                 or ""
             )
             text_len = len(_strip_html(desc))
