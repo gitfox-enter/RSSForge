@@ -283,9 +283,9 @@ def import_items(new_items, folder_id):
             results = res.get("data", {}).get("results", {})
             for u in batch:
                 r = results.get(u, {})
+                imported_urls.add(u)  # 不论成功失败都记录，避免解析失败的链接被无限重试
                 if r.get("ret_code") == 0:
                     total_imported += 1
-                    imported_urls.add(u)
                 else:
                     total_failed += 1
                     log("  FAIL: %s -> %s" % (u, str(r)[:200]))
@@ -299,9 +299,9 @@ def import_items(new_items, folder_id):
                     results = res.get("data", {}).get("results", {})
                     for u in batch:
                         r = results.get(u, {})
+                        imported_urls.add(u)  # 不论成功失败都记录
                         if r.get("ret_code") == 0:
                             total_imported += 1
-                            imported_urls.add(u)
                         else:
                             total_failed += 1
                     break
