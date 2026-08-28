@@ -5,7 +5,7 @@
     <link>https://new.xianbao.fun/</link>
     <description>线报酷 的 RSS 订阅源（由 RSSForge 生成）</description>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 28 Aug 2026 02:36:21 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 28 Aug 2026 10:22:23 +0800</lastBuildDate>
     <generator>RSSForge</generator>
     <copyright>内容版权归原作者所有，RSSForge 仅提供聚合索引</copyright>
     <ttl>15</ttl>
@@ -20,7 +20,7 @@
       <title>我的关注</title>
       <link>https://new.xianbao.fun/category-guanzhu1/</link>
       <guid isPermaLink="false">urn:md5:a51e44454d45b121@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">我的关注&lt;br/&gt;&lt;a href="https://new.xianbao.fun/category-guanzhu1/"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
@@ -28,7 +28,7 @@
       <title>豆瓣线报</title>
       <link>https://new.xianbao.fun/category-douban/</link>
       <guid isPermaLink="false">urn:md5:781b0ba88a03be0b@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">豆瓣线报&lt;br/&gt;&lt;a href="https://new.xianbao.fun/category-douban/"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
@@ -36,15 +36,23 @@
       <title>豆瓣热帖</title>
       <link>https://new.xianbao.fun/douban-hot.html</link>
       <guid isPermaLink="false">urn:md5:e5bd3f546373d4d4@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">豆瓣热帖&lt;br/&gt;&lt;a href="https://new.xianbao.fun/douban-hot.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>微博线报</title>
+      <link>https://new.xianbao.fun/category-weibo/</link>
+      <guid isPermaLink="false">urn:md5:37a868158c1f95bd@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
+      <author>线报酷</author>
+      <description type="html" xml:space="preserve">微博线报&lt;br/&gt;&lt;a href="https://new.xianbao.fun/category-weibo/"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
       <title>微博超话</title>
       <link>https://new.xianbao.fun/category-weibo-chaohua/</link>
       <guid isPermaLink="false">urn:md5:1b3c567c75f0c839@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">微博超话&lt;br/&gt;&lt;a href="https://new.xianbao.fun/category-weibo-chaohua/"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
@@ -52,7 +60,7 @@
       <title>微博热帖</title>
       <link>https://new.xianbao.fun/weibo-hot.html</link>
       <guid isPermaLink="false">urn:md5:86e1cb4ed81e1048@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">微博热帖&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo-hot.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
@@ -60,289 +68,273 @@
       <title>好单线报</title>
       <link>https://new.xianbao.fun/category-haodan/</link>
       <guid isPermaLink="false">urn:md5:ad0515d472a82f12@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">好单线报&lt;br/&gt;&lt;a href="https://new.xianbao.fun/category-haodan/"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>注册用户可筛选首页分类</title>
-      <link>https://new.xianbao.fun/gonggao/5535689.html</link>
-      <guid isPermaLink="false">urn:md5:ed8d1cd70c54a8d8@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>新好单线报 首页分类数据库级筛选 上线</title>
+      <link>https://new.xianbao.fun/gonggao/5515115.html</link>
+      <guid isPermaLink="false">urn:md5:aa3ebbdf6b41c2b1@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">注册用户可筛选首页分类&lt;br/&gt;&lt;a href="https://new.xianbao.fun/gonggao/5535689.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">新好单线报 首页分类数据库级筛选 上线&lt;br/&gt;&lt;a href="https://new.xianbao.fun/gonggao/5515115.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>大卫玻璃擦窗器S6 2.57元</title>
-      <link>https://new.xianbao.fun/weibo/6896360.html</link>
-      <guid isPermaLink="false">urn:md5:6fef5a86ec490497@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>①美团每日大额虹包 ②可叠美团 额外商家棬 ③美团津贴荟场 ④美团大额虹包棬包</title>
+      <link>https://new.xianbao.fun/weibo/6897898.html</link>
+      <guid isPermaLink="false">urn:md5:81ecb62ed8f792fd@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">大卫玻璃擦窗器S6 2.57元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo/6896360.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">①美团每日大额虹包 ②可叠美团 额外商家棬 ③美团津贴荟场 ④美团大额虹包棬包&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo/6897898.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>微众连两天{ 哇 }</title>
-      <link>https://new.xianbao.fun/xiaodigu/6896359.html</link>
-      <guid isPermaLink="false">urn:md5:84748ab6ab67d7db@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>52 林清轩 3.0山茶花润肤油50ml 主要功效保湿紧致 抗皱淡纹 以油养肤</title>
+      <link>https://new.xianbao.fun/weibo/6897894.html</link>
+      <guid isPermaLink="false">urn:md5:b38c65590a429592@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">微众连两天{ 哇 }&lt;br/&gt;&lt;a href="https://new.xianbao.fun/xiaodigu/6896359.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">52 林清轩 3.0山茶花润肤油50ml 主要功效保湿紧致 抗皱淡纹 以油养肤&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo/6897894.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>这个姐妹发的真有氵 我2-2都是18 微博正文</title>
-      <link>https://new.xianbao.fun/weibo-chaohua/6896358.html</link>
-      <guid isPermaLink="false">urn:md5:47eea654ae933b71@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>西塔老太太泥炉烤肉200元代金券午市 110元，西塔老太太泥炉烤肉200元代金券 128元</title>
+      <link>https://new.xianbao.fun/weibo/6897897.html</link>
+      <guid isPermaLink="false">urn:md5:c5b4c625fbe70a62@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">这个姐妹发的真有氵 我2-2都是18 微博正文&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo-chaohua/6896358.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">西塔老太太泥炉烤肉200元代金券午市 110元，西塔老太太泥炉烤肉200元代金券 128元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo/6897897.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>维达厨房抽纸80抽*12包拍3件 65.9元</title>
-      <link>https://new.xianbao.fun/haodan/6896357.html</link>
-      <guid isPermaLink="false">urn:md5:ddd2837f744a54d4@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>90 京鲜生.福建红宝石莲雾净重2斤 约8-11个 单果75g+ 包邮活动</title>
+      <link>https://new.xianbao.fun/weibo/6897892.html</link>
+      <guid isPermaLink="false">urn:md5:75093bc4777ca9c4@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">维达厨房抽纸80抽*12包拍3件 65.9元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896357.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">90 京鲜生.福建红宝石莲雾净重2斤 约8-11个 单果75g+ 包邮活动&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo/6897892.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>拼多多月卡里面我的神券可以抽无门槛券</title>
-      <link>https://new.xianbao.fun/kuan/6896356.html</link>
-      <guid isPermaLink="false">urn:md5:57d9cc66dd20fd4b@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>最上方领消费券 人人都有</title>
+      <link>https://new.xianbao.fun/haodan/6897890.html</link>
+      <guid isPermaLink="false">urn:md5:6e192b3599cb7d62@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">拼多多月卡里面我的神券可以抽无门槛券&lt;br/&gt;&lt;a href="https://new.xianbao.fun/kuan/6896356.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">最上方领消费券 人人都有&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897890.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>京喜自营马顺顺车载香片 1.1元</title>
-      <link>https://new.xianbao.fun/haodan/6896355.html</link>
-      <guid isPermaLink="false">urn:md5:363a5e70b02c119f@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>⭕曼龙双面XPE整张爬爬垫 💰137.7🉐150*180*2cm‼</title>
+      <link>https://new.xianbao.fun/haodan/6897889.html</link>
+      <guid isPermaLink="false">urn:md5:d4937d5b4a600986@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">京喜自营马顺顺车载香片 1.1元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896355.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">⭕曼龙双面XPE整张爬爬垫 💰137.7🉐150*180*2cm‼&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897889.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>张一元茉莉花茶叶八窨毛尖200g金罐 114.51元</title>
-      <link>https://new.xianbao.fun/haodan/6896354.html</link>
-      <guid isPermaLink="false">urn:md5:3c172e1344696a81@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>速限量 润本 洗发沐浴露 9元 配料干净 392万粉咝的大痁铺</title>
+      <link>https://new.xianbao.fun/haodan/6897893.html</link>
+      <guid isPermaLink="false">urn:md5:6df8fc1bc2f819e1@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">张一元茉莉花茶叶八窨毛尖200g金罐 114.51元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896354.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">速限量 润本 洗发沐浴露 9元 配料干净 392万粉咝的大痁铺&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897893.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>得力TD740除胶刮刀145mm黄色1把 1.07元</title>
-      <link>https://new.xianbao.fun/haodan/6896353.html</link>
-      <guid isPermaLink="false">urn:md5:30abfda5392bef28@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>48 得力 N立方直液丙烯马克笔24色 淘金币可抵扣0.42元✅</title>
+      <link>https://new.xianbao.fun/weibo/6897895.html</link>
+      <guid isPermaLink="false">urn:md5:f8252a7416271694@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">得力TD740除胶刮刀145mm黄色1把 1.07元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896353.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">48 得力 N立方直液丙烯马克笔24色 淘金币可抵扣0.42元✅&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo/6897895.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>Tenda BE12Pro WiFi7路由器1台 200元</title>
-      <link>https://new.xianbao.fun/haodan/6896352.html</link>
-      <guid isPermaLink="false">urn:md5:be73195dac46c197@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>蒙牛 MENGNIU 冠益乳免疫力发酵乳 200g×4瓶 拍3件</title>
+      <link>https://new.xianbao.fun/weibo/6897887.html</link>
+      <guid isPermaLink="false">urn:md5:49fc77797695f2b9@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">Tenda BE12Pro WiFi7路由器1台 200元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896352.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">蒙牛 MENGNIU 冠益乳免疫力发酵乳 200g×4瓶 拍3件&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo/6897887.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>❗️美宜佳15 左右买70 1️⃣丐友复制打开淘宝app 搜 美宜佳</title>
-      <link>https://new.xianbao.fun/weibo/6896349.html</link>
-      <guid isPermaLink="false">urn:md5:042a556b1e57af93@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>领69-16券 领200-20券 蒙牛全脂纯牛奶200ml*24盒</title>
+      <link>https://new.xianbao.fun/haodan/6897885.html</link>
+      <guid isPermaLink="false">urn:md5:0fd0ce63a0855f47@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">❗️美宜佳15 左右买70 1️⃣丐友复制打开淘宝app 搜 美宜佳&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo/6896349.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">领69-16券 领200-20券 蒙牛全脂纯牛奶200ml*24盒&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897885.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>立白茶籽洗洁精1.45kg 8.61元</title>
-      <link>https://new.xianbao.fun/haodan/6896351.html</link>
-      <guid isPermaLink="false">urn:md5:7615e49c76445ff0@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>芬腾可安软支撑内衣任选2件 29.9元</title>
+      <link>https://new.xianbao.fun/haodan/6897888.html</link>
+      <guid isPermaLink="false">urn:md5:9ec452fe2fe17537@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">立白茶籽洗洁精1.45kg 8.61元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896351.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">芬腾可安软支撑内衣任选2件 29.9元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897888.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>习酒贵州习酒窖藏1988精装500ml*1瓶53度无礼袋 327.37元</title>
-      <link>https://new.xianbao.fun/haodan/6896350.html</link>
-      <guid isPermaLink="false">urn:md5:5ad9fda983a7bed2@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>金龙鱼食用植物调和油5.88L*2桶 134元</title>
+      <link>https://new.xianbao.fun/haodan/6897886.html</link>
+      <guid isPermaLink="false">urn:md5:9441ad973332599c@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">习酒贵州习酒窖藏1988精装500ml*1瓶53度无礼袋 327.37元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896350.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">金龙鱼食用植物调和油5.88L*2桶 134元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897886.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>怡宝方案 0.1元</title>
-      <link>https://new.xianbao.fun/weibo/6896348.html</link>
-      <guid isPermaLink="false">urn:md5:383ce7976845fe60@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>江小白果立方多口味15度果汁酒168ml*3瓶 27.4元</title>
+      <link>https://new.xianbao.fun/haodan/6897883.html</link>
+      <guid isPermaLink="false">urn:md5:68b9396f981a6f9d@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">怡宝方案 0.1元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo/6896348.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">江小白果立方多口味15度果汁酒168ml*3瓶 27.4元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897883.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>分享图片</title>
-      <link>https://new.xianbao.fun/weibo-chaohua/6896347.html</link>
-      <guid isPermaLink="false">urn:md5:bc50675d22f582aa@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>京鲜生辽宁巨峰葡萄2-2.5斤 16.41元</title>
+      <link>https://new.xianbao.fun/weibo/6897884.html</link>
+      <guid isPermaLink="false">urn:md5:58b751ff8de60ff9@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">分享图片&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo-chaohua/6896347.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">京鲜生辽宁巨峰葡萄2-2.5斤 16.41元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo/6897884.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>凑了一下想吃的，包括热狗棒、牛肉卷、鸡肉薄饼；不知道算不算好价</title>
-      <link>https://new.xianbao.fun/douban-pinzu/6896346.html</link>
-      <guid isPermaLink="false">urn:md5:1eee7e08510f57d2@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>骆驼疾风透气运动鞋 67元</title>
+      <link>https://new.xianbao.fun/haodan/6897882.html</link>
+      <guid isPermaLink="false">urn:md5:c895b4ccaf30293e@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">凑了一下想吃的，包括热狗棒、牛肉卷、鸡肉薄饼；不知道算不算好价&lt;br/&gt;&lt;a href="https://new.xianbao.fun/douban-pinzu/6896346.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">骆驼疾风透气运动鞋 67元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897882.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>乐知行高效去油膜防冻玻璃水4瓶装 2.72元</title>
-      <link>https://new.xianbao.fun/haodan/6896345.html</link>
-      <guid isPermaLink="false">urn:md5:9f4b240f9541232f@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>芬腾可安高腰安全裤拍2件 19.8元</title>
+      <link>https://new.xianbao.fun/haodan/6897881.html</link>
+      <guid isPermaLink="false">urn:md5:d6a277129625c858@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">乐知行高效去油膜防冻玻璃水4瓶装 2.72元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896345.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">芬腾可安高腰安全裤拍2件 19.8元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897881.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>公牛自营开关插座 182.8元</title>
-      <link>https://new.xianbao.fun/haodan/6896344.html</link>
-      <guid isPermaLink="false">urn:md5:606223f5fcf36112@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>波司登白月光收腰羽绒服 592.2元，波司登短款羽绒服 592.2元</title>
+      <link>https://new.xianbao.fun/haodan/6897878.html</link>
+      <guid isPermaLink="false">urn:md5:2c5b73e97d96fb2b@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">公牛自营开关插座 182.8元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896344.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">波司登白月光收腰羽绒服 592.2元，波司登短款羽绒服 592.2元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897878.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>艾美特自营电风扇 199元，艾美特自营电风扇 248.87元</title>
-      <link>https://new.xianbao.fun/haodan/6896343.html</link>
-      <guid isPermaLink="false">urn:md5:79acbf6583232ec3@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>霸王艾叶人参草本滋润清爽沐浴露1L 17.7元</title>
+      <link>https://new.xianbao.fun/haodan/6897880.html</link>
+      <guid isPermaLink="false">urn:md5:6475023b70c42e78@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">艾美特自营电风扇 199元，艾美特自营电风扇 248.87元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896343.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">霸王艾叶人参草本滋润清爽沐浴露1L 17.7元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897880.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>美的自营空调 4762元</title>
-      <link>https://new.xianbao.fun/haodan/6896342.html</link>
-      <guid isPermaLink="false">urn:md5:ca32c17e373dd088@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>雪中飞男女摇粒绒外套40元 去首页-重进淘宝秒杀加购1件</title>
+      <link>https://new.xianbao.fun/haodan/6897876.html</link>
+      <guid isPermaLink="false">urn:md5:640d5113b8d2e579@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">美的自营空调 4762元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896342.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">雪中飞男女摇粒绒外套40元 去首页-重进淘宝秒杀加购1件&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897876.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>如果你正好有tm🧧 🍚5</title>
-      <link>https://new.xianbao.fun/weibo-chaohua/6896341.html</link>
-      <guid isPermaLink="false">urn:md5:996f17b1c858088d@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>翼支付10</title>
+      <link>https://new.xianbao.fun/zuankeba/6897879.html</link>
+      <guid isPermaLink="false">urn:md5:c1023392ef6b6a27@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">如果你正好有tm🧧 🍚5&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo-chaohua/6896341.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">翼支付10&lt;br/&gt;&lt;a href="https://new.xianbao.fun/zuankeba/6897879.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>海底捞自营方便米饭 12.3元</title>
-      <link>https://new.xianbao.fun/haodan/6896340.html</link>
-      <guid isPermaLink="false">urn:md5:e3d913294f7b591c@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>超威蟑螂饵剂3支 19.9元</title>
+      <link>https://new.xianbao.fun/haodan/6897877.html</link>
+      <guid isPermaLink="false">urn:md5:3cb973791ea35215@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">海底捞自营方便米饭 12.3元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896340.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">超威蟑螂饵剂3支 19.9元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897877.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>之前买过又弹了-5</title>
-      <link>https://new.xianbao.fun/weibo-chaohua/6896339.html</link>
-      <guid isPermaLink="false">urn:md5:20bd8891235d32bb@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>派得鸭肉金枪鱼全价猫粮3斤 27元 10斤79元 下单 500g*3袋双重益生元</title>
+      <link>https://new.xianbao.fun/haodan/6897875.html</link>
+      <guid isPermaLink="false">urn:md5:a059c338bdecb4ed@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">之前买过又弹了-5&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo-chaohua/6896339.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">派得鸭肉金枪鱼全价猫粮3斤 27元 10斤79元 下单 500g*3袋双重益生元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897875.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>安井黑椒鸡块1kg 需买4件 8.23元</title>
-      <link>https://new.xianbao.fun/haodan/6896338.html</link>
-      <guid isPermaLink="false">urn:md5:532ba94ac10b52ab@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>帕特蓝莓牛肉/火鸡狗粮12kg 279元 下单 成幼可选 高蛋白低脂肪</title>
+      <link>https://new.xianbao.fun/haodan/6897874.html</link>
+      <guid isPermaLink="false">urn:md5:eff7192834d53b8f@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">安井黑椒鸡块1kg 需买4件 8.23元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896338.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">帕特蓝莓牛肉/火鸡狗粮12kg 279元 下单 成幼可选 高蛋白低脂肪&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897874.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>凯芮甜心小酪草莓芙蕾杰味78g/15粒 11.24元</title>
-      <link>https://new.xianbao.fun/haodan/6896337.html</link>
-      <guid isPermaLink="false">urn:md5:bdcbeb40c3d7aac8@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>uah有哈钠基矿石猫砂4.6kg 淘金币11.8元 下单 几近无尘 遇水释香</title>
+      <link>https://new.xianbao.fun/haodan/6897873.html</link>
+      <guid isPermaLink="false">urn:md5:8cea614a1888e6f1@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">凯芮甜心小酪草莓芙蕾杰味78g/15粒 11.24元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896337.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">uah有哈钠基矿石猫砂4.6kg 淘金币11.8元 下单 几近无尘 遇水释香&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897873.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>夜市精品烤肠油炸黄金脆皮淀粉肠夜市地摊香肠50g 0.10元</title>
-      <link>https://new.xianbao.fun/haodan/6896336.html</link>
-      <guid isPermaLink="false">urn:md5:b2a93e47398ac823@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>旺旺集团出品 水神 抗菌漱口水500ml 9.9 效期至10月 旺旺水神</title>
+      <link>https://new.xianbao.fun/weibo/6897868.html</link>
+      <guid isPermaLink="false">urn:md5:779275a6561c46c0@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">夜市精品烤肠油炸黄金脆皮淀粉肠夜市地摊香肠50g 0.10元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896336.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">旺旺集团出品 水神 抗菌漱口水500ml 9.9 效期至10月 旺旺水神&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo/6897868.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>冀仁万痛筋骨贴磁疗镇痛贴40贴 9.9元</title>
-      <link>https://new.xianbao.fun/haodan/6896335.html</link>
-      <guid isPermaLink="false">urn:md5:acaed0cd55ebfb54@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>派得椰香咖啡猫砂2.5kg*2 21.8元 折10.9/袋 下单</title>
+      <link>https://new.xianbao.fun/haodan/6897872.html</link>
+      <guid isPermaLink="false">urn:md5:d769453738e00a75@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">冀仁万痛筋骨贴磁疗镇痛贴40贴 9.9元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896335.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">派得椰香咖啡猫砂2.5kg*2 21.8元 折10.9/袋 下单&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897872.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>官方正版哈小浪上学记全套漫画书奇遇记游中国动漫童话镇恐龙岛大冒险公仔小学生漫画书 19.8元</title>
-      <link>https://new.xianbao.fun/haodan/6896334.html</link>
-      <guid isPermaLink="false">urn:md5:f4acf80170201d57@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>神圿快拍 折1.7元/瓶 拍下25.6元 叠礼金 金币 外星人</title>
+      <link>https://new.xianbao.fun/haodan/6897869.html</link>
+      <guid isPermaLink="false">urn:md5:256d841dba2d6562@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">官方正版哈小浪上学记全套漫画书奇遇记游中国动漫童话镇恐龙岛大冒险公仔小学生漫画书 19.8元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896334.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">神圿快拍 折1.7元/瓶 拍下25.6元 叠礼金 金币 外星人&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897869.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>大头儿子和小头爸爸二年级下册课外书必读注音版郑春华正版故事书儿童读物小学生课外阅读 7.74元</title>
-      <link>https://new.xianbao.fun/haodan/6896333.html</link>
-      <guid isPermaLink="false">urn:md5:668446cc3ba0c07b@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>📚捏呀捏超轻黏土 60包💰8.6‼️ 色宋收纳箱💰8.6‼️ 叠礼.金➕金币</title>
+      <link>https://new.xianbao.fun/haodan/6897871.html</link>
+      <guid isPermaLink="false">urn:md5:8991a3204891ebe6@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">大头儿子和小头爸爸二年级下册课外书必读注音版郑春华正版故事书儿童读物小学生课外阅读 7.74元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896333.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">📚捏呀捏超轻黏土 60包💰8.6‼️ 色宋收纳箱💰8.6‼️ 叠礼.金➕金币&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897871.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>木头马小学英语阅读100篇年级任选 10.8元</title>
-      <link>https://new.xianbao.fun/haodan/6896332.html</link>
-      <guid isPermaLink="false">urn:md5:5d798badfcf5c123@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>喜马拉雅7天会员</title>
+      <link>https://new.xianbao.fun/xiaodigu/6897867.html</link>
+      <guid isPermaLink="false">urn:md5:019d84f8dd8fee6d@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">木头马小学英语阅读100篇年级任选 10.8元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896332.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">喜马拉雅7天会员&lt;br/&gt;&lt;a href="https://new.xianbao.fun/xiaodigu/6897867.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>猫人女士薄款7A级抗菌纯棉内裤3条 18.9元</title>
-      <link>https://new.xianbao.fun/haodan/6896326.html</link>
-      <guid isPermaLink="false">urn:md5:167ee1b2c901e6ee@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>香满园 可生食鸡蛋1.59kg共30枚礼盒装 31-36左右 按图①步骤去𢫦</title>
+      <link>https://new.xianbao.fun/weibo/6897870.html</link>
+      <guid isPermaLink="false">urn:md5:8fa54668ceea8abe@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">猫人女士薄款7A级抗菌纯棉内裤3条 18.9元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896326.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">香满园 可生食鸡蛋1.59kg共30枚礼盒装 31-36左右 按图①步骤去𢫦&lt;br/&gt;&lt;a href="https://new.xianbao.fun/weibo/6897870.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>装在口袋里的爸爸全套49册任选新版全能超人6-9岁儿童读物小说 7.11元</title>
-      <link>https://new.xianbao.fun/haodan/6896331.html</link>
-      <guid isPermaLink="false">urn:md5:e9f87dce0e2d1f4b@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>小神忦 自营维达车 plus领25券 券 线条小狗100抽*20包</title>
+      <link>https://new.xianbao.fun/haodan/6897865.html</link>
+      <guid isPermaLink="false">urn:md5:a7708ef0253d3221@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">装在口袋里的爸爸全套49册任选新版全能超人6-9岁儿童读物小说 7.11元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896331.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">小神忦 自营维达车 plus领25券 券 线条小狗100抽*20包&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897865.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
-      <title>得力63481拉链文件袋A4马卡龙色5个装 10.89元</title>
-      <link>https://new.xianbao.fun/haodan/6896330.html</link>
-      <guid isPermaLink="false">urn:md5:89553920c5282abc@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
+      <title>盼盼茉莉乌龙茶500ml*15瓶 29.9元</title>
+      <link>https://new.xianbao.fun/haodan/6897864.html</link>
+      <guid isPermaLink="false">urn:md5:cd9e6e59f742ca81@new.xianbao.fun</guid>
+      <pubDate>Fri, 28 Aug 2026 10:16:27 +0800</pubDate>
       <author>线报酷</author>
-      <description type="html" xml:space="preserve">得力63481拉链文件袋A4马卡龙色5个装 10.89元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896330.html"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>超能陆战队迪士尼动画电影故事绘本系列注音版国际金奖3-6-9岁儿童书籍 9.41元</title>
-      <link>https://new.xianbao.fun/haodan/6896329.html</link>
-      <guid isPermaLink="false">urn:md5:aa9dafaaa61f5f0f@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
-      <author>线报酷</author>
-      <description type="html" xml:space="preserve">超能陆战队迪士尼动画电影故事绘本系列注音版国际金奖3-6-9岁儿童书籍 9.41元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896329.html"&gt;查看原文 →&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>刘慈欣科幻短篇小说集1·带上她的眼睛 17元</title>
-      <link>https://new.xianbao.fun/haodan/6896328.html</link>
-      <guid isPermaLink="false">urn:md5:f3f1e3a84a5547ca@new.xianbao.fun</guid>
-      <pubDate>Fri, 28 Aug 2026 02:31:01 +0800</pubDate>
-      <author>线报酷</author>
-      <description type="html" xml:space="preserve">刘慈欣科幻短篇小说集1·带上她的眼睛 17元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6896328.html"&gt;查看原文 →&lt;/a&gt;</description>
+      <description type="html" xml:space="preserve">盼盼茉莉乌龙茶500ml*15瓶 29.9元&lt;br/&gt;&lt;a href="https://new.xianbao.fun/haodan/6897864.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
     <item>
       <title>葫芦侠三楼</title>
@@ -16015,6 +16007,14 @@
       <pubDate>Wed, 19 Aug 2026 23:56:52 +0800</pubDate>
       <author>线报酷</author>
       <description type="html" xml:space="preserve">⏰0点/1点 小虹薯试下搜 海蓝之谜奇迹晚霜 DHC橄榄净火&lt;br/&gt;&lt;a href="https://news.ixbk.net/weibo/6840327.html"&gt;查看原文 →&lt;/a&gt;</description>
+    </item>
+    <item>
+      <title>屯河番茄酱100g*3 6.9元，惠氏启赋新客专属1分钱福袋 0.01元</title>
+      <link>https://news.ixbk.net/haodan/6840326.html</link>
+      <guid isPermaLink="false">urn:md5:8e298755823b5288@news.ixbk.net</guid>
+      <pubDate>Wed, 19 Aug 2026 23:56:52 +0800</pubDate>
+      <author>线报酷</author>
+      <description type="html" xml:space="preserve">屯河番茄酱100g*3 6.9元，惠氏启赋新客专属1分钱福袋 0.01元&lt;br/&gt;&lt;a href="https://news.ixbk.net/haodan/6840326.html"&gt;查看原文 →&lt;/a&gt;</description>
     </item>
   </channel>
 </rss>
